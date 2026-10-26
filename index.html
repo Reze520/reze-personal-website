@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>蕾泽</title>
+<meta name="description" content="这里放我随手拍的照片、写到一半的话，和还没想明白的事。">
+<meta name="theme-color" content="#F6F5F9">
+<style>
+  :root{
+    --bg:#F6F5F9;
+    --surface:#FFFFFF;
+    --surface-2:#FAF9FC;
+    --wash:#F2F0F7;
+    --ink:#24222C;
+    --ink2:#55515F;
+    --muted:#8A8794;
+    --muted2:#9E9AAB;
+    --lav:#A99BC4;
+    --lav-deep:#5F5480;
+    --lav-pale:#ECE9F3;
+    --clay:#B47A6E;
+    --line:#E7E4EF;
+    --sans:"PingFang SC","Hiragino Sans GB","Microsoft YaHei","Noto Sans SC",system-ui,-apple-system,sans-serif;
+    --pad:64px;
+  }
+
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{
+    background:var(--bg);
+    color:var(--ink);
+    font-family:var(--sans);
+    line-height:1.7;
+    -webkit-font-smoothing:antialiased;
+    overflow-x:hidden;
+  }
+  a{color:inherit;text-decoration:none}
+  img{display:block;max-width:100%}
+  ::selection{background:var(--lav-pale);color:var(--ink)}
+
+  .wrap{max-width:1408px;margin:0 auto;padding-left:var(--pad);padding-right:var(--pad)}
+
+  /* ---------- Header ---------- */
+  .site-header{
+    position:sticky;top:0;z-index:50;
+    background:rgba(250,249,252,.84);
+    backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);
+    border-bottom:1px solid var(--line);
+  }
+  .site-header .wrap{height:80px;display:flex;align-items:center;justify-content:space-between;gap:24px}
+  .logo{display:flex;align-items:center;gap:8px}
+  .logo-text{font-weight:700;font-size:18px;letter-spacing:.5px}
+  .logo-dot{width:6px;height:6px;border-radius:50%;background:var(--clay);flex:none;margin-top:6px}
+  .nav{display:flex;align-items:center;gap:36px}
+  .nav a{font-size:14px;color:var(--muted);transition:color .25s ease;position:relative}
+  .nav a:hover,.nav a.active{color:var(--ink)}
+  .nav a::after{
+    content:"";position:absolute;left:50%;bottom:-8px;width:4px;height:4px;border-radius:50%;
+    background:var(--lav);transform:translateX(-50%) scale(0);transition:transform .25s ease;
+  }
+  .nav a:hover::after,.nav a.active::after{transform:translateX(-50%) scale(1)}
+  .pill{
+    display:inline-flex;align-items:center;padding:9px 20px;border-radius:10px;
+    background:var(--lav-pale);color:#4E4A5A;font-size:13px;
+    transition:background .25s ease;
+  }
+  .pill:hover{background:#E2DDEC}
+
+  /* ---------- Hero ---------- */
+  .hero{position:relative;padding:96px 0 104px;overflow:hidden}
+  .hero::before{
+    content:"";position:absolute;width:520px;height:520px;border-radius:50%;
+    right:-120px;top:-160px;pointer-events:none;filter:blur(80px);
+    background:radial-gradient(circle,rgba(169,155,196,.22),rgba(169,155,196,0) 68%);
+  }
+  .hero .wrap{
+    position:relative;z-index:1;
+    display:grid;grid-template-columns:minmax(0,1fr) 400px;gap:80px;align-items:center;
+  }
+  .eyebrow{display:flex;align-items:center;gap:10px;font-size:14px;color:var(--muted);margin-bottom:26px}
+  .eyebrow i{width:26px;height:1px;background:#CFC9DC;display:block;flex:none}
+  h1{
+    font-weight:700;font-size:clamp(38px,4.4vw,58px);line-height:1.24;
+    letter-spacing:-1px;max-width:11em;margin-bottom:26px;
+  }
+  .hero-sub{font-size:16px;line-height:2;color:var(--ink2);max-width:31em;margin-bottom:32px}
+  .cta{display:flex;gap:14px;flex-wrap:wrap}
+  .btn{
+    display:inline-flex;align-items:center;justify-content:center;
+    font-size:14px;padding:15px 28px;border-radius:10px;
+    transition:transform .25s ease,box-shadow .25s ease,background .25s ease,border-color .25s ease;
+  }
+  .btn:active{transform:translateY(1px)}
+  .btn-primary{background:#2A2733;color:#F6F5F9;font-weight:500}
+  .btn-primary:hover{background:#3A3547;box-shadow:0 10px 24px rgba(36,34,44,.22)}
+  .btn-ghost{border:1px solid #D6D2E0;color:var(--ink2)}
+  .btn-ghost:hover{border-color:#B9B2CC;color:var(--ink)}
+
+  /* 最近卡片 */
+  .now-card{
+    background:var(--surface);border:1px solid var(--line);border-radius:14px;
+    padding:30px 28px 32px;
+    box-shadow:0 14px 34px -6px rgba(41,36,56,.10);
+  }
+  .now-card h3{
+    display:flex;align-items:center;gap:8px;
+    font-size:12px;font-weight:500;color:var(--muted2);margin-bottom:18px;
+  }
+  .now-card h3 i{width:5px;height:5px;border-radius:50%;background:var(--clay);display:block;flex:none}
+  .now-row{font-size:15px;line-height:1.75;color:#3E3A48;padding:14px 0;border-top:1px solid #EFEDF3}
+  .now-row:first-of-type{border-top:0;padding-top:0}
+  .now-row span{color:var(--muted2);font-size:13px;margin-right:6px}
+
+  /* ---------- Section 通用 ---------- */
+  .section{padding:92px 0 96px}
+  .section.surface{background:var(--surface)}
+  .section.wash{background:var(--wash)}
+  .sec-head{
+    display:flex;align-items:flex-end;justify-content:space-between;gap:40px;
+    padding-bottom:26px;margin-bottom:40px;border-bottom:1px solid var(--line);
+  }
+  .sec-idx{font-size:12px;font-weight:500;color:var(--muted2);margin-bottom:12px;letter-spacing:1px}
+  h2{font-weight:700;font-size:clamp(28px,2.9vw,42px);line-height:1.3;letter-spacing:-.5px}
+  .sec-note{max-width:360px;font-size:13px;color:var(--muted);line-height:2;text-align:right;flex:none}
+
+  /* ---------- About ---------- */
+  .about-grid{display:grid;grid-template-columns:minmax(0,660px) 580px;gap:72px;align-items:start}
+  .about-copy p{font-size:16px;line-height:2;color:var(--ink2);margin-bottom:22px}
+  .kicker{font-size:12px;font-weight:500;color:var(--muted2);margin-bottom:10px;letter-spacing:.5px}
+  .keywords{font-size:14px;line-height:2.1;color:var(--muted)}
+  .facts{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+  .fact{background:#F2F0F7;border-radius:10px;padding:22px 20px;transition:transform .3s ease,background .3s ease}
+  .fact:hover{transform:translateY(-3px);background:#ECE9F3}
+  .fact dt{font-size:12px;color:var(--muted2);margin-bottom:6px}
+  .fact dd{font-size:16px;font-weight:500;color:#2E2B36}
+
+  /* ---------- Scraps ---------- */
+  .bento{display:flex;flex-direction:column;gap:24px}
+  .bento-row{display:grid;gap:24px}
+  .bento-row.a{grid-template-columns:620fr 380fr 264fr}
+  .bento-row.b{grid-template-columns:380fr 884fr}
+  .photo{display:flex;flex-direction:column;gap:10px}
+  .photo-media{
+    position:relative;border-radius:12px;overflow:hidden;
+    border:1px solid #DED8EA;
+    background:linear-gradient(140deg,#EDEAF4 0%,#E4DFEF 50%,#F0EDF6 100%);
+    display:flex;align-items:center;justify-content:center;
+    transition:transform .45s cubic-bezier(.2,.7,.3,1),box-shadow .35s ease;
+  }
+  .bento-row.a .photo-media{height:400px}
+  .bento-row.b .photo-media{height:300px}
+  .photo-media::before{
+    content:"";position:absolute;inset:0;
+    background-image:radial-gradient(circle at 28% 22%,rgba(255,255,255,.6),transparent 46%),
+                     radial-gradient(circle at 78% 82%,rgba(169,155,196,.28),transparent 56%);
+  }
+  .photo-media img{position:relative;z-index:1;width:100%;height:100%;object-fit:cover}
+  .photo-media span{
+    position:relative;z-index:1;font-size:13px;color:#8E86A0;letter-spacing:2px;
+    transition:opacity .3s ease;
+  }
+  .photo:hover .photo-media{transform:translateY(-4px);box-shadow:0 16px 32px -14px rgba(41,36,56,.30)}
+  .photo:hover .photo-media span{opacity:.4}
+  .photo figcaption{font-size:12px;color:var(--muted2);letter-spacing:.3px}
+
+  /* ---------- Footer ---------- */
+  .site-footer{background:var(--surface-2);padding-top:88px;overflow:hidden}
+  .foot-top{display:flex;justify-content:space-between;gap:64px;flex-wrap:wrap;margin-bottom:56px}
+  .foot-top .kicker{margin-bottom:14px}
+  .foot-top h2{font-size:clamp(26px,3.2vw,40px);margin-bottom:16px}
+  .foot-mail{
+    display:inline-flex;align-items:center;gap:6px;
+    font-size:15px;font-weight:500;color:var(--lav-deep);
+    border-bottom:1px solid transparent;transition:border-color .25s ease;
+  }
+  .foot-mail:hover{border-bottom-color:#C3BBD8}
+  .foot-cols{display:flex;gap:76px}
+  .foot-col{display:flex;flex-direction:column;gap:12px}
+  .foot-col h4{font-size:12px;font-weight:400;color:var(--muted2);margin-bottom:2px}
+  .foot-col a{font-size:14px;color:var(--ink2);transition:color .25s ease}
+  .foot-col a:hover{color:var(--lav-deep)}
+  .watermark{
+    font-weight:700;font-size:clamp(84px,15vw,190px);line-height:1.08;
+    letter-spacing:-2px;color:#EFEDF4;user-select:none;pointer-events:none;
+  }
+  .foot-bottom{
+    border-top:1px solid #E9E6F0;padding:26px 0 34px;
+    display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap;
+    font-size:12px;color:var(--muted2);
+  }
+  .foot-bottom span:last-child{color:#B0ACBD}
+
+  /* ---------- 进场 ---------- */
+  .reveal{opacity:0;transform:translateY(14px)}
+  .reveal.in{opacity:1;transform:none;transition:opacity .8s ease,transform .8s cubic-bezier(.22,.7,.3,1)}
+  @media (prefers-reduced-motion:reduce){
+    *{animation:none!important;transition:none!important}
+    .reveal{opacity:1;transform:none}
+    html{scroll-behavior:auto}
+  }
+
+  /* ---------- 响应式 ---------- */
+  @media (max-width:1180px){
+    :root{--pad:40px}
+    .hero .wrap{grid-template-columns:1fr;gap:48px}
+    .now-card{max-width:440px}
+    .about-grid{grid-template-columns:1fr;gap:44px}
+    .facts{max-width:580px}
+  }
+  @media (max-width:860px){
+    :root{--pad:24px}
+    .nav{display:none}
+    .hero{padding:64px 0 72px}
+    .section{padding:64px 0}
+    .sec-head{flex-direction:column;align-items:flex-start;gap:14px}
+    .sec-note{text-align:left;max-width:100%}
+    .bento-row.a,.bento-row.b{grid-template-columns:1fr}
+    .bento-row.a .photo-media,.bento-row.b .photo-media{height:auto;aspect-ratio:4/3}
+    .foot-cols{gap:48px}
+    .foot-top{margin-bottom:40px}
+    .site-footer{padding-top:56px}
+  }
+  @media (max-width:520px){
+    .btn{flex:1}
+    .facts{grid-template-columns:1fr}
+    .foot-cols{gap:36px}
+  }
+</style>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="wrap">
+    <a class="logo" href="#top" aria-label="回到顶部">
+      <span class="logo-text">蕾泽</span>
+      <span class="logo-dot" aria-hidden="true"></span>
+    </a>
+    <nav class="nav">
+      <a href="#about" class="active">关于我</a>
+      <a href="#scraps">日常碎片</a>
+      <a href="#now">现在</a>
+    </nav>
+    <a class="pill" href="#contact">联系我</a>
+  </div>
+</header>
+
+<main id="top">
+
+  <!-- Hero -->
+  <section class="hero">
+    <div class="wrap">
+      <div class="hero-copy reveal">
+        <p class="eyebrow"><i></i>你好，我是蕾泽</p>
+        <h1>喜欢海、便利店，<br>和没写完的话。</h1>
+        <p class="hero-sub">这里放我随手拍的照片、写到一半的话，和还没想明白的事。不分类，慢慢长——反正也没人催我。</p>
+        <div class="cta">
+          <a class="btn btn-primary" href="#scraps">看看我的日常</a>
+          <a class="btn btn-ghost" href="#about">先认识一下我</a>
+        </div>
+      </div>
+
+      <aside class="now-card reveal" id="now">
+        <h3><i aria-hidden="true"></i>最近</h3>
+        <p class="now-row"><span>在听</span>一首循环了三天的歌</p>
+        <p class="now-row"><span>在想</span>要不要搬去有海的地方</p>
+        <p class="now-row"><span>在做</span>这个网站，和一顿还没做的饭</p>
+      </aside>
+    </div>
+  </section>
+
+  <!-- 关于我 -->
+  <section class="section surface" id="about">
+    <div class="wrap">
+      <div class="sec-head reveal">
+        <div>
+          <p class="sec-idx">01</p>
+          <h2>关于我</h2>
+        </div>
+        <p class="sec-note">不写成简历，写成便签。想到哪写到哪，顺序也不重要。</p>
+      </div>
+
+      <div class="about-grid">
+        <div class="about-copy reveal">
+          <p>我不太擅长一句话介绍自己，所以干脆把事实摊开放在右边。剩下的部分，你大概能从照片和我写的东西里拼出来。</p>
+          <p>这个网站没有更新计划。想起来了就加一点，忙起来就放着。它更像我的一个抽屉，不是我的名片。</p>
+          <p class="kicker">关键词</p>
+          <p class="keywords">海&nbsp;&nbsp;/&nbsp;&nbsp;便利店&nbsp;&nbsp;/&nbsp;&nbsp;老照片&nbsp;&nbsp;/&nbsp;&nbsp;奇怪的歌&nbsp;&nbsp;/&nbsp;&nbsp;深夜散步&nbsp;&nbsp;/&nbsp;&nbsp;把兴趣分门别类、然后又全部推翻</p>
+        </div>
+
+        <dl class="facts reveal">
+          <div class="fact"><dt>名字</dt><dd>蕾泽</dd></div>
+          <div class="fact"><dt>在做什么</dt><dd>什么都想试一点</dd></div>
+          <div class="fact"><dt>常出没</dt><dd>有海的地方</dd></div>
+          <div class="fact"><dt>小毛病</dt><dd>兴趣必须乱着放</dd></div>
+        </dl>
+      </div>
+    </div>
+  </section>
+
+  <!-- 日常碎片 -->
+  <section class="section wash" id="scraps">
+    <div class="wrap">
+      <div class="sec-head reveal">
+        <div>
+          <p class="sec-idx">02</p>
+          <h2>日常碎片</h2>
+        </div>
+        <p class="sec-note">按时间倒序，没有分类。拍糊了也不修，那才是当时的样子。</p>
+      </div>
+
+      <div class="bento reveal">
+        <!-- 换真图：把 <img src="你的照片.jpg" alt=""> 放进 .photo-media 里，删掉 <span> -->
+        <div class="bento-row a">
+          <figure class="photo">
+            <div class="photo-media"><span>照片 01</span></div>
+            <figcaption>09.14 · 便利店门口站了很久</figcaption>
+          </figure>
+          <figure class="photo">
+            <div class="photo-media"><span>照片 02</span></div>
+            <figcaption>09.02 · 海是灰的，风很大</figcaption>
+          </figure>
+          <figure class="photo">
+            <div class="photo-media"><span>照片 03</span></div>
+            <figcaption>08.28 · 车上睡着的猫</figcaption>
+          </figure>
+        </div>
+
+        <div class="bento-row b">
+          <figure class="photo">
+            <div class="photo-media"><span>照片 04</span></div>
+            <figcaption>08.21 · 写了一半的纸条</figcaption>
+          </figure>
+          <figure class="photo">
+            <div class="photo-media"><span>照片 05</span></div>
+            <figcaption>07.30 · 夏天最后的向日葵</figcaption>
+          </figure>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer class="site-footer" id="contact">
+  <div class="wrap">
+    <div class="foot-top">
+      <div>
+        <p class="kicker">03</p>
+        <h2>要不要聊两句？</h2>
+        <a class="foot-mail" href="mailto:1806754672@qq.com">
+          1806754672@qq.com
+          <svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true">
+            <path d="M3 9L9 3M9 3H4.2M9 3V7.8" stroke="#5F5480" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </a>
+      </div>
+
+      <div class="foot-cols">
+        <div class="foot-col">
+          <h4>页面</h4>
+          <a href="#about">关于我</a>
+          <a href="#scraps">日常碎片</a>
+          <a href="#now">现在</a>
+        </div>
+        <div class="foot-col">
+          <h4>找到我</h4>
+          <a href="mailto:1806754672@qq.com">邮箱</a>
+          <a href="https://space.bilibili.com/234451938" target="_blank" rel="noopener">B 站</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="watermark" aria-hidden="true">reze</div>
+
+    <div class="foot-bottom">
+      <span>2026 蕾泽 · 想到哪写到哪</span>
+      <span>自己搭的，所以随时会变</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+  (function () {
+    var items = document.querySelectorAll('.reveal');
+    if (!('IntersectionObserver' in window)) {
+      items.forEach(function (el) { el.classList.add('in'); });
+      return;
+    }
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) {
+        if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); }
+      });
+    }, { threshold: 0.1, rootMargin: '0px 0px -6% 0px' });
+    items.forEach(function (el) { io.observe(el); });
+  })();
+
+  (function () {
+    var links = Array.prototype.slice.call(document.querySelectorAll('.nav a'));
+    var targets = links.map(function (a) {
+      var id = a.getAttribute('href');
+      return id && id.charAt(0) === '#' ? document.querySelector(id) : null;
+    });
+    if (!('IntersectionObserver' in window)) return;
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) {
+        if (!e.isIntersecting) return;
+        links.forEach(function (a) { a.classList.remove('active'); });
+        var i = targets.indexOf(e.target);
+        if (i > -1) links[i].classList.add('active');
+      });
+    }, { threshold: 0.2, rootMargin: '-25% 0px -60% 0px' });
+    targets.forEach(function (t) { if (t) io.observe(t); });
+  })();
+</script>
+</body>
+</html>
