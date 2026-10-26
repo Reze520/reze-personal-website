@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://reze520.top/sitemap.xml
