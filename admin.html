@@ -97,6 +97,7 @@
   <div class="tabs">
     <button data-tab="posts" class="on">文章</button>
     <button data-tab="moments">动态</button>
+    <button data-tab="album">相册</button>
     <button data-tab="settings">站点设置</button>
   </div>
 
@@ -111,6 +112,12 @@
       <div class="bar"><h2>动态 · 说说</h2><button class="btn primary" id="btn-new-moment">+ 发一条</button></div>
       <p class="hint">图片填路径（多张用英文逗号分隔），留空就是纯文字。</p>
       <div id="moment-list"></div>
+    </section>
+
+    <section id="tab-album">
+      <div class="bar"><h2>相册</h2><button class="btn primary" id="btn-new-album">+ 添加照片</button></div>
+      <p class="hint">照片用「图床外链」：把图片上传到免费图床（如 imgse.com / sm.ms）拿到图片链接，粘贴到「图片链接」里即可，无需绑卡。保存后相册页实时显示。</p>
+      <div id="album-list"></div>
     </section>
 
     <section id="tab-settings">
@@ -158,10 +165,24 @@
   </div>
 </div>
 
+<div class="mask" id="album-mask">
+  <div class="panel">
+    <h3>编辑照片</h3>
+    <div class="f"><label>图片链接（图床外链，必填）</label><input id="af-src" placeholder="https://s2.loli.net/xxxx.jpg"></div>
+    <div class="f"><label>照片说明（可留空）</label><input id="af-caption" placeholder="比如：某个下午"></div>
+    <div class="f"><label>日期</label><input id="af-date" placeholder="2026-10-27"></div>
+    <div class="f" id="af-preview" style="display:none"><label>预览</label><img id="af-img" style="max-width:100%;border-radius:8px;max-height:220px;object-fit:cover"></div>
+    <div class="foot">
+      <button class="btn" id="af-cancel">取消</button>
+      <button class="btn primary" id="af-save">保存</button>
+    </div>
+  </div>
+</div>
+
 <div class="toast" id="toast"></div>
 
-<script src="assets/js/data.js?v=20261027f"></script>
-<script src="assets/js/cloud.js?v=20261027f"></script>
+<script src="assets/js/data.js?v=20261027g"></script>
+<script src="assets/js/cloud.js?v=20261027g"></script>
 <script>
 (function () {
   var state = { site: {}, posts: [] };
@@ -218,9 +239,9 @@
   async function reload () {
     var r = await fetch("/site-data/content", { cache: "no-store" });
     if (r.ok) { var d = await r.json(); state.site = d.site || {}; state.posts = d.posts || []; }
-    renderPosts(); renderMoments(); renderSettings();
+    renderPosts(); renderMoments(); renderAlbum(); renderSettings();
   }
-  function showApp () { $("#gate").style.display = "none"; $("#app").hidden = false; renderPosts(); renderMoments(); renderSettings(); }
+  function showApp () { $("#gate").style.display = "none"; $("#app").hidden = false; renderPosts(); renderMoments(); renderAlbum(); renderSettings(); }
 
   /* ---------- 文章 ---------- */
   function renderPosts () {
@@ -325,6 +346,68 @@
     saveSettings(function () { renderMoments(); toast("已保存"); });
   }
 
+  /* ---------- 相册 ---------- */
+  var editingAlbumIndex = -1;
+  function renderAlbum () {
+    var box = $("#album-list");
+    var a = state.site.album || [];
+    if (!a.length) { box.innerHTML = '<div class="empty">相册还是空的，点右上「添加照片」。</div>'; return; }
+    box.innerHTML = a.map(function (x, i) {
+      var thumb = x.src
+        ? '<img src="' + esc(x.src) + '" style="width:56px;height:56px;object-fit:cover;border-radius:8px;flex:0 0 auto">'
+        : '<div style="width:56px;height:56px;border-radius:8px;background:#eee;flex:0 0 auto"></div>';
+      return '<div class="card"><div class="r">' + thumb +
+        '<span class="title">' + esc(x.caption || "（无说明）") + "</span>" +
+        '<span class="ops">' +
+        '<button class="btn" data-up="' + i + '">↑</button>' +
+        '<button class="btn" data-down="' + i + '">↓</button>' +
+        '<button class="btn" data-edit="' + i + '">编辑</button>' +
+        '<button class="btn danger" data-del="' + i + '">删除</button>' +
+        "</span></div>" +
+        '<div class="meta">' + esc(x.date || "") + "</div></div>";
+    }).join("");
+    box.querySelectorAll("button[data-edit]").forEach(function (b) { b.onclick = function () { openAlbum(Number(b.getAttribute("data-edit"))); }; });
+    box.querySelectorAll("button[data-del]").forEach(function (b) { b.onclick = function () { delAlbum(Number(b.getAttribute("data-del"))); }; });
+    box.querySelectorAll("button[data-up]").forEach(function (b) { b.onclick = function () { moveAlbum(Number(b.getAttribute("data-up")), -1); }; });
+    box.querySelectorAll("button[data-down]").forEach(function (b) { b.onclick = function () { moveAlbum(Number(b.getAttribute("data-down")), 1); }; });
+  }
+  function openAlbum (i) {
+    editingAlbumIndex = i;
+    var a = (state.site.album || [])[i] || { src:"", caption:"", date:"" };
+    $("#af-src").value = a.src || "";
+    $("#af-caption").value = a.caption || "";
+    $("#af-date").value = a.date || "";
+    updateAlbumPreview();
+    $("#album-mask").classList.add("on");
+  }
+  function updateAlbumPreview () {
+    var src = $("#af-src").value.trim();
+    var pv = $("#af-preview"), img = $("#af-img");
+    if (src) { img.src = src; pv.style.display = "block"; }
+    else { pv.style.display = "none"; img.src = ""; }
+  }
+  function delAlbum (i) {
+    if (!confirm("删除这张照片？")) return;
+    state.site.album.splice(i, 1);
+    saveSettings(function () { renderAlbum(); });
+  }
+  function moveAlbum (i, d) {
+    var a = state.site.album;
+    var j = i + d; if (j < 0 || j >= a.length) return;
+    var t = a[i]; a[i] = a[j]; a[j] = t;
+    saveSettings(function () { renderAlbum(); });
+  }
+  function saveAlbum () {
+    var src = $("#af-src").value.trim();
+    if (!src) { toast("请填写图片链接"); return; }
+    var obj = { src: src, caption: $("#af-caption").value.trim(), date: $("#af-date").value.trim() || today() };
+    if (!state.site.album) state.site.album = [];
+    if (editingAlbumIndex < 0 || !state.site.album[editingAlbumIndex]) state.site.album.unshift(obj);
+    else state.site.album[editingAlbumIndex] = obj;
+    $("#album-mask").classList.remove("on");
+    saveSettings(function () { renderAlbum(); toast("已保存"); });
+  }
+
   /* ---------- 设置 ---------- */
   var SETTING_FIELDS = [
     { key:"name", label:"站点名", type:"text" },
@@ -417,6 +500,10 @@
     $("#pf-save").onclick = savePost;
     $("#mf-cancel").onclick = function () { $("#moment-mask").classList.remove("on"); };
     $("#mf-save").onclick = saveMoment;
+    $("#btn-new-album").onclick = function () { editingAlbumIndex = -1; openAlbum(-1); };
+    $("#af-cancel").onclick = function () { $("#album-mask").classList.remove("on"); };
+    $("#af-save").onclick = saveAlbum;
+    $("#af-src").addEventListener("input", updateAlbumPreview);
     $("#btn-save-settings").onclick = function () { saveSettings(); };
     $("#btn-export").onclick = exportOverride;
     document.querySelectorAll(".mask").forEach(function (m) {
