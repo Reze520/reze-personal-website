@@ -104,6 +104,24 @@
   /* ---------- 工具 ---------- */
   // 首页播放器和左下角悬浮按钮共用一个音频实例
   var bgmAudio = null;
+  // 播放列表与当前曲目序号（窗口内共享，切页不丢）
+  var playerList = [];
+  var playerIdx = 0;
+
+  // 取一首歌的展示信息，缺字段时兜底
+  function trackAt(i) {
+    var list = playerList.length ? playerList : [];
+    if (!list.length) {
+      return {
+        title: (SITE.song && SITE.song.title) || "未知曲目",
+        artist: (SITE.song && SITE.song.artist) || "",
+        cover: (SITE.song && SITE.song.cover) || "",
+        src: SITE.bgm || "assets/audio/song.mp3",
+        lyrics: SITE.lyrics || "",
+      };
+    }
+    return list[((i % list.length) + list.length) % list.length];
+  }
 
   // file:// 协议下访问 storage 会抛 SecurityError，必须兜住，
   // 否则整段初始化会中断，页面变成白屏。
@@ -956,6 +974,7 @@
 
     var cc = catCounts();
     var tc = tagCounts();
+    var curTrack = trackAt(playerIdx);
     var tagNames = Object.keys(tc).sort(function (a, b) {
       return tc[b] - tc[a];
     });
@@ -1013,18 +1032,21 @@
       "</div>" +
       noticeCard +
       '<div class="g-card g-player">' +
-      '<div class="ply-head">音乐播放器</div>' +
+      '<div class="ply-head">音乐播放器' +
+      '<button class="ply-list-btn" id="p-list" type="button" aria-label="曲目列表" data-tip="曲目列表">' +
+      ICONS.note +
+      "</button></div>" +
       // 封面 + 歌名歌手
       '<div class="ply">' +
       '<div class="ply-cover" id="p-cover">' +
-      (SITE.song && SITE.song.cover
-        ? '<img src="' + esc(SITE.song.cover) + '" alt="">'
+      (curTrack.cover
+        ? '<img src="' + esc(curTrack.cover) + '" alt="">'
         : '<span class="ph">♪</span>') +
       "</div>" +
       '<div class="ply-info"><b id="p-title">' +
-      esc((SITE.song && SITE.song.title) || "未知曲目") +
+      esc(curTrack.title || "未知曲目") +
       '</b><span id="p-artist">' +
-      esc((SITE.song && SITE.song.artist) || "") +
+      esc(curTrack.artist || "") +
       "</span></div>" +
       "</div>" +
       // 音量行：喇叭 + 滑块 + 律动条 + 悬浮播放器 / 悬浮歌词
@@ -1044,13 +1066,15 @@
       // 控制行：中间白色大圆
       '<div class="ply-ctrl">' +
       '<button id="p-loop" data-tip="循环播放">' + ICONS.loop + "</button>" +
-      '<button id="p-back" data-tip="从头开始">' + ICONS.skipBack + "</button>" +
+      '<button id="p-back" data-tip="上一首">' + ICONS.skipBack + "</button>" +
       '<button class="ply-play" id="p-play" data-tip="播放 / 暂停">' + ICONS.play + "</button>" +
-      '<button id="p-fwd" data-tip="快进 10 秒">' + ICONS.skipFwd + "</button>" +
+      '<button id="p-fwd" data-tip="下一首">' + ICONS.skipFwd + "</button>" +
       '<button id="p-lyricbox" data-tip="播放器歌词">' + ICONS.lyrics + "</button>" +
       "</div>" +
-      // 歌词区（居中，当前句高亮）
+      // 歌词区（默认收起，点歌词按钮展开）
       '<div class="ply-lyrics" id="p-lyrics"></div>' +
+      // 曲目列表（点右上角列表按钮展开）
+      '<div class="ply-tracks" id="p-tracks"></div>' +
       "</div>" +
       '<div class="g-card">' +
       '<div class="g-card-head"><span class="t">' + ICONS.folder + "分类</span></div>" +
@@ -1205,12 +1229,11 @@
     var fwdBtn = $("#p-fwd");
     if (backBtn)
       backBtn.addEventListener("click", function () {
-        if (audio) audio.currentTime = Math.max(0, audio.currentTime - 10);
+        loadTrack(playerIdx - 1, true);
       });
     if (fwdBtn)
       fwdBtn.addEventListener("click", function () {
-        if (audio && audio.duration)
-          audio.currentTime = Math.min(audio.duration, audio.currentTime + 10);
+        loadTrack(playerIdx + 1, true);
       });
 
     // 音量 / 静音 / 循环
@@ -1265,11 +1288,7 @@
     }
     if (lyricBox) {
       renderLyrics(lyricBox, lyricLines);
-      // 参考图里歌词是常显的，所以默认展开；点「播放器歌词」按钮可以收起
-      if (lyricLines.length) {
-        lyricBox.classList.add("open");
-        if (lbBtn) lbBtn.classList.add("on");
-      }
+      // 默认收起：不再自动展开，点「播放器歌词」按钮才打开
     }
 
     // 网页正下方中间的「单行悬浮歌词条」（音乐软件风格，默认隐藏，点了才出现）
@@ -1279,8 +1298,8 @@
       nowBar.className = "now-lyric";
       nowBar.id = "nowLyric";
       nowBar.setAttribute("aria-hidden", "true");
-      var nlPlaceholder = (SITE.song && SITE.song.title)
-        ? SITE.song.title + (SITE.song.artist ? " · " + SITE.song.artist : "")
+      var nlPlaceholder = curTrack.title
+        ? curTrack.title + (curTrack.artist ? " · " + curTrack.artist : "")
         : "暂无歌词";
       nowBar.innerHTML =
         '<span class="nl-dot">♪</span>' +
@@ -1296,14 +1315,12 @@
       fp.id = "floatPlayer";
       fp.innerHTML =
         '<div class="fp-cover" id="fp-cover">' +
-        (SITE.song && SITE.song.cover
-          ? '<img src="' + esc(SITE.song.cover) + '" alt="">'
-          : ICONS.disc) +
+        (curTrack.cover ? '<img src="' + esc(curTrack.cover) + '" alt="">' : ICONS.disc) +
         "</div>" +
         '<div class="fp-meta"><b id="fp-title">' +
-        esc((SITE.song && SITE.song.title) || "") +
+        esc(curTrack.title || "") +
         '</b><span id="fp-artist">' +
-        esc((SITE.song && SITE.song.artist) || "") +
+        esc(curTrack.artist || "") +
         "</span></div>" +
         '<button class="fp-play" id="fp-play" data-tip="播放 / 暂停">' +
         ICONS.play +
@@ -1386,11 +1403,102 @@
         nowBar.classList.add("has-line");
       } else {
         // 间奏 / 还没到第一句：显示歌名占位
-        nlText.textContent = (SITE.song && SITE.song.title)
-          ? SITE.song.title + (SITE.song.artist ? " · " + SITE.song.artist : "")
+        var ct2 = trackAt(playerIdx);
+        nlText.textContent = ct2.title
+          ? ct2.title + (ct2.artist ? " · " + ct2.artist : "")
           : "纯音乐，请欣赏";
         nowBar.classList.remove("has-line");
       }
+    }
+
+    /* ---- 切歌 + 曲目列表 ---- */
+    var listBtn = $("#p-list");
+    var tracksBox = $("#p-tracks");
+
+    function paintTrackList() {
+      if (!tracksBox) return;
+      if (playerList.length < 2) {
+        tracksBox.innerHTML = "";
+        if (listBtn) listBtn.style.display = "none";
+        return;
+      }
+      tracksBox.innerHTML = playerList
+        .map(function (t, i) {
+          return (
+            '<button type="button" class="ply-track' + (i === playerIdx ? " on" : "") +
+            '" data-i="' + i + '">' +
+            '<span class="no">' + (i + 1) + "</span>" +
+            '<span class="nm">' + esc(t.title || "未知曲目") +
+            "<i>" + esc(t.artist || "") + "</i></span>" +
+            "</button>"
+          );
+        })
+        .join("");
+    }
+
+    function loadTrack(i, autoplay) {
+      if (!playerList.length || !audio) return;
+      playerIdx = ((i % playerList.length) + playerList.length) % playerList.length;
+      var t = playerList[playerIdx];
+
+      audio.src = t.src;
+      audio.load();
+
+      var tEl = $("#p-title");
+      var aEl = $("#p-artist");
+      if (tEl) tEl.textContent = t.title || "未知曲目";
+      if (aEl) aEl.textContent = t.artist || "";
+      if (coverEl) {
+        coverEl.innerHTML = t.cover
+          ? '<img src="' + esc(t.cover) + '" alt="">'
+          : '<span class="ph">♪</span>';
+      }
+
+      // 歌词换成这一首的
+      lyricLines = parseLrc(t.lyrics || "");
+      if (lyricBox) renderLyrics(lyricBox, lyricLines);
+      lastLyric = -2;
+
+      // 悬浮迷你播放器同步
+      var fpT = document.getElementById("fp-title");
+      var fpA = document.getElementById("fp-artist");
+      var fpC = document.getElementById("fp-cover");
+      if (fpT) fpT.textContent = t.title || "";
+      if (fpA) fpA.textContent = t.artist || "";
+      if (fpC) {
+        fpC.innerHTML = t.cover ? '<img src="' + esc(t.cover) + '" alt="">' : ICONS.disc;
+      }
+
+      paintTrackList();
+      tick();
+      if (autoplay) audio.play().catch(function () {});
+      try {
+        localStorage.setItem("reze-track", String(playerIdx));
+      } catch (e) {}
+    }
+
+    if (listBtn && tracksBox) {
+      listBtn.addEventListener("click", function () {
+        var open = tracksBox.classList.toggle("open");
+        listBtn.classList.toggle("on", open);
+      });
+    }
+    if (tracksBox) {
+      tracksBox.addEventListener("click", function (e) {
+        var b = e.target.closest(".ply-track");
+        if (!b) return;
+        loadTrack(Number(b.getAttribute("data-i")), true);
+        tracksBox.classList.remove("open");
+        if (listBtn) listBtn.classList.remove("on");
+      });
+    }
+    paintTrackList();
+
+    // 关掉单曲循环后，播完自动下一首
+    if (audio) {
+      audio.addEventListener("ended", function () {
+        if (!audio.loop) loadTrack(playerIdx + 1, true);
+      });
     }
 
     tick();
@@ -2303,11 +2411,24 @@ function interceptLinks(e) {
     btn.setAttribute("data-tip", "背景音乐");
     btn.innerHTML = ICONS.disc;
 
+    // 播放列表：优先用 playlist.js，没有就退回 SITE 里那一首
+    var list = (window.PLAYLIST || []).filter(function (t) {
+      return t && t.src;
+    });
+    if (!list.length) list = [trackAt(0)];
+    playerList = list;
+    try {
+      var saved = parseInt(localStorage.getItem("reze-track") || "0", 10);
+      if (!isNaN(saved) && saved >= 0 && saved < list.length) playerIdx = saved;
+    } catch (e) {
+      playerIdx = 0;
+    }
+
     var audio = document.createElement("audio");
     audio.loop = true;
     audio.preload = "metadata";
     audio.volume = 0.35;
-    audio.src = SITE.bgm || "assets/audio/bgm.wav";
+    audio.src = list[playerIdx].src;
     audio.load();
     bgmAudio = audio;
 

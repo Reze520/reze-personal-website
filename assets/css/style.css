@@ -4834,6 +4834,95 @@ body.has-app .site-head.is-over-hero .nav-more-btn:hover {
 }
 
 /* 歌词：居中、大行距、当前句亮白，上下淡出 */
+/* 曲目列表按钮（播放器头部右侧） */
+.ply-list-btn {
+  margin-left: auto;
+  display: grid;
+  place-items: center;
+  width: 26px;
+  height: 26px;
+  flex: 0 0 auto;
+  border: none;
+  background: none;
+  color: var(--g-text-3);
+  border-radius: 7px;
+  cursor: pointer;
+  transition: color 0.15s ease, background 0.15s ease;
+}
+.ply-list-btn:hover {
+  color: var(--g-accent);
+  background: rgba(255, 255, 255, 0.07);
+}
+.ply-list-btn.on {
+  color: var(--g-accent);
+  background: rgba(255, 255, 255, 0.1);
+}
+.ply-list-btn svg {
+  width: 15px;
+  height: 15px;
+}
+
+/* 曲目列表（默认收起） */
+.ply-tracks {
+  max-height: 0;
+  overflow: hidden;
+  padding: 0 14px;
+  transition: max-height 0.35s var(--ease), padding 0.25s var(--ease);
+}
+.ply-tracks.open {
+  max-height: 240px;
+  padding: 0 14px 12px;
+  overflow-y: auto;
+  scrollbar-width: thin;
+}
+.ply-track {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  width: 100%;
+  border: none;
+  background: none;
+  text-align: left;
+  padding: 8px;
+  border-radius: 9px;
+  color: var(--g-text-2);
+  cursor: pointer;
+  transition: background 0.15s ease, color 0.15s ease;
+}
+.ply-track:hover {
+  background: rgba(255, 255, 255, 0.06);
+  color: var(--g-text);
+}
+.ply-track.on {
+  background: rgba(184, 161, 247, 0.14);
+  color: var(--g-accent);
+}
+.ply-track .no {
+  width: 12px;
+  flex: 0 0 auto;
+  font-size: 10px;
+  color: var(--g-text-3);
+  font-variant-numeric: tabular-nums;
+}
+.ply-track.on .no {
+  color: var(--g-accent);
+}
+.ply-track .nm {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+  font-size: 12px;
+}
+.ply-track .nm i {
+  font-style: normal;
+  font-size: 10px;
+  color: var(--g-text-3);
+}
+.ply-track.on .nm i {
+  color: rgba(184, 161, 247, 0.72);
+}
+
 .ply-lyrics {
   position: relative;
   max-height: 0;
