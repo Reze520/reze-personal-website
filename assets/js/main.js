@@ -7,7 +7,23 @@
   "use strict";
 
   var SITE = window.SITE || {};
-  var POSTS = (window.POSTS || []).slice();
+  // 注意：POSTS 必须保持对 window.POSTS 数组的引用（不要 slice 复制），
+  // 否则后台/云端的动态数据无法同步到这里的渲染。
+  var POSTS = window.POSTS || [];
+
+  // 原地更新 SITE/POSTS（保持引用不变，页面所有渲染自动看到新数据）
+  function applyDataOver(site, posts) {
+    try {
+      if (site && typeof site === "object") {
+        for (var k in window.SITE) { if (!(k in site)) delete window.SITE[k]; }
+        for (var k2 in site) window.SITE[k2] = site[k2];
+      }
+      if (Array.isArray(posts)) {
+        window.POSTS.length = 0;
+        posts.forEach(function (p) { window.POSTS.push(p); });
+      }
+    } catch (e) {}
+  }
 
   /* ---------- 图标 ---------- */
   var ICONS = {
@@ -2416,8 +2432,7 @@ function interceptLinks(e) {
       var raw = window.localStorage.getItem("reze-cms");
       if (!raw) return;
       var cms = JSON.parse(raw);
-      if (cms && cms.site) window.SITE = cms.site;
-      if (cms && Array.isArray(cms.posts)) window.POSTS = cms.posts;
+      applyDataOver(cms && cms.site, cms && cms.posts);
     } catch (e) {}
   }
 
@@ -2488,8 +2503,7 @@ function interceptLinks(e) {
       if (typeof window.loadCloudContent === "function") {
         var c = await window.loadCloudContent();
         if (c && c.site && Object.keys(c.site).length) {
-          window.SITE = c.site;
-          if (Array.isArray(c.posts)) window.POSTS = c.posts;
+          applyDataOver(c.site, Array.isArray(c.posts) ? c.posts : null);
         }
       }
     } catch (e) {}
