@@ -1750,33 +1750,26 @@ function applyRoute() {
   renderMain();
 }
 
-/* 欢迎首屏只在「第一次进站」出现一次。
-   之后再进首页（或切回主页）都直接显示正文，不再挡在上面。
-   子页面（文章、动态、相册…）任何时候都不显示首屏。 */
+/* 欢迎首屏：每次打开/刷新网站都会出现一次，但站内切换页面（含切回主页）不再弹。
+   规则：
+   - 本次加载的第一个路由是首页 → 显示首屏，之后切走再切回来都不再显示
+   - 本次加载直接落在子页面（文章、动态…）→ 这次访问整场都不显示首屏
+   不用 localStorage，刷新即重置，所以不会出现「永远看不到」的情况。 */
 var _splashOn = null;
-var _splashShownThisVisit = false;
-var SPLASH_SEEN_KEY = "reze-splash-seen";
-
-function splashSeenBefore() {
-  try {
-    return localStorage.getItem(SPLASH_SEEN_KEY) === "1";
-  } catch (e) {
-    return false;
-  }
-}
+var _splashDecided = false; // 本次加载是否已经判定过
+var _splashAllow = false;   // 本次加载是否允许显示
+var _splashShown = false;   // 本次加载是否已经显示过
 
 function syncSplash(page) {
   var splash = document.getElementById("splash");
   if (!splash) return;
 
-  // 只有「首页 + 以前没看过 + 本次访问还没显示过」才展示
-  var show = page === "home" && !splashSeenBefore() && !_splashShownThisVisit;
-  if (show) {
-    _splashShownThisVisit = true;
-    try {
-      localStorage.setItem(SPLASH_SEEN_KEY, "1");
-    } catch (e) {}
+  if (!_splashDecided) {
+    _splashDecided = true;
+    _splashAllow = page === "home";
   }
+  var show = _splashAllow && !_splashShown && page === "home";
+  if (show) _splashShown = true;
 
   if (_splashOn === show) return;
   _splashOn = show;
