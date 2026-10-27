@@ -3,116 +3,91 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>蕾泽 · 什么都沾一点</title>
-<meta name="description" content="蕾泽的个人博客，记录技术笔记、生活碎片和做过的小东西。">
-<meta name="author" content="蕾泽">
-<meta name="theme-color" content="#f3effc">
-<meta property="og:title" content="蕾泽 · 什么都沾一点">
-<meta property="og:description" content="技术笔记、生活碎片、做过的和想做的东西。">
+<title>伤心公主 · 什么都沾一点</title>
+<meta name="description" content="伤心公主的个人博客，记录生活、兴趣和随手做的小东西。">
+<meta name="author" content="伤心公主">
+<meta name="theme-color" content="#14111d">
+<meta property="og:title" content="伤心公主 · 什么都沾一点">
+<meta property="og:description" content="生活、兴趣、随手做的小东西，还有那些没头没尾的想法。">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://reze520.top/">
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%237a5cb8'/%3E%3Ctext x='16' y='23' font-size='19' font-family='Georgia,serif' fill='%23ffffff' text-anchor='middle'%3Er%3C/text%3E%3C/svg%3E">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%237a5cb8'/%3E%3Cpath d='M16 24.5s-7.5-4.6-7.5-9.6a4.2 4.2 0 0 1 7.5-2.5 4.2 4.2 0 0 1 7.5 2.5c0 5-7.5 9.6-7.5 9.6Z' fill='%23ffffff'/%3E%3C/svg%3E">
 <link rel="stylesheet" href="assets/css/style.css">
 </head>
-<body>
-<a class="skip-link" href="#main">跳到正文</a>
+<body class="has-app">
+<a class="skip-link" href="#app-main">跳到正文</a>
+
+<div class="page-bg" id="page-bg"></div>
 
 <header class="site-head">
   <div class="head-inner">
     <a class="brand" href="index.html">
-      <span class="brand-mark">r</span>
-      蕾泽
-      <em>reze520</em>
+      伤心公主
+      <em>Sad Princess</em>
     </a>
     <nav class="nav">
-      <a href="index.html" aria-current="page">首页</a>
-      <a href="writing.html">文章</a>
-      <a href="about.html">关于</a>
-      <a href="about.html#works" class="hide-s">作品</a>
+      <a href="index.html" aria-current="page" data-tip="返回首页"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="m3 10.2 9-7.2 9 7.2V20a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><path d="M9.5 22v-7.5h5V22"/></svg><span>主页</span></a>
+      <a href="moments.html" data-tip="日常碎片"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v3.6M12 17.4V21M3 12h3.6M17.4 12H21M5.8 5.8l2.5 2.5M15.7 15.7l2.5 2.5M18.2 5.8l-2.5 2.5M8.3 15.7l-2.5 2.5"/></svg><span>动态</span></a>
+      <a href="writing.html" data-tip="全部文章"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/></svg><span>文章</span></a>
+      <a href="album.html" data-tip="照片墙"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="2.5"/><circle cx="8.5" cy="9.5" r="1.5"/><path d="m21 16-5-5-6.5 7"/></svg><span>相册</span></a>
+      <a href="links.html" data-tip="常用网站"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="m15.6 8.4-2.1 5.1-5.1 2.1 2.1-5.1z"/></svg><span>导航</span></a>
+      <div class="nav-more">
+        <button class="nav-more-btn" type="button" data-tip="关于与时间线"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg><span>更多</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="chev"><path d="m6 9 6 6 6-6"/></svg></button>
+        <div class="nav-more-menu">
+          <a href="about.html">关于我</a>
+          <a href="timeline.html">时间线</a>
+        </div>
+      </div>
     </nav>
     <div class="head-tools">
-      <button class="icon-btn" id="skin-btn" title="切换视觉皮肤" aria-label="切换视觉皮肤">
+      <button class="icon-btn" id="skin-btn" title="切换皮肤" aria-label="切换皮肤">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21a9 9 0 1 1 9-9c0 2-1.6 3-3.5 3H16a2 2 0 0 0-1.4 3.4A2 2 0 0 1 12 21Z"/><circle cx="7.5" cy="10.5" r="1"/><circle cx="12" cy="7.5" r="1"/><circle cx="16.5" cy="10.5" r="1"/></svg>
       </button>
-      <button class="icon-btn" id="theme-btn" title="切换深浅色" aria-label="切换深浅色"></button>
+      <button class="icon-btn" id="theme-btn" data-tip="深浅色" aria-label="切换深浅色"></button>
+      <button class="icon-btn" id="set-btn" data-tip="外观设置" aria-label="设置"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h9M19 7h1M4 17h3M13 17h7"/><circle cx="16" cy="7" r="2.2"/><circle cx="10" cy="17" r="2.2"/></svg></button>
     </div>
   </div>
+
+  <div class="read-progress" id="progress"></div>
 </header>
 
 <section class="splash" id="splash">
   <div class="splash-media" id="splash-media"></div>
   <div class="splash-scrim"></div>
   <div class="splash-inner">
-    <div class="splash-avatar" id="splash-avatar"><span>蕾</span></div>
     <p class="splash-hi" id="splash-hi">HI THERE — WELCOME TO MY BLOG</p>
-    <h1 class="splash-title" id="splash-title">欢迎来到我的小窝</h1>
+    <h1 class="splash-title" id="splash-title">RezeのBlog</h1>
+    <p class="splash-typing"><span id="typing"></span></p>
     <div class="splash-quote" id="splash-quote">
       <p>什么都沾一点，想到什么记什么。</p>
-      <span>— 蕾泽</span>
+      <span>— 伤心公主</span>
     </div>
-    <a class="splash-scroll" href="#main">
+    <a class="splash-scroll" href="#app-main">
       <span>向下滑动</span>
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4v14M6 12l6 6 6-6"/></svg>
     </a>
   </div>
 </section>
 
-<div class="shell">
-  <div class="layout">
-    <aside class="side" id="sidebar"></aside>
-
-    <main class="main" id="main">
-      <div class="welcome reveal">
-        <span class="wave">👋</span>
-        <span>欢迎来到 <b>蕾泽</b> 的小站 —— 这里没有算法推荐，只有我想说的话。</span>
-      </div>
-
-      <div class="quick reveal">
-        <a href="writing.html">
-          <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M8 13h8M8 17h5"/></svg></span>
-          <span class="lbl">全部文章</span>
-          <span class="sub">按分类与标签浏览</span>
-        </a>
-        <a href="about.html#works">
-          <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="m12 2 9 5-9 5-9-5 9-5Z"/><path d="m3 12 9 5 9-5M3 17l9 5 9-5"/></svg></span>
-          <span class="lbl">作品集</span>
-          <span class="sub">做过的小东西</span>
-        </a>
-        <a href="about.html">
-          <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></span>
-          <span class="lbl">关于我</span>
-          <span class="sub">这个人是谁</span>
-        </a>
-        <a href="mailto:1806754672@qq.com">
-          <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-10 6L2 7"/></svg></span>
-          <span class="lbl">写信给我</span>
-          <span class="sub">1806754672@qq.com</span>
-        </a>
-      </div>
-
-      <div class="block-head reveal">
-        <span class="t">最新文章</span>
-        <a href="writing.html">查看全部 →</a>
-      </div>
-
-      <div class="cards" id="home-cards"></div>
-    </main>
-  </div>
+<div class="app">
+  <aside class="col col-left" id="app-left"></aside>
+  <main class="col col-main" id="app-main"></main>
+  <aside class="col col-right" id="app-right"></aside>
 </div>
 
 <footer class="site-foot">
   <div class="foot-inner">
     <div class="foot-left">
       <a class="brand" href="index.html">
-        <span class="brand-mark">r</span>
-        蕾泽
+        伤心公主
       </a>
-      <p>什么都沾一点，想到什么记什么。<br>© <span class="js-year">2026</span> 蕾泽 · 保留所有权利</p>
+      <p>什么都沾一点，想到什么记什么。<br>© <span class="js-year">2026</span> 伤心公主 · 保留所有权利</p>
     </div>
     <div class="foot-links">
       <a href="index.html">首页</a>
       <a href="writing.html">文章</a>
       <a href="about.html">关于</a>
+      <a href="timeline.html">时间线</a>
       <a href="mailto:1806754672@qq.com">写信</a>
     </div>
   </div>
@@ -122,11 +97,6 @@
     <span>手写 HTML / CSS，无框架、无追踪</span>
   </div>
 </footer>
-
-<div class="skin-tip" id="skin-tip">
-  <span>当前是 <b class="js-skin-name">淡紫版</b>，点右上角调色盘可切换极简黑白版</span>
-  <button aria-label="关闭提示">×</button>
-</div>
 
 <script>
 (function () {
