@@ -9,3 +9,10 @@ Thumbs.db
 # 临时文件
 _t*.html
 *.log
+
+# 改写文案用的辅助文件（不上线）
+_rewrite.py
+_cloud_patch.json
+_backup/
+cloud_content_*.json
+docx_fulltext.txt
