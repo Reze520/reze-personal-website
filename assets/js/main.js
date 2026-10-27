@@ -736,19 +736,52 @@
 
   function linksMainHtml() {
     var items = SITE.links || [];
+    if (!items.length) {
+      return '<div class="g-card"><div class="g-empty">还没有添加链接</div></div>';
+    }
+
+    // 按分类分组，保持数据里的原始顺序
+    var order = [];
+    var bucket = {};
+    items.forEach(function (l) {
+      var c = l.cat || "其他";
+      if (!bucket[c]) {
+        bucket[c] = [];
+        order.push(c);
+      }
+      bucket[c].push(l);
+    });
+
+    var groups = order
+      .map(function (c) {
+        var cells = bucket[c]
+          .map(function (l) {
+            var initial = esc((l.name || "?").charAt(0));
+            var ico = l.fav
+              ? '<img src="' + esc(l.fav) + '" alt="" loading="lazy" ' +
+                "onerror=\"this.style.display='none';this.parentNode.classList.add('no-img')\">"
+              : "";
+            return (
+              '<a class="lk-item" href="' + esc(l.url) + '" target="_blank" rel="noopener">' +
+              '<span class="lk-ico" data-fb="' + initial + '">' + ico + "</span>" +
+              '<span class="lk-txt"><b>' + esc(l.name) + "</b>" +
+              "<i>" + esc(l.desc || "") + "</i></span></a>"
+            );
+          })
+          .join("");
+        return (
+          '<section class="g-card lk-group">' +
+          '<h2 class="lk-cat">' + esc(c) + "<em>" + bucket[c].length + "</em></h2>" +
+          '<div class="lk-grid">' + cells + "</div></section>"
+        );
+      })
+      .join("");
+
     return (
-      '<div class="g-links-grid">' +
-      items
-        .map(function (l) {
-          return (
-            '<a class="g-link" href="' + esc(l.url) + '" target="_blank" rel="noopener">' +
-            '<span class="ico">' + (ICONS[l.icon] || ICONS.layers) + "</span>" +
-            '<span class="txt"><b>' + esc(l.name) + "</b><span>" + esc(l.desc || "") +
-            "</span></span></a>"
-          );
-        })
-        .join("") +
-      "</div>"
+      '<div class="g-card lk-head">' +
+      "<div><h1>导航</h1><p>常用的一些站点，按用途分了类</p></div>" +
+      '<span class="count">' + items.length + " 个</span></div>" +
+      '<div class="lk-wrap">' + groups + "</div>"
     );
   }
 

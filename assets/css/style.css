@@ -3693,58 +3693,156 @@ body.has-app .site-foot .brand .brand-mark {
 }
 
 /* 导航 */
-.g-links-grid {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 10px;
-}
-.g-link {
+/* ============ 导航页（按分类分组的卡片） ============ */
+.lk-head {
   display: flex;
   align-items: center;
+  justify-content: space-between;
   gap: 12px;
-  background: var(--glass);
-  border: var(--glass-line);
-  border-radius: 12px;
-  backdrop-filter: blur(14px);
-  padding: 14px 16px;
-  transition: all 0.28s var(--ease);
+  padding: 18px 20px;
 }
-.g-link:hover {
-  background: rgba(255, 255, 255, 0.08);
-  border-color: rgba(184, 161, 247, 0.3);
-  transform: translateY(-2px);
+.lk-head h1 {
+  margin: 0 0 3px;
+  font-size: 19px;
+  font-weight: 600;
+  color: var(--g-text);
 }
-.g-link .ico {
-  width: 34px;
-  height: 34px;
+.lk-head p {
+  margin: 0;
+  font-size: 12px;
+  color: var(--g-text-3);
+}
+.lk-head .count {
   flex: none;
-  border-radius: 9px;
+  font-size: 11.5px;
+  color: var(--g-text-3);
+  padding: 3px 9px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.lk-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  margin-top: 16px;
+}
+
+/* 每个分类一张玻璃卡片，压住背景图，字才看得清 */
+.lk-group {
+  padding: 16px 18px 18px;
+  /* 比默认玻璃更实一点，避免花背景透上来干扰阅读 */
+  background: rgba(21, 18, 30, 0.8);
+  border-color: rgba(255, 255, 255, 0.07);
+}
+.lk-head {
+  background: rgba(21, 18, 30, 0.8);
+}
+
+.lk-cat {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  margin: 0 0 12px 2px;
+  font-size: 12.5px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  color: var(--g-text-2);
+}
+.lk-cat::before {
+  content: "";
+  width: 3px;
+  height: 12px;
+  border-radius: 2px;
+  background: var(--g-accent);
+  opacity: 0.85;
+}
+.lk-cat em {
+  font-style: normal;
+  font-size: 10.5px;
+  font-weight: 400;
+  letter-spacing: 0;
+  color: var(--g-text-3);
+}
+
+.lk-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(198px, 1fr));
+  gap: 9px;
+}
+
+.lk-item {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  padding: 10px 12px;
+  border-radius: 11px;
+  background: rgba(255, 255, 255, 0.045);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  transition: background 0.18s ease, border-color 0.18s ease, transform 0.18s ease;
+}
+.lk-item:hover {
+  background: rgba(255, 255, 255, 0.095);
+  border-color: rgba(184, 161, 247, 0.36);
+  transform: translateY(-1px);
+}
+
+.lk-ico {
+  flex: 0 0 auto;
+  width: 32px;
+  height: 32px;
   display: grid;
   place-items: center;
-  background: rgba(184, 161, 247, 0.16);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.07);
+  overflow: hidden;
+}
+.lk-ico img {
+  width: 20px;
+  height: 20px;
+  object-fit: contain;
+  display: block;
+}
+/* 图标没抓到时退回首字 */
+.lk-ico.no-img::after {
+  content: attr(data-fb);
+  font-size: 13px;
+  font-weight: 600;
   color: var(--g-accent);
 }
-.g-link .ico svg {
-  width: 15px;
-  height: 15px;
-}
-.g-link .txt {
+
+.lk-txt {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
   min-width: 0;
 }
-.g-link b {
-  display: block;
+.lk-txt b {
   font-size: 13px;
   font-weight: 500;
   color: var(--g-text);
-}
-.g-link span {
-  display: block;
-  font-size: 11px;
-  color: var(--g-text-3);
-  margin-top: 2px;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+}
+.lk-txt i {
+  font-style: normal;
+  font-size: 11px;
+  color: var(--g-text-3);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+@media (max-width: 760px) {
+  .lk-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+@media (max-width: 460px) {
+  .lk-grid {
+    grid-template-columns: 1fr;
+  }
 }
 
 @media (max-width: 620px) {
@@ -4449,6 +4547,21 @@ body.has-app .site-head.is-over-hero .icon-btn {
   font-size: 12.5px;
   color: rgba(255, 255, 255, 0.8);
   transition: all 0.2s var(--ease);
+}
+
+/* 「更多」里与主导航重复的项：宽屏隐藏（上面已经有了），窄屏才补进来 */
+.nav-more-menu a.m-dupe {
+  display: none;
+}
+@media (max-width: 760px) {
+  .nav-more-menu a.m-dupe {
+    display: block;
+  }
+  /* 窄屏把这两项收进「更多」，避免顶栏挤在一起 */
+  .nav > a[href="album.html"],
+  .nav > a[href="links.html"] {
+    display: none;
+  }
 }
 .nav-more-menu a:hover {
   background: rgba(255, 255, 255, 0.11);
