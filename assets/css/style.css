@@ -5293,3 +5293,9 @@ body.has-app .site-head.is-over-hero .nav-more-btn:hover {
 body {
   overflow-x: clip;
 }
+
+/* 顶栏品牌靠到真正左上角：取消居中宽度限制，左内边距缩小 */
+.head-inner {
+  max-width: none;
+  padding: 0 16px;
+}
