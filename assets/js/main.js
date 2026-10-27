@@ -726,7 +726,7 @@
     var params = params0 || new URLSearchParams(location.search);
     var startCat = params.get("cat") || "全部";
     var startTag = params.get("tag") || "";
-    var PER = 8; // 每页篇数
+    var PER = 5; // 每页篇数
 
     function pagerHtml(pages, page) {
       if (pages <= 1) return "";
@@ -812,7 +812,7 @@
     var barEl = root.querySelector("#g-filters");
     if (!listEl || !barEl) return;
 
-    var PER = 8; // 每页篇数
+    var PER = 5; // 每页篇数
     var params = params0 || new URLSearchParams(location.search);
     var startCat = params.get("cat") || "全部";
     var startTag = params.get("tag") || "";
@@ -1637,6 +1637,16 @@ function renderRightForPage(page) {
   bindToc();
 }
 
+// 路由切换时瞬时回到顶部：绕过 html 上的 scroll-behavior:smooth，
+// 避免"整页向上滑一段动画"打断阅读（目录跳转、回顶部仍然是平滑滚动）
+function instantScrollTop() {
+  var de = document.documentElement;
+  var prev = de.style.scrollBehavior;
+  de.style.scrollBehavior = "auto";
+  window.scrollTo(0, 0);
+  de.style.scrollBehavior = prev;
+}
+
 function renderMain() {
   var app = document.querySelector(".app");
   var main = $("#app-main");
@@ -1668,7 +1678,7 @@ function renderMain() {
   }
   updateNavActive(page);
   renderRightForPage(page);
-  window.scrollTo(0, 0);
+  instantScrollTop();
 }
 
 function updateNavActive(page) {
@@ -1695,7 +1705,38 @@ function applyRoute() {
   if (page === "index") page = "home";
   app.setAttribute("data-page", page);
   app.__params = new URLSearchParams(r.qs);
+  syncSplash(page);
   renderMain();
+}
+
+/* 首屏只在「首页」出现。子页面（文章、动态、相册…）直接收起，
+   否则进去后屏幕被欢迎大屏占满，得手动往下滑才能看到内容。 */
+var _splashOn = null;
+function syncSplash(page) {
+  var splash = document.getElementById("splash");
+  if (!splash) return;
+  var show = page === "home";
+  if (_splashOn === show) return;
+  _splashOn = show;
+
+  splash.style.display = show ? "" : "none";
+  document.body.classList.toggle("splash-off", !show);
+
+  var inner = splash.querySelector(".splash-inner");
+  var head = document.querySelector(".site-head");
+  if (!show) {
+    // 离开首页：把首屏文字的淡出状态清掉，下次回来是干净的样子
+    if (inner) {
+      inner.style.opacity = "";
+      inner.style.transform = "";
+      inner.style.visibility = "";
+      inner.style.pointerEvents = "";
+    }
+    if (head) head.classList.remove("is-over-hero");
+  } else if (typeof window.__splashUpdate === "function") {
+    // 回到首页：立刻重算顶栏透明白字，不用等下一次滚动
+    window.__splashUpdate();
+  }
 }
 
 function goPage(hash) {
@@ -2270,17 +2311,24 @@ function interceptLinks(e) {
     if (!splash || !head) return;
     var inner = splash.querySelector(".splash-inner");
     function update() {
+      var h = splash.offsetHeight;
+      // 子页面里首屏被收起（高度为 0），不参与计算，顶栏恢复常态
+      if (!h) {
+        head.classList.remove("is-over-hero");
+        return;
+      }
       var y = window.scrollY;
-      head.classList.toggle("is-over-hero", y < splash.offsetHeight - 100);
+      head.classList.toggle("is-over-hero", y < h - 100);
       if (inner) {
         // 滚过首屏高度的 35% 时文字基本消失，不会撞上顶栏
-        var fade = Math.max(0, Math.min(1, y / (splash.offsetHeight * 0.35)));
+        var fade = Math.max(0, Math.min(1, y / (h * 0.35)));
         inner.style.opacity = String(1 - fade);
         inner.style.transform = "translateY(" + -fade * 70 + "px)";
         inner.style.visibility = fade >= 1 ? "hidden" : "visible";
         inner.style.pointerEvents = fade > 0.5 ? "none" : "";
       }
     }
+    window.__splashUpdate = update;
     window.addEventListener("scroll", update, { passive: true });
     window.addEventListener("resize", update);
     update();
