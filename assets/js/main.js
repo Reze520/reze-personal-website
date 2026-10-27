@@ -726,31 +726,51 @@
     var params = params0 || new URLSearchParams(location.search);
     var startCat = params.get("cat") || "全部";
     var startTag = params.get("tag") || "";
+    var PER = 8; // 每页篇数
 
-    function apply(c, t) {
+    function pagerHtml(pages, page) {
+      if (pages <= 1) return "";
+      var h = '<div class="g-pager">';
+      for (var i = 0; i < pages; i++) {
+        h += '<button class="pg-btn' + (i === page ? " on" : "") + '" data-p="' + i + '">' + (i + 1) + "</button>";
+      }
+      return h + "</div>";
+    }
+
+    function apply(c, t, page) {
+      page = page || 0;
       var list = orderedPosts().filter(function (p) {
         var okCat = !c || c === "全部" || p.cat === c;
         var okTag = !t || (p.tags || []).indexOf(t) !== -1;
         return okCat && okTag;
       });
-      listEl.innerHTML = list.length
-        ? list.map(glassPostH).join("")
-        : '<div class="g-empty">这里还没有文章</div>';
+      var pages = Math.max(1, Math.ceil(list.length / PER));
+      if (page >= pages) page = pages - 1;
+      var slice = list.slice(page * PER, page * PER + PER);
+      listEl.innerHTML = (slice.length
+        ? slice.map(glassPostH).join("")
+        : '<div class="g-empty">这里还没有文章</div>') + pagerHtml(pages, page);
       Array.prototype.forEach.call(barEl.querySelectorAll(".g-tab[data-cat]"), function (b) {
         b.setAttribute("aria-pressed", String(!t && b.getAttribute("data-cat") === c));
+      });
+      listEl.querySelectorAll(".pg-btn").forEach(function (b) {
+        b.onclick = function () {
+          apply(c, t, Number(b.getAttribute("data-p")));
+          try { listEl.scrollIntoView({ behavior: "smooth", block: "start" }); } catch (err) {}
+        };
       });
     }
 
     barEl.addEventListener("click", function (e) {
       var b = e.target.closest(".g-tab[data-cat]");
       if (!b) return;
-      apply(b.getAttribute("data-cat"), "");
+      apply(b.getAttribute("data-cat"), "", 0);
       try {
         history.replaceState(null, "", location.pathname.split("/").pop() || "index.html");
       } catch (err) {}
     });
 
-    apply(startCat, startTag);
+    apply(startCat, startTag, 0);
   }
 
   function writingMainHtml() {
