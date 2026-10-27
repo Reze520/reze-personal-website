@@ -649,18 +649,58 @@
 
   function albumMainHtml() {
     var items = SITE.album || [];
-    var cells = items
-      .map(function (it) {
-        var inner = it.src
-          ? '<img src="' + esc(it.src) + '" alt="' + esc(it.caption || "") + '" loading="lazy">'
-          : '<div class="ph">待添加</div>';
-        return (
-          "<figure>" + inner + "<figcaption><span>" + esc(it.caption || "") +
-          "</span><time>" + fmtDate(it.date) + "</time></figcaption></figure>"
-        );
-      })
-      .join("");
-    return '<div class="g-album">' + cells + "</div>";
+    var cats = SITE.albumCats || [];
+    // 收集所有相册里出现的分类（含未在 albumCats 里的）
+    var seen = cats.slice();
+    items.forEach(function (it) { if (it.cat && seen.indexOf(it.cat) < 0) seen.push(it.cat); });
+    var chips = '<div class="g-tabs" id="al-tabs" style="margin:0 0 14px"><button class="g-tab" data-acat="" aria-pressed="true">全部<span class="n">' + items.length + "</span></button>";
+    seen.forEach(function (c) {
+      var n = items.filter(function (it) { return it.cat === c; }).length;
+      chips += '<button class="g-tab" data-acat="' + esc(c) + '" aria-pressed="false">' + esc(c) + '<span class="n">' + n + "</span></button>";
+    });
+    chips += "</div>";
+
+    function cellsOf(list) {
+      return list
+        .map(function (it) {
+          var inner = it.src
+            ? '<img src="' + esc(it.src) + '" alt="' + esc(it.caption || "") + '" loading="lazy">'
+            : '<div class="ph">待添加</div>';
+          return (
+            "<figure>" + inner + "<figcaption><span>" + esc(it.caption || "") +
+            "</span><time>" + fmtDate(it.date) + "</time></figcaption></figure>"
+          );
+        })
+        .join("");
+    }
+    return chips + '<div class="g-album" id="al-grid">' + cellsOf(items) + "</div>";
+  }
+
+  function bindAlbumTabs(root) {
+    var tabs = root.querySelector("#al-tabs");
+    var grid = root.querySelector("#al-grid");
+    if (!tabs || !grid) return;
+    var items = SITE.album || [];
+    function paint(cat) {
+      var list = items.filter(function (it) { return !cat || it.cat === cat; });
+      grid.innerHTML = list.length
+        ? list.map(function (it) {
+            var inner = it.src
+              ? '<img src="' + esc(it.src) + '" alt="' + esc(it.caption || "") + '" loading="lazy">'
+              : '<div class="ph">待添加</div>';
+            return "<figure>" + inner + "<figcaption><span>" + esc(it.caption || "") +
+              "</span><time>" + fmtDate(it.date) + "</time></figcaption></figure>";
+          }).join("")
+        : '<div class="g-empty">这个分类还没有照片</div>';
+      tabs.querySelectorAll(".g-tab").forEach(function (b) {
+        b.setAttribute("aria-pressed", String(b.getAttribute("data-acat") === cat));
+      });
+    }
+    tabs.addEventListener("click", function (e) {
+      var b = e.target.closest(".g-tab[data-acat]");
+      if (!b) return;
+      paint(b.getAttribute("data-acat"));
+    });
   }
 
   function linksMainHtml() {
@@ -1442,6 +1482,7 @@ function renderMain() {
     bindMoments(main);
   } else if (page === "album") {
     main.innerHTML = albumMainHtml();
+    bindAlbumTabs(main);
   } else if (page === "links") {
     main.innerHTML = linksMainHtml();
   } else if (page === "timeline") {

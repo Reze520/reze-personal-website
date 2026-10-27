@@ -70,6 +70,9 @@
   .toast.on { opacity:1; }
   .empty { color:var(--ink2); text-align:center; padding:40px 0; font-size:13px; }
   .loading { text-align:center; color:var(--ink2); padding:40px 0; }
+  .tag-chips { display:flex; flex-wrap:wrap; gap:6px; margin-bottom:8px; }
+  .tag-chips .tc { font-size:12px; padding:4px 10px; border-radius:20px; border:1px solid var(--line); cursor:pointer; user-select:none; background:#f7f6fb; color:var(--ink2); }
+  .tag-chips .tc.on { background:var(--accent); border-color:var(--accent); color:#fff; }
 </style>
 </head>
 <body>
@@ -98,6 +101,7 @@
     <button data-tab="posts" class="on">文章</button>
     <button data-tab="moments">动态</button>
     <button data-tab="album">相册</button>
+    <button data-tab="cats">分类标签</button>
     <button data-tab="settings">站点设置</button>
   </div>
 
@@ -120,6 +124,14 @@
       <div id="album-list"></div>
     </section>
 
+    <section id="tab-cats">
+      <div class="bar"><h2>分类标签管理</h2></div>
+      <p class="hint">文章分类和相册分类可以在这里统一增删；标签会从文章里自动累积，删除某标签会从对应文章中移除。</p>
+      <div class="card"><div class="r"><span class="title">文章分类</span><input id="cat-new-input" placeholder="新分类名" style="flex:1;padding:8px 10px;border:1px solid var(--line);border-radius:8px"><button class="btn primary" id="btn-add-cat">添加</button></div><div id="cat-list" style="margin-top:10px"></div></div>
+      <div class="card"><div class="r"><span class="title">相册分类</span><input id="albumcat-new-input" placeholder="新相册分类名" style="flex:1;padding:8px 10px;border:1px solid var(--line);border-radius:8px"><button class="btn primary" id="btn-add-albumcat">添加</button></div><div id="albumcat-list" style="margin-top:10px"></div></div>
+      <div class="card"><div class="r"><span class="title">全部标签</span></div><div id="alltags-list" style="margin-top:10px"></div></div>
+    </section>
+
     <section id="tab-settings">
       <div class="bar"><h2>站点设置</h2></div>
       <p class="hint">改完点底部「保存设置」。背景图每行一条；社交每行「名称 | 图标 | 链接」；导航每行「名称 | 链接 | 描述 | 图标」。（头像 / 背景 / 封面等图片请先放到 assets/uploads/ 目录，再填路径。）</p>
@@ -134,10 +146,11 @@
     <h3 id="post-mask-title">编辑文章</h3>
     <div class="f"><label>标题</label><input id="pf-title"></div>
     <div class="f"><div class="row">
-      <div><label>分类</label><input id="pf-cat" placeholder="技术 / 生活 / 作品"></div>
-      <div><label>发布日期</label><input id="pf-date" placeholder="2026-10-27"></div>
+      <div><label>分类</label><select id="pf-cat"><option value="">未分类</option></select></div>
+      <div><label>新分类（填了则用这个，并加入分类表）</label><input id="pf-cat-new" placeholder="留空则用上方选择"></div>
     </div></div>
-    <div class="f"><label>标签（逗号分隔）</label><input id="pf-tags" placeholder="前端, 随笔"></div>
+    <div class="f"><label>标签（点选，或输入新标签逗号分隔）</label><div id="pf-tag-chips" class="tag-chips"></div><input id="pf-tags" placeholder="新标签，逗号分隔"></div>
+    <div class="f"><label>发布日期</label><input id="pf-date" placeholder="2026-10-27"></div>
     <div class="f"><label>封面图路径（可留空）</label><input id="pf-cover" placeholder="assets/uploads/xxx.jpg"></div>
     <div class="f"><label>摘要（列表里显示，可留空）</label><textarea id="pf-excerpt"></textarea></div>
     <div class="f"><div class="chk"><input type="checkbox" id="pf-pinned"><label for="pf-pinned" style="margin:0">置顶</label></div></div>
@@ -170,7 +183,10 @@
     <h3>编辑照片</h3>
     <div class="f"><label>图片链接（图床外链，必填）</label><input id="af-src" placeholder="https://s2.loli.net/xxxx.jpg"></div>
     <div class="f"><label>照片说明（可留空）</label><input id="af-caption" placeholder="比如：某个下午"></div>
-    <div class="f"><label>日期</label><input id="af-date" placeholder="2026-10-27"></div>
+    <div class="f"><div class="row">
+      <div><label>日期</label><input id="af-date" placeholder="2026-10-27"></div>
+      <div><label>相册分类</label><select id="af-cat"><option value="">未分类</option></select></div>
+    </div></div>
     <div class="f" id="af-preview" style="display:none"><label>预览</label><img id="af-img" style="max-width:100%;border-radius:8px;max-height:220px;object-fit:cover"></div>
     <div class="foot">
       <button class="btn" id="af-cancel">取消</button>
@@ -181,8 +197,8 @@
 
 <div class="toast" id="toast"></div>
 
-<script src="assets/js/data.js?v=20261027g"></script>
-<script src="assets/js/cloud.js?v=20261027g"></script>
+<script src="assets/js/data.js?v=20261027h"></script>
+<script src="assets/js/cloud.js?v=20261027h"></script>
 <script>
 (function () {
   var state = { site: {}, posts: [] };
@@ -239,9 +255,15 @@
   async function reload () {
     var r = await fetch("/site-data/content", { cache: "no-store" });
     if (r.ok) { var d = await r.json(); state.site = d.site || {}; state.posts = d.posts || []; }
-    renderPosts(); renderMoments(); renderAlbum(); renderSettings();
+    renderPosts(); renderMoments(); renderAlbum(); renderCats(); renderSettings();
   }
-  function showApp () { $("#gate").style.display = "none"; $("#app").hidden = false; renderPosts(); renderMoments(); renderAlbum(); renderSettings(); }
+  function showApp () { $("#gate").style.display = "none"; $("#app").hidden = false; renderPosts(); renderMoments(); renderAlbum(); renderCats(); renderSettings(); }
+  // 重新拉取文章并写回（删除标签等批量改标签时用）
+  async function reloadPosts () {
+    var r = await fetch("/site-data/content", { cache: "no-store" });
+    if (r.ok) { var d = await r.json(); state.posts = d.posts || []; }
+    renderPosts();
+  }
 
   /* ---------- 文章 ---------- */
   function renderPosts () {
@@ -260,18 +282,62 @@
     box.querySelectorAll("button[data-edit]").forEach(function (b) { b.onclick = function () { openPost(Number(b.getAttribute("data-edit"))); }; });
     box.querySelectorAll("button[data-del]").forEach(function (b) { b.onclick = function () { delPost(Number(b.getAttribute("data-del"))); }; });
   }
+  // 已有分类列表（自定义分类 + 从文章里出现的分类合并去重）
+  function allCategories () {
+    var set = [];
+    (state.site.categories || []).forEach(function (c) { if (c && set.indexOf(c) < 0) set.push(c); });
+    (state.posts || []).forEach(function (p) { if (p.cat && set.indexOf(p.cat) < 0) set.push(p.cat); });
+    return set;
+  }
+  // 已有标签列表（从文章自动累积）
+  function allTags () {
+    var set = [];
+    (state.posts || []).forEach(function (p) {
+      (p.tags || []).forEach(function (t) { if (t && set.indexOf(t) < 0) set.push(t); });
+    });
+    return set;
+  }
+  // 当前编辑的文章选中的标签
+  var editingTags = [];
+
+  function fillCatSelect (curCat) {
+    var sel = $("#pf-cat");
+    var cats = allCategories();
+    sel.innerHTML = '<option value="">未分类</option>' +
+      cats.map(function (c) { return '<option value="' + esc(c) + '">' + esc(c) + "</option>"; }).join("");
+    sel.value = curCat || "";
+  }
+  function paintTagChips () {
+    var box = $("#pf-tag-chips");
+    var tags = allTags();
+    box.innerHTML = tags.map(function (t) {
+      return '<span class="tc' + (editingTags.indexOf(t) >= 0 ? " on" : "") + '" data-t="' + esc(t) + '">' + esc(t) + "</span>";
+    }).join("");
+    box.querySelectorAll(".tc").forEach(function (el) {
+      el.onclick = function () {
+        var t = el.getAttribute("data-t");
+        var idx = editingTags.indexOf(t);
+        if (idx >= 0) editingTags.splice(idx, 1); else editingTags.push(t);
+        el.classList.toggle("on");
+      };
+    });
+  }
+
   function openPost (i) {
     editingPostIndex = i;
     var p = state.posts[i] || { title:"", cat:"", date:"", tags:[], cover:"", pinned:false, excerpt:"", content:"" };
+    editingTags = (p.tags || []).slice();
     $("#post-mask-title").textContent = i < 0 ? "写新文章" : "编辑文章";
     $("#pf-title").value = p.title || "";
-    $("#pf-cat").value = p.cat || "";
+    fillCatSelect(p.cat || "");
+    $("#pf-cat-new").value = "";
     $("#pf-date").value = p.date || "";
-    $("#pf-tags").value = (p.tags || []).join(", ");
+    $("#pf-tags").value = "";
     $("#pf-cover").value = p.cover || "";
     $("#pf-excerpt").value = p.excerpt || "";
     $("#pf-pinned").checked = !!p.pinned;
     $("#pf-content").value = p.content || "";
+    paintTagChips();
     $("#post-mask").classList.add("on");
   }
   async function delPost (i) {
@@ -284,14 +350,27 @@
   async function savePost () {
     var title = $("#pf-title").value.trim();
     if (!title) { toast("标题不能为空"); return; }
+    // 分类：优先用「新分类」输入框；否则用下拉选择
+    var newCat = $("#pf-cat-new").value.trim();
+    var cat = newCat || $("#pf-cat").value || "未分类";
+    if (newCat) {
+      if (!state.site.categories) state.site.categories = [];
+      if (state.site.categories.indexOf(newCat) < 0) state.site.categories.push(newCat);
+      // 新分类随文章一起写入，但 categories 列表要单独存进 site 设置
+    }
+    // 标签：点选的 chips + 手输的新标签合并
+    var manual = splitCsv($("#pf-tags").value);
+    var tags = editingTags.slice();
+    manual.forEach(function (t) { if (tags.indexOf(t) < 0) tags.push(t); });
+
     var cur = state.posts[editingPostIndex] || {};
     var payload = {
       slug: cur.slug || slug(title),
       title: title,
       date: $("#pf-date").value.trim() || today(),
       updated: today(),
-      cat: $("#pf-cat").value.trim() || "未分类",
-      tags: splitCsv($("#pf-tags").value),
+      cat: cat,
+      tags: tags,
       cover: $("#pf-cover").value.trim(),
       pinned: $("#pf-pinned").checked,
       excerpt: $("#pf-excerpt").value.trim(),
@@ -302,6 +381,8 @@
     else d = await api("/site-data/posts", { method: "POST", headers: authHeaders(), body: JSON.stringify(payload) });
     if (d && d.error) { toast("保存失败：" + d.error); return; }
     $("#post-mask").classList.remove("on");
+    // 若有新分类，同步保存 site 设置
+    if (newCat) await saveSettings();
     await reload(); toast("已保存");
   }
 
@@ -373,10 +454,14 @@
   }
   function openAlbum (i) {
     editingAlbumIndex = i;
-    var a = (state.site.album || [])[i] || { src:"", caption:"", date:"" };
+    var a = (state.site.album || [])[i] || { src:"", caption:"", date:"", cat:"" };
     $("#af-src").value = a.src || "";
     $("#af-caption").value = a.caption || "";
     $("#af-date").value = a.date || "";
+    var acats = state.site.albumCats || [];
+    $("#af-cat").innerHTML = '<option value="">未分类</option>' +
+      acats.map(function (c) { return '<option value="' + esc(c) + '">' + esc(c) + "</option>"; }).join("");
+    $("#af-cat").value = a.cat || "";
     updateAlbumPreview();
     $("#album-mask").classList.add("on");
   }
@@ -400,12 +485,77 @@
   function saveAlbum () {
     var src = $("#af-src").value.trim();
     if (!src) { toast("请填写图片链接"); return; }
-    var obj = { src: src, caption: $("#af-caption").value.trim(), date: $("#af-date").value.trim() || today() };
+    var obj = { src: src, caption: $("#af-caption").value.trim(), date: $("#af-date").value.trim() || today(), cat: $("#af-cat").value };
     if (!state.site.album) state.site.album = [];
     if (editingAlbumIndex < 0 || !state.site.album[editingAlbumIndex]) state.site.album.unshift(obj);
     else state.site.album[editingAlbumIndex] = obj;
     $("#album-mask").classList.remove("on");
     saveSettings(function () { renderAlbum(); toast("已保存"); });
+  }
+
+  /* ---------- 分类标签管理 ---------- */
+  function renderCats () {
+    // 文章分类
+    var catBox = $("#cat-list");
+    var cats = state.site.categories || [];
+    catBox.innerHTML = cats.length
+      ? cats.map(function (c) {
+          return '<span class="badge" style="margin:3px">' + esc(c) + ' <a href="javascript:;" data-delcat="' + esc(c) + '" style="color:#d23a3a;margin-left:4px">×</a></span>';
+        }).join("")
+      : '<span class="empty" style="padding:8px 0">还没有自定义分类（文章里用过的会自动出现在下拉里）</span>';
+    catBox.querySelectorAll("a[data-delcat]").forEach(function (a) {
+      a.onclick = function () {
+        var c = a.getAttribute("data-delcat");
+        if (!confirm("删除分类「" + c + "」？相关文章会变成「未分类」。")) return;
+        state.site.categories = (state.site.categories || []).filter(function (x) { return x !== c; });
+        state.posts.forEach(function (p) { if (p.cat === c) p.cat = ""; });
+        saveSettings(function () { renderCats(); });
+      };
+    });
+    // 相册分类
+    var acBox = $("#albumcat-list");
+    var acats = state.site.albumCats || [];
+    acBox.innerHTML = acats.length
+      ? acats.map(function (c) {
+          return '<span class="badge" style="margin:3px">' + esc(c) + ' <a href="javascript:;" data-delac="' + esc(c) + '" style="color:#d23a3a;margin-left:4px">×</a></span>';
+        }).join("")
+      : '<span class="empty" style="padding:8px 0">还没有相册分类</span>';
+    acBox.querySelectorAll("a[data-delac]").forEach(function (a) {
+      a.onclick = function () {
+        var c = a.getAttribute("data-delac");
+        if (!confirm("删除相册分类「" + c + "」？")) return;
+        state.site.albumCats = (state.site.albumCats || []).filter(function (x) { return x !== c; });
+        saveSettings(function () { renderCats(); });
+      };
+    });
+    // 全部标签
+    var tBox = $("#alltags-list");
+    var tags = allTags();
+    tBox.innerHTML = tags.length
+      ? tags.map(function (t) {
+          var cnt = (state.posts || []).filter(function (p) { return (p.tags || []).indexOf(t) >= 0; }).length;
+          return '<span class="badge" style="margin:3px">' + esc(t) + ' ×' + cnt + ' <a href="javascript:;" data-deltag="' + esc(t) + '" style="color:#d23a3a;margin-left:4px">×</a></span>';
+        }).join("")
+      : '<span class="empty" style="padding:8px 0">还没有标签</span>';
+    tBox.querySelectorAll("a[data-deltag]").forEach(function (a) {
+      a.onclick = async function () {
+        var t = a.getAttribute("data-deltag");
+        if (!confirm("删除标签「" + t + "」？会从所有文章移除。")) return;
+        var targets = (state.posts || []).filter(function (p) { return (p.tags || []).indexOf(t) >= 0; });
+        for (var i = 0; i < targets.length; i++) {
+          var p = targets[i];
+          var newTags = (p.tags || []).filter(function (x) { return x !== t; });
+          // 后端是整行更新，需传回完整字段
+          var body = {
+            slug: p.id, title: p.title, date: p.date, updated: p.updated || "",
+            cat: p.cat || "", tags: newTags, cover: p.cover || "",
+            pinned: !!p.pinned, excerpt: p.excerpt || "", content: p.content || ""
+          };
+          await api("/site-data/posts/" + p._dbid, { method: "PUT", headers: authHeaders(), body: JSON.stringify(body) });
+        }
+        await reloadPosts(); renderCats(); toast("已删除标签");
+      };
+    });
   }
 
   /* ---------- 设置 ---------- */
@@ -504,6 +654,21 @@
     $("#af-cancel").onclick = function () { $("#album-mask").classList.remove("on"); };
     $("#af-save").onclick = saveAlbum;
     $("#af-src").addEventListener("input", updateAlbumPreview);
+    // 分类标签管理
+    $("#btn-add-cat").onclick = function () {
+      var v = $("#cat-new-input").value.trim();
+      if (!v) { toast("请输入分类名"); return; }
+      if (!state.site.categories) state.site.categories = [];
+      if (state.site.categories.indexOf(v) < 0) state.site.categories.push(v);
+      saveSettings(function () { $("#cat-new-input").value = ""; renderCats(); toast("已添加分类"); });
+    };
+    $("#btn-add-albumcat").onclick = function () {
+      var v = $("#albumcat-new-input").value.trim();
+      if (!v) { toast("请输入相册分类名"); return; }
+      if (!state.site.albumCats) state.site.albumCats = [];
+      if (state.site.albumCats.indexOf(v) < 0) state.site.albumCats.push(v);
+      saveSettings(function () { $("#albumcat-new-input").value = ""; renderCats(); toast("已添加相册分类"); });
+    };
     $("#btn-save-settings").onclick = function () { saveSettings(); };
     $("#btn-export").onclick = exportOverride;
     document.querySelectorAll(".mask").forEach(function (m) {
