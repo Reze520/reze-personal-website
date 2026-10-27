@@ -4883,7 +4883,25 @@ body.has-app .site-head.is-over-hero .nav-more-btn:hover {
   max-height: 240px;
   padding: 0 14px 12px;
   overflow-y: auto;
+  /* 滚到列表顶/底就停住，不再把滚动传给整个页面 */
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
   scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.22) transparent;
+}
+/* 列表自己的滚动条细一点，和卡片风格一致 */
+.ply-tracks::-webkit-scrollbar {
+  width: 4px;
+}
+.ply-tracks::-webkit-scrollbar-track {
+  background: transparent;
+}
+.ply-tracks::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.22);
+  border-radius: 4px;
+}
+.ply-tracks::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.34);
 }
 .ply-track {
   display: flex;

@@ -1505,6 +1505,42 @@
         tracksBox.classList.remove("open");
         if (listBtn) listBtn.classList.remove("on");
       });
+      // 列表滚到顶/底就停住，别把滚动传给整个页面
+      // （overscroll-behavior 在个别浏览器对滚轮无效，这里兜一道）
+      tracksBox.addEventListener(
+        "wheel",
+        function (e) {
+          if (!tracksBox.classList.contains("open")) return;
+          var top = tracksBox.scrollTop <= 0;
+          var bottom =
+            tracksBox.scrollTop + tracksBox.clientHeight >= tracksBox.scrollHeight - 1;
+          if ((e.deltaY < 0 && top) || (e.deltaY > 0 && bottom)) {
+            e.preventDefault();
+          }
+        },
+        { passive: false }
+      );
+      // 触屏：到边界时同样拦住
+      var touchY = 0;
+      tracksBox.addEventListener(
+        "touchstart",
+        function (e) {
+          touchY = e.touches[0].clientY;
+        },
+        { passive: true }
+      );
+      tracksBox.addEventListener(
+        "touchmove",
+        function (e) {
+          if (!tracksBox.classList.contains("open")) return;
+          var dy = touchY - e.touches[0].clientY; // >0 往下翻
+          var top = tracksBox.scrollTop <= 0;
+          var bottom =
+            tracksBox.scrollTop + tracksBox.clientHeight >= tracksBox.scrollHeight - 1;
+          if ((dy < 0 && top) || (dy > 0 && bottom)) e.preventDefault();
+        },
+        { passive: false }
+      );
     }
     paintTrackList();
 
