@@ -2406,8 +2406,24 @@ function interceptLinks(e) {
     });
   }
 
+  /* ---------- 本地 CMS 覆盖（后台编辑器产物） ----------
+     后台 admin.html 编辑后把内容存进 localStorage；
+     这里在启动最前读取，有就覆盖 SITE / POSTS，实现本机即时预览。
+     部署上线则依赖导出的 data.override.js（见 index.html 引用）。
+     ---------------------------------- */
+  function applyLocalCms() {
+    try {
+      var raw = window.localStorage.getItem("reze-cms");
+      if (!raw) return;
+      var cms = JSON.parse(raw);
+      if (cms && cms.site) window.SITE = cms.site;
+      if (cms && Array.isArray(cms.posts)) window.POSTS = cms.posts;
+    } catch (e) {}
+  }
+
   /* ---------- 启动 ---------- */
   function boot() {
+    applyLocalCms(); // 先套用本地编辑的内容，再渲染
     // 每个模块单独兜底：任何一处出错都不该拖垮整页
     [
       initPageBg, // 先定背景，设置面板的高亮才有依据
@@ -2444,8 +2460,39 @@ function interceptLinks(e) {
   }
 
   if (document.readyState === "loading") {
-    document.addEventListener("DOMContentLoaded", boot);
+    document.addEventListener("DOMContentLoaded", start);
   } else {
+    start();
+  }
+
+  // 启动：先套本地编辑的内容，再尝试拉云端（云端优先），最后渲染
+  async function start() {
+    // 登录回调（WorkBuddy 账号登录用于进入后台 admin.html）
+    try {
+      if (typeof window.handleCloudCallback === "function") {
+        var cb = await window.handleCloudCallback();
+        if (cb === "ok") {
+          try {
+            if (sessionStorage.getItem("reze-admin-intent") === "1") {
+              sessionStorage.removeItem("reze-admin-intent");
+              location.replace("admin.html");
+              return;
+            }
+          } catch (e) {}
+        }
+      }
+    } catch (e) {}
+
+    applyLocalCms();
+    try {
+      if (typeof window.loadCloudContent === "function") {
+        var c = await window.loadCloudContent();
+        if (c && c.site && Object.keys(c.site).length) {
+          window.SITE = c.site;
+          if (Array.isArray(c.posts)) window.POSTS = c.posts;
+        }
+      }
+    } catch (e) {}
     boot();
   }
 })();
