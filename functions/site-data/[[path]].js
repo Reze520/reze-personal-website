@@ -31,6 +31,13 @@ async function initSchema(env) {
   await env.DB.prepare(
     `CREATE TABLE IF NOT EXISTS settings (k TEXT PRIMARY KEY, v TEXT)`
   ).run();
+  await env.DB.prepare(
+    `CREATE TABLE IF NOT EXISTS events (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      date TEXT DEFAULT '', title TEXT DEFAULT '', desc TEXT DEFAULT '',
+      type TEXT DEFAULT 'note', created_at TEXT DEFAULT (datetime('now'))
+    )`
+  ).run();
 }
 
 function authorized(request, env) {
@@ -73,7 +80,8 @@ export async function onRequest(context) {
     let site = {};
     if (s) { try { site = JSON.parse(s.v); } catch (e) { site = {}; } }
     const rows = await env.DB.prepare("SELECT * FROM posts ORDER BY pinned DESC, created_at DESC, id DESC").all();
-    return json({ site: site, posts: (rows.results || []).map(mapPost) });
+    const evs = await env.DB.prepare("SELECT * FROM events ORDER BY date ASC, id ASC").all();
+    return json({ site: site, posts: (rows.results || []).map(mapPost), events: (evs.results || []) });
   }
 
   // 登录
@@ -111,6 +119,29 @@ export async function onRequest(context) {
         b.slug || "", b.title || "", b.date || "", b.updated || "", b.cat || "",
         JSON.stringify(b.tags || []), b.cover || "", b.pinned ? 1 : 0, b.excerpt || "", b.content || "", id
       ).run();
+      return json({ ok: true });
+    }
+  }
+
+  // 日历记事
+  if (seg.length >= 1 && seg[0] === "events") {
+    if (method === "POST" && seg.length === 1) {
+      const b = await request.json();
+      const r = await env.DB.prepare(
+        "INSERT INTO events (date,title,desc,type) VALUES (?,?,?,?)"
+      ).bind(b.date || "", b.title || "", b.desc || "", b.type || "note").run();
+      return json({ ok: true, id: r.meta && r.meta.last_row_id });
+    }
+    if ((method === "PUT" || method === "DELETE") && seg.length === 2) {
+      const id = Number(seg[1]);
+      if (method === "DELETE") {
+        await env.DB.prepare("DELETE FROM events WHERE id=?").bind(id).run();
+        return json({ ok: true });
+      }
+      const b = await request.json();
+      await env.DB.prepare(
+        "UPDATE events SET date=?,title=?,desc=?,type=? WHERE id=?"
+      ).bind(b.date || "", b.title || "", b.desc || "", b.type || "note", id).run();
       return json({ ok: true });
     }
   }

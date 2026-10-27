@@ -14,7 +14,11 @@ window.loadCloudContent = async function () {
       var site = window.mergeSiteDefaults
         ? window.mergeSiteDefaults(window.SITE || {}, d.site)
         : d.site;
-      return { site: site, posts: Array.isArray(d.posts) ? d.posts : [] };
+      return {
+        site: site,
+        posts: Array.isArray(d.posts) ? d.posts : [],
+        events: Array.isArray(d.events) ? d.events : []
+      };
     }
     return null;
   } catch (e) {

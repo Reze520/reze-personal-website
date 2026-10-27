@@ -101,6 +101,7 @@
     <button data-tab="posts" class="on">文章</button>
     <button data-tab="moments">动态</button>
     <button data-tab="album">相册</button>
+    <button data-tab="calendar">日历记事</button>
     <button data-tab="cats">分类标签</button>
     <button data-tab="settings">站点设置</button>
   </div>
@@ -130,6 +131,12 @@
       <div class="card"><div class="r"><span class="title">文章分类</span><input id="cat-new-input" placeholder="新分类名" style="flex:1;padding:8px 10px;border:1px solid var(--line);border-radius:8px"><button class="btn primary" id="btn-add-cat">添加</button></div><div id="cat-list" style="margin-top:10px"></div></div>
       <div class="card"><div class="r"><span class="title">相册分类</span><input id="albumcat-new-input" placeholder="新相册分类名" style="flex:1;padding:8px 10px;border:1px solid var(--line);border-radius:8px"><button class="btn primary" id="btn-add-albumcat">添加</button></div><div id="albumcat-list" style="margin-top:10px"></div></div>
       <div class="card"><div class="r"><span class="title">全部标签</span></div><div id="alltags-list" style="margin-top:10px"></div></div>
+    </section>
+
+    <section id="tab-calendar">
+      <div class="bar"><h2>日历记事</h2><button class="btn primary" id="btn-new-event">+ 添加记事</button></div>
+      <p class="hint">在某一天标记一件事或写段备忘，前台日历上那天会亮起小点，点日期可查看。</p>
+      <div id="event-list"></div>
     </section>
 
     <section id="tab-settings">
@@ -178,6 +185,22 @@
   </div>
 </div>
 
+<div class="mask" id="event-mask">
+  <div class="panel">
+    <h3>编辑记事</h3>
+    <div class="f"><div class="row">
+      <div><label>日期</label><input id="ef-date" placeholder="2026-10-27"></div>
+      <div><label>类型</label><select id="ef-type"><option value="note">记事</option><option value="birthday">生日</option><option value="anniversary">纪念日</option><option value="todo">待办</option></select></div>
+    </div></div>
+    <div class="f"><label>标题</label><input id="ef-title" placeholder="比如：约了朋友吃饭"></div>
+    <div class="f"><label>详细（可留空）</label><textarea id="ef-desc"></textarea></div>
+    <div class="foot">
+      <button class="btn" id="ef-cancel">取消</button>
+      <button class="btn primary" id="ef-save">保存</button>
+    </div>
+  </div>
+</div>
+
 <div class="mask" id="album-mask">
   <div class="panel">
     <h3>编辑照片</h3>
@@ -197,11 +220,11 @@
 
 <div class="toast" id="toast"></div>
 
-<script src="assets/js/data.js?v=20261027i"></script>
-<script src="assets/js/cloud.js?v=20261027i"></script>
+<script src="assets/js/data.js?v=20261027j"></script>
+<script src="assets/js/cloud.js?v=20261027j"></script>
 <script>
 (function () {
-  var state = { site: {}, posts: [] };
+  var state = { site: {}, posts: [], events: [] };
   var editingPostIndex = -1;
   var editingMomentIndex = -1;
 
@@ -249,15 +272,16 @@
       }
       state.site = cloud;
       state.posts = d.posts || [];
+      state.events = d.events || [];
     } catch (e) { gateErr("读取失败：" + e.message); return; }
     showApp();
   }
   async function reload () {
     var r = await fetch("/site-data/content", { cache: "no-store" });
-    if (r.ok) { var d = await r.json(); state.site = d.site || {}; state.posts = d.posts || []; }
-    renderPosts(); renderMoments(); renderAlbum(); renderCats(); renderSettings();
+    if (r.ok) { var d = await r.json(); state.site = d.site || {}; state.posts = d.posts || []; state.events = d.events || []; }
+    renderPosts(); renderMoments(); renderAlbum(); renderEvents(); renderCats(); renderSettings();
   }
-  function showApp () { $("#gate").style.display = "none"; $("#app").hidden = false; renderPosts(); renderMoments(); renderAlbum(); renderCats(); renderSettings(); }
+  function showApp () { $("#gate").style.display = "none"; $("#app").hidden = false; renderPosts(); renderMoments(); renderAlbum(); renderEvents(); renderCats(); renderSettings(); }
   // 重新拉取文章并写回（删除标签等批量改标签时用）
   async function reloadPosts () {
     var r = await fetch("/site-data/content", { cache: "no-store" });
@@ -493,7 +517,60 @@
     saveSettings(function () { renderAlbum(); toast("已保存"); });
   }
 
-  /* ---------- 分类标签管理 ---------- */
+  /* ---------- 日历记事 ---------- */
+  var editingEventIndex = -1;
+  function renderEvents () {
+    var box = $("#event-list");
+    var evs = state.events || [];
+    if (!evs.length) { box.innerHTML = '<div class="empty">还没有记事，点右上「添加记事」。</div>'; return; }
+    var typeMap = { note:"记事", birthday:"生日", anniversary:"纪念日", todo:"待办" };
+    box.innerHTML = evs.map(function (e, i) {
+      return '<div class="card"><div class="r"><span class="title">' + esc(e.title) + "</span>" +
+        '<span class="badge">' + esc(typeMap[e.type] || "记事") + "</span>" +
+        '<span class="ops">' +
+        '<button class="btn" data-edit="' + i + '">编辑</button>' +
+        '<button class="btn danger" data-del="' + i + '">删除</button>' +
+        "</span></div>" +
+        '<div class="meta">' + esc(e.date || "") + (e.desc ? " · " + esc(e.desc) : "") + "</div></div>";
+    }).join("");
+    box.querySelectorAll("button[data-edit]").forEach(function (b) { b.onclick = function () { openEvent(Number(b.getAttribute("data-edit"))); }; });
+    box.querySelectorAll("button[data-del]").forEach(function (b) { b.onclick = function () { delEvent(Number(b.getAttribute("data-del"))); }; });
+  }
+  function openEvent (i) {
+    editingEventIndex = i;
+    var e = (state.events || [])[i] || { date:"", title:"", desc:"", type:"note" };
+    $("#ef-date").value = e.date || today();
+    $("#ef-title").value = e.title || "";
+    $("#ef-desc").value = e.desc || "";
+    $("#ef-type").value = e.type || "note";
+    $("#event-mask").classList.add("on");
+  }
+  async function delEvent (i) {
+    var e = state.events[i];
+    if (!confirm("删除记事「" + e.title + "」？")) return;
+    var d = await api("/site-data/events/" + e.id, { method: "DELETE", headers: authHeaders() });
+    if (d && d.error) { toast("删除失败：" + d.error); return; }
+    await reload(); toast("已删除");
+  }
+  async function saveEvent () {
+    var title = $("#ef-title").value.trim();
+    if (!title) { toast("标题不能为空"); return; }
+    var payload = {
+      date: $("#ef-date").value.trim() || today(),
+      title: title,
+      desc: $("#ef-desc").value.trim(),
+      type: $("#ef-type").value
+    };
+    var cur = (state.events || [])[editingEventIndex] || {};
+    var d;
+    if (cur.id) d = await api("/site-data/events/" + cur.id, { method: "PUT", headers: authHeaders(), body: JSON.stringify(payload) });
+    else d = await api("/site-data/events", { method: "POST", headers: authHeaders(), body: JSON.stringify(payload) });
+    if (d && d.error) { toast("保存失败：" + d.error); return; }
+    $("#event-mask").classList.remove("on");
+    await reload(); toast("已保存");
+  }
+
+
   function renderCats () {
     // 文章分类
     var catBox = $("#cat-list");
@@ -654,6 +731,10 @@
     $("#af-cancel").onclick = function () { $("#album-mask").classList.remove("on"); };
     $("#af-save").onclick = saveAlbum;
     $("#af-src").addEventListener("input", updateAlbumPreview);
+    // 日历记事
+    $("#btn-new-event").onclick = function () { editingEventIndex = -1; openEvent(-1); };
+    $("#ef-cancel").onclick = function () { $("#event-mask").classList.remove("on"); };
+    $("#ef-save").onclick = saveEvent;
     // 分类标签管理
     $("#btn-add-cat").onclick = function () {
       var v = $("#cat-new-input").value.trim();

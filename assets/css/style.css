@@ -5316,3 +5316,44 @@ body {
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)'/%3E%3C/svg%3E");
   background-size: 160px 160px;
 }
+
+/* ============================================================
+   日历页
+   ============================================================ */
+.calendar-head { display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; }
+.calendar-head h1 { margin: 0; font-size: 20px; }
+.calendar-head p { margin: 4px 0 0; color: var(--g-text-3); font-size: 13px; }
+.cal-nav { display: flex; align-items: center; gap: 8px; margin: 14px 0 10px; }
+.cal-nav .btn { min-width: 34px; height: 34px; display: inline-flex; align-items: center; justify-content: center; }
+.cal-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 4px;
+}
+.cal-cell {
+  position: relative;
+  min-height: 64px;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: 6px 7px;
+  background: rgba(255, 255, 255, 0.04);
+  cursor: default;
+  transition: background 0.18s var(--ease), border-color 0.18s var(--ease);
+}
+.cal-cell[data-date]:hover { border-color: var(--g-accent); background: rgba(255, 255, 255, 0.08); }
+.cal-cell.cal-empty { background: transparent; border-color: transparent; }
+.cal-dow { min-height: 0; border: none; background: transparent; color: var(--g-text-3); font-size: 12px; text-align: center; }
+.cal-day { font-size: 14px; font-weight: 600; line-height: 1; }
+.cal-sub { display: block; font-size: 10px; color: var(--g-text-3); margin-top: 3px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.cal-sub.cal-fest { color: #e0564a; font-weight: 600; }
+.cal-cell.cal-today { border-color: var(--g-accent); background: rgba(124, 108, 240, 0.12); }
+.cal-cell.cal-today .cal-day { color: var(--g-accent); }
+.cal-dot { display: inline-block; width: 5px; height: 5px; border-radius: 50%; margin: 6px 2px 0 0; vertical-align: top; }
+.cal-dot-post { background: var(--g-accent); }
+.cal-dot-event { background: #f0a04b; }
+.cal-legend { display: flex; gap: 16px; margin-top: 12px; color: var(--g-text-3); font-size: 12px; align-items: center; }
+.cal-legend .cal-dot { margin-top: 0; }
+@media (max-width: 620px) {
+  .cal-cell { min-height: 48px; padding: 4px 5px; }
+  .cal-sub { display: none; }
+}
