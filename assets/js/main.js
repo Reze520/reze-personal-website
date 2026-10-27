@@ -2406,8 +2406,24 @@ function interceptLinks(e) {
     });
   }
 
+  /* ---------- 本地 CMS 覆盖（后台编辑器产物） ----------
+     后台 admin.html 编辑后把内容存进 localStorage；
+     这里在启动最前读取，有就覆盖 SITE / POSTS，实现本机即时预览。
+     部署上线则依赖导出的 data.override.js（见 index.html 引用）。
+     ---------------------------------- */
+  function applyLocalCms() {
+    try {
+      var raw = window.localStorage.getItem("reze-cms");
+      if (!raw) return;
+      var cms = JSON.parse(raw);
+      if (cms && cms.site) window.SITE = cms.site;
+      if (cms && Array.isArray(cms.posts)) window.POSTS = cms.posts;
+    } catch (e) {}
+  }
+
   /* ---------- 启动 ---------- */
   function boot() {
+    applyLocalCms(); // 先套用本地编辑的内容，再渲染
     // 每个模块单独兜底：任何一处出错都不该拖垮整页
     [
       initPageBg, // 先定背景，设置面板的高亮才有依据
