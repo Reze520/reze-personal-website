@@ -4810,7 +4810,21 @@ body.has-app .site-head.is-over-hero .nav-more-btn:hover {
   padding: 3px;
   display: grid;
   place-items: center;
+  position: relative;
   transition: color 0.2s var(--ease), transform 0.2s var(--ease);
+}
+
+/* 单曲循环：循环图标右下角挂个「1」 */
+.ply-ctrl button[data-mode="one"]::after {
+  content: "1";
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  font-size: 8px;
+  font-weight: 700;
+  line-height: 1;
+  color: currentColor;
+  pointer-events: none;
 }
 .ply-ctrl button:hover {
   color: var(--g-text);

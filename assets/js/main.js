@@ -43,6 +43,8 @@
       '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5 6.5 9H3v6h3.5L11 19z"/><path d="m16 9.5 5 5M21 9.5l-5 5"/></svg>',
     loop:
       '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="m17 2 4 4-4 4"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/><path d="m7 22-4-4 4-4"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/></svg>',
+    shuffle:
+      '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M2 18h1.4c1.3 0 2.5-.6 3.3-1.7l6.1-8.6c.8-1.1 2-1.7 3.3-1.7H22"/><path d="m18 2 4 4-4 4"/><path d="M2 6h1.9c1.5 0 2.9.9 3.6 2.2"/><path d="M22 18h-5.9c-1.3 0-2.6-.7-3.3-1.8l-.5-.8"/><path d="m18 14 4 4-4 4"/></svg>',
     code:
       '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="m16 18 6-6-6-6M8 6l-6 6 6 6"/></svg>',
     video:
@@ -107,6 +109,19 @@
   // 播放列表与当前曲目序号（窗口内共享，切页不丢）
   var playerList = [];
   var playerIdx = 0;
+  var playMode = "list"; // list 顺序循环 / one 单曲循环 / shuffle 随机
+
+  // 下一首该放哪个：随机模式下随机挑一首（避免连续重复同一首）
+  function nextTrackIndex(step) {
+    var n = playerList.length;
+    if (!n) return 0;
+    if (playMode === "shuffle" && n > 1) {
+      var pick = playerIdx;
+      while (pick === playerIdx) pick = Math.floor(Math.random() * n);
+      return pick;
+    }
+    return (((playerIdx + step) % n) + n) % n;
+  }
 
   // 取一首歌的展示信息，缺字段时兜底
   function trackAt(i) {
@@ -1247,7 +1262,7 @@
       });
     if (fwdBtn)
       fwdBtn.addEventListener("click", function () {
-        loadTrack(playerIdx + 1, true);
+        loadTrack(nextTrackIndex(1), true);
       });
 
     // 音量 / 静音 / 循环
@@ -1270,13 +1285,34 @@
         syncMuteIcon();
       });
     }
+    /* 播放模式：顺序循环 → 单曲循环 → 随机，点一下换一个 */
+    var MODE_ORDER = ["list", "one", "shuffle"];
+    var MODE_TIP = { list: "顺序循环", one: "单曲循环", shuffle: "随机播放" };
+    function paintMode() {
+      if (!audio) return;
+      audio.loop = playMode === "one";
+      if (loopBtn) {
+        loopBtn.innerHTML = playMode === "shuffle" ? ICONS.shuffle : ICONS.loop;
+        loopBtn.classList.toggle("on", playMode !== "list");
+        loopBtn.setAttribute("data-mode", playMode);
+        loopBtn.setAttribute("data-tip", MODE_TIP[playMode]);
+      }
+      try {
+        localStorage.setItem("reze-play-mode", playMode);
+      } catch (e) {}
+    }
     if (loopBtn && audio) {
-      loopBtn.classList.toggle("on", audio.loop);
+      try {
+        var savedMode = localStorage.getItem("reze-play-mode");
+        if (savedMode && MODE_ORDER.indexOf(savedMode) >= 0) playMode = savedMode;
+      } catch (e) {}
       loopBtn.addEventListener("click", function () {
-        audio.loop = !audio.loop;
-        loopBtn.classList.toggle("on", audio.loop);
+        var i = MODE_ORDER.indexOf(playMode);
+        playMode = MODE_ORDER[(i + 1) % MODE_ORDER.length];
+        paintMode();
       });
     }
+    paintMode();
     syncMuteIcon();
 
     // 歌词：解析一次，供「播放器内歌词」和「悬浮单行歌词条」共用
@@ -1544,10 +1580,11 @@
     }
     paintTrackList();
 
-    // 关掉单曲循环后，播完自动下一首
+    // 播完自动切下一首（单曲循环由 audio.loop 自己处理，不会走到这里）
     if (audio) {
       audio.addEventListener("ended", function () {
-        if (!audio.loop) loadTrack(playerIdx + 1, true);
+        if (audio.loop) return;
+        loadTrack(nextTrackIndex(1), true);
       });
     }
 
