@@ -5240,3 +5240,56 @@ body.has-app .site-head.is-over-hero .nav-more-btn:hover {
 .splash-inner {
   will-change: opacity, transform;
 }
+
+/* ============================================================
+   24. 移动端顶栏适配（防重叠）
+   窄屏下顶栏内容总宽超出视口会导致按钮互相叠压，分级收纳：
+   ≤760px：导航藏「相册/导航」，保留 主页/动态/文章/更多；
+   ≤620px：按钮缩到 30px、藏「皮肤/音乐」按钮、站名副标题隐藏；
+   ≤400px：导航只留「主页 + 更多」。
+   ============================================================ */
+@media (max-width: 760px) {
+  .nav a:nth-child(n + 4) {
+    display: none;
+  }
+}
+@media (max-width: 620px) {
+  .head-inner {
+    padding: 0 14px;
+    gap: 10px;
+  }
+  .brand {
+    font-size: 15px;
+    gap: 8px;
+  }
+  .brand em {
+    display: none;
+  }
+  .head-tools {
+    gap: 6px;
+    margin-left: 0;
+  }
+  .icon-btn {
+    width: 30px;
+    height: 30px;
+    flex: 0 0 auto;
+  }
+  .icon-btn svg {
+    width: 16px;
+    height: 16px;
+  }
+  #skin-btn,
+  #music-btn {
+    display: none;
+  }
+}
+@media (max-width: 400px) {
+  .nav a:nth-child(n + 2) {
+    display: none;
+  }
+}
+
+/* 背景层 scale 呼吸动画会让画布横向多出约 3px，用 clip 收掉（不影响 sticky 顶栏） */
+body {
+  overflow-x: clip;
+}
