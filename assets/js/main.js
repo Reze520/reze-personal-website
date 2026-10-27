@@ -1750,48 +1750,42 @@ function applyRoute() {
   renderMain();
 }
 
-/* 欢迎首屏：每次打开/刷新网站都会出现一次，但站内切换页面（含切回主页）不再弹。
-   规则：
-   - 本次加载的第一个路由是首页 → 显示首屏，之后切走再切回来都不再显示
-   - 本次加载直接落在子页面（文章、动态…）→ 这次访问整场都不显示首屏
-   不用 localStorage，刷新即重置，所以不会出现「永远看不到」的情况。 */
-var _splashOn = null;
-var _splashDecided = false; // 本次加载是否已经判定过
-var _splashAllow = false;   // 本次加载是否允许显示
-var _splashShown = false;   // 本次加载是否已经显示过
+/* 欢迎首屏：每次打开/刷新网站都出现在最上面（不管停在哪个页面），
+   往下滑才是内容；站内切换页面时不再重复弹出。
+   只用内存变量，刷新即重置，所以不会出现「再也看不到」的情况。 */
+var _splashDone = false; // 本次加载是否已经处理过首屏
+
+function hideSplash() {
+  var splash = document.getElementById("splash");
+  if (!splash) return;
+  splash.style.display = "none";
+  document.body.classList.add("splash-off");
+  var inner = splash.querySelector(".splash-inner");
+  if (inner) {
+    inner.style.opacity = "";
+    inner.style.transform = "";
+    inner.style.visibility = "";
+    inner.style.pointerEvents = "";
+  }
+  var head = document.querySelector(".site-head");
+  if (head) head.classList.remove("is-over-hero");
+}
 
 function syncSplash(page) {
   var splash = document.getElementById("splash");
   if (!splash) return;
 
-  if (!_splashDecided) {
-    _splashDecided = true;
-    _splashAllow = page === "home";
+  // 每次页面加载的第一次调用：无论当前是哪个页面，都把首屏摆出来
+  if (!_splashDone) {
+    _splashDone = true;
+    splash.style.display = "";
+    document.body.classList.remove("splash-off");
+    if (typeof window.__splashUpdate === "function") window.__splashUpdate();
+    return;
   }
-  var show = _splashAllow && !_splashShown && page === "home";
-  if (show) _splashShown = true;
 
-  if (_splashOn === show) return;
-  _splashOn = show;
-
-  splash.style.display = show ? "" : "none";
-  document.body.classList.toggle("splash-off", !show);
-
-  var inner = splash.querySelector(".splash-inner");
-  var head = document.querySelector(".site-head");
-  if (!show) {
-    // 收起首屏：把文字淡出状态清掉，避免残留
-    if (inner) {
-      inner.style.opacity = "";
-      inner.style.transform = "";
-      inner.style.visibility = "";
-      inner.style.pointerEvents = "";
-    }
-    if (head) head.classList.remove("is-over-hero");
-  } else if (typeof window.__splashUpdate === "function") {
-    // 展示首屏：立刻重算顶栏透明白字，不用等滚动
-    window.__splashUpdate();
-  }
+  // 之后（站内切换页面）：收起首屏，直接看内容
+  hideSplash();
 }
 
 function goPage(hash) {
