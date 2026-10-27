@@ -4927,17 +4927,27 @@ body.has-app .site-head.is-over-hero .nav-more-btn:hover {
   transition: color 0.2s var(--ease), transform 0.2s var(--ease);
 }
 
-/* 单曲循环：循环图标右下角挂个「1」 */
-.ply-ctrl button[data-mode="one"]::after {
-  content: "1";
+/* 单曲循环角标：右下角一枚小圆点，不用 ::after（那个坑位属于提示气泡） */
+.ply-mode-badge {
+  display: none;
   position: absolute;
-  right: 0;
-  bottom: 0;
-  font-size: 8px;
-  font-weight: 700;
-  line-height: 1;
-  color: currentColor;
+  right: -2px;
+  bottom: -2px;
+  min-width: 9px;
+  height: 9px;
+  padding: 0 2px;
+  border-radius: 5px;
+  background: var(--g-accent);
+  color: #1a1626;
+  font-size: 7px;
+  font-weight: 800;
+  font-style: normal;
+  line-height: 9px;
+  text-align: center;
   pointer-events: none;
+}
+.ply-ctrl button[data-mode="one"] .ply-mode-badge {
+  display: block;
 }
 .ply-ctrl button:hover {
   color: var(--g-text);

@@ -1325,7 +1325,10 @@
       if (!audio) return;
       audio.loop = playMode === "one";
       if (loopBtn) {
-        loopBtn.innerHTML = playMode === "shuffle" ? ICONS.shuffle : ICONS.loop;
+        // 角标必须是独立元素：提示气泡也用 ::after，两个挤在一起会把气泡撑成一个小黑块
+        loopBtn.innerHTML =
+          (playMode === "shuffle" ? ICONS.shuffle : ICONS.loop) +
+          '<i class="ply-mode-badge" aria-hidden="true">1</i>';
         loopBtn.classList.toggle("on", playMode !== "list");
         loopBtn.setAttribute("data-mode", playMode);
         loopBtn.setAttribute("data-tip", MODE_TIP[playMode]);
