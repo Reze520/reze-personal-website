@@ -5357,3 +5357,14 @@ body {
   .cal-cell { min-height: 48px; padding: 4px 5px; }
   .cal-sub { display: none; }
 }
+
+/* 文章列表分页 */
+.g-pager { display: flex; gap: 8px; justify-content: center; margin: 26px 0 8px; }
+.g-pager .pg-btn {
+  min-width: 36px; height: 36px; padding: 0 10px;
+  border-radius: 10px; border: 1px solid var(--line);
+  background: transparent; color: var(--g-text-2);
+  cursor: pointer; font-size: 13px; transition: all 0.2s var(--ease);
+}
+.g-pager .pg-btn:hover { border-color: var(--g-accent); color: var(--g-accent); }
+.g-pager .pg-btn.on { background: var(--g-accent); border-color: var(--g-accent); color: #fff; }

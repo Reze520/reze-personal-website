@@ -434,7 +434,7 @@
   function cardMarkup(p, i) {
     var cover = p.cover
       ? '<img src="' + esc(p.cover) + '" alt="' + esc(p.title) + '" loading="lazy">'
-      : '<div class="cover-ph"><span>' + esc(p.cat) + "</span></div>";
+      : ""; // 无封面时不渲染占位块
 
     var pin = p.pinned ? '<span class="pin">置顶</span>' : "";
 
@@ -473,11 +473,9 @@
       " 字</span>" +
       "</div>" +
       "</div>" +
-      '<div class="cover" style="--ph-h:' +
-      coverHue(p.id, i) +
-      '">' +
-      cover +
-      "</div>" +
+      (cover
+        ? '<div class="cover" style="--ph-h:' + coverHue(p.id, i) + '">' + cover + "</div>"
+        : "") +
       "</a>" +
       "</article>"
     );
@@ -519,7 +517,7 @@
   function glassPostH(p) {
     var thumb = p.cover
       ? '<img src="' + esc(p.cover) + '" alt="" loading="lazy">'
-      : '<div class="ph">' + esc(p.cat) + "</div>";
+      : ""; // 无封面时不渲染占位块
     var chips = (p.tags || [])
       .slice(0, 5)
       .map(function (t) {
@@ -538,7 +536,7 @@
       "<span>" + ICONS.doc + wordCount(p).toLocaleString() + " 字</span>" +
       "<span>" + ICONS.clock + readMin(p) + " 分钟</span></div>" +
       "</div>" +
-      '<div class="thumb">' + thumb + "</div>" +
+      (thumb ? '<div class="thumb">' + thumb + "</div>" : "") +
       "</a>"
     );
   }
@@ -794,34 +792,54 @@
     var barEl = root.querySelector("#g-filters");
     if (!listEl || !barEl) return;
 
+    var PER = 8; // 每页篇数
     var params = params0 || new URLSearchParams(location.search);
     var startCat = params.get("cat") || "全部";
     var startTag = params.get("tag") || "";
 
-    function apply(c, t) {
+    function pagerHtml(pages, page) {
+      if (pages <= 1) return "";
+      var h = '<div class="g-pager">';
+      for (var i = 0; i < pages; i++) {
+        h += '<button class="pg-btn' + (i === page ? " on" : "") + '" data-p="' + i + '">' + (i + 1) + "</button>";
+      }
+      return h + "</div>";
+    }
+
+    function apply(c, t, page) {
+      page = page || 0;
       var list = orderedPosts().filter(function (p) {
         var okCat = !c || c === "全部" || p.cat === c;
         var okTag = !t || (p.tags || []).indexOf(t) !== -1;
         return okCat && okTag;
       });
-      listEl.innerHTML = list.length
-        ? list.map(glassPostMarkup).join("")
-        : '<div class="g-empty">这里还没有文章</div>';
+      var pages = Math.max(1, Math.ceil(list.length / PER));
+      if (page >= pages) page = pages - 1;
+      var slice = list.slice(page * PER, page * PER + PER);
+      listEl.innerHTML = (slice.length
+        ? slice.map(glassPostMarkup).join("")
+        : '<div class="g-empty">这里还没有文章</div>') + pagerHtml(pages, page);
       Array.prototype.forEach.call(barEl.querySelectorAll(".g-chip"), function (b) {
         b.setAttribute("aria-pressed", String(!t && b.getAttribute("data-cat") === c));
+      });
+      listEl.querySelectorAll(".pg-btn").forEach(function (b) {
+        b.onclick = function () {
+          apply(c, t, Number(b.getAttribute("data-p")));
+          try { listEl.scrollIntoView({ behavior: "smooth", block: "start" }); } catch (err) {}
+        };
       });
     }
 
     barEl.addEventListener("click", function (e) {
       var b = e.target.closest(".g-chip");
       if (!b) return;
-      apply(b.getAttribute("data-cat"), "");
+      apply(b.getAttribute("data-cat"), "", 0);
       try {
         history.replaceState(null, "", "writing.html");
       } catch (err) {}
     });
 
-    apply(startCat, startTag);
+    apply(startCat, startTag, 0);
   }
 
   function mountApp() {
