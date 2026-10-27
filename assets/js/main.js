@@ -862,6 +862,84 @@
     apply(startCat, startTag, 0);
   }
 
+  /* ---------- 右栏小日历：农历 + 节日 + 发文标记，可翻月 ----------
+     只用来「看日期」，点日期不改任何数据，也不做日程。 */
+  function initMiniCal(right) {
+    var box = right && right.querySelector(".g-cal");
+    if (!box) return;
+    var titleEl = box.querySelector(".g-cal-title");
+    var gridEl = box.querySelector(".g-cal-grid");
+    var btnPrev = box.querySelector(".g-cal-prev");
+    var btnNext = box.querySelector(".g-cal-next");
+    var btnToday = box.querySelector(".g-cal-today");
+
+    var today = new Date();
+    var y = today.getFullYear();
+    var m = today.getMonth();
+
+    function dayInfo(yy, mo, dd) {
+      if (!window.Solar) return null;
+      try {
+        var solar = window.Solar.fromYmd(yy, mo, dd);
+        var lunar = solar.getLunar();
+        var fest = (solar.getFestivals() || []).concat(lunar.getFestivals() || []);
+        var jq = lunar.getJieQi() || "";
+        if (jq) fest.unshift(jq);
+        var dayCn = lunar.getDayInChinese();   // 初三 / 廿一
+        var monCn = lunar.getMonthInChinese();
+        return {
+          lun: dayCn === "初一" ? monCn + "月" : dayCn,
+          fest: fest.length ? String(fest[0]) : ""
+        };
+      } catch (e) {
+        return null;
+      }
+    }
+
+    function paint() {
+      if (titleEl) titleEl.textContent = y + " 年 " + (m + 1) + " 月";
+      var firstDow = new Date(y, m, 1).getDay();
+      var days = new Date(y, m + 1, 0).getDate();
+      var isNow = today.getFullYear() === y && today.getMonth() === m;
+
+      var posted = {};
+      POSTS.forEach(function (p) {
+        if (!p.date) return;
+        var d = new Date(p.date);
+        if (d.getFullYear() === y && d.getMonth() === m) posted[d.getDate()] = 1;
+      });
+
+      var html = ["日", "一", "二", "三", "四", "五", "六"]
+        .map(function (w) { return "<span>" + w + "</span>"; })
+        .join("");
+      for (var i = 0; i < firstDow; i++) html += '<b class="mute"></b>';
+      for (var dd = 1; dd <= days; dd++) {
+        var info = dayInfo(y, m + 1, dd);
+        var sub = info ? (info.fest || info.lun) : "";
+        var isFest = !!(info && info.fest);
+        var cls = [];
+        if (isNow && dd === today.getDate()) cls.push("today");
+        if (posted[dd]) cls.push("has");
+        html +=
+          '<b class="' + cls.join(" ") + '"' + (posted[dd] ? ' title="这天发过文章"' : "") + ">" +
+          "<em>" + dd + "</em>" +
+          (sub ? '<i class="g-cal-sub' + (isFest ? " is-fest" : "") + '">' + esc(sub) + "</i>" : "") +
+          "</b>";
+      }
+      if (gridEl) gridEl.innerHTML = html;
+    }
+
+    if (btnPrev) btnPrev.onclick = function () { m--; if (m < 0) { m = 11; y--; } paint(); };
+    if (btnNext) btnNext.onclick = function () { m++; if (m > 11) { m = 0; y++; } paint(); };
+    if (btnToday) btnToday.onclick = function () {
+      var t = new Date();
+      y = t.getFullYear();
+      m = t.getMonth();
+      paint();
+    };
+    paint();
+  }
+
   function mountApp() {
     var left = $("#app-left");
     var main = $("#app-main");
@@ -996,25 +1074,6 @@
       .join("");
 
     var now = new Date();
-    var yy = now.getFullYear();
-    var mm = now.getMonth();
-    var firstDay = new Date(yy, mm, 1).getDay();
-    var total = new Date(yy, mm + 1, 0).getDate();
-    var marked = {};
-    POSTS.forEach(function (p) {
-      var d = new Date(p.date);
-      if (d.getFullYear() === yy && d.getMonth() === mm) marked[d.getDate()] = 1;
-    });
-    var cells = ["日", "一", "二", "三", "四", "五", "六"]
-      .map(function (d) {
-        return "<span>" + d + "</span>";
-      })
-      .join("");
-    for (var i = 0; i < firstDay; i++) cells += '<b class="mute"></b>';
-    for (var dd = 1; dd <= total; dd++) {
-      var cls = dd === now.getDate() ? "today" : marked[dd] ? "has" : "";
-      cells += '<b class="' + cls + '">' + dd + "</b>";
-    }
 
     var totalWords = POSTS.reduce(function (s, p) {
       return s + wordCount(p);
@@ -1041,10 +1100,15 @@
       '动态</span><a class="more" href="timeline.html">更多</a></div>' +
       '<ul class="g-feed">' + feed + "</ul></div>" +
       statCard +
-      '<div class="g-card">' +
-      '<div class="g-card-head"><span class="t">' + ICONS.cal + "日历</span></div>" +
-      '<div class="g-cal"><div class="g-cal-head"><span>' + yy + " 年 " + (mm + 1) +
-      ' 月</span></div><div class="g-cal-grid">' + cells + "</div></div></div>" +
+      '<div class="g-card g-cal-card">' +
+      '<div class="g-card-head"><span class="t">' + ICONS.cal + "日历</span>" +
+      '<div class="g-cal-nav">' +
+      '<button type="button" class="g-cal-prev" aria-label="上个月">‹</button>' +
+      '<button type="button" class="g-cal-today">今</button>' +
+      '<button type="button" class="g-cal-next" aria-label="下个月">›</button>' +
+      "</div></div>" +
+      '<div class="g-cal"><div class="g-cal-title"></div>' +
+      '<div class="g-cal-grid"></div></div></div>' +
       '<div class="g-card">' +
       '<div class="g-card-head"><span class="t">' + ICONS.info + "站点信息</span></div>" +
       '<div class="g-site"><dl>' +
@@ -1054,6 +1118,8 @@
       "<dt>内容许可</dt><dd>CC BY-NC-SA 4.0</dd>" +
       "<dt>始于</dt><dd>" + (SITE.startYear || 2026) + "</dd>" +
       "</dl></div></div>";
+
+    initMiniCal(right);
 
     // 中栏在右栏之后渲染，文章页才能把「文章目录」插到右栏里而不被覆盖
     renderMain();
@@ -1368,136 +1434,6 @@ function timelineMainHtml() {
   );
 }
 
-/* ============================================================
-   日历页：农历 + 节日 + 节气 + 自己标记的记事 + 发文日期
-   依赖 window.Lunar（lunar-javascript，由 calendar.html 引入）
-   ============================================================ */
-function calendarMainHtml() {
-  return (
-    '<div class="g-card calendar-head">' +
-    "<div><h1>" + ICONS.activity + "日历</h1><p>农历、节日、节气，还有我自己标记的日子</p></div>" +
-    '<span class="count" id="cal-today"></span></div>' +
-    '<div class="cal-nav">' +
-    '<button class="btn" id="cal-prev" aria-label="上一月">‹</button>' +
-    '<span id="cal-title" style="font-weight:600;font-size:16px"></span>' +
-    '<button class="btn" id="cal-next" aria-label="下一月">›</button>' +
-    '<button class="btn" id="cal-todaybtn">今天</button>' +
-    "</div>" +
-    '<div class="cal-grid" id="cal-grid"></div>' +
-    '<div class="cal-legend" id="cal-legend"></div>'
-  );
-}
-
-function bindCalendar(root) {
-  var grid = root.querySelector("#cal-grid");
-  var title = root.querySelector("#cal-title");
-  var legend = root.querySelector("#cal-legend");
-  if (!grid) return;
-
-  var now = new Date();
-  var year = now.getFullYear();
-  var month = now.getMonth(); // 0-based
-
-  // 记事（云端）+ 发文日期（本地 POSTS）
-  var events = window.CAL_EVENTS || [];
-  var postDates = {};
-  (window.POSTS || []).forEach(function (p) {
-    if (p.date) postDates[p.date.slice(0, 10)] = true;
-  });
-
-  function lunarInfo(y, m, d) {
-    if (!window.Solar) return null;
-    try {
-      var solar = window.Solar.fromYmd(y, m, d);
-      var lunar = solar.getLunar();
-      var festivals = lunar.getFestivals() || [];
-      var solarFest = solar.getFestivals() || [];
-      var jq = lunar.getJieQi() || "";
-      var others = lunar.getOtherFestivals() || [];
-      var dayText = lunar.getDayInChinese(); // 初一、十五等
-      var monthText = lunar.getMonthInChinese();
-      var all = [];
-      if (solarFest.length) all = all.concat(solarFest);       // 公历节日优先
-      if (jq) all.push(jq);                                     // 节气
-      if (festivals.length) all = all.concat(festivals);        // 农历节日
-      if (others.length) all = all.concat(others);
-      return {
-        dayCn: dayText,
-        monthCn: monthText,
-        festivals: all.slice(0, 2) // 最多显示两个，避免挤
-      };
-    } catch (e) { return null; }
-  }
-
-  function render() {
-    title.textContent = year + " 年 " + (month + 1) + " 月";
-    var first = new Date(year, month, 1);
-    var startDow = first.getDay(); // 0=周日
-    var daysInMonth = new Date(year, month + 1, 0).getDate();
-    var cells = "";
-    // 表头
-    ["日","一","二","三","四","五","六"].forEach(function (w) {
-      cells += '<div class="cal-cell cal-dow">' + w + "</div>";
-    });
-    // 前置空白
-    for (var i = 0; i < startDow; i++) cells += '<div class="cal-cell cal-empty"></div>';
-    var todayStr = now.getFullYear() + "-" + pad2(now.getMonth() + 1) + "-" + pad2(now.getDate());
-    for (var d = 1; d <= daysInMonth; d++) {
-      var ds = year + "-" + pad2(month + 1) + "-" + pad2(d);
-      var li = lunarInfo(year, month + 1, d);
-      var dayEvents = events.filter(function (e) { return e.date === ds; });
-      var isPost = postDates[ds];
-      var isToday = ds === todayStr;
-      var cls = "cal-cell" + (isToday ? " cal-today" : "");
-      var marks = "";
-      if (isPost) marks += '<i class="cal-dot cal-dot-post"></i>';
-      if (dayEvents.length) marks += '<i class="cal-dot cal-dot-event"></i>';
-      var sub = "";
-      if (li) {
-        var fest = li.festivals.length ? li.festivals[0] : (li.dayCn === "初一" ? li.monthCn : li.dayCn);
-        var isFest = li.festivals.length || (li.dayCn === "初一" && li.monthCn !== "正月");
-        sub = '<span class="cal-sub' + (isFest ? " cal-fest" : "") + '">' + esc(fest) + "</span>";
-      }
-      var evTitles = dayEvents.map(function (e) { return esc(e.title); }).join("、");
-      cells += '<div class="' + cls + '" data-date="' + ds + '" title="' + esc(evTitles || "") + '">' +
-        '<span class="cal-day">' + d + "</span>" + marks + sub + "</div>";
-    }
-    grid.innerHTML = cells;
-    // 今日
-    var todayEl = root.querySelector("#cal-today");
-    if (todayEl) todayEl.textContent = todayStr;
-
-    // 图例
-    legend.innerHTML =
-      '<span><i class="cal-dot cal-dot-post"></i>有发文</span>' +
-      '<span><i class="cal-dot cal-dot-event"></i>有记事</span>' +
-      '<span class="cal-sub cal-fest" style="font-size:12px">节日/节气</span>';
-
-    // 点击日期显示详情
-    grid.querySelectorAll(".cal-cell[data-date]").forEach(function (cell) {
-      cell.onclick = function () {
-        var ds2 = cell.getAttribute("data-date");
-        var evs = events.filter(function (e) { return e.date === ds2; });
-        var li2 = lunarInfo(parseInt(ds2.slice(0,4)), parseInt(ds2.slice(5,7)), parseInt(ds2.slice(8,10)));
-        var txt = "「" + ds2 + "」";
-        if (li2 && li2.festivals.length) txt += "\n" + li2.festivals.join("、");
-        if (postDates[ds2]) txt += "\n📝 这一天发过文章";
-        if (evs.length) txt += "\n\n记事：\n" + evs.map(function (e) { return "· " + e.title + (e.desc ? "：" + e.desc : ""); }).join("\n");
-        else if (!postDates[ds2] && (!li2 || !li2.festivals.length)) txt += "\n（没有特别标记）";
-        alert(txt);
-      };
-    });
-  }
-
-  root.querySelector("#cal-prev").onclick = function () { month--; if (month < 0) { month = 11; year--; } render(); };
-  root.querySelector("#cal-next").onclick = function () { month++; if (month > 11) { month = 0; year++; } render(); };
-  root.querySelector("#cal-todaybtn").onclick = function () { year = now.getFullYear(); month = now.getMonth(); render(); };
-
-  render();
-}
-
-function pad2(n) { return n < 10 ? "0" + n : "" + n; }
-
 function aboutHtml() {
   return (
     '<article class="g-article">' +
@@ -1665,9 +1601,6 @@ function renderMain() {
     main.innerHTML = linksMainHtml();
   } else if (page === "timeline") {
     main.innerHTML = timelineMainHtml();
-  } else if (page === "calendar") {
-    main.innerHTML = calendarMainHtml();
-    bindCalendar(main);
   } else if (page === "about") {
     main.innerHTML = aboutHtml();
   } else if (page === "post") {
@@ -1682,7 +1615,7 @@ function renderMain() {
 }
 
 function updateNavActive(page) {
-  var navMap = { home: "index.html", moments: "moments.html", writing: "writing.html", album: "album.html", links: "links.html", calendar: "calendar.html" };
+  var navMap = { home: "index.html", moments: "moments.html", writing: "writing.html", album: "album.html", links: "links.html" };
   var want = navMap[page];
   document.querySelectorAll(".nav a").forEach(function (a) {
     var href = a.getAttribute("href") || "";

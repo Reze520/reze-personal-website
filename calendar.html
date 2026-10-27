@@ -1,106 +1,29 @@
 <!DOCTYPE html>
 <html lang="zh-CN" data-theme="light" data-skin="soft">
 <head>
-  <script>
-  (function () {
-    var p = location.pathname.split("/").pop().replace(/\.html$/, "");
-    if (p && p !== "index") location.replace("index.html#/" + p + location.search);
-  })();
-  </script>
-  <meta charset="utf-8">
+<meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>日历 · 伤心公主</title>
-<meta name="description" content="农历节日、节气，还有我自己标记的日子。">
-<meta name="author" content="伤心公主">
-<meta name="theme-color" content="#14111d">
-<meta property="og:title" content="日历 · 伤心公主">
-<meta property="og:type" content="website">
-<meta property="og:url" content="https://reze520.top/calendar.html">
-<link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20viewBox%3D%270%200%2064%2064%27%3E%3Crect%20width%3D%2764%27%20height%3D%2764%27%20rx%3D%2714%27%20fill%3D%27%23241f33%27%2F%3E%3Crect%20x%3D%272%27%20y%3D%272%27%20width%3D%2760%27%20height%3D%2760%27%20rx%3D%2712%27%20fill%3D%27none%27%20stroke%3D%27rgba%28255%2C255%2C255%2C0.25%29%27%20stroke-width%3D%272%27%2F%3E%3Ctext%20x%3D%2732%27%20y%3D%2745%27%20font-size%3D%2738%27%20font-family%3D%27KaiTi%2CSTKaiti%2Cserif%27%20font-weight%3D%27bold%27%20fill%3D%27%23ffffff%27%20text-anchor%3D%27middle%27%3E%E8%95%BE%3C%2Ftext%3E%3C%2Fsvg%3E">
-<link rel="stylesheet" href="assets/css/style.css?v=20261027p">
+<meta name="robots" content="noindex">
+<link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20viewBox%3D%270%200%2064%2064%27%3E%3Crect%20width%3D%2764%27%20height%3D%2764%27%20rx%3D%2714%27%20fill%3D%27%23241f33%27%2F%3E%3Ctext%20x%3D%2732%27%20y%3D%2745%27%20font-size%3D%2738%27%20font-family%3D%27KaiTi%2CSTKaiti%2Cserif%27%20font-weight%3D%27bold%27%20fill%3D%27%23ffffff%27%20text-anchor%3D%27middle%27%3E%E8%95%BE%3C%2Ftext%3E%3C%2Fsvg%3E">
+<style>
+  html, body { margin: 0; height: 100%; background: #101114; color: #eceded; }
+  body {
+    display: grid; place-items: center; text-align: center;
+    font: 15px/1.9 -apple-system, "Segoe UI", "Microsoft YaHei", sans-serif;
+  }
+  strong { display: block; margin-bottom: 10px; font-size: 17px; color: #eceded; font-weight: 500; }
+  p { max-width: 22em; padding: 0 20px; color: #a3a8b2; }
+  a { color: #b8a1f7; text-decoration: none; border-bottom: 1px solid rgba(184, 161, 247, 0.4); }
+  a:hover { color: #cdbdfb; }
+</style>
+<script>location.replace("index.html#/home");</script>
 </head>
-<body class="has-app">
-<a class="skip-link" href="#app-main">跳到正文</a>
-
-<div class="page-bg" id="page-bg"></div>
-
-<header class="site-head">
-  <div class="head-inner">
-    <a class="brand" href="index.html">
-      伤心公主
-      <em>Sad Princess</em>
-    </a>
-    <nav class="nav">
-      <a href="index.html" data-tip="返回首页"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="m3 10.2 9-7.2 9 7.2V20a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><path d="M9.5 22v-7.5h5V22"/></svg><span>主页</span></a>
-      <a href="calendar.html" data-tip="日历"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="16" rx="2.5"/><path d="M3 10h18M8 3v4M16 3v4"/></svg><span>日历</span></a>
-      <a href="moments.html" data-tip="日常碎片"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v3.6M12 17.4V21M3 12h3.6M17.4 12H21M5.8 5.8l2.5 2.5M15.7 15.7l2.5 2.5M18.2 5.8l-2.5 2.5M8.3 15.7l-2.5 2.5"/></svg><span>动态</span></a>
-      <a href="writing.html" data-tip="全部文章"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/></svg><span>文章</span></a>
-      <a href="album.html" data-tip="照片墙"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="2.5"/><circle cx="8.5" cy="9.5" r="1.5"/><path d="m21 16-5-5-6.5 7"/></svg><span>相册</span></a>
-      <a href="links.html" data-tip="常用网站"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="m15.6 8.4-2.1 5.1-5.1 2.1 2.1-5.1z"/></svg><span>导航</span></a>
-      <div class="nav-more">
-        <button class="nav-more-btn" type="button" data-tip="关于与时间线"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg><span>更多</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="chev"><path d="m6 9 6 6 6-6"/></svg></button>
-        <div class="nav-more-menu">
-          <a href="about.html">关于我</a>
-          <a href="timeline.html">时间线</a>
-        </div>
-      </div>
-    </nav>
-    <div class="head-tools">
-      <button class="icon-btn" id="skin-btn" title="切换皮肤" aria-label="切换皮肤">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21a9 9 0 1 1 9-9c0 2-1.6 3-3.5 3H16a2 2 0 0 0-1.4 3.4A2 2 0 0 1 12 21Z"/><circle cx="7.5" cy="10.5" r="1"/><circle cx="12" cy="7.5" r="1"/><circle cx="16.5" cy="10.5" r="1"/></svg>
-      </button>
-      <button class="icon-btn" id="theme-btn" data-tip="深浅色" aria-label="切换深浅色"></button>
-      <button class="icon-btn" id="set-btn" data-tip="外观设置" aria-label="设置"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h9M19 7h1M4 17h3M13 17h7"/><circle cx="16" cy="7" r="2.2"/><circle cx="10" cy="17" r="2.2"/></svg></button>
-    </div>
-  </div>
-</header>
-
-<div class="app" data-page="calendar">
-  <aside class="col col-left" id="app-left"></aside>
-  <main class="col col-main" id="app-main"></main>
-  <aside class="col col-right" id="app-right"></aside>
-</div>
-
-<footer class="site-foot">
-  <div class="foot-inner">
-    <div class="foot-left">
-      <a class="brand" href="index.html">
-        伤心公主
-      </a>
-      <p>什么都沾一点，想到什么记什么。<br>© <span class="js-year">2026</span> 伤心公主 · 保留所有权利</p>
-    </div>
-    <div class="foot-links">
-      <a href="index.html">首页</a>
-      <a href="writing.html">文章</a>
-      <a href="about.html">关于</a>
-      <a href="timeline.html">时间线</a>
-      <a href="mailto:1806754672@qq.com">写信</a>
-    </div>
-  </div>
-  <div class="icp">
-    <span>© <span class="js-year">2026</span> reze520.top</span>
-    <span><span class="js-icp">备案中</span></span>
-    <span>手写 HTML / CSS，无框架、无追踪</span>
-  </div>
-</footer>
-
-<script>
-(function () {
-  try {
-    var root = document.documentElement;
-    var t = localStorage.getItem("reze-theme");
-    if (!t) t = window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
-    root.setAttribute("data-theme", t);
-    root.setAttribute(
-      "data-skin",
-      localStorage.getItem("reze-skin") || root.getAttribute("data-skin") || "minimal"
-    );
-  } catch (e) {}
-})();
-</script>
-<script src="assets/js/lunar.js?v=20261027p"></script>
-<script src="assets/js/data.js?v=20261027p"></script>
-<script src="assets/js/cloud.js?v=20261027p"></script>
-<script src="assets/js/main.js?v=20261027p"></script>
+<body>
+  <p>
+    <strong>日历已经收进首页侧栏了</strong>
+    不再单独占一页。<br>
+    <a href="index.html">回到首页看看</a>
+  </p>
 </body>
 </html>
