@@ -12,15 +12,16 @@
   button { font-family:inherit; }
 
   .gate { position:fixed; inset:0; display:grid; place-items:center; background:linear-gradient(160deg,#1b1830,#332c55); color:#fff; }
-  .gate .box { width:min(380px,90vw); background:rgba(255,255,255,.07); border:1px solid rgba(255,255,255,.14); border-radius:16px; padding:30px; text-align:center; }
+  .gate .box { width:min(380px,90vw); background:rgba(255,255,255,.07); border:1px solid rgba(255,255,255,.14); border-radius:16px; padding:30px; }
   .gate h1 { margin:0 0 6px; font-size:20px; }
-  .gate p { margin:0 0 22px; color:rgba(255,255,255,.62); font-size:13px; line-height:1.7; }
-  .gate .err { color:#ffb4b4; font-size:13px; margin-top:14px; min-height:18px; }
+  .gate p { margin:0 0 18px; color:rgba(255,255,255,.62); font-size:13px; line-height:1.7; }
+  .gate input { width:100%; padding:11px 13px; border-radius:10px; border:1px solid rgba(255,255,255,.2); background:rgba(0,0,0,.2); color:#fff; font-size:14px; margin-bottom:12px; }
+  .gate input::placeholder { color:rgba(255,255,255,.4); }
+  .gate .err { color:#ffb4b4; font-size:13px; margin-top:12px; min-height:18px; }
 
   header.top { position:sticky; top:0; z-index:10; background:var(--panel); border-bottom:1px solid var(--line); padding:0 20px; height:58px; display:flex; align-items:center; justify-content:space-between; }
   header.top .t { font-weight:700; }
   header.top .acts { display:flex; gap:8px; align-items:center; }
-  header.top .who { font-size:12px; color:var(--ink2); }
 
   .tabs { display:flex; gap:8px; padding:14px 20px 0; }
   .tabs button { padding:9px 18px; border-radius:10px 10px 0 0; border:1px solid var(--line); border-bottom:none; background:transparent; cursor:pointer; font-size:14px; color:var(--ink2); }
@@ -46,7 +47,7 @@
   button.btn:hover { border-color:var(--accent); color:var(--accent); }
   button.btn.primary { background:var(--accent); border-color:var(--accent); color:#fff; }
   button.btn.primary:hover { color:#fff; opacity:.92; }
-  button.btn.big { padding:12px 22px; font-size:15px; }
+  button.btn.big { padding:12px 22px; font-size:15px; width:100%; }
   button.btn.danger { color:#d23a3a; }
   button.btn.danger:hover { border-color:#d23a3a; }
 
@@ -76,8 +77,9 @@
 <div class="gate" id="gate">
   <div class="box">
     <h1>内容管理后台</h1>
-    <p id="gate-sub">用你的 WorkBuddy 账号登录。<br>第一次登录的人会成为本站管理员。</p>
-    <button class="btn primary big" id="login-btn">使用 WorkBuddy 登录</button>
+    <p id="gate-sub">输入管理员口令进入。<br>口令在 Cloudflare 的环境变量 ADMIN_PASS 里设置。</p>
+    <input type="password" id="pass" placeholder="管理员口令" autocomplete="current-password">
+    <button class="btn primary big" id="login-btn">进入</button>
     <div class="err" id="gate-err"></div>
   </div>
 </div>
@@ -86,7 +88,6 @@
   <header class="top">
     <span class="t">reze520.top · 内容管理</span>
     <div class="acts">
-      <span class="who" id="who"></span>
       <a class="btn" href="index.html" target="_blank">回前台</a>
       <button class="btn" id="btn-export">导出备份 data.override.js</button>
       <button class="btn danger" id="btn-logout">退出</button>
@@ -159,12 +160,10 @@
 
 <div class="toast" id="toast"></div>
 
-<script src="https://cdn.jsdelivr.net/npm/@tencent-ai/workbuddy-cloud-sdk@dev/lib/index.global.js"></script>
 <script src="assets/js/data.js"></script>
-<script src="assets/js/cloud.js"></script>
 <script>
 (function () {
-  var state = { site: {}, posts: [], adminId: "", settingsRowId: null };
+  var state = { site: {}, posts: [] };
   var editingPostIndex = -1;
   var editingMomentIndex = -1;
 
@@ -179,68 +178,42 @@
   function now () { var d = new Date(); return today() + " " + pad(d.getHours()) + ":" + pad(d.getMinutes()); }
 
   function gateErr (m) { $("#gate-err").textContent = m || ""; }
+  function pass () { try { return localStorage.getItem("reze-admin-pass") || ""; } catch (e) { return ""; } }
+  function authHeaders () { return { "Content-Type": "application/json", "X-Admin-Pass": pass() }; }
 
-  /* ---------- 登录 ---------- */
-  function doLogin () {
-    if (!window.cloud) { gateErr("云服务未加载，请刷新重试"); return; }
-    try { sessionStorage.setItem("reze-admin-intent", "1"); } catch (e) {}
-    var back = new URL(location.href);
-    back.pathname = "/"; back.search = ""; back.hash = "";
-    window.cloud.auth.signInWithOAuth({ provider: "workbuddy", redirectTo: back.toString() }).then(function (r) {
-      if (r.error) gateErr("登录失败：" + r.error.message);
-      else location.assign(r.data.url);
-    });
+  function api (path, opts) {
+    return fetch(path, opts).then(function (r) { return r.json().catch(function () { return {}; }); });
   }
 
+  /* ---------- 登录 ---------- */
+  async function doLogin () {
+    var v = $("#pass").value;
+    if (!v) { gateErr("请输入口令"); return; }
+    var d = await api("/api/login", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ pass: v }) });
+    if (d.ok) { try { localStorage.setItem("reze-admin-pass", v); } catch (e) {} load(); }
+    else gateErr(d.error || "口令错误");
+  }
   function signOut () {
-    if (window.cloud) window.cloud.auth.signOut();
-    try { sessionStorage.removeItem("reze-admin-intent"); } catch (e) {}
+    try { localStorage.removeItem("reze-admin-pass"); } catch (e) {}
     location.reload();
   }
 
-  /* ---------- 初始化 / 鉴权 ---------- */
-  async function boot () {
-    if (!window.cloud) { gateErr("云服务未加载（需联网）。"); return; }
-    var s = await window.cloud.auth.getSession();
-    if (s.error || !s.data) { showLogin(); return; }
-    var uid = s.data.user && s.data.user.id;
-    $("#who").textContent = s.data.user && s.data.user.name ? "你好，" + s.data.user.name : "";
-
-    var ss = await window.cloud.database.from("site_settings").select("*").order("id", { ascending: true }).limit(1);
-    if (ss.error) { gateErr("读取失败：" + ss.error.message); return; }
-
-    if (!ss.data || !ss.data.length) {
-      // 首次：当前用户成为管理员，写入 data.js 默认内容
-      var def = clone(window.SITE || {});
-      var ins = await window.cloud.database.from("site_settings")
-        .insert({ admin_id: uid, data: JSON.stringify(def) }).select();
-      if (ins.error) { gateErr("初始化失败：" + ins.error.message); return; }
-      state.adminId = uid;
-      state.settingsRowId = ins.data && ins.data[0] ? ins.data[0].id : null;
-      state.site = def;
-      state.posts = [];
-      showApp();
-      toast("已初始化，现在开始写第一篇文章吧");
-      return;
-    }
-
-    var row = ss.data[0];
-    if (row.admin_id !== uid) { gateErr("你不是本站管理员（admin_id 不匹配），无法编辑。"); return; }
-    state.adminId = row.admin_id;
-    state.settingsRowId = row.id;
-    try { state.site = JSON.parse(row.data || "{}"); } catch (e) { state.site = {}; }
-
-    var pr = await window.cloud.database.from("posts")
-      .select("*").eq("owner_id", row.admin_id).order("created_at", { ascending: false });
-    state.posts = (pr.data || []).map(function (r) {
-      var p = (typeof window.mapPostRow === "function") ? window.mapPostRow(r) : {};
-      p._dbid = r.id;
-      return p;
-    });
+  /* ---------- 读取 ---------- */
+  async function load () {
+    try {
+      var r = await fetch("/api/content", { cache: "no-store" });
+      if (!r.ok) { gateErr("读取失败（后端未就绪？）"); return; }
+      var d = await r.json();
+      state.site = d.site || {};
+      state.posts = d.posts || [];
+    } catch (e) { gateErr("读取失败：" + e.message); return; }
     showApp();
   }
-
-  function showLogin () { $("#gate").style.display = "grid"; $("#app").hidden = true; }
+  async function reload () {
+    var r = await fetch("/api/content", { cache: "no-store" });
+    if (r.ok) { var d = await r.json(); state.site = d.site || {}; state.posts = d.posts || []; }
+    renderPosts(); renderMoments(); renderSettings();
+  }
   function showApp () { $("#gate").style.display = "none"; $("#app").hidden = false; renderPosts(); renderMoments(); renderSettings(); }
 
   /* ---------- 文章 ---------- */
@@ -277,11 +250,9 @@
   async function delPost (i) {
     var p = state.posts[i];
     if (!confirm("确定删除《" + p.title + "》？不可恢复。")) return;
-    if (p._dbid) {
-      var r = await window.cloud.database.from("posts").delete().eq("id", p._dbid).select();
-      if (r.error) { toast("删除失败：" + r.error.message); return; }
-    }
-    state.posts.splice(i, 1); renderPosts(); toast("已删除");
+    var d = await api("/api/posts/" + p._dbid, { method: "DELETE", headers: authHeaders() });
+    if (d && d.error) { toast("删除失败：" + d.error); return; }
+    await reload(); toast("已删除");
   }
   async function savePost () {
     var title = $("#pf-title").value.trim();
@@ -293,28 +264,18 @@
       date: $("#pf-date").value.trim() || today(),
       updated: today(),
       cat: $("#pf-cat").value.trim() || "未分类",
-      tags: JSON.stringify(splitCsv($("#pf-tags").value)),
+      tags: splitCsv($("#pf-tags").value),
       cover: $("#pf-cover").value.trim(),
       pinned: $("#pf-pinned").checked,
       excerpt: $("#pf-excerpt").value.trim(),
       content: $("#pf-content").value
     };
-    var r;
-    if (cur._dbid) r = await window.cloud.database.from("posts").update(payload).eq("id", cur._dbid).select();
-    else r = await window.cloud.database.from("posts").insert(payload).select();
-    if (r.error) { toast("保存失败：" + r.error.message); return; }
+    var d;
+    if (cur._dbid) d = await api("/api/posts/" + cur._dbid, { method: "PUT", headers: authHeaders(), body: JSON.stringify(payload) });
+    else d = await api("/api/posts", { method: "POST", headers: authHeaders(), body: JSON.stringify(payload) });
+    if (d && d.error) { toast("保存失败：" + d.error); return; }
     $("#post-mask").classList.remove("on");
-    await reloadPosts();
-    toast("已保存");
-  }
-  async function reloadPosts () {
-    var pr = await window.cloud.database.from("posts")
-      .select("*").eq("owner_id", state.adminId).order("created_at", { ascending: false });
-    state.posts = (pr.data || []).map(function (r) {
-      var p = (typeof window.mapPostRow === "function") ? window.mapPostRow(r) : {};
-      p._dbid = r.id; return p;
-    });
-    renderPosts();
+    await reload(); toast("已保存");
   }
 
   /* ---------- 动态 ---------- */
@@ -413,9 +374,8 @@
   }
   async function saveSettings (cb) {
     collectSettings();
-    var r = await window.cloud.database.from("site_settings")
-      .update({ data: JSON.stringify(state.site) }).eq("id", state.settingsRowId).select();
-    if (r.error) { toast("保存失败：" + r.error.message); return; }
+    var d = await api("/api/settings", { method: "POST", headers: authHeaders(), body: JSON.stringify({ site: state.site }) });
+    if (d && d.error) { toast("保存失败：" + d.error); return; }
     if (cb) cb(); else toast("设置已保存");
   }
 
@@ -443,6 +403,7 @@
       };
     });
     $("#login-btn").onclick = doLogin;
+    $("#pass").addEventListener("keydown", function (e) { if (e.key === "Enter") doLogin(); });
     $("#btn-logout").onclick = signOut;
     $("#btn-new-post").onclick = function () { openPost(-1); };
     $("#btn-new-moment").onclick = function () { editingMomentIndex = -1; openMoment(-1); };
@@ -458,7 +419,7 @@
   }
 
   bind();
-  boot();
+  load();
 })();
 </script>
 </body>
