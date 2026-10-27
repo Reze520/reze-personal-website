@@ -2460,8 +2460,39 @@ function interceptLinks(e) {
   }
 
   if (document.readyState === "loading") {
-    document.addEventListener("DOMContentLoaded", boot);
+    document.addEventListener("DOMContentLoaded", start);
   } else {
+    start();
+  }
+
+  // 启动：先套本地编辑的内容，再尝试拉云端（云端优先），最后渲染
+  async function start() {
+    // 登录回调（WorkBuddy 账号登录用于进入后台 admin.html）
+    try {
+      if (typeof window.handleCloudCallback === "function") {
+        var cb = await window.handleCloudCallback();
+        if (cb === "ok") {
+          try {
+            if (sessionStorage.getItem("reze-admin-intent") === "1") {
+              sessionStorage.removeItem("reze-admin-intent");
+              location.replace("admin.html");
+              return;
+            }
+          } catch (e) {}
+        }
+      }
+    } catch (e) {}
+
+    applyLocalCms();
+    try {
+      if (typeof window.loadCloudContent === "function") {
+        var c = await window.loadCloudContent();
+        if (c && c.site && Object.keys(c.site).length) {
+          window.SITE = c.site;
+          if (Array.isArray(c.posts)) window.POSTS = c.posts;
+        }
+      }
+    } catch (e) {}
     boot();
   }
 })();

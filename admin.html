@@ -9,17 +9,18 @@
   * { box-sizing: border-box; }
   body { margin:0; font-family:-apple-system,"PingFang SC","Microsoft YaHei",sans-serif; background:var(--bg); color:var(--ink); }
   a { color:var(--accent); }
+  button { font-family:inherit; }
 
   .gate { position:fixed; inset:0; display:grid; place-items:center; background:linear-gradient(160deg,#1b1830,#332c55); color:#fff; }
-  .gate .box { width:min(360px,90vw); background:rgba(255,255,255,.07); border:1px solid rgba(255,255,255,.14); border-radius:16px; padding:28px; }
+  .gate .box { width:min(380px,90vw); background:rgba(255,255,255,.07); border:1px solid rgba(255,255,255,.14); border-radius:16px; padding:30px; text-align:center; }
   .gate h1 { margin:0 0 6px; font-size:20px; }
-  .gate p { margin:0 0 18px; color:rgba(255,255,255,.6); font-size:13px; }
-  .gate input { width:100%; padding:11px 13px; border-radius:10px; border:1px solid rgba(255,255,255,.2); background:rgba(0,0,0,.2); color:#fff; font-size:14px; margin-bottom:12px; }
-  .gate input::placeholder { color:rgba(255,255,255,.4); }
+  .gate p { margin:0 0 22px; color:rgba(255,255,255,.62); font-size:13px; line-height:1.7; }
+  .gate .err { color:#ffb4b4; font-size:13px; margin-top:14px; min-height:18px; }
 
   header.top { position:sticky; top:0; z-index:10; background:var(--panel); border-bottom:1px solid var(--line); padding:0 20px; height:58px; display:flex; align-items:center; justify-content:space-between; }
   header.top .t { font-weight:700; }
-  header.top .acts { display:flex; gap:8px; }
+  header.top .acts { display:flex; gap:8px; align-items:center; }
+  header.top .who { font-size:12px; color:var(--ink2); }
 
   .tabs { display:flex; gap:8px; padding:14px 20px 0; }
   .tabs button { padding:9px 18px; border-radius:10px 10px 0 0; border:1px solid var(--line); border-bottom:none; background:transparent; cursor:pointer; font-size:14px; color:var(--ink2); }
@@ -44,17 +45,18 @@
   button.btn { padding:8px 14px; border-radius:9px; border:1px solid var(--line); background:var(--panel); cursor:pointer; font-size:13px; color:var(--ink); }
   button.btn:hover { border-color:var(--accent); color:var(--accent); }
   button.btn.primary { background:var(--accent); border-color:var(--accent); color:#fff; }
+  button.btn.primary:hover { color:#fff; opacity:.92; }
+  button.btn.big { padding:12px 22px; font-size:15px; }
   button.btn.danger { color:#d23a3a; }
   button.btn.danger:hover { border-color:#d23a3a; }
 
-  /* 编辑器弹层 */
   .mask { position:fixed; inset:0; background:rgba(20,16,32,.5); z-index:50; display:none; align-items:flex-start; justify-content:center; padding:30px 14px; overflow:auto; }
   .mask.on { display:flex; }
   .panel { width:min(720px,100%); background:var(--panel); border-radius:14px; padding:22px; }
   .panel h3 { margin:0 0 16px; }
   .f { margin-bottom:14px; }
   .f label { display:block; font-size:13px; color:var(--ink2); margin-bottom:6px; }
-  .f input, .f textarea, .f select { width:100%; padding:10px 12px; border:1px solid var(--line); border-radius:9px; font-size:14px; font-family:inherit; color:var(--ink); background:#fff; }
+  .f input, .f textarea { width:100%; padding:10px 12px; border:1px solid var(--line); border-radius:9px; font-size:14px; font-family:inherit; color:var(--ink); background:#fff; }
   .f textarea { min-height:90px; resize:vertical; line-height:1.6; }
   .f textarea.tall { min-height:260px; font-family:ui-monospace,SFMono-Regular,Consolas,monospace; font-size:13px; }
   .f .row { display:flex; gap:12px; }
@@ -66,16 +68,17 @@
   .toast { position:fixed; left:50%; bottom:30px; transform:translateX(-50%); background:#241f33; color:#fff; padding:11px 18px; border-radius:10px; font-size:13px; opacity:0; pointer-events:none; transition:opacity .25s; z-index:99; }
   .toast.on { opacity:1; }
   .empty { color:var(--ink2); text-align:center; padding:40px 0; font-size:13px; }
+  .loading { text-align:center; color:var(--ink2); padding:40px 0; }
 </style>
 </head>
 <body>
 
 <div class="gate" id="gate">
   <div class="box">
-    <h1 id="gate-title">进入管理后台</h1>
-    <p id="gate-sub">这是你站点的内容后台，只有你知道口令。</p>
-    <input type="password" id="gate-pass" placeholder="管理口令" autocomplete="current-password">
-    <button class="btn primary" id="gate-btn" style="width:100%">进入</button>
+    <h1>内容管理后台</h1>
+    <p id="gate-sub">用你的 WorkBuddy 账号登录。<br>第一次登录的人会成为本站管理员。</p>
+    <button class="btn primary big" id="login-btn">使用 WorkBuddy 登录</button>
+    <div class="err" id="gate-err"></div>
   </div>
 </div>
 
@@ -83,9 +86,10 @@
   <header class="top">
     <span class="t">reze520.top · 内容管理</span>
     <div class="acts">
+      <span class="who" id="who"></span>
       <a class="btn" href="index.html" target="_blank">回前台</a>
-      <button class="btn primary" id="btn-export">导出 data.override.js</button>
-      <button class="btn danger" id="btn-reset">清空本地改动</button>
+      <button class="btn" id="btn-export">导出备份 data.override.js</button>
+      <button class="btn danger" id="btn-logout">退出</button>
     </div>
   </header>
 
@@ -96,21 +100,18 @@
   </div>
 
   <main>
-    <!-- 文章 -->
     <section id="tab-posts" class="on">
       <div class="bar"><h2>文章</h2><button class="btn primary" id="btn-new-post">+ 写新文章</button></div>
       <p class="hint">正文用 HTML 片段：段落 &lt;p&gt;、小标题 &lt;h2&gt;/&lt;h3&gt;、代码 &lt;pre&gt;&lt;code&gt;、引用 &lt;blockquote&gt;、列表 &lt;ul&gt;&lt;li&gt;。封面填图片路径，如 assets/uploads/xxx.jpg。</p>
-      <div id="post-list"></div>
+      <div id="post-list"><div class="loading">加载中…</div></div>
     </section>
 
-    <!-- 动态 -->
     <section id="tab-moments">
       <div class="bar"><h2>动态 · 说说</h2><button class="btn primary" id="btn-new-moment">+ 发一条</button></div>
       <p class="hint">图片填路径（多张用英文逗号分隔），留空就是纯文字。</p>
       <div id="moment-list"></div>
     </section>
 
-    <!-- 设置 -->
     <section id="tab-settings">
       <div class="bar"><h2>站点设置</h2></div>
       <p class="hint">改完点底部「保存设置」。背景图每行一条；社交每行「名称 | 图标 | 链接」；导航每行「名称 | 链接 | 描述 | 图标」。（头像 / 背景 / 封面等图片请先放到 assets/uploads/ 目录，再填路径。）</p>
@@ -120,7 +121,6 @@
   </main>
 </div>
 
-<!-- 文章/动态 编辑弹层 -->
 <div class="mask" id="post-mask">
   <div class="panel">
     <h3 id="post-mask-title">编辑文章</h3>
@@ -159,71 +159,89 @@
 
 <div class="toast" id="toast"></div>
 
+<script src="https://cdn.jsdelivr.net/npm/@tencent-ai/workbuddy-cloud-sdk@dev/lib/index.global.js"></script>
 <script src="assets/js/data.js"></script>
-<script src="assets/js/data.override.js" onerror="this.remove()"></script>
+<script src="assets/js/cloud.js"></script>
 <script>
 (function () {
-  var LS_CMS = "reze-cms";
-  var LS_PASS = "reze-cms-pass";
-  var state = { site: {}, posts: [] };
+  var state = { site: {}, posts: [], adminId: "", settingsRowId: null };
   var editingPostIndex = -1;
   var editingMomentIndex = -1;
 
   function $ (s) { return document.querySelector(s); }
   function clone (o) { return JSON.parse(JSON.stringify(o)); }
+  function toast (m) { var t = $("#toast"); t.textContent = m; t.classList.add("on"); clearTimeout(t._t); t._t = setTimeout(function () { t.classList.remove("on"); }, 2400); }
+  function esc (s) { return String(s == null ? "" : s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;"); }
+  function splitCsv (s) { return (s || "").split(/[,，]/).map(function (x) { return x.trim(); }).filter(Boolean); }
+  function slug (s) { return (s || "post").toLowerCase().replace(/[^\w\u4e00-\u9fa5]+/g, "-").replace(/^-+|-+$/g, "") || "post-" + Date.now(); }
+  function pad (n) { return n < 10 ? "0" + n : "" + n; }
+  function today () { var d = new Date(); return d.getFullYear() + "-" + pad(d.getMonth() + 1) + "-" + pad(d.getDate()); }
+  function now () { var d = new Date(); return today() + " " + pad(d.getHours()) + ":" + pad(d.getMinutes()); }
 
-  function toast (m) {
-    var t = $("#toast"); t.textContent = m; t.classList.add("on");
-    clearTimeout(t._t); t._t = setTimeout(function () { t.classList.remove("on"); }, 2200);
-  }
+  function gateErr (m) { $("#gate-err").textContent = m || ""; }
 
-  /* ---------- 数据 ---------- */
-  function loadData () {
-    var site = clone(window.SITE || {});
-    var posts = clone(window.POSTS || []);
-    try {
-      var raw = localStorage.getItem(LS_CMS);
-      if (raw) {
-        var c = JSON.parse(raw);
-        if (c.site) site = c.site;
-        if (Array.isArray(c.posts)) posts = c.posts;
-      }
-    } catch (e) {}
-    state.site = site; state.posts = posts;
-  }
-  function persist () {
-    try { localStorage.setItem(LS_CMS, JSON.stringify({ site: state.site, posts: state.posts })); }
-    catch (e) { toast("保存失败：" + e.message); }
-  }
-
-  /* ---------- 口令门 ---------- */
-  function initGate () {
-    var pass = localStorage.getItem(LS_PASS);
-    if (!pass) {
-      $("#gate-title").textContent = "设置管理口令";
-      $("#gate-sub").textContent = "第一次使用，先给自己设一个口令（只存在本机浏览器里）。";
-      $("#gate-btn").textContent = "设置并进入";
-    }
-    $("#gate-btn").addEventListener("click", function () {
-      var v = $("#gate-pass").value.trim();
-      if (!v) { toast("请输入口令"); return; }
-      if (!localStorage.getItem(LS_PASS)) {
-        localStorage.setItem(LS_PASS, v);
-        unlock();
-      } else if (v === localStorage.getItem(LS_PASS)) {
-        unlock();
-      } else {
-        toast("口令不对"); $("#gate-pass").value = "";
-      }
+  /* ---------- 登录 ---------- */
+  function doLogin () {
+    if (!window.cloud) { gateErr("云服务未加载，请刷新重试"); return; }
+    try { sessionStorage.setItem("reze-admin-intent", "1"); } catch (e) {}
+    var back = new URL(location.href);
+    back.pathname = "/"; back.search = ""; back.hash = "";
+    window.cloud.auth.signInWithOAuth({ provider: "workbuddy", redirectTo: back.toString() }).then(function (r) {
+      if (r.error) gateErr("登录失败：" + r.error.message);
+      else location.assign(r.data.url);
     });
-    $("#gate-pass").addEventListener("keydown", function (e) { if (e.key === "Enter") $("#gate-btn").click(); });
   }
-  function unlock () {
-    $("#gate").style.display = "none";
-    $("#app").hidden = false;
-    loadData();
-    renderPosts(); renderMoments(); renderSettings();
+
+  function signOut () {
+    if (window.cloud) window.cloud.auth.signOut();
+    try { sessionStorage.removeItem("reze-admin-intent"); } catch (e) {}
+    location.reload();
   }
+
+  /* ---------- 初始化 / 鉴权 ---------- */
+  async function boot () {
+    if (!window.cloud) { gateErr("云服务未加载（需联网）。"); return; }
+    var s = await window.cloud.auth.getSession();
+    if (s.error || !s.data) { showLogin(); return; }
+    var uid = s.data.user && s.data.user.id;
+    $("#who").textContent = s.data.user && s.data.user.name ? "你好，" + s.data.user.name : "";
+
+    var ss = await window.cloud.database.from("site_settings").select("*").order("id", { ascending: true }).limit(1);
+    if (ss.error) { gateErr("读取失败：" + ss.error.message); return; }
+
+    if (!ss.data || !ss.data.length) {
+      // 首次：当前用户成为管理员，写入 data.js 默认内容
+      var def = clone(window.SITE || {});
+      var ins = await window.cloud.database.from("site_settings")
+        .insert({ admin_id: uid, data: JSON.stringify(def) }).select();
+      if (ins.error) { gateErr("初始化失败：" + ins.error.message); return; }
+      state.adminId = uid;
+      state.settingsRowId = ins.data && ins.data[0] ? ins.data[0].id : null;
+      state.site = def;
+      state.posts = [];
+      showApp();
+      toast("已初始化，现在开始写第一篇文章吧");
+      return;
+    }
+
+    var row = ss.data[0];
+    if (row.admin_id !== uid) { gateErr("你不是本站管理员（admin_id 不匹配），无法编辑。"); return; }
+    state.adminId = row.admin_id;
+    state.settingsRowId = row.id;
+    try { state.site = JSON.parse(row.data || "{}"); } catch (e) { state.site = {}; }
+
+    var pr = await window.cloud.database.from("posts")
+      .select("*").eq("owner_id", row.admin_id).order("created_at", { ascending: false });
+    state.posts = (pr.data || []).map(function (r) {
+      var p = (typeof window.mapPostRow === "function") ? window.mapPostRow(r) : {};
+      p._dbid = r.id;
+      return p;
+    });
+    showApp();
+  }
+
+  function showLogin () { $("#gate").style.display = "grid"; $("#app").hidden = true; }
+  function showApp () { $("#gate").style.display = "none"; $("#app").hidden = false; renderPosts(); renderMoments(); renderSettings(); }
 
   /* ---------- 文章 ---------- */
   function renderPosts () {
@@ -234,8 +252,6 @@
       return '<div class="card"><div class="r"><span class="title">' + esc(p.title) + "</span>" + pin +
         '<span class="badge">' + esc(p.cat || "未分类") + "</span>" +
         '<span class="ops">' +
-        '<button class="btn" data-up="' + i + '">↑</button>' +
-        '<button class="btn" data-down="' + i + '">↓</button>' +
         '<button class="btn" data-edit="' + i + '">编辑</button>' +
         '<button class="btn danger" data-del="' + i + '">删除</button>' +
         "</span></div>" +
@@ -243,17 +259,10 @@
     }).join("");
     box.querySelectorAll("button[data-edit]").forEach(function (b) { b.onclick = function () { openPost(Number(b.getAttribute("data-edit"))); }; });
     box.querySelectorAll("button[data-del]").forEach(function (b) { b.onclick = function () { delPost(Number(b.getAttribute("data-del"))); }; });
-    box.querySelectorAll("button[data-up]").forEach(function (b) { b.onclick = function () { move(Number(b.getAttribute("data-up")), -1); }; });
-    box.querySelectorAll("button[data-down]").forEach(function (b) { b.onclick = function () { move(Number(b.getAttribute("data-down")), 1); }; });
-  }
-  function move (i, d) {
-    var j = i + d; if (j < 0 || j >= state.posts.length) return;
-    var t = state.posts[i]; state.posts[i] = state.posts[j]; state.posts[j] = t;
-    persist(); renderPosts();
   }
   function openPost (i) {
     editingPostIndex = i;
-    var p = state.posts[i] || { title:"", cat:"", date: today(), tags:[], cover:"", pinned:false, excerpt:"", content:"" };
+    var p = state.posts[i] || { title:"", cat:"", date:"", tags:[], cover:"", pinned:false, excerpt:"", content:"" };
     $("#post-mask-title").textContent = i < 0 ? "写新文章" : "编辑文章";
     $("#pf-title").value = p.title || "";
     $("#pf-cat").value = p.cat || "";
@@ -265,29 +274,47 @@
     $("#pf-content").value = p.content || "";
     $("#post-mask").classList.add("on");
   }
-  function delPost (i) {
-    if (!confirm("确定删除《" + state.posts[i].title + "》？不可恢复。")) return;
-    state.posts.splice(i, 1); persist(); renderPosts(); toast("已删除");
+  async function delPost (i) {
+    var p = state.posts[i];
+    if (!confirm("确定删除《" + p.title + "》？不可恢复。")) return;
+    if (p._dbid) {
+      var r = await window.cloud.database.from("posts").delete().eq("id", p._dbid).select();
+      if (r.error) { toast("删除失败：" + r.error.message); return; }
+    }
+    state.posts.splice(i, 1); renderPosts(); toast("已删除");
   }
-  function savePost () {
+  async function savePost () {
     var title = $("#pf-title").value.trim();
     if (!title) { toast("标题不能为空"); return; }
-    var tags = splitCsv($("#pf-tags").value);
-    var obj = {
-      id: state.posts[editingPostIndex] ? state.posts[editingPostIndex].id : slug(title),
+    var cur = state.posts[editingPostIndex] || {};
+    var payload = {
+      slug: cur.slug || slug(title),
       title: title,
       date: $("#pf-date").value.trim() || today(),
       updated: today(),
       cat: $("#pf-cat").value.trim() || "未分类",
-      tags: tags,
+      tags: JSON.stringify(splitCsv($("#pf-tags").value)),
       cover: $("#pf-cover").value.trim(),
       pinned: $("#pf-pinned").checked,
       excerpt: $("#pf-excerpt").value.trim(),
       content: $("#pf-content").value
     };
-    if (editingPostIndex < 0 || !state.posts[editingPostIndex]) state.posts.unshift(obj);
-    else state.posts[editingPostIndex] = obj;
-    persist(); renderPosts(); $("#post-mask").classList.remove("on"); toast("已保存");
+    var r;
+    if (cur._dbid) r = await window.cloud.database.from("posts").update(payload).eq("id", cur._dbid).select();
+    else r = await window.cloud.database.from("posts").insert(payload).select();
+    if (r.error) { toast("保存失败：" + r.error.message); return; }
+    $("#post-mask").classList.remove("on");
+    await reloadPosts();
+    toast("已保存");
+  }
+  async function reloadPosts () {
+    var pr = await window.cloud.database.from("posts")
+      .select("*").eq("owner_id", state.adminId).order("created_at", { ascending: false });
+    state.posts = (pr.data || []).map(function (r) {
+      var p = (typeof window.mapPostRow === "function") ? window.mapPostRow(r) : {};
+      p._dbid = r.id; return p;
+    });
+    renderPosts();
   }
 
   /* ---------- 动态 ---------- */
@@ -317,21 +344,18 @@
   }
   function delMoment (i) {
     if (!confirm("删除这条动态？")) return;
-    state.site.moments.splice(i, 1); persist(); renderMoments(); toast("已删除");
+    state.site.moments.splice(i, 1);
+    saveSettings(function () { renderMoments(); });
   }
   function saveMoment () {
     var text = $("#mf-text").value.trim();
     if (!text) { toast("内容不能为空"); return; }
-    var obj = {
-      date: $("#mf-date").value.trim() || now(),
-      text: text,
-      images: splitCsv($("#mf-images").value),
-      tags: splitCsv($("#mf-tags").value)
-    };
+    var obj = { date: $("#mf-date").value.trim() || now(), text: text, images: splitCsv($("#mf-images").value), tags: splitCsv($("#mf-tags").value) };
     if (!state.site.moments) state.site.moments = [];
     if (editingMomentIndex < 0 || !state.site.moments[editingMomentIndex]) state.site.moments.unshift(obj);
     else state.site.moments[editingMomentIndex] = obj;
-    persist(); renderMoments(); $("#moment-mask").classList.remove("on"); toast("已保存");
+    $("#moment-mask").classList.remove("on");
+    saveSettings(function () { renderMoments(); toast("已保存"); });
   }
 
   /* ---------- 设置 ---------- */
@@ -368,7 +392,7 @@
     if (key === "links") return (s.links || []).map(function (x) { return x.name + " | " + x.url + " | " + (x.desc || "") + " | " + x.icon; }).join("\n");
     return s[key] || "";
   }
-  function saveSettings () {
+  function collectSettings () {
     var s = state.site;
     document.querySelectorAll("#settings-form [data-k]").forEach(function (el) {
       var k = el.getAttribute("data-k");
@@ -379,40 +403,34 @@
       else if (k === "links") s.links = parseRows(el.value, 4);
       else s[k] = el.value;
     });
-    persist(); toast("设置已保存");
   }
   function parseRows (txt, minCols) {
-    return txt.split("\n").map(function (line) { return line.trim(); }).filter(Boolean).map(function (line) {
-      var c = line.split("|").map(function (x) { return x.trim(); });
+    return txt.split("\n").map(function (l) { return l.trim(); }).filter(Boolean).map(function (l) {
+      var c = l.split("|").map(function (x) { return x.trim(); });
       if (minCols === 3) return { name: c[0] || "", icon: c[1] || "github", url: c[2] || "#" };
       return { name: c[0] || "", url: c[1] || "#", desc: c[2] || "", icon: c[3] || "link" };
     });
   }
+  async function saveSettings (cb) {
+    collectSettings();
+    var r = await window.cloud.database.from("site_settings")
+      .update({ data: JSON.stringify(state.site) }).eq("id", state.settingsRowId).select();
+    if (r.error) { toast("保存失败：" + r.error.message); return; }
+    if (cb) cb(); else toast("设置已保存");
+  }
 
-  /* ---------- 导出 / 重置 ---------- */
+  /* ---------- 导出备份 ---------- */
   function exportOverride () {
-    var txt = "/* reze520.top 内容（由管理后台导出）\n   上传到 assets/js/ 覆盖 data.override.js，然后重新部署站点即可生效 */\n"
+    collectSettings();
+    var txt = "/* reze520.top 内容（管理后台导出的离线备份） */\n"
       + "window.SITE = " + JSON.stringify(state.site, null, 2) + ";\n\n"
-      + "window.POSTS = " + JSON.stringify(state.posts, null, 2) + ";\n";
+      + "window.POSTS = " + JSON.stringify(state.posts.map(function (p) { var c = clone(p); delete c._dbid; return c; }), null, 2) + ";\n";
     var blob = new Blob([txt], { type: "text/javascript;charset=utf-8" });
     var a = document.createElement("a");
-    a.href = URL.createObjectURL(blob);
-    a.download = "data.override.js";
+    a.href = URL.createObjectURL(blob); a.download = "data.override.js";
     document.body.appendChild(a); a.click(); a.remove();
-    toast("已下载 data.override.js，替换后重新部署即可");
+    toast("已下载离线备份");
   }
-
-  /* ---------- 工具 ---------- */
-  function esc (s) {
-    return String(s == null ? "" : s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
-  }
-  function splitCsv (s) { return (s || "").split(/[,，]/).map(function (x) { return x.trim(); }).filter(Boolean); }
-  function slug (s) {
-    return (s || "post").toLowerCase().replace(/[^\w\u4e00-\u9fa5]+/g, "-").replace(/^-+|-+$/g, "") || "post-" + Date.now();
-  }
-  function pad (n) { return n < 10 ? "0" + n : "" + n; }
-  function today () { var d = new Date(); return d.getFullYear() + "-" + pad(d.getMonth() + 1) + "-" + pad(d.getDate()); }
-  function now () { var d = new Date(); return today() + " " + pad(d.getHours()) + ":" + pad(d.getMinutes()); }
 
   /* ---------- 绑定 ---------- */
   function bind () {
@@ -424,25 +442,23 @@
         $("#tab-" + b.getAttribute("data-tab")).classList.add("on");
       };
     });
+    $("#login-btn").onclick = doLogin;
+    $("#btn-logout").onclick = signOut;
     $("#btn-new-post").onclick = function () { openPost(-1); };
     $("#btn-new-moment").onclick = function () { editingMomentIndex = -1; openMoment(-1); };
     $("#pf-cancel").onclick = function () { $("#post-mask").classList.remove("on"); };
     $("#pf-save").onclick = savePost;
     $("#mf-cancel").onclick = function () { $("#moment-mask").classList.remove("on"); };
     $("#mf-save").onclick = saveMoment;
-    $("#btn-save-settings").onclick = saveSettings;
+    $("#btn-save-settings").onclick = function () { saveSettings(); };
     $("#btn-export").onclick = exportOverride;
-    $("#btn-reset").onclick = function () {
-      if (!confirm("清空本机浏览器里的所有改动，恢复到 data.js 默认内容？")) return;
-      localStorage.removeItem(LS_CMS); location.reload();
-    };
     document.querySelectorAll(".mask").forEach(function (m) {
       m.addEventListener("click", function (e) { if (e.target === m) m.classList.remove("on"); });
     });
   }
 
-  initGate();
   bind();
+  boot();
 })();
 </script>
 </body>
