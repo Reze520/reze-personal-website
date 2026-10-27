@@ -256,17 +256,18 @@
   }
 
   /* ---------- 数据整理 ---------- */
-  var byDate = POSTS.slice().sort(function (a, b) {
-    return a.date < b.date ? 1 : a.date > b.date ? -1 : 0;
-  });
-  var featured = byDate.filter(function (p) {
-    return p.pinned;
-  });
-  var ordered = featured.concat(
-    byDate.filter(function (p) {
-      return !p.pinned;
-    })
-  );
+  /* ---------- 数据整理（实时计算：云端/后台数据更新后自动生效） ---------- */
+  function byDateList() {
+    return POSTS.slice().sort(function (a, b) {
+      return a.date < b.date ? 1 : a.date > b.date ? -1 : 0;
+    });
+  }
+  function orderedPosts() {
+    var bd = byDateList();
+    return bd.filter(function (p) { return p.pinned; }).concat(
+      bd.filter(function (p) { return !p.pinned; })
+    );
+  }
 
   function catCounts() {
     var m = {};
@@ -347,7 +348,7 @@
       })
       .join("");
 
-    var recent = byDate
+    var recent = byDateList()
       .slice(0, 4)
       .map(function (p) {
         return (
@@ -496,7 +497,7 @@
   function mountHome() {
     var box = $("#home-cards");
     if (!box) return;
-    renderCards(box, ordered.slice(0, 5));
+    renderCards(box, orderedPosts().slice(0, 5));
   }
 
   /* ---------- 首页三栏 ---------- */
@@ -689,7 +690,7 @@
     var startTag = params.get("tag") || "";
 
     function apply(c, t) {
-      var list = ordered.filter(function (p) {
+      var list = orderedPosts().filter(function (p) {
         var okCat = !c || c === "全部" || p.cat === c;
         var okTag = !t || (p.tags || []).indexOf(t) !== -1;
         return okCat && okTag;
@@ -758,7 +759,7 @@
     var startTag = params.get("tag") || "";
 
     function apply(c, t) {
-      var list = ordered.filter(function (p) {
+      var list = orderedPosts().filter(function (p) {
         var okCat = !c || c === "全部" || p.cat === c;
         var okTag = !t || (p.tags || []).indexOf(t) !== -1;
         return okCat && okTag;
@@ -906,7 +907,7 @@
       "</div>";
 
     /* ---- 右栏 ---- */
-    var feed = byDate
+    var feed = byDateList()
       .slice(0, 4)
       .map(function (p) {
         return (
@@ -940,7 +941,7 @@
     var totalWords = POSTS.reduce(function (s, p) {
       return s + wordCount(p);
     }, 0);
-    var firstDate = byDate.length ? byDate[byDate.length - 1].date : "2026-01-01";
+    var firstDate = byDateList().length ? byDateList()[byDateList().length - 1].date : "2026-01-01";
     var runDays = Math.max(
       1,
       Math.round((Date.now() - new Date(firstDate + "T00:00:00").getTime()) / 86400000)
@@ -953,7 +954,7 @@
       '<div><span class="k">标签</span><span class="n">' + tagNames.length + "</span></div>" +
       '<div><span class="k">总字数</span><span class="n">' + totalWords.toLocaleString() + "</span></div>" +
       '<div><span class="k">运行天数</span><span class="n">' + runDays + "</span></div>" +
-      '<div><span class="k">最近更新</span><span class="n">' + fmtDate(byDate[0].date) + "</span></div>" +
+      '<div><span class="k">最近更新</span><span class="n">' + fmtDate(byDateList()[0].date) + "</span></div>" +
       "</div></div>";
 
     right.innerHTML =
@@ -1541,7 +1542,7 @@ function interceptLinks(e) {
     if (bar) bar.innerHTML = chips;
 
     function apply(cat, tag) {
-      var list = ordered.filter(function (p) {
+      var list = orderedPosts().filter(function (p) {
         var okCat = !cat || cat === "全部" || p.cat === cat;
         var okTag = !tag || (p.tags || []).indexOf(tag) !== -1;
         return okCat && okTag;
@@ -1625,9 +1626,9 @@ function interceptLinks(e) {
       ? '<div class="post-cover"><img src="' + esc(p.cover) + '" alt="' + esc(p.title) + '"></div>'
       : "";
 
-    var idx = ordered.indexOf(p);
-    var prev = ordered[idx + 1];
-    var next = ordered[idx - 1];
+    var idx = orderedPosts().indexOf(p);
+    var prev = orderedPosts()[idx + 1];
+    var next = orderedPosts()[idx - 1];
     var navItems = [];
     if (prev) {
       navItems.push(
@@ -2171,7 +2172,7 @@ function interceptLinks(e) {
     tools.insertBefore(trigger, tools.firstChild);
 
     // 建一次索引，把正文转成纯文本；之后每次搜索只是字符串查找
-    var index = ordered.map(function (p) {
+    var index = orderedPosts().map(function (p) {
       var body = plain(p.content);
       return {
         post: p,
