@@ -9,7 +9,7 @@
 #        本机 git 走 https 访问 GitHub 必须带 schannelCheckRevoke=false。
 # ============================================================
 set -euo pipefail
-cd "$(dirname "$0")"
+cd "$(dirname "$0")/.."
 
 msg="${1:-更新站点}"
 
