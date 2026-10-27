@@ -757,9 +757,11 @@
         var cells = bucket[c]
           .map(function (l) {
             var initial = esc((l.name || "?").charAt(0));
-            // 图标很小且同源，不用懒加载：程序化滚动后 lazy 图有时不触发，会留一片空方块
+            // 图标很小且同源，不用懒加载：程序化滚动后 lazy 图有时不触发，会留一片空方块。
+            // 图还没下完时先显示站名首字，加载完再淡入盖住，避免一排空格子。
             var ico = l.fav
               ? '<img src="' + esc(l.fav) + '" alt="" width="20" height="20" decoding="async" ' +
+                "onload=\"this.parentNode.classList.add('has-img')\" " +
                 "onerror=\"this.style.display='none';this.parentNode.classList.add('no-img')\">"
               : "";
             return (

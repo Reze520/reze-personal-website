@@ -3821,14 +3821,23 @@ body.has-app .site-foot .brand .brand-mark {
   overflow: hidden;
 }
 .lk-ico img {
+  grid-area: 1 / 1;
   width: 20px;
   height: 20px;
   object-fit: contain;
   display: block;
+  z-index: 1;
+  opacity: 0;
+  transition: opacity 0.18s var(--ease);
 }
-/* 图标没抓到时退回首字 */
-.lk-ico.no-img::after {
+.lk-ico.has-img img {
+  opacity: 1;
+}
+/* 图标没到之前先显示站名首字，避免一排空格子；抓不到图标时也停在这个状态 */
+.lk-ico::after {
   content: attr(data-fb);
+  grid-area: 1 / 1;
+  z-index: 0;
   font-size: 13px;
   font-weight: 600;
   color: var(--g-accent);
