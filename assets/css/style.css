@@ -2709,22 +2709,21 @@ body::after {
   color: rgba(26, 22, 38, 0.74);
   font-weight: 500;
 }
+.g-cal-grid b.has {
+  background: rgba(184, 161, 247, 0.13);
+}
 .g-cal-grid b.has em {
-  color: var(--g-text);
+  color: var(--g-accent);
   font-weight: 600;
 }
-.g-cal-grid b.has::after {
-  content: "";
-  position: absolute;
-  top: 4px;
-  right: 5px;
-  width: 3px;
-  height: 3px;
-  border-radius: 50%;
+.g-cal-grid b.has .g-cal-sub.is-fest {
+  color: #d6c8ff;
+}
+.g-cal-grid b.today.has {
   background: var(--g-accent);
 }
-.g-cal-grid b.today.has::after {
-  background: #1a1626;
+.g-cal-grid b.today.has em {
+  color: #1a1626;
 }
 
 .g-site {
