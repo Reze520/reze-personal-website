@@ -4,6 +4,11 @@
    加歌：往数组里加一条就行（title / artist / src / cover / lyrics）。
    lyrics 是 LRC 文本，没有就留空字符串，歌词区会显示「暂无歌词」。
    ============================================================ */
+/* 音频走这个 CDN：Cloudflare Pages 不返回 Accept-Ranges，浏览器没法拖动进度条。
+   jsDelivr 支持 Range 请求（206），所以音频单独走它，页面仍然在 Cloudflare。
+   换仓库或换 CDN 时只改这一行。 */
+window.PLAYLIST_CDN = "https://cdn.jsdelivr.net/gh/Reze520/reze-personal-website@main/assets/audio/";
+
 window.PLAYLIST = [
   {
     "title": "容易受伤的女人",

@@ -2453,6 +2453,27 @@ function interceptLinks(e) {
       return t && t.src;
     });
     if (!list.length) list = [trackAt(0)];
+
+    // 音频改走支持 Range 的 CDN：Cloudflare Pages 不返回 Accept-Ranges，
+    // 浏览器拿不到分段数据，进度条就拖不动。页面本身仍在 Cloudflare。
+    var CDN = window.PLAYLIST_CDN || "";
+    if (CDN) {
+      var base = CDN.replace(/\/+$/, "") + "/";
+      list = list.map(function (t) {
+        var src = t.src;
+        if (/^assets\/audio\//.test(src)) {
+          return {
+            title: t.title,
+            artist: t.artist,
+            cover: t.cover,
+            lyrics: t.lyrics,
+            src: base + src.replace(/^assets\/audio\//, ""),
+            local: src,
+          };
+        }
+        return t;
+      });
+    }
     playerList = list;
     try {
       var saved = parseInt(localStorage.getItem("reze-track") || "0", 10);
