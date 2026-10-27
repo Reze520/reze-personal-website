@@ -121,8 +121,7 @@ window.SITE = {
   homeBg: "",
   homeBgs: [
     "assets/uploads/bg1.jpg", // 雨夜伞下
-    "assets/uploads/bg2.png", // boss & me
-    "assets/uploads/bg3.jpg", // 白发黑西装
+    "assets/uploads/bg3.jpg", // 白发黑西装（已锐化增强）
     "assets/uploads/bg.jpg",  // 夏日海滩
     "assets/uploads/bg5.jpg", // 月下花枝（最早那款背景）
   ],
