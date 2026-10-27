@@ -204,7 +204,12 @@
       var r = await fetch("/api/content", { cache: "no-store" });
       if (!r.ok) { gateErr("读取失败（后端未就绪？）"); return; }
       var d = await r.json();
-      state.site = d.site || {};
+      // 云端数据里的空字段用 data.js 默认值补全（用户发过的动态等内容保留）
+      var cloud = d.site || {};
+      if (typeof window.mergeSiteDefaults === "function" && window.SITE) {
+        cloud = window.mergeSiteDefaults(window.SITE, cloud);
+      }
+      state.site = cloud;
       state.posts = d.posts || [];
     } catch (e) { gateErr("读取失败：" + e.message); return; }
     showApp();
