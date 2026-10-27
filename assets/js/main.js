@@ -744,7 +744,7 @@
     var params = params0 || new URLSearchParams(location.search);
     var startCat = params.get("cat") || "全部";
     var startTag = params.get("tag") || "";
-    var PER = 5; // 每页篇数
+    var PER = 12; // 每页篇数
 
     function pagerHtml(pages, page) {
       if (pages <= 1) return "";
@@ -830,8 +830,8 @@
     var barEl = root.querySelector("#g-filters");
     if (!listEl || !barEl) return;
 
-    var PER = 5; // 每页篇数
-    var params = params0 || new URLSearchParams(location.search);
+    var PER = 12; // 每页篇数
+    var params = new URLSearchParams(location.search);
     var startCat = params.get("cat") || "全部";
     var startTag = params.get("tag") || "";
 
