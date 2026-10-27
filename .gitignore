@@ -16,3 +16,6 @@ _cloud_patch.json
 _backup/
 cloud_content_*.json
 docx_fulltext.txt
+
+# 音频重编码前的备份（不发布）
+_backup_audio/
