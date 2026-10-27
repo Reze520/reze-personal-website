@@ -19,3 +19,6 @@ docx_fulltext.txt
 
 # 音频重编码前的备份（不发布）
 _backup_audio/
+
+# 截图用的调试脚本（本地工具，不发布）
+_cdp.js

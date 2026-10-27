@@ -2525,14 +2525,15 @@ body::after {
 
 .tl-body {
   display: block;
-  background: rgba(255, 255, 255, 0.035);
+  /* 底色要够实：背景图上有月亮和花，卡片太透会把 12px 的说明文吃掉 */
+  background: rgba(19, 16, 27, 0.58);
   border: var(--glass-line);
   border-radius: 12px;
   padding: 15px 18px;
   transition: all 0.3s var(--ease);
 }
 .tl-body:hover {
-  background: rgba(255, 255, 255, 0.07);
+  background: rgba(26, 22, 37, 0.76);
   border-color: rgba(184, 161, 247, 0.28);
   transform: translateX(3px);
 }
@@ -2542,7 +2543,7 @@ body::after {
   align-items: center;
   gap: 8px;
   font-size: 11px;
-  color: var(--g-text-3);
+  color: rgba(236, 232, 246, 0.55);
   font-variant-numeric: tabular-nums;
   margin-bottom: 8px;
 }
@@ -2572,7 +2573,7 @@ body::after {
   margin: 8px 0 0;
   font-size: 12px;
   line-height: 1.75;
-  color: var(--g-text-2);
+  color: rgba(236, 232, 246, 0.8);
 }
 
 .tl-chips {
