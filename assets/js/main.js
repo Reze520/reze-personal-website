@@ -757,8 +757,9 @@
         var cells = bucket[c]
           .map(function (l) {
             var initial = esc((l.name || "?").charAt(0));
+            // 图标很小且同源，不用懒加载：程序化滚动后 lazy 图有时不触发，会留一片空方块
             var ico = l.fav
-              ? '<img src="' + esc(l.fav) + '" alt="" loading="lazy" ' +
+              ? '<img src="' + esc(l.fav) + '" alt="" width="20" height="20" decoding="async" ' +
                 "onerror=\"this.style.display='none';this.parentNode.classList.add('no-img')\">"
               : "";
             return (
