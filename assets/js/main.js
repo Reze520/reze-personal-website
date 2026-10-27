@@ -1632,6 +1632,25 @@
 
 
 /* ---------- SPA 路由：站内跳转只切中栏，音频持续 ---------- */
+/* 时间线正文：单行当一段话，多行按要点列出来（更新记录的样子） */
+function tlDescHtml(text) {
+  var lines = String(text || "")
+    .split("\n")
+    .map(function (s) { return s.trim(); })
+    .filter(Boolean);
+  if (!lines.length) return "";
+  if (lines.length === 1) return '<p class="tl-desc">' + esc(lines[0]) + "</p>";
+  return (
+    '<ul class="tl-desc tl-list">' +
+    lines
+      .map(function (s) {
+        return "<li>" + esc(s.replace(/^[·•\-*]\s*/, "")) + "</li>";
+      })
+      .join("") +
+    "</ul>"
+  );
+}
+
 function timelineMainHtml() {
   var groups = {};
   (SITE.timeline || []).forEach(function (it) {
@@ -1650,7 +1669,7 @@ function timelineMainHtml() {
           '<div class="tl-item"><div class="tl-body">' +
           '<div class="tl-top"><span>' + fmtDate(it.date) + "</span></div>" +
           '<h2 class="tl-title">' + esc(it.title) + "</h2>" +
-          '<p class="tl-desc">' + esc(it.desc) + "</p>" +
+          tlDescHtml(it.desc) +
           (chips ? '<div class="tl-chips">' + chips + "</div>" : "") +
           "</div></div>"
         );
@@ -1804,14 +1823,38 @@ function renderRightForPage(page) {
   bindToc();
 }
 
-// 路由切换时瞬时回到顶部：绕过 html 上的 scroll-behavior:smooth，
-// 避免"整页向上滑一段动画"打断阅读（目录跳转、回顶部仍然是平滑滚动）
-function instantScrollTop() {
+// 路由切换时瞬时滚到指定位置：绕过 html 上的 scroll-behavior:smooth，
+// 避免"整页滑一段动画"打断阅读（目录跳转、回顶部仍然是平滑滚动）
+function instantScrollTo(y) {
   var de = document.documentElement;
   var prev = de.style.scrollBehavior;
   de.style.scrollBehavior = "auto";
-  window.scrollTo(0, 0);
+  window.scrollTo(0, y);
   de.style.scrollBehavior = prev;
+}
+
+/* 切页后的落点：
+   - 本次加载第一次进来、且落在首页 → 停在首屏
+   - 文章直链、站内切页 → 直接落到内容开头（首屏就在上面，往上滑随时回去） */
+var _firstRoute = true;
+var _lastSettle = null;
+
+function settleScroll(page) {
+  // goPage 会同步渲染一次、hashchange 再跑一次，同一路由只落一次
+  var key = page + "|" + location.hash;
+  if (_lastSettle === key) return;
+  _lastSettle = key;
+
+  var splash = document.getElementById("splash");
+  var h = splash ? splash.offsetHeight : 0;
+  var first = _firstRoute;
+  _firstRoute = false;
+  var y = h && !(first && page === "home") ? h : 0;
+  instantScrollTo(y);
+  // 图片和字体加载后首屏高度可能变一点，下一帧再校一次
+  requestAnimationFrame(function () {
+    instantScrollTo(y);
+  });
 }
 
 function renderMain() {
@@ -1842,7 +1885,7 @@ function renderMain() {
   }
   updateNavActive(page);
   renderRightForPage(page);
-  instantScrollTop();
+  settleScroll(page);
 }
 
 function updateNavActive(page) {
@@ -1869,46 +1912,17 @@ function applyRoute() {
   if (page === "index") page = "home";
   app.setAttribute("data-page", page);
   app.__params = new URLSearchParams(r.qs);
-  syncSplash(page);
+  syncSplash();
   renderMain();
 }
 
-/* 欢迎首屏：每次打开/刷新网站都出现在最上面（不管停在哪个页面），
-   往下滑才是内容；站内切换页面时不再重复弹出。
-   只用内存变量，刷新即重置，所以不会出现「再也看不到」的情况。 */
-var _splashDone = false; // 本次加载是否已经处理过首屏
-
-function hideSplash() {
+/* 欢迎首屏：常驻在页面最上方，任何时候往上滑都能回到它。
+   进站时停在首屏；站内切页时自动落到内容开头，不用先划过去。 */
+function syncSplash() {
   var splash = document.getElementById("splash");
   if (!splash) return;
-  splash.style.display = "none";
-  document.body.classList.add("splash-off");
-  var inner = splash.querySelector(".splash-inner");
-  if (inner) {
-    inner.style.opacity = "";
-    inner.style.transform = "";
-    inner.style.visibility = "";
-    inner.style.pointerEvents = "";
-  }
-  var head = document.querySelector(".site-head");
-  if (head) head.classList.remove("is-over-hero");
-}
-
-function syncSplash(page) {
-  var splash = document.getElementById("splash");
-  if (!splash) return;
-
-  // 每次页面加载的第一次调用：无论当前是哪个页面，都把首屏摆出来
-  if (!_splashDone) {
-    _splashDone = true;
-    splash.style.display = "";
-    document.body.classList.remove("splash-off");
-    if (typeof window.__splashUpdate === "function") window.__splashUpdate();
-    return;
-  }
-
-  // 之后（站内切换页面）：收起首屏，直接看内容
-  hideSplash();
+  splash.style.display = "";
+  if (typeof window.__splashUpdate === "function") window.__splashUpdate();
 }
 
 function goPage(hash) {

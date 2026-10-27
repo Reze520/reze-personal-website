@@ -1,0 +1,944 @@
+[
+  {
+    "cat": "AI 工具",
+    "name": "DeepSeek",
+    "url": "https://chat.deepseek.com",
+    "desc": "推理与代码"
+  },
+  {
+    "cat": "AI 工具",
+    "name": "Kimi",
+    "url": "https://kimi.moonshot.cn",
+    "desc": "长文阅读"
+  },
+  {
+    "cat": "AI 工具",
+    "name": "豆包",
+    "url": "https://www.doubao.com",
+    "desc": "字节 AI 助手"
+  },
+  {
+    "cat": "AI 工具",
+    "name": "通义千问",
+    "url": "https://tongyi.aliyun.com",
+    "desc": "阿里 AI 助手"
+  },
+  {
+    "cat": "AI 工具",
+    "name": "腾讯元宝",
+    "url": "https://yuanbao.tencent.com",
+    "desc": "接公众号语料"
+  },
+  {
+    "cat": "AI 工具",
+    "name": "文心一言",
+    "url": "https://yiyan.baidu.com",
+    "desc": "百度 AI 助手"
+  },
+  {
+    "cat": "AI 工具",
+    "name": "智谱清言",
+    "url": "https://chatglm.cn",
+    "desc": "GLM 系列"
+  },
+  {
+    "cat": "AI 工具",
+    "name": "讯飞星火",
+    "url": "https://xinghuo.xfyun.cn",
+    "desc": "语音能力强"
+  },
+  {
+    "cat": "AI 工具",
+    "name": "秘塔 AI 搜索",
+    "url": "https://metaso.cn",
+    "desc": "无广告检索"
+  },
+  {
+    "cat": "AI 工具",
+    "name": "天工 AI",
+    "url": "https://www.tiangong.cn",
+    "desc": "搜索 + 写作"
+  },
+  {
+    "cat": "AI 工具",
+    "name": "海螺 AI",
+    "url": "https://hailuoai.com",
+    "desc": "语音与视频"
+  },
+  {
+    "cat": "AI 工具",
+    "name": "即梦 AI",
+    "url": "https://jimeng.jianying.com",
+    "desc": "文生图 / 视频"
+  },
+  {
+    "cat": "AI 工具",
+    "name": "可灵 AI",
+    "url": "https://klingai.com",
+    "desc": "文生视频"
+  },
+  {
+    "cat": "AI 工具",
+    "name": "Claude",
+    "url": "https://claude.ai",
+    "desc": "Anthropic"
+  },
+  {
+    "cat": "AI 工具",
+    "name": "Midjourney",
+    "url": "https://www.midjourney.com",
+    "desc": "AI 绘画"
+  },
+  {
+    "cat": "开发技术",
+    "name": "GitHub",
+    "url": "https://github.com",
+    "desc": "代码托管"
+  },
+  {
+    "cat": "开发技术",
+    "name": "Gitee",
+    "url": "https://gitee.com",
+    "desc": "国内代码托管"
+  },
+  {
+    "cat": "开发技术",
+    "name": "MDN",
+    "url": "https://developer.mozilla.org",
+    "desc": "前端文档"
+  },
+  {
+    "cat": "开发技术",
+    "name": "菜鸟教程",
+    "url": "https://www.runoob.com",
+    "desc": "入门教程"
+  },
+  {
+    "cat": "开发技术",
+    "name": "菜鸟工具",
+    "url": "https://c.runoob.com",
+    "desc": "在线小工具"
+  },
+  {
+    "cat": "开发技术",
+    "name": "Stack Overflow",
+    "url": "https://stackoverflow.com",
+    "desc": "英文问答"
+  },
+  {
+    "cat": "开发技术",
+    "name": "掘金",
+    "url": "https://juejin.cn",
+    "desc": "中文技术社区"
+  },
+  {
+    "cat": "开发技术",
+    "name": "CSDN",
+    "url": "https://www.csdn.net",
+    "desc": "中文技术博客"
+  },
+  {
+    "cat": "开发技术",
+    "name": "博客园",
+    "url": "https://www.cnblogs.com",
+    "desc": "老牌技术博客"
+  },
+  {
+    "cat": "开发技术",
+    "name": "开源中国",
+    "url": "https://www.oschina.net",
+    "desc": "开源资讯"
+  },
+  {
+    "cat": "开发技术",
+    "name": "Can I use",
+    "url": "https://caniuse.com",
+    "desc": "兼容性查询"
+  },
+  {
+    "cat": "开发技术",
+    "name": "CodePen",
+    "url": "https://codepen.io",
+    "desc": "前端在线实验"
+  },
+  {
+    "cat": "开发技术",
+    "name": "Cloudflare",
+    "url": "https://dash.cloudflare.com",
+    "desc": "部署与 CDN"
+  },
+  {
+    "cat": "开发技术",
+    "name": "npm",
+    "url": "https://www.npmjs.com",
+    "desc": "包管理"
+  },
+  {
+    "cat": "开发技术",
+    "name": "力扣",
+    "url": "https://leetcode.cn",
+    "desc": "刷题"
+  },
+  {
+    "cat": "开发技术",
+    "name": "ES6 教程",
+    "url": "https://es6.ruanyifeng.com",
+    "desc": "阮一峰"
+  },
+  {
+    "cat": "开发技术",
+    "name": "阿里云",
+    "url": "https://www.aliyun.com",
+    "desc": "云服务"
+  },
+  {
+    "cat": "开发技术",
+    "name": "腾讯云",
+    "url": "https://cloud.tencent.com",
+    "desc": "云服务"
+  },
+  {
+    "cat": "设计素材",
+    "name": "阿里图标库",
+    "url": "https://www.iconfont.cn",
+    "desc": "免费图标"
+  },
+  {
+    "cat": "设计素材",
+    "name": "Iconify",
+    "url": "https://icon-sets.iconify.design",
+    "desc": "图标聚合"
+  },
+  {
+    "cat": "设计素材",
+    "name": "Coolors",
+    "url": "https://coolors.co",
+    "desc": "配色生成"
+  },
+  {
+    "cat": "设计素材",
+    "name": "Figma",
+    "url": "https://www.figma.com",
+    "desc": "在线设计"
+  },
+  {
+    "cat": "设计素材",
+    "name": "TinyPNG",
+    "url": "https://tinypng.com",
+    "desc": "图片压缩"
+  },
+  {
+    "cat": "设计素材",
+    "name": "花瓣网",
+    "url": "https://huaban.com",
+    "desc": "灵感采集"
+  },
+  {
+    "cat": "设计素材",
+    "name": "稿定设计",
+    "url": "https://www.gaoding.com",
+    "desc": "模板做图"
+  },
+  {
+    "cat": "设计素材",
+    "name": "创客贴",
+    "url": "https://www.chuangkit.com",
+    "desc": "在线设计"
+  },
+  {
+    "cat": "设计素材",
+    "name": "站酷",
+    "url": "https://www.zcool.com.cn",
+    "desc": "设计师社区"
+  },
+  {
+    "cat": "设计素材",
+    "name": "100font",
+    "url": "https://www.100font.com",
+    "desc": "免费商用字体"
+  },
+  {
+    "cat": "设计素材",
+    "name": "Unsplash",
+    "url": "https://unsplash.com",
+    "desc": "免费图库"
+  },
+  {
+    "cat": "设计素材",
+    "name": "Pexels",
+    "url": "https://www.pexels.com",
+    "desc": "免费图库"
+  },
+  {
+    "cat": "设计素材",
+    "name": "Pixabay",
+    "url": "https://pixabay.com",
+    "desc": "免费素材"
+  },
+  {
+    "cat": "设计素材",
+    "name": "改图宝",
+    "url": "https://www.gaitubao.com",
+    "desc": "在线改尺寸"
+  },
+  {
+    "cat": "设计素材",
+    "name": "Canva",
+    "url": "https://www.canva.com",
+    "desc": "在线设计"
+  },
+  {
+    "cat": "效率工具",
+    "name": "语雀",
+    "url": "https://www.yuque.com",
+    "desc": "文档知识库"
+  },
+  {
+    "cat": "效率工具",
+    "name": "飞书",
+    "url": "https://www.feishu.cn",
+    "desc": "协作办公"
+  },
+  {
+    "cat": "效率工具",
+    "name": "Excalidraw",
+    "url": "https://excalidraw.com",
+    "desc": "手绘风白板"
+  },
+  {
+    "cat": "效率工具",
+    "name": "ProcessOn",
+    "url": "https://www.processon.com",
+    "desc": "流程图"
+  },
+  {
+    "cat": "效率工具",
+    "name": "草料二维码",
+    "url": "https://cli.im",
+    "desc": "二维码生成"
+  },
+  {
+    "cat": "效率工具",
+    "name": "石墨文档",
+    "url": "https://shimo.im",
+    "desc": "在线文档"
+  },
+  {
+    "cat": "效率工具",
+    "name": "金山文档",
+    "url": "https://www.kdocs.cn",
+    "desc": "WPS 云文档"
+  },
+  {
+    "cat": "效率工具",
+    "name": "腾讯文档",
+    "url": "https://docs.qq.com",
+    "desc": "在线表格"
+  },
+  {
+    "cat": "效率工具",
+    "name": "幕布",
+    "url": "https://mubu.com",
+    "desc": "大纲笔记"
+  },
+  {
+    "cat": "效率工具",
+    "name": "坚果云",
+    "url": "https://www.jianguoyun.com",
+    "desc": "文件同步"
+  },
+  {
+    "cat": "效率工具",
+    "name": "奶牛快传",
+    "url": "https://cowtransfer.com",
+    "desc": "大文件传输"
+  },
+  {
+    "cat": "效率工具",
+    "name": "iLovePDF",
+    "url": "https://www.ilovepdf.com",
+    "desc": "PDF 处理"
+  },
+  {
+    "cat": "效率工具",
+    "name": "Aconvert",
+    "url": "https://www.aconvert.com",
+    "desc": "格式转换"
+  },
+  {
+    "cat": "效率工具",
+    "name": "讯飞听见",
+    "url": "https://www.iflyrec.com",
+    "desc": "录音转文字"
+  },
+  {
+    "cat": "效率工具",
+    "name": "少数派",
+    "url": "https://sspai.com",
+    "desc": "效率内容"
+  },
+  {
+    "cat": "新闻时政",
+    "name": "人民网",
+    "url": "http://www.people.com.cn",
+    "desc": "人民日报"
+  },
+  {
+    "cat": "新闻时政",
+    "name": "新华网",
+    "url": "http://www.news.cn",
+    "desc": "新华社"
+  },
+  {
+    "cat": "新闻时政",
+    "name": "央视网",
+    "url": "https://www.cctv.com",
+    "desc": "中央电视台"
+  },
+  {
+    "cat": "新闻时政",
+    "name": "中国新闻网",
+    "url": "https://www.chinanews.com.cn",
+    "desc": "中新社"
+  },
+  {
+    "cat": "新闻时政",
+    "name": "中国日报",
+    "url": "https://www.chinadaily.com.cn",
+    "desc": "英文时政"
+  },
+  {
+    "cat": "新闻时政",
+    "name": "光明网",
+    "url": "https://www.gmw.cn",
+    "desc": "光明日报"
+  },
+  {
+    "cat": "新闻时政",
+    "name": "环球网",
+    "url": "https://www.huanqiu.com",
+    "desc": "国际新闻"
+  },
+  {
+    "cat": "新闻时政",
+    "name": "参考消息",
+    "url": "https://www.cankaoxiaoxi.com",
+    "desc": "外媒编译"
+  },
+  {
+    "cat": "新闻时政",
+    "name": "澎湃新闻",
+    "url": "https://www.thepaper.cn",
+    "desc": "深度报道"
+  },
+  {
+    "cat": "新闻时政",
+    "name": "界面新闻",
+    "url": "https://www.jiemian.com",
+    "desc": "财经新闻"
+  },
+  {
+    "cat": "新闻时政",
+    "name": "财新网",
+    "url": "https://www.caixin.com",
+    "desc": "财经调查"
+  },
+  {
+    "cat": "新闻时政",
+    "name": "第一财经",
+    "url": "https://www.yicai.com",
+    "desc": "财经资讯"
+  },
+  {
+    "cat": "新闻时政",
+    "name": "观察者网",
+    "url": "https://www.guancha.cn",
+    "desc": "时评"
+  },
+  {
+    "cat": "新闻时政",
+    "name": "南方周末",
+    "url": "https://www.infzm.com",
+    "desc": "深度长文"
+  },
+  {
+    "cat": "新闻时政",
+    "name": "联合早报",
+    "url": "https://www.zaobao.com.sg",
+    "desc": "新加坡视角"
+  },
+  {
+    "cat": "政府服务",
+    "name": "中国政府网",
+    "url": "https://www.gov.cn",
+    "desc": "政策文件"
+  },
+  {
+    "cat": "政府服务",
+    "name": "国家统计局",
+    "url": "https://www.stats.gov.cn",
+    "desc": "统计数据"
+  },
+  {
+    "cat": "政府服务",
+    "name": "教育部",
+    "url": "http://www.moe.gov.cn",
+    "desc": "教育政策"
+  },
+  {
+    "cat": "政府服务",
+    "name": "人社部",
+    "url": "http://www.mohrss.gov.cn",
+    "desc": "就业社保"
+  },
+  {
+    "cat": "政府服务",
+    "name": "国家税务总局",
+    "url": "https://www.chinatax.gov.cn",
+    "desc": "税务政策"
+  },
+  {
+    "cat": "政府服务",
+    "name": "国家医保局",
+    "url": "http://www.nhsa.gov.cn",
+    "desc": "医保政策"
+  },
+  {
+    "cat": "政府服务",
+    "name": "外交部",
+    "url": "https://www.mfa.gov.cn",
+    "desc": "外交表态"
+  },
+  {
+    "cat": "政府服务",
+    "name": "共产党员网",
+    "url": "https://www.12371.cn",
+    "desc": "党建学习"
+  },
+  {
+    "cat": "政府服务",
+    "name": "学信网",
+    "url": "https://www.chsi.com.cn",
+    "desc": "学历查询"
+  },
+  {
+    "cat": "政府服务",
+    "name": "中国人事考试网",
+    "url": "http://www.cpta.com.cn",
+    "desc": "资格考试"
+  },
+  {
+    "cat": "政府服务",
+    "name": "国家政务服务平台",
+    "url": "http://gjzwfw.www.gov.cn",
+    "desc": "一网通办"
+  },
+  {
+    "cat": "政府服务",
+    "name": "学习强国",
+    "url": "https://www.xuexi.cn",
+    "desc": "时政学习"
+  },
+  {
+    "cat": "社交社区",
+    "name": "微博",
+    "url": "https://weibo.com",
+    "desc": "公共讨论"
+  },
+  {
+    "cat": "社交社区",
+    "name": "知乎",
+    "url": "https://www.zhihu.com",
+    "desc": "问答社区"
+  },
+  {
+    "cat": "社交社区",
+    "name": "豆瓣",
+    "url": "https://www.douban.com",
+    "desc": "书影音标记"
+  },
+  {
+    "cat": "社交社区",
+    "name": "百度贴吧",
+    "url": "https://tieba.baidu.com",
+    "desc": "兴趣贴吧"
+  },
+  {
+    "cat": "社交社区",
+    "name": "小红书",
+    "url": "https://www.xiaohongshu.com",
+    "desc": "生活分享"
+  },
+  {
+    "cat": "社交社区",
+    "name": "抖音",
+    "url": "https://www.douyin.com",
+    "desc": "短视频"
+  },
+  {
+    "cat": "社交社区",
+    "name": "哔哩哔哩",
+    "url": "https://www.bilibili.com",
+    "desc": "中长视频"
+  },
+  {
+    "cat": "社交社区",
+    "name": "即刻",
+    "url": "https://okjike.com",
+    "desc": "话题圈子"
+  },
+  {
+    "cat": "学术文献",
+    "name": "中国知网",
+    "url": "https://www.cnki.net",
+    "desc": "期刊论文"
+  },
+  {
+    "cat": "学术文献",
+    "name": "万方数据",
+    "url": "https://www.wanfangdata.com.cn",
+    "desc": "期刊学位"
+  },
+  {
+    "cat": "学术文献",
+    "name": "维普",
+    "url": "http://www.cqvip.com",
+    "desc": "中文期刊"
+  },
+  {
+    "cat": "学术文献",
+    "name": "国家哲学社会科学文献中心",
+    "url": "https://www.ncpssd.org",
+    "desc": "免费人文社科"
+  },
+  {
+    "cat": "学术文献",
+    "name": "百度学术",
+    "url": "https://xueshu.baidu.com",
+    "desc": "论文检索"
+  },
+  {
+    "cat": "学术文献",
+    "name": "中国大学 MOOC",
+    "url": "https://www.icourse163.org",
+    "desc": "免费公开课"
+  },
+  {
+    "cat": "学术文献",
+    "name": "爱课程",
+    "url": "https://www.icourses.cn",
+    "desc": "高校课程"
+  },
+  {
+    "cat": "学术文献",
+    "name": "智慧教育平台",
+    "url": "https://higher.smartedu.cn",
+    "desc": "国家平台"
+  },
+  {
+    "cat": "学术文献",
+    "name": "国家图书馆",
+    "url": "http://www.nlc.cn",
+    "desc": "馆藏检索"
+  },
+  {
+    "cat": "学术文献",
+    "name": "ReadPaper",
+    "url": "https://readpaper.com",
+    "desc": "论文阅读翻译"
+  },
+  {
+    "cat": "金融财经",
+    "name": "东方财富",
+    "url": "https://www.eastmoney.com",
+    "desc": "行情与数据"
+  },
+  {
+    "cat": "金融财经",
+    "name": "雪球",
+    "url": "https://xueqiu.com",
+    "desc": "投资讨论"
+  },
+  {
+    "cat": "金融财经",
+    "name": "同花顺",
+    "url": "https://www.10jqka.com.cn",
+    "desc": "行情软件"
+  },
+  {
+    "cat": "金融财经",
+    "name": "新浪财经",
+    "url": "https://finance.sina.com.cn",
+    "desc": "财经资讯"
+  },
+  {
+    "cat": "金融财经",
+    "name": "中国人民银行",
+    "url": "http://www.pbc.gov.cn",
+    "desc": "货币政策"
+  },
+  {
+    "cat": "金融财经",
+    "name": "上海证券交易所",
+    "url": "https://www.sse.com.cn",
+    "desc": "上交所"
+  },
+  {
+    "cat": "金融财经",
+    "name": "深圳证券交易所",
+    "url": "https://www.szse.cn",
+    "desc": "深交所"
+  },
+  {
+    "cat": "金融财经",
+    "name": "巨潮资讯",
+    "url": "http://www.cninfo.com.cn",
+    "desc": "公告披露"
+  },
+  {
+    "cat": "金融财经",
+    "name": "中国证监会",
+    "url": "http://www.csrc.gov.cn",
+    "desc": "监管信息"
+  },
+  {
+    "cat": "金融财经",
+    "name": "国家外汇管理局",
+    "url": "https://www.safe.gov.cn",
+    "desc": "汇率与外汇"
+  },
+  {
+    "cat": "数理工具",
+    "name": "Desmos",
+    "url": "https://www.desmos.com/calculator",
+    "desc": "函数画图"
+  },
+  {
+    "cat": "数理工具",
+    "name": "GeoGebra",
+    "url": "https://www.geogebra.org",
+    "desc": "几何代数"
+  },
+  {
+    "cat": "数理工具",
+    "name": "WolframAlpha",
+    "url": "https://www.wolframalpha.com",
+    "desc": "符号计算"
+  },
+  {
+    "cat": "数理工具",
+    "name": "Symbolab",
+    "url": "https://www.symbolab.com",
+    "desc": "解题步骤"
+  },
+  {
+    "cat": "数理工具",
+    "name": "OEIS",
+    "url": "https://oeis.org",
+    "desc": "整数数列"
+  },
+  {
+    "cat": "数理工具",
+    "name": "MathWorld",
+    "url": "https://mathworld.wolfram.com",
+    "desc": "数学百科"
+  },
+  {
+    "cat": "数理工具",
+    "name": "PhET",
+    "url": "https://phet.colorado.edu/zh_CN",
+    "desc": "物理仿真"
+  },
+  {
+    "cat": "数理工具",
+    "name": "数学乐",
+    "url": "https://www.shuxuele.com",
+    "desc": "中学数学"
+  },
+  {
+    "cat": "数理工具",
+    "name": "可汗学院",
+    "url": "https://zh.khanacademy.org",
+    "desc": "免费课程"
+  },
+  {
+    "cat": "人文历史",
+    "name": "豆瓣读书",
+    "url": "https://book.douban.com",
+    "desc": "书评与评分"
+  },
+  {
+    "cat": "人文历史",
+    "name": "书格",
+    "url": "https://shuge.org",
+    "desc": "古籍影印"
+  },
+  {
+    "cat": "人文历史",
+    "name": "中国哲学书电子化计划",
+    "url": "https://ctext.org/zhs",
+    "desc": "先秦典籍"
+  },
+  {
+    "cat": "人文历史",
+    "name": "国学大师",
+    "url": "http://www.guoxuedashi.net",
+    "desc": "古籍检索"
+  },
+  {
+    "cat": "人文历史",
+    "name": "中国国家博物馆",
+    "url": "http://www.chnmuseum.cn",
+    "desc": "馆藏与展览"
+  },
+  {
+    "cat": "人文历史",
+    "name": "故宫博物院",
+    "url": "https://www.dpm.org.cn",
+    "desc": "数字文物"
+  },
+  {
+    "cat": "人文历史",
+    "name": "中国社会科学网",
+    "url": "http://www.cssn.cn",
+    "desc": "社科学术"
+  },
+  {
+    "cat": "影音娱乐",
+    "name": "网易云音乐",
+    "url": "https://music.163.com",
+    "desc": "音乐社区"
+  },
+  {
+    "cat": "影音娱乐",
+    "name": "QQ 音乐",
+    "url": "https://y.qq.com",
+    "desc": "曲库"
+  },
+  {
+    "cat": "影音娱乐",
+    "name": "豆瓣电影",
+    "url": "https://movie.douban.com",
+    "desc": "评分与影评"
+  },
+  {
+    "cat": "影音娱乐",
+    "name": "爱奇艺",
+    "url": "https://www.iqiyi.com",
+    "desc": "影视剧"
+  },
+  {
+    "cat": "影音娱乐",
+    "name": "腾讯视频",
+    "url": "https://v.qq.com",
+    "desc": "影视综艺"
+  },
+  {
+    "cat": "影音娱乐",
+    "name": "优酷",
+    "url": "https://www.youku.com",
+    "desc": "影视"
+  },
+  {
+    "cat": "影音娱乐",
+    "name": "芒果 TV",
+    "url": "https://www.mgtv.com",
+    "desc": "综艺"
+  },
+  {
+    "cat": "漫画阅读",
+    "name": "哔哩哔哩漫画",
+    "url": "https://manga.bilibili.com",
+    "desc": "正版日漫"
+  },
+  {
+    "cat": "漫画阅读",
+    "name": "快看漫画",
+    "url": "https://www.kuaikanmanhua.com",
+    "desc": "原创国漫"
+  },
+  {
+    "cat": "漫画阅读",
+    "name": "腾讯动漫",
+    "url": "https://ac.qq.com",
+    "desc": "正版国漫"
+  },
+  {
+    "cat": "漫画阅读",
+    "name": "咚漫",
+    "url": "https://www.dongmanmanhua.cn",
+    "desc": "韩漫"
+  },
+  {
+    "cat": "生活服务",
+    "name": "高德地图",
+    "url": "https://www.amap.com",
+    "desc": "地图导航"
+  },
+  {
+    "cat": "生活服务",
+    "name": "12306",
+    "url": "https://www.12306.cn",
+    "desc": "火车票"
+  },
+  {
+    "cat": "生活服务",
+    "name": "中国天气",
+    "url": "https://www.weather.com.cn",
+    "desc": "天气预报"
+  },
+  {
+    "cat": "生活服务",
+    "name": "百度翻译",
+    "url": "https://fanyi.baidu.com",
+    "desc": "中英互译"
+  },
+  {
+    "cat": "生活服务",
+    "name": "DeepL",
+    "url": "https://www.deepl.com",
+    "desc": "翻译"
+  },
+  {
+    "cat": "生活服务",
+    "name": "淘宝",
+    "url": "https://www.taobao.com",
+    "desc": "购物"
+  },
+  {
+    "cat": "生活服务",
+    "name": "京东",
+    "url": "https://www.jd.com",
+    "desc": "购物"
+  },
+  {
+    "cat": "生活服务",
+    "name": "美团",
+    "url": "https://www.meituan.com",
+    "desc": "外卖到店"
+  },
+  {
+    "cat": "生活服务",
+    "name": "大众点评",
+    "url": "https://www.dianping.com",
+    "desc": "本地生活"
+  },
+  {
+    "cat": "生活服务",
+    "name": "快递100",
+    "url": "https://www.kuaidi100.com",
+    "desc": "查快递"
+  },
+  {
+    "cat": "生活服务",
+    "name": "携程",
+    "url": "https://www.ctrip.com",
+    "desc": "机票酒店"
+  },
+  {
+    "cat": "生活服务",
+    "name": "QQ 邮箱",
+    "url": "https://mail.qq.com",
+    "desc": "邮箱"
+  }
+]
