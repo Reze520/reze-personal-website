@@ -1368,9 +1368,9 @@ function bindCalendar(root) {
   });
 
   function lunarInfo(y, m, d) {
-    if (!window.Lunar) return null;
+    if (!window.Solar) return null;
     try {
-      var solar = window.Lunar.Solar.fromYmd(y, m, d);
+      var solar = window.Solar.fromYmd(y, m, d);
       var lunar = solar.getLunar();
       var festivals = lunar.getFestivals() || [];
       var solarFest = solar.getFestivals() || [];
