@@ -160,8 +160,8 @@
 
 <div class="toast" id="toast"></div>
 
-<script src="assets/js/data.js?v=20261027b"></script>
-<script src="assets/js/cloud.js?v=20261027b"></script>
+<script src="assets/js/data.js?v=20261027c"></script>
+<script src="assets/js/cloud.js?v=20261027c"></script>
 <script>
 (function () {
   var state = { site: {}, posts: [] };
@@ -190,7 +190,7 @@
   async function doLogin () {
     var v = $("#pass").value;
     if (!v) { gateErr("请输入口令"); return; }
-    var d = await api("/api/login", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ pass: v }) });
+    var d = await api("/site-data/login", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ pass: v }) });
     if (d.ok) { try { localStorage.setItem("reze-admin-pass", v); } catch (e) {} load(); }
     else gateErr(d.error || "口令错误");
   }
@@ -202,7 +202,7 @@
   /* ---------- 读取 ---------- */
   async function load () {
     try {
-      var r = await fetch("/api/content", { cache: "no-store" });
+      var r = await fetch("/site-data/content", { cache: "no-store" });
       if (!r.ok) { gateErr("读取失败（后端未就绪？）"); return; }
       var d = await r.json();
       // 云端数据里的空字段用 data.js 默认值补全（用户发过的动态等内容保留）
@@ -216,7 +216,7 @@
     showApp();
   }
   async function reload () {
-    var r = await fetch("/api/content", { cache: "no-store" });
+    var r = await fetch("/site-data/content", { cache: "no-store" });
     if (r.ok) { var d = await r.json(); state.site = d.site || {}; state.posts = d.posts || []; }
     renderPosts(); renderMoments(); renderSettings();
   }
@@ -256,7 +256,7 @@
   async function delPost (i) {
     var p = state.posts[i];
     if (!confirm("确定删除《" + p.title + "》？不可恢复。")) return;
-    var d = await api("/api/posts/" + p._dbid, { method: "DELETE", headers: authHeaders() });
+    var d = await api("/site-data/posts/" + p._dbid, { method: "DELETE", headers: authHeaders() });
     if (d && d.error) { toast("删除失败：" + d.error); return; }
     await reload(); toast("已删除");
   }
@@ -277,8 +277,8 @@
       content: $("#pf-content").value
     };
     var d;
-    if (cur._dbid) d = await api("/api/posts/" + cur._dbid, { method: "PUT", headers: authHeaders(), body: JSON.stringify(payload) });
-    else d = await api("/api/posts", { method: "POST", headers: authHeaders(), body: JSON.stringify(payload) });
+    if (cur._dbid) d = await api("/site-data/posts/" + cur._dbid, { method: "PUT", headers: authHeaders(), body: JSON.stringify(payload) });
+    else d = await api("/site-data/posts", { method: "POST", headers: authHeaders(), body: JSON.stringify(payload) });
     if (d && d.error) { toast("保存失败：" + d.error); return; }
     $("#post-mask").classList.remove("on");
     await reload(); toast("已保存");
@@ -380,7 +380,7 @@
   }
   async function saveSettings (cb) {
     collectSettings();
-    var d = await api("/api/settings", { method: "POST", headers: authHeaders(), body: JSON.stringify({ site: state.site }) });
+    var d = await api("/site-data/settings", { method: "POST", headers: authHeaders(), body: JSON.stringify({ site: state.site }) });
     if (d && d.error) { toast("保存失败：" + d.error); return; }
     if (cb) cb(); else toast("设置已保存");
   }
