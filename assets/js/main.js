@@ -1200,26 +1200,40 @@
     if (bar) {
       var scrubbing = false;
       function seekTo(clientX) {
-        if (!audio || !audio.duration) return;
+        if (!audio || !isFinite(audio.duration) || audio.duration <= 0) return;
         var r = bar.getBoundingClientRect();
+        if (!r.width) return;
         var ratio = (clientX - r.left) / r.width;
         ratio = Math.min(1, Math.max(0, ratio));
         audio.currentTime = ratio * audio.duration;
         tick();
       }
-      bar.addEventListener("pointerdown", function (e) {
+      function startScrub(e) {
         scrubbing = true;
-        try { bar.setPointerCapture(e.pointerId); } catch (_) {}
+        bar.classList.add("dragging");
+        e.preventDefault();
         seekTo(e.clientX);
-      });
-      bar.addEventListener("pointermove", function (e) {
-        if (scrubbing) seekTo(e.clientX);
-      });
-      bar.addEventListener("pointerup", function (e) {
+      }
+      function moveScrub(e) {
+        if (!scrubbing) return;
+        e.preventDefault();
+        seekTo(e.clientX);
+      }
+      function endScrub() {
+        if (!scrubbing) return;
         scrubbing = false;
-        try { bar.releasePointerCapture(e.pointerId); } catch (_) {}
+        bar.classList.remove("dragging");
+        document.removeEventListener("pointermove", moveScrub);
+        document.removeEventListener("pointerup", endScrub);
+        document.removeEventListener("pointercancel", endScrub);
+      }
+      bar.addEventListener("pointerdown", function (e) {
+        startScrub(e);
+        // 监听挂到 document：指针拖出进度条范围也不会断
+        document.addEventListener("pointermove", moveScrub);
+        document.addEventListener("pointerup", endScrub);
+        document.addEventListener("pointercancel", endScrub);
       });
-      bar.addEventListener("pointercancel", function () { scrubbing = false; });
       // click 兜底（与拖动共用 seekTo，幂等）：桌面点击直接定位
       bar.addEventListener("click", function (e) {
         if (!scrubbing) seekTo(e.clientX);

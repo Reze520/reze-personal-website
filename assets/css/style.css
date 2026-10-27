@@ -4752,6 +4752,16 @@ body.has-app .site-head.is-over-hero .nav-more-btn:hover {
   border-radius: 3px;
   background: rgba(255, 255, 255, 0.18);
   cursor: pointer;
+  touch-action: none;
+  -webkit-user-select: none;
+  user-select: none;
+}
+/* 拖动时关掉填充动画，否则手感发黏 */
+.ply-bar.dragging i {
+  transition: none;
+}
+.ply-bar.dragging i::after {
+  transform: translateY(-50%) scale(1.3);
 }
 /* 透明命中区：轨道只有 3px 高，点不中，上下各扩 11px */
 .ply-bar::before {
