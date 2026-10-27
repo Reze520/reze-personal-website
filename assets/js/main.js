@@ -734,6 +734,9 @@
     });
   }
 
+  // 导航页当前选中的分类（空 = 全部）
+  var lkActiveCat = "";
+
   function linksMainHtml() {
     var items = SITE.links || [];
     if (!items.length) {
@@ -752,9 +755,28 @@
       bucket[c].push(l);
     });
 
-    var groups = order
+    // 默认「全部」视图：每个分类只露 6 个，剩下的点分类筛选或「查看全部」再看
+    var LK_PREVIEW = 3;
+    var activeCat = lkActiveCat && bucket[lkActiveCat] ? lkActiveCat : "";
+    var showOrder = activeCat ? [activeCat] : order;
+
+    var chips =
+      '<button class="lk-chip' + (activeCat ? "" : " on") + '" data-cat="">全部<em>' +
+      items.length + "</em></button>" +
+      order
+        .map(function (c) {
+          return (
+            '<button class="lk-chip' + (activeCat === c ? " on" : "") +
+            '" data-cat="' + esc(c) + '">' + esc(c) + "<em>" + bucket[c].length + "</em></button>"
+          );
+        })
+        .join("");
+
+    var groups = showOrder
       .map(function (c) {
-        var cells = bucket[c]
+        var all = bucket[c];
+        var shown = activeCat ? all : all.slice(0, LK_PREVIEW);
+        var cells = shown
           .map(function (l) {
             var initial = esc((l.name || "?").charAt(0));
             // 图标很小且同源，不用懒加载：程序化滚动后 lazy 图有时不触发，会留一片空方块。
@@ -772,9 +794,14 @@
             );
           })
           .join("");
+        var more =
+          !activeCat && all.length > LK_PREVIEW
+            ? '<button class="lk-more" data-cat="' + esc(c) + '">全部 ' +
+              all.length + " 个<i>›</i></button>"
+            : "";
         return (
           '<section class="g-card lk-group">' +
-          '<h2 class="lk-cat">' + esc(c) + "<em>" + bucket[c].length + "</em></h2>" +
+          '<h2 class="lk-cat">' + esc(c) + "<em>" + all.length + "</em>" + more + "</h2>" +
           '<div class="lk-grid">' + cells + "</div></section>"
         );
       })
@@ -784,6 +811,7 @@
       '<div class="g-card lk-head">' +
       "<div><h1>导航</h1><p>常用的一些站点，按用途分了类</p></div>" +
       '<span class="count">' + items.length + " 个</span></div>" +
+      '<div class="lk-bar">' + chips + "</div>" +
       '<div class="lk-wrap">' + groups + "</div>"
     );
   }
@@ -1654,9 +1682,17 @@ function tlDescHtml(text) {
   );
 }
 
+/* 时间线先只渲染最近几条，底部「加载更早」再往前翻。
+   一页铺 22 条太长，分页又和这个版式不适配。 */
+var TL_STEP = 10;
+var tlShown = TL_STEP;
+
 function timelineMainHtml() {
+  var list = SITE.timeline || [];
+  var total = list.length;
+  var shown = Math.min(tlShown, total);
   var groups = {};
-  (SITE.timeline || []).forEach(function (it) {
+  list.slice(0, shown).forEach(function (it) {
     var k = it.date.slice(0, 7).replace("-", ".");
     (groups[k] = groups[k] || []).push(it);
   });
@@ -1679,11 +1715,18 @@ function timelineMainHtml() {
       }).join("")
     );
   }).join("");
+
+  var more =
+    shown < total
+      ? '<button class="tl-more" id="tl-more">加载更早的 ' +
+        Math.min(TL_STEP, total - shown) + " 条<em>还有 " + (total - shown) + " 条</em></button>"
+      : "";
+
   return (
     '<div class="g-card timeline-head">' +
     "<div><h1>" + ICONS.activity + "时间线</h1><p>记录这个站的每一次改动</p></div>" +
-    '<span class="count">' + (SITE.timeline || []).length + " 条</span></div>" +
-    '<div class="timeline">' + tlHtml + "</div>"
+    '<span class="count">' + total + " 条</span></div>" +
+    '<div class="timeline">' + tlHtml + "</div>" + more
   );
 }
 
@@ -1926,6 +1969,45 @@ function syncSplash() {
   if (!splash) return;
   splash.style.display = "";
   if (typeof window.__splashUpdate === "function") window.__splashUpdate();
+}
+
+/* 标签页开太久时不会重新拉 JS，改了也看不见。
+   切回页面时对一下 index.html 里的版本号，不一致就提示刷新。 */
+function showRebuildTip() {
+  if (document.getElementById("rebuild-tip")) return;
+  var b = document.createElement("button");
+  b.id = "rebuild-tip";
+  b.className = "rebuild-tip";
+  b.textContent = "站点已更新，点这里刷新";
+  b.addEventListener("click", function () {
+    location.reload();
+  });
+  document.body.appendChild(b);
+}
+
+function watchBuild() {
+  var tag = document.querySelector('script[src*="main.js?v="]');
+  if (!tag) return;
+  var m = /main\.js\?v=([\w]+)/.exec(tag.getAttribute("src") || "");
+  if (!m) return;
+  var ver = m[1];
+  var busy = false;
+
+  function check() {
+    if (busy || document.visibilityState !== "visible") return;
+    busy = true;
+    fetch("index.html?_b=" + Date.now(), { cache: "no-store" })
+      .then(function (r) { return r.text(); })
+      .then(function (html) {
+        var mm = /main\.js\?v=([\w]+)/.exec(html);
+        if (mm && mm[1] !== ver) showRebuildTip();
+      })
+      .catch(function () {})
+      .then(function () { busy = false; });
+  }
+
+  document.addEventListener("visibilitychange", check);
+  window.addEventListener("focus", check);
 }
 
 function goPage(hash) {
@@ -2955,9 +3037,30 @@ function interceptLinks(e) {
     } catch (e) {}
     window.addEventListener("hashchange", applyRoute);
     document.addEventListener("click", interceptLinks);
+    // 导航页分类筛选 / 时间线「加载更早」：事件托管，重渲染后不用重新绑
+    document.addEventListener("click", function (e) {
+      var chip = e.target.closest(".lk-chip, .lk-more");
+      if (chip) {
+        lkActiveCat = chip.getAttribute("data-cat") || "";
+        renderMain();
+        // 换分类后回到筛选条下方，别停在半空中
+        var bar = document.querySelector(".lk-bar");
+        if (bar) {
+          var y = bar.getBoundingClientRect().top + window.scrollY - 74;
+          instantScrollTo(Math.max(0, y));
+        }
+        return;
+      }
+      if (e.target.closest("#tl-more")) {
+        tlShown += TL_STEP;
+        var main = $("#app-main");
+        if (main) main.innerHTML = timelineMainHtml();
+      }
+    });
     if (location.hash) applyRoute();
     // 没有 hash 时也要判断一次：老访客直接进首页，不再弹欢迎大屏
     else syncSplash("home");
+    watchBuild();
   }
 
   if (document.readyState === "loading") {

@@ -23,3 +23,4 @@ _backup_audio/
 # 截图用的调试脚本（本地工具，不发布）
 _cdp.js
 _probe.js
+_act.js
