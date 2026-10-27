@@ -515,6 +515,41 @@
   }
 
   /* ---------- 渲染：添加城市 ---------- */
+  // 单独算「搜索结果」这一块，供整页渲染和局部更新共用。
+  // 拆出来是为了搜索时只替换 <ul>，不重建输入框 —— 重建输入框会打断
+  // 输入法的拼音组合态，导致拼音永远转不成汉字。
+  function resultsHtml() {
+    if (!state.results.length) {
+      return '<li class="wx-tip">' +
+        (state.searching ? "正在搜索…" : "输入地名搜一下，比如「成都」「昆明」「中国香港」") +
+        "</li>";
+    }
+    return state.results
+      .map(function (r) {
+        var nm = displayName(r);
+        var rg = regionOf(r);
+        var dup = state.cities.some(function (c) {
+          return Math.abs(c.lat - r.latitude) < 0.05 && Math.abs(c.lon - r.longitude) < 0.05;
+        });
+        return (
+          '<li><span class="n">' + esc(nm) +
+          (rg && rg !== nm ? '<em>' + esc(rg) + "</em>" : "") +
+          "</span>" +
+          '<button class="wx-addone" data-add="' + esc(r.latitude) + "," +
+          esc(r.longitude) + '" data-name="' + esc(nm) + '" data-region="' + esc(rg) +
+          '" type="button"' + (dup ? " disabled" : "") + ">" +
+          (dup ? "已添加" : "添加") + "</button></li>"
+        );
+      })
+      .join("");
+  }
+
+  // 搜索专用：只重画结果列表，输入框原封不动
+  function paintResults() {
+    var ul = document.querySelector("#wx-addpanel .wx-resultlist");
+    if (ul) ul.innerHTML = resultsHtml();
+  }
+
   function addPanelHtml() {
     var current = state.cities
       .map(function (c) {
@@ -526,29 +561,6 @@
         );
       })
       .join("");
-
-    var results = state.results.length
-      ? state.results
-          .map(function (r) {
-            var nm = displayName(r);
-            var rg = regionOf(r);
-            var dup = state.cities.some(function (c) {
-              return Math.abs(c.lat - r.latitude) < 0.05 && Math.abs(c.lon - r.longitude) < 0.05;
-            });
-            return (
-              '<li><span class="n">' + esc(nm) +
-              (rg && rg !== nm ? '<em>' + esc(rg) + "</em>" : "") +
-              "</span>" +
-              '<button class="wx-addone" data-add="' + esc(r.latitude) + "," +
-              esc(r.longitude) + '" data-name="' + esc(nm) + '" data-region="' + esc(rg) +
-              '" type="button"' + (dup ? " disabled" : "") + ">" +
-              (dup ? "已添加" : "添加") + "</button></li>"
-            );
-          })
-          .join("")
-      : '<li class="wx-tip">' +
-        (state.searching ? "正在搜索…" : "输入地名搜一下，比如「成都」「昆明」「中国香港」") +
-        "</li>";
 
     return (
       '<div class="wx-addpanel g-card' + (state.addOpen ? " open" : "") + '" id="wx-addpanel">' +
@@ -564,7 +576,7 @@
       "</div>" +
       '<ul class="wx-citylist">' + current + "</ul>" +
       '<div class="wx-sub">搜索结果</div>' +
-      '<ul class="wx-resultlist">' + results + "</ul>" +
+      '<ul class="wx-resultlist">' + resultsHtml() + "</ul>" +
       "</div></div>"
     );
   }
@@ -590,6 +602,10 @@
     var inp = $("#wx-q");
     var typing = inp && document.activeElement === inp;
     var caret = typing ? inp.selectionStart : 0;
+
+    // 正在用输入法打字（拼音组合态）时绝不整块重画：
+    // 一旦重建输入框，组合态就被打断，拼音会原样留成英文字母。
+    if (typing && composing) return;
 
     var panelOpen = state.addOpen;
     var q = state.query;
@@ -690,12 +706,12 @@
     if (!q) {
       state.results = [];
       state.searching = false;
-      repaintAll();
+      paintResults();
       return;
     }
     state.searching = true;
     state.results = [];
-    repaintAll();
+    paintResults();
     fetch(GEO + "?name=" + encodeURIComponent(q) + "&count=8&language=zh&format=json")
       .then(function (r) { return r.json(); })
       .then(function (d) { return (d && d.results) || []; })
@@ -707,11 +723,12 @@
           .sort(function (a, b) { return (b.population || 0) - (a.population || 0); })
           .slice(0, 6);
         state.searching = false;
-        repaintAll();
+        paintResults();
       });
   }
 
   var searchTimer = null;
+  var composing = false; // 输入法拼音组合中
 
   function bind(root) {
     if (!root || root.__wxBound) return;
@@ -752,8 +769,27 @@
       }
     });
 
+    // 输入法拼音组合：开始时挂起搜索，结束后（已转成汉字）再搜。
+    // 不这样做的话，防抖搜索会在组合中途触发重绘，把拼音打散成英文。
+    root.addEventListener("compositionstart", function (e) {
+      if (e.target && e.target.id === "wx-q") {
+        composing = true;
+        clearTimeout(searchTimer);
+      }
+    }, true);
+    root.addEventListener("compositionend", function (e) {
+      if (e.target && e.target.id === "wx-q") {
+        composing = false;
+        state.query = e.target.value;
+        clearTimeout(searchTimer);
+        searchTimer = setTimeout(function () { search(state.query); }, 60);
+      }
+    }, true);
+
     root.addEventListener("input", function (e) {
       if (!e.target || e.target.id !== "wx-q") return;
+      // 组合态中的 input 事件带的是拼音，别拿它去搜
+      if (e.isComposing || composing) return;
       state.query = e.target.value;
       clearTimeout(searchTimer);
       searchTimer = setTimeout(function () { search(state.query); }, 420);
@@ -761,9 +797,9 @@
 
     root.addEventListener("keydown", function (e) {
       if (!e.target || e.target.id !== "wx-q") return;
-      if (e.key === "Enter") {
+      if (e.key === "Enter" && !e.isComposing && !composing) {
         clearTimeout(searchTimer);
-        search(state.query);
+        search(e.target.value);
       }
     });
 
