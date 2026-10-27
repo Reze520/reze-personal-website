@@ -1203,6 +1203,10 @@
       '动态</span><a class="more" href="timeline.html">更多</a></div>' +
       '<ul class="g-feed">' + feed + "</ul></div>" +
       statCard +
+      '<div class="g-card g-wx-mini">' +
+      '<div class="g-card-head"><span class="t">' + ICONS.sun + "天气</span>" +
+      '<a class="more" href="weather.html">更多</a></div>' +
+      '<div class="wxm-body" id="wx-mini-body"><div class="wxm-fail">正在获取…</div></div></div>' +
       '<div class="g-card g-cal-card">' +
       '<div class="g-card-head"><span class="t">' + ICONS.cal + "日历</span>" +
       '<div class="g-cal-nav">' +
@@ -1223,6 +1227,12 @@
       "</dl></div></div>";
 
     initMiniCal(right);
+
+    // 右栏天气小卡：独立订阅，切城市时右栏也跟着变
+    if (window.WX) {
+      var wxBox = $("#wx-mini-body");
+      if (wxBox) window.WX.mountMini(wxBox);
+    }
 
     // 中栏在右栏之后渲染，文章页才能把「文章目录」插到右栏里而不被覆盖
     renderMain();
@@ -1919,6 +1929,14 @@ function renderMain() {
     bindAlbumTabs(main);
   } else if (page === "links") {
     main.innerHTML = linksMainHtml();
+  } else if (page === "weather") {
+    if (window.WX) {
+      main.innerHTML = window.WX.mainHtml();
+      window.WX.bind(main);
+    } else {
+      main.innerHTML = '<div class="g-card"><div class="g-card-head"><span class="t">天气</span></div>' +
+        '<div class="g-notice">天气模块没加载出来，刷新一下试试。</div></div>';
+    }
   } else if (page === "timeline") {
     main.innerHTML = timelineMainHtml();
   } else if (page === "about") {
@@ -1935,7 +1953,7 @@ function renderMain() {
 }
 
 function updateNavActive(page) {
-  var navMap = { home: "index.html", moments: "moments.html", writing: "writing.html", album: "album.html", links: "links.html" };
+  var navMap = { home: "index.html", moments: "moments.html", writing: "writing.html", album: "album.html", links: "links.html", weather: "weather.html" };
   var want = navMap[page];
   document.querySelectorAll(".nav a").forEach(function (a) {
     var href = a.getAttribute("href") || "";
