@@ -215,7 +215,7 @@ window.SITE = {
     { cat: "效率工具", name: "草料二维码", url: "https://cli.im", desc: "二维码生成", fav: "assets/icons/cli.im.ico" },
     { cat: "效率工具", name: "石墨文档", url: "https://shimo.im", desc: "在线文档", fav: "assets/icons/shimo.im.ico" },
     { cat: "效率工具", name: "金山文档", url: "https://www.kdocs.cn", desc: "WPS 云文档", fav: "assets/icons/kdocs.cn.png" },
-    { cat: "效率工具", name: "腾讯文档", url: "https://docs.qq.com", desc: "在线表格", fav: "assets/icons/docs.qq.com.ico" },
+    { cat: "效率工具", name: "腾讯文档", url: "https://docs.qq.com", desc: "在线表格", fav: "assets/icons/docs.qq.com.png" },
     { cat: "效率工具", name: "幕布", url: "https://mubu.com", desc: "大纲笔记", fav: "assets/icons/mubu.com.png" },
     { cat: "效率工具", name: "坚果云", url: "https://www.jianguoyun.com", desc: "文件同步", fav: "assets/icons/jianguoyun.com.png" },
     { cat: "效率工具", name: "奶牛快传", url: "https://cowtransfer.com", desc: "大文件传输", fav: "assets/icons/cowtransfer.com.png" },

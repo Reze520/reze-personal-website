@@ -444,7 +444,7 @@ window.SITE = {
             "name": "腾讯文档",
             "url": "https://docs.qq.com",
             "desc": "在线表格",
-            "fav": "assets/icons/docs.qq.com.ico"
+            "fav": "assets/icons/docs.qq.com.png"
         },
         {
             "cat": "效率工具",
