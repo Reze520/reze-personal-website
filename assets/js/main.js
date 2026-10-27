@@ -1642,13 +1642,34 @@ function applyRoute() {
   renderMain();
 }
 
-/* 首屏只在「首页」出现。子页面（文章、动态、相册…）直接收起，
-   否则进去后屏幕被欢迎大屏占满，得手动往下滑才能看到内容。 */
+/* 欢迎首屏只在「第一次进站」出现一次。
+   之后再进首页（或切回主页）都直接显示正文，不再挡在上面。
+   子页面（文章、动态、相册…）任何时候都不显示首屏。 */
 var _splashOn = null;
+var _splashShownThisVisit = false;
+var SPLASH_SEEN_KEY = "reze-splash-seen";
+
+function splashSeenBefore() {
+  try {
+    return localStorage.getItem(SPLASH_SEEN_KEY) === "1";
+  } catch (e) {
+    return false;
+  }
+}
+
 function syncSplash(page) {
   var splash = document.getElementById("splash");
   if (!splash) return;
-  var show = page === "home";
+
+  // 只有「首页 + 以前没看过 + 本次访问还没显示过」才展示
+  var show = page === "home" && !splashSeenBefore() && !_splashShownThisVisit;
+  if (show) {
+    _splashShownThisVisit = true;
+    try {
+      localStorage.setItem(SPLASH_SEEN_KEY, "1");
+    } catch (e) {}
+  }
+
   if (_splashOn === show) return;
   _splashOn = show;
 
@@ -1658,7 +1679,7 @@ function syncSplash(page) {
   var inner = splash.querySelector(".splash-inner");
   var head = document.querySelector(".site-head");
   if (!show) {
-    // 离开首页：把首屏文字的淡出状态清掉，下次回来是干净的样子
+    // 收起首屏：把文字淡出状态清掉，避免残留
     if (inner) {
       inner.style.opacity = "";
       inner.style.transform = "";
@@ -1667,7 +1688,7 @@ function syncSplash(page) {
     }
     if (head) head.classList.remove("is-over-hero");
   } else if (typeof window.__splashUpdate === "function") {
-    // 回到首页：立刻重算顶栏透明白字，不用等下一次滚动
+    // 展示首屏：立刻重算顶栏透明白字，不用等滚动
     window.__splashUpdate();
   }
 }
@@ -2666,6 +2687,8 @@ function interceptLinks(e) {
     window.addEventListener("hashchange", applyRoute);
     document.addEventListener("click", interceptLinks);
     if (location.hash) applyRoute();
+    // 没有 hash 时也要判断一次：老访客直接进首页，不再弹欢迎大屏
+    else syncSplash("home");
   }
 
   if (document.readyState === "loading") {
