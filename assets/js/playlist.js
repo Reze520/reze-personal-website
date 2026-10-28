@@ -8,6 +8,13 @@
    jsDelivr 支持 Range 请求（206），所以音频单独走它，页面仍然在 Cloudflare。
    换仓库或换 CDN 时只改这一行。 */
 window.PLAYLIST_CDN = "https://cdn.jsdelivr.net/gh/Reze520/reze-personal-website@main/assets/audio/";
+/* 备用线路：主 CDN 连不上时按顺序换（大陆网络下 jsdelivr 主域名常被抽风）。
+   最后还会自动退回本站同源地址，所以哪怕全部 CDN 都不通，歌也照样能放。 */
+window.PLAYLIST_CDN_MIRRORS = [
+  "https://testingcf.jsdelivr.net/gh/Reze520/reze-personal-website@main/assets/audio/",
+  "https://gcore.jsdelivr.net/gh/Reze520/reze-personal-website@main/assets/audio/",
+  "https://fastly.jsdelivr.net/gh/Reze520/reze-personal-website@main/assets/audio/"
+];
 
 window.PLAYLIST = [
   {

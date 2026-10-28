@@ -111,6 +111,131 @@
   var playerIdx = 0;
   var playMode = "list"; // list 顺序循环 / one 单曲循环 / shuffle 随机
 
+  /* ---------- 音频线路 ----------
+     页面在 Cloudflare Pages 上，但 Pages 不支持 Range 请求（进度条拖不动），
+     所以音频优先走 jsDelivr；可 jsDelivr 在部分网络/地区会连不上，
+     一旦连不上整个播放器就哑了。这里改成线路链：
+        上次验证可用的线路 → 其余 CDN 镜像 → 同源（本站，保底）
+     哪条通就走哪条，正在播的换线路也不断（位置一起带过去）。 */
+  var AUDIO_DIR = /^assets\/audio\//;
+  var audioBase = ""; // 当前在用的线路前缀，"" 表示同源
+  var audioQueue = []; // 当前这一首还没试过的线路
+  var audioDead = false; // 所有线路都不通
+  var audioWantPlay = false; // 用户是不是想让它响（换线路后据此续播）
+  var audioOnDead = null; // 全挂时的回调（由 initMusic 挂上）
+  var AUDIO_LINE_KEY = "reze-audio-line";
+  var AUDIO_LINE_TTL = 3 * 24 * 3600 * 1000;
+
+  function cdnBases() {
+    var arr = [window.PLAYLIST_CDN].concat(window.PLAYLIST_CDN_MIRRORS || []);
+    var out = [];
+    arr.forEach(function (u) {
+      if (!u) return;
+      var s = String(u).replace(/\/+$/, "") + "/";
+      if (out.indexOf(s) < 0) out.push(s);
+    });
+    return out;
+  }
+
+  function readLineMemo() {
+    try {
+      var raw = localStorage.getItem(AUDIO_LINE_KEY);
+      if (!raw) return "";
+      var o = JSON.parse(raw);
+      if (!o || !o.t || Date.now() - o.t > AUDIO_LINE_TTL) return "";
+      return typeof o.b === "string" ? o.b : "";
+    } catch (e) {
+      return "";
+    }
+  }
+
+  function memorizeLine(base) {
+    try {
+      localStorage.setItem(AUDIO_LINE_KEY, JSON.stringify({ b: base, t: Date.now() }));
+    } catch (e) {}
+  }
+
+  // 一首歌的候选地址列表：{ url, base }
+  function audioCandidates(t) {
+    var src = (t && t.src) || "";
+    if (!AUDIO_DIR.test(src)) return [{ url: src, base: "" }]; // 外链，原样用
+    var file = src.replace(AUDIO_DIR, "");
+    var out = [];
+    if (audioBase) out.push({ url: audioBase + file, base: audioBase });
+    cdnBases().forEach(function (b) {
+      if (b !== audioBase) out.push({ url: b + file, base: b });
+    });
+    out.push({ url: src, base: "" }); // 同源保底，一定跟着页面走
+    return out;
+  }
+
+  // 给 audio 挂上某一首的地址（自动带上剩余的备用线路）
+  function setTrackSrc(t, autoplay) {
+    var audio = bgmAudio;
+    if (!audio) return;
+    var cands = audioCandidates(t);
+    audioDead = false;
+    audioQueue = cands.slice(1);
+    audio.src = cands[0].url;
+    audio.load();
+    if (autoplay) playAudio();
+  }
+
+  function playAudio() {
+    var audio = bgmAudio;
+    if (!audio) return;
+    if (audioDead) {
+      if (audioOnDead) audioOnDead();
+      return;
+    }
+    audioWantPlay = true;
+    var p = audio.play();
+    if (p && typeof p.then === "function") {
+      p.catch(function (e) {
+        var name = (e && e.name) || "";
+        // 切地址造成的中断、浏览器拦截自动播放，都不算故障
+        if (name === "AbortError" || name === "NotAllowedError") return;
+        // 真正的加载/解码失败交给 error 事件去换线路
+      });
+    }
+  }
+
+  // 探一下各条 CDN 线路通不通，通了就记住，下次直接走它（进度条能拖）
+  function probeAudioLine(src, done) {
+    if (!window.fetch || !window.AbortController || !AUDIO_DIR.test(src)) return;
+    var bases = cdnBases();
+    if (!bases.length) return;
+    var file = src.replace(AUDIO_DIR, "");
+    var i = 0;
+    (function next() {
+      if (i >= bases.length) return done("");
+      var base = bases[i++];
+      var ctl = new AbortController();
+      var timer = setTimeout(function () {
+        try {
+          ctl.abort();
+        } catch (e) {}
+      }, 2500);
+      fetch(base + file, {
+        method: "GET",
+        headers: { Range: "bytes=0-0" },
+        signal: ctl.signal,
+        cache: "no-store",
+      })
+        .then(function (r) {
+          clearTimeout(timer);
+          if (r.ok || r.status === 206) {
+            memorizeLine(base);
+            done(base);
+          } else next();
+        })
+        .catch(function () {
+          clearTimeout(timer);
+          next();
+        });
+    })();
+  }
+
   // 下一首该放哪个：随机模式下随机挑一首（避免连续重复同一首）
   function nextTrackIndex(step) {
     var n = playerList.length;
@@ -1297,8 +1422,11 @@
     }
     function togglePlay() {
       if (!audio) return;
-      if (audio.paused) audio.play().catch(function () {});
-      else audio.pause();
+      if (audio.paused) playAudio();
+      else {
+        audioWantPlay = false;
+        audio.pause();
+      }
     }
     if (playBtn) playBtn.addEventListener("click", togglePlay);
     if (bar) {
@@ -1583,8 +1711,8 @@
       playerIdx = ((i % playerList.length) + playerList.length) % playerList.length;
       var t = playerList[playerIdx];
 
-      audio.src = t.src;
-      audio.load();
+      // 地址交给线路链去选：这条 CDN 挂了会自动换下一条
+      setTrackSrc(t, false);
 
       var tEl = $("#p-title");
       var aEl = $("#p-artist");
@@ -1613,7 +1741,7 @@
 
       paintTrackList();
       tick();
-      if (autoplay) audio.play().catch(function () {});
+      if (autoplay) playAudio();
       try {
         localStorage.setItem("reze-track", String(playerIdx));
       } catch (e) {}
@@ -2902,26 +3030,6 @@ function interceptLinks(e) {
     });
     if (!list.length) list = [trackAt(0)];
 
-    // 音频改走支持 Range 的 CDN：Cloudflare Pages 不返回 Accept-Ranges，
-    // 浏览器拿不到分段数据，进度条就拖不动。页面本身仍在 Cloudflare。
-    var CDN = window.PLAYLIST_CDN || "";
-    if (CDN) {
-      var base = CDN.replace(/\/+$/, "") + "/";
-      list = list.map(function (t) {
-        var src = t.src;
-        if (/^assets\/audio\//.test(src)) {
-          return {
-            title: t.title,
-            artist: t.artist,
-            cover: t.cover,
-            lyrics: t.lyrics,
-            src: base + src.replace(/^assets\/audio\//, ""),
-            local: src,
-          };
-        }
-        return t;
-      });
-    }
     playerList = list;
     try {
       var saved = parseInt(localStorage.getItem("reze-track") || "0", 10);
@@ -2930,19 +3038,42 @@ function interceptLinks(e) {
       playerIdx = 0;
     }
 
+    // 上次验证过能用的线路直接用，省得每次先从连不上的 CDN 上撞一遍
+    audioBase = readLineMemo();
+
     var audio = document.createElement("audio");
     audio.loop = true;
     audio.preload = "metadata";
     audio.volume = 0.35;
-    audio.src = list[playerIdx].src;
-    audio.load();
     bgmAudio = audio;
 
-    var unavailable = false;
     var toast = null;
+    var asked = false; // 用户点过播放没有（没点就别弹失败提示，太吵）
 
+    // 这条线路挂了就换下一条，正在播的继续播，位置也跟着过去
     audio.addEventListener("error", function () {
-      unavailable = true;
+      if (audioQueue.length) {
+        var pos = audio.currentTime || 0;
+        var next = audioQueue.shift();
+        audioBase = next.base;
+        audio.src = next.url;
+        audio.load();
+        if (pos > 0) {
+          try {
+            audio.currentTime = pos;
+          } catch (e) {}
+        }
+        if (audioWantPlay) {
+          var rp = audio.play();
+          if (rp && typeof rp.catch === "function") rp.catch(function () {});
+        }
+        return;
+      }
+      // 所有线路都不通：CDN、镜像、本站全没拿到音频
+      audioDead = true;
+      audioWantPlay = false;
+      btn.classList.remove("is-playing");
+      if (asked && audioOnDead) audioOnDead();
     });
     audio.addEventListener("play", function () {
       btn.classList.add("is-playing");
@@ -2953,35 +3084,53 @@ function interceptLinks(e) {
       btn.setAttribute("aria-label", "播放背景音乐");
     });
 
-    function showToast() {
-      if (toast && toast.parentNode) return;
+    // 先按「已知能用的线路」装好地址，能立刻播（同源保底，不会哑）
+    setTrackSrc(list[playerIdx], false);
+
+    // 后台探一下 CDN 通不通：通了就切过去，进度条才能拖
+    probeAudioLine(list[playerIdx].src, function (base) {
+      if (!base || audioDead || !audio.paused) return;
+      audioBase = base;
+      setTrackSrc(trackAt(playerIdx), false);
+    });
+
+    var toastSeq = 0;
+    function showToast(html) {
+      var seq = ++toastSeq;
+      if (toast && toast.parentNode) toast.remove(); // 换文案，别被旧提示挡住
       toast = document.createElement("div");
       toast.className = "music-toast";
-      toast.innerHTML =
-        "还没找到音乐文件。把音频放到 <code>" +
-        esc(SITE.bgm || "assets/audio/bgm.wav") +
-        "</code> 就能用了。";
+      toast.innerHTML = html;
       document.body.appendChild(toast);
       setTimeout(function () {
+        if (seq !== toastSeq) return; // 已经被新提示替换掉了
         if (toast && toast.parentNode) toast.remove();
         toast = null;
-      }, 6000);
+      }, 7000);
     }
 
+    audioOnDead = function () {
+      showToast(
+        "音乐加载失败：CDN 和本站都取不到音频，多半是网络问题。稍后再点一下重试。"
+      );
+    };
+
     btn.addEventListener("click", function () {
-      if (unavailable) {
-        showToast();
+      asked = true;
+      // 上一轮全挂了：用户再点就从头再试一遍（网络可能已经好了）
+      if (audioDead) {
+        audioDead = false;
+        asked = true;
+        setTrackSrc(trackAt(playerIdx), false);
+        setTimeout(function () {
+          if (!audioDead) playAudio();
+        }, 60);
         return;
       }
       if (audio.paused) {
-        var p = audio.play();
-        if (p && typeof p.then === "function") {
-          p.catch(function () {
-            unavailable = true;
-            showToast();
-          });
-        }
+        playAudio();
       } else {
+        audioWantPlay = false;
         audio.pause();
       }
     });
