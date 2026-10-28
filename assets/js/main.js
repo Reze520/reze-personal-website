@@ -1968,7 +1968,9 @@ function applyRoute() {
   var r = parseHash();
   var app = document.querySelector(".app");
   if (!app) return;
-  var page = r.page || app.getAttribute("data-page") || "home";
+  // 没有 hash 时一律回首页：不能用上一次的 data-page，
+  // 否则从文章页后退会拿空 id 再渲染一次 post，显示「没有找到这篇文章」
+  var page = r.page || "home";
   if (page === "index") page = "home";
   app.setAttribute("data-page", page);
   app.__params = new URLSearchParams(r.qs);
