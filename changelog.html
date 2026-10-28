@@ -5,24 +5,24 @@
        现在这一页直接自己渲染，地址就是 /writing，刷新也不用再多跳一次。 -->
   <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>更新日志 · 伤心公主</title>
+<title>更新日志 · RezeのBlog</title>
 <meta name="description" content="这个站怎么一点点长成现在这样：每一版改了什么、为什么改、卡在哪儿。">
-<meta name="author" content="伤心公主">
+<meta name="author" content="RezeのBlog">
 <meta name="theme-color" content="#14111d">
-<meta property="og:title" content="更新日志 · 伤心公主">
+<meta property="og:title" content="更新日志 · RezeのBlog">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://reze520.pages.dev/changelog">
 <link rel="canonical" href="https://reze520.pages.dev/changelog">
-<meta property="og:site_name" content="伤心公主">
+<meta property="og:site_name" content="RezeのBlog">
 <meta property="og:description" content="这个站怎么一点点长成现在这样：每一版改了什么、为什么改、卡在哪儿。">
 <meta property="og:image" content="https://reze520.pages.dev/assets/uploads/cover.png">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:image" content="https://reze520.pages.dev/assets/uploads/cover.png">
 <meta property="og:image:width" content="474">
 <meta property="og:image:height" content="474">
-<link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20viewBox%3D%270%200%2064%2064%27%3E%3Crect%20width%3D%2764%27%20height%3D%2764%27%20rx%3D%2714%27%20fill%3D%27%23241f33%27%2F%3E%3Crect%20x%3D%272%27%20y%3D%272%27%20width%3D%2760%27%20height%3D%2760%27%20rx%3D%2712%27%20fill%3D%27none%27%20stroke%3D%27rgba%28255%2C255%2C255%2C0.25%29%27%20stroke-width%3D%272%27%2F%3E%3Ctext%20x%3D%2732%27%20y%3D%2745%27%20font-size%3D%2738%27%20font-family%3D%27KaiTi%2CSTKaiti%2Cserif%27%20font-weight%3D%27bold%27%20fill%3D%27%23ffffff%27%20text-anchor%3D%27middle%27%3E%E8%95%BE%3C%2Ftext%3E%3C%2Fsvg%3E">
-<link rel="stylesheet" href="assets/css/style.css?v=20261101c">
-  <link rel="alternate" type="application/rss+xml" title="伤心公主" href="feed.xml">
+<link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20viewBox%3D%270%200%2064%2064%27%3E%3Crect%20width%3D%2764%27%20height%3D%2764%27%20rx%3D%2715%27%20fill%3D%27%23241f33%27%2F%3E%3Cg%20transform%3D%27translate%286%2C6%29%20scale%282.1667%29%27%3E%3Cpath%20d%3D%27M21%2012.79A9%209%200%201%201%2011.21%203%207%207%200%200%200%2021%2012.79z%27%20fill%3D%27%23f6f1e7%27%2F%3E%3C%2Fg%3E%3C%2Fsvg%3E">
+<link rel="stylesheet" href="assets/css/style.css?v=20261101d">
+  <link rel="alternate" type="application/rss+xml" title="RezeのBlog" href="feed.xml">
 </head>
 <body class="has-app">
 <a class="skip-link" href="#app-main">跳到正文</a>
@@ -32,8 +32,8 @@
 <header class="site-head">
   <div class="head-inner">
     <a class="brand" href="/">
-      伤心公主
-      <em>Sad Princess</em>
+      <span class="brand-mark" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" fill="currentColor"/></svg></span>
+      RezeのBlog
     </a>
     <nav class="nav">
       <a href="/" data-tip="返回首页"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="m3 10.2 9-7.2 9 7.2V20a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><path d="M9.5 22v-7.5h5V22"/></svg><span>主页</span></a>
@@ -80,7 +80,7 @@
 <li>卡了半天的坑：<code>updateNavActive()</code> 原来用 <code>href.indexOf(want) &gt;= 0</code> 判断当前页，链接换成路径以后，首页那个 <code>/</code> 是任何地址的子串，于是每一页都把「主页」点亮。改成把 href 的路径段截出来整段比。</li>
 <li>第二个坑更要命：<code>currentPage()</code> 在没有 <code>data-page</code> 时靠 hash 兜底认首页。以前首页地址里挂着 <code>#/home</code> 认得出来，换成 <code>/</code> 之后解析成空串，「首页点分类 → 进文章」这一步的来源就记不下，返回按钮退化成「返回文章列表」，回不到原来那一栏。补上「根路径就是 home」才算完。</li>
 <li>验证：无头 Edge 本地跑一遍、线上再跑一遍，共 51 项 —— 点导航、切分类、进文章、点返回、直接打开深链、刷新、前进后退、老 hash 链接、导航高亮，全部通过，无页面报错。</li>
-<li>版本号一并推到 <code>20261101c</code>。</li>
+<li>版本号一并推到 <code>20261101d</code>。</li>
 </ul>
 <h3>往站里放了今年写下的三篇</h3>
 <ul>
@@ -95,7 +95,7 @@
 <h3>换掉那句签名，顺手给它配了个字体</h3>
 <ul>
 <li>原来那句「什么都沾一点，想到什么记什么」用了一年多，太像口头禅。换成「漫漫长路锤炼身躯，幽幽魂灵雕琢心智。」——对仗的句子，说的是两条线：身体和心智，都得慢慢磨。</li>
-<li>一处改、三处生效：<code>slogan</code>（侧栏个人卡、页脚）和 <code>splash.quote</code>（首屏那张签名卡）都指向同一句，首屏那句下面补了落款「— 伤心公主」。之前 <code>quote</code> 一直是空的，签名卡压根不显示，这回才第一次露出来。</li>
+<li>一处改、三处生效：<code>slogan</code>（侧栏个人卡、页脚）和 <code>splash.quote</code>（首屏那张签名卡）都指向同一句，首屏那句下面补了落款「— RezeのBlog」。之前 <code>quote</code> 一直是空的，签名卡压根不显示，这回才第一次露出来。</li>
 <li>字体换了楷体那一支（KaiTi / STKaiti / LXGW WenKai）。理由：楷书有起落，比宋体软，比黑体有人味，配这种对仗句刚好；而且站里正文、标题全是衬线，签名再换一种笔意才有区分。写成一条 <code>--motto</code> 变量，首屏和侧栏共用，免得两边长得不一样像抄来的。</li>
 <li>不换行的账：这句话 14 个字，首屏卡片原来只有 420px 宽，怎么都塞不进一行。于是把卡片放宽到 <code>min(760px, 92vw)</code>，字号做成 <code>clamp(15px, 2.6vw, 25px)</code> 随视口缩放。实测 1440 / 1280 / 1024 / 768 / 390 五个宽度，全部单行、无溢出、无横向滚动条。侧栏那行在 246px 的窄卡里也是单行。</li>
 <li>落款原本右对齐，改成居中；配一句一行之后右对齐会显得偏。</li>
@@ -282,9 +282,9 @@
   <div class="foot-inner">
     <div class="foot-left">
       <a class="brand" href="/">
-        伤心公主
+        RezeのBlog
       </a>
-      <p>什么都沾一点，想到什么记什么。<br>© <span class="js-year">2026</span> 伤心公主 · 保留所有权利</p>
+      <p>什么都沾一点，想到什么记什么。<br>© <span class="js-year">2026</span> RezeのBlog · 保留所有权利</p>
     </div>
     <div class="foot-links">
       <a href="/">首页</a>
@@ -316,9 +316,9 @@
   } catch (e) {}
 })();
 </script>
-<script defer src="assets/js/data.js?v=20261101c"></script>
-<script defer src="assets/js/cloud.js?v=20261101c"></script>
-<script defer src="assets/js/weather.js?v=20261101c"></script>
-<script defer src="assets/js/main.js?v=20261101c"></script>
+<script defer src="assets/js/data.js?v=20261101d"></script>
+<script defer src="assets/js/cloud.js?v=20261101d"></script>
+<script defer src="assets/js/weather.js?v=20261101d"></script>
+<script defer src="assets/js/main.js?v=20261101d"></script>
 </body>
 </html>

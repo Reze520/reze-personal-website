@@ -98,7 +98,7 @@ def main():
     tpl = re.sub(r'\s*<script>\s*\(function \(\) \{\s*var p = location\.pathname.*?</script>\s*', "\n", tpl, flags=re.S)
 
     # 2) 改标题与元信息
-    title = "更新日志 · 伤心公主"
+    title = "更新日志 · RezeのBlog"
     desc = "这个站怎么一点点长成现在这样：每一版改了什么、为什么改、卡在哪儿。"
     tpl = re.sub(r"<title>[^<]*</title>", "<title>%s</title>" % title, tpl, count=1)
     tpl = re.sub(r'<meta name="description" content="[^"]*"',

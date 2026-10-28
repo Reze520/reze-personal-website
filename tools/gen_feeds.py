@@ -83,8 +83,8 @@ def main(path):
         latest = datetime.now()
 
     site = data.get("site") or {}
-    title = site.get("name") or "伤心公主"
-    desc = strip_html(site.get("desc") or site.get("intro") or "伤心公主的个人博客。")
+    title = site.get("name") or "RezeのBlog"
+    desc = strip_html(site.get("desc") or site.get("intro") or "RezeのBlog的个人博客。")
 
     items = []
     for p in posts[:30]:

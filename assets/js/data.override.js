@@ -1,7 +1,7 @@
 /* 由后台编辑器导出的内容覆盖文件（可手动删除回到 data.js 默认内容） */
 window.SITE = {
-  "name": "伤心公主",
-  "en": "sad princess",
+  "name": "RezeのBlog",
+  "en": "reze blog",
   "domain": "reze520.top",
   "slogan": "漫漫长路锤炼身躯，幽幽魂灵雕琢心智。",
   "intro": "这里是我的自留地。生活、兴趣、随手做的小东西，还有那些没头没尾的想法，都放在这儿。没有推荐算法，也不会突然消失。",
@@ -1459,7 +1459,7 @@ window.SITE = {
       "Eppur si muove."
     ],
     "quote": "",
-    "quoteFrom": "— 伤心公主",
+    "quoteFrom": "— reze",
     "scrollText": "向下滑动"
   }
 };

@@ -22,8 +22,8 @@
    ============================================================ */
 
 window.SITE = {
-  name: "伤心公主",
-  en: "sad princess",
+  name: "RezeのBlog",
+  en: "reze blog",
   domain: "reze520.top",
   slogan: "漫漫长路锤炼身躯，幽幽魂灵雕琢心智。",
   intro:
@@ -604,7 +604,7 @@ window.SITE = {
       "Eppur si muove."
     ],
     quote: "", // 留空就不显示那张签名卡，只留滚动的句子
-    quoteFrom: "— 伤心公主",
+    quoteFrom: "— reze",
     scrollText: "向下滑动",
   },
 };

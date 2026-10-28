@@ -1541,7 +1541,6 @@
     left.innerHTML =
       '<div class="g-card g-profile">' +
       '<div class="g-avatar">' + avatarHtml + "</div>" +
-      '<p class="g-name">' + esc(SITE.name) + "</p>" +
       '<p class="g-bio">' + esc(SITE.slogan) + "</p>" +
       '<div class="g-social">' + socialHtml + "</div>" +
       '<div class="g-stats">' +
@@ -2168,7 +2167,7 @@ function aboutHtml() {
     '<h1>关于我</h1>' +
     '<div class="g-prose prose" style="padding-top:26px">' +
     '<h2>我是谁</h2>' +
-    '<p>我叫伤心公主，<strong>reze</strong> 是我在网上的名字。没有什么非做不可的事，也没有哪个领域算专精——什么都想试试，什么都沾一点。</p>' +
+    '<p>我叫 <strong>reze</strong>。没有什么非做不可的事，也没有哪个领域算专精——什么都想试试，什么都沾一点。</p>' +
     '<p>不太擅长自我介绍。每次被要求“简单说说你自己”，我都会卡住。但如果让我讲一个最近在想的问题，我可以讲很久。</p>' +
     '<p>所以这个站大概也是这样：没有履历，没有头衔，只有一些具体的、我真的想过的内容。</p>' +
     '<h2>这个站在做什么</h2>' +
@@ -2354,19 +2353,19 @@ function syncListQuery(cat, tag, page) {
 
 /* ---------- 每个路由的标题与描述 ----------
    子页面（about.html、writing.html…）打开时会 location.replace 到
-   index.html#/xxx，浏览器标签就只剩首页那一句「伤心公主 · 什么都沾一点」，
+   index.html#/xxx，浏览器标签就只剩首页那一句「RezeのBlog · 什么都沾一点」，
    description / og 也全停在首页。收藏、分享、搜索结果里八个页面长得一模一样。
    这里按路由重写一遍，值和各静态页 <head> 里写的保持一致。 */
 var PAGE_META = {
-  home: ["伤心公主 · 什么都沾一点", "伤心公主的个人博客，记录生活、兴趣和随手做的小东西。"],
-  writing: ["全部文章 · 伤心公主", "伤心公主写过的全部文章，按分类和标签浏览。"],
-  moments: ["动态 · 伤心公主", "随手记下的碎片，想到什么写什么。"],
-  album: ["相册 · 伤心公主", "存下来的照片。"],
-  links: ["导航 · 伤心公主", "常去的地方。"],
-  weather: ["天气 · 伤心公主", "几个城市放在一起看，点一下就能换。"],
-  timeline: ["时间线 · 伤心公主", "这个站的重大改动记录。"],
-  about: ["关于我 · 伤心公主", "关于伤心公主：一个什么都想试试的人，以及这个站在做什么。"],
-  post: ["文章 · 伤心公主", "伤心公主的个人博客。"]
+  home: ["RezeのBlog · 什么都沾一点", "RezeのBlog的个人博客，记录生活、兴趣和随手做的小东西。"],
+  writing: ["全部文章 · RezeのBlog", "RezeのBlog写过的全部文章，按分类和标签浏览。"],
+  moments: ["动态 · RezeのBlog", "随手记下的碎片，想到什么写什么。"],
+  album: ["相册 · RezeのBlog", "存下来的照片。"],
+  links: ["导航 · RezeのBlog", "常去的地方。"],
+  weather: ["天气 · RezeのBlog", "几个城市放在一起看，点一下就能换。"],
+  timeline: ["时间线 · RezeのBlog", "这个站的重大改动记录。"],
+  about: ["关于我 · RezeのBlog", "关于RezeのBlog：一个什么都想试试的人，以及这个站在做什么。"],
+  post: ["文章 · RezeのBlog", "RezeのBlog的个人博客。"]
 };
 var SITE_ORIGIN = "https://reze520.pages.dev";
 
