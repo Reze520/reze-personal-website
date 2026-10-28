@@ -1451,11 +1451,7 @@
     if (!bank.length) return "";
     var canSwap = bank.length > 1;
     return (
-      '<div class="g-card"><div class="g-card-head"><span class="t">' + ICONS.info + "诗笺</span>" +
-      (canSwap
-        ? '<span class="gn-tip" style="font-size:11px;letter-spacing:.04em;color:var(--g-text-3);opacity:.75">点击换一句</span>'
-        : "") +
-      "</div>" +
+      '<div class="g-card"><div class="g-card-head"><span class="t">' + ICONS.info + "诗笺</span></div>" +
       '<div class="g-notice' + (canSwap ? " gn-swap" : "") + '"' +
       (canSwap ? ' role="button" tabindex="0" title="点一下换一句"' : "") +
       '><div class="gn-body">' + poemInner(bank[_poemIdx]) + "</div></div></div>"

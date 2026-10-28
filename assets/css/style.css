@@ -3616,6 +3616,10 @@ body.has-app .site-foot .brand .brand-mark {
   color: var(--g-text);
   font-family: "Ma Shan Zheng", var(--serif);
 }
+.g-notice.gn-swap {
+  cursor: pointer;
+}
+
 .g-notice b {
   color: var(--g-text);
   font-weight: 500;
