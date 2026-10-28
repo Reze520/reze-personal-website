@@ -29,7 +29,7 @@ window.SITE = {
       "url": "mailto:1806754672@qq.com"
     }
   ],
-  "startYear": 2026,
+  "startYear": 2020,
   "avatar": "assets/uploads/avatar.gif",
   "icp": "待备案",
   "bgm": "assets/audio/song.mp3",

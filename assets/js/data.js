@@ -37,7 +37,7 @@ window.SITE = {
     { name: "抖音", icon: "douyin", url: "https://v.douyin.com/jY-UScBpfDE/" },
     { name: "邮箱", icon: "mail", url: "mailto:1806754672@qq.com" },
   ],
-  startYear: 2026,
+  startYear: 2020,
   avatar: "assets/uploads/avatar.gif", // 头像：留空显示「蕾」字
   icp: "待备案", // 备案下来后填：苏ICP备2026xxxxxx号-1
 
