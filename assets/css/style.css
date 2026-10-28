@@ -7018,3 +7018,25 @@ body.has-app .site-head .nav-more.open .nav-more-btn,
   opacity: 0 !important;
   visibility: hidden !important;
 }
+
+/* ============================================================
+   20. 顶栏导航：高亮块改成「内嵌胶囊」，别顶出外层圆角
+   外层容器是胶囊（radius 999px，等效 ~22px），内层高亮只有 8px 圆角、
+   又只内缩 3px，两边弧度对不上 —— 高亮块的方形拐角会从弧线外侧支出来，
+   看着像两块叠在一起。这里让内外用同一套胶囊弧度，并给高亮块留足内缩。
+   底下那根 16px 的小白条跟这层胶囊底边贴在一起，也一并去掉（有底色够了）。
+   ============================================================ */
+body.has-app .site-head .nav {
+  gap: 2px;
+}
+body.has-app .site-head .nav > a,
+body.has-app .site-head .nav-more-btn {
+  border-radius: 999px;
+}
+body.has-app .site-head .nav > a[aria-current="page"]::before {
+  display: none !important;
+}
+/* 浮在首屏时容器有底板，多留 1px 内缩，让高亮块与弧线之间透气 */
+body.has-app .site-head.is-over-hero .nav {
+  padding: 4px;
+}
