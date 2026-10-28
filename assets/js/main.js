@@ -1419,6 +1419,73 @@
     paint();
   }
 
+  /* ---------- 诗笺：点一下换一句 ----------
+     原来每次进页面随机抽一条，抽到哪首全靠运气，想换也没办法。
+     现在固定成一组，点卡片就往下顺一条，淡出淡入接上。 */
+  var _poemBank = null, _poemSig = "", _poemIdx = 0;
+
+  function poemBank() {
+    var src = (SITE.poems && SITE.poems.length)
+      ? SITE.poems
+      : (SITE.notice ? [SITE.notice] : []);
+    var first = src.length ? (typeof src[0] === "string" ? src[0] : (src[0] && src[0].t) || "") : "";
+    var sig = src.length + "|" + first;
+    if (_poemBank && _poemSig === sig) return _poemBank;
+    _poemSig = sig;
+    _poemBank = src.map(function (x) {
+      if (typeof x === "string") return { t: x, by: "" };
+      return { t: (x && x.t) || "", by: (x && x.by) || "" };
+    }).filter(function (x) { return x.t; });
+    _poemIdx = _poemBank.length ? Math.floor(Math.random() * _poemBank.length) : 0;
+    return _poemBank;
+  }
+
+  function poemInner(it) {
+    if (!it) return "";
+    return esc(it.t).replace(/\n/g, "<br>") +
+      (it.by ? '<span class="sig">—— ' + esc(it.by) + "</span>" : "");
+  }
+
+  function poemCardHtml() {
+    var bank = poemBank();
+    if (!bank.length) return "";
+    var canSwap = bank.length > 1;
+    return (
+      '<div class="g-card"><div class="g-card-head"><span class="t">' + ICONS.info + "诗笺</span>" +
+      (canSwap
+        ? '<span class="gn-tip" style="font-size:11px;letter-spacing:.04em;color:var(--g-text-3);opacity:.75">点击换一句</span>'
+        : "") +
+      "</div>" +
+      '<div class="g-notice' + (canSwap ? " gn-swap" : "") + '"' +
+      (canSwap ? ' role="button" tabindex="0" title="点一下换一句"' : "") +
+      '><div class="gn-body">' + poemInner(bank[_poemIdx]) + "</div></div></div>"
+    );
+  }
+
+  function swapPoem() {
+    var bank = _poemBank;
+    if (!bank || bank.length < 2) return;
+    var box = document.querySelector(".g-notice.gn-swap");
+    if (!box || box.__busy) return;
+    var body = box.querySelector(".gn-body");
+    if (!body) return;
+    box.__busy = true;
+    body.style.transition = "opacity .18s ease, transform .18s ease";
+    body.style.opacity = "0";
+    body.style.transform = "translateY(-6px)";
+    setTimeout(function () {
+      _poemIdx = (_poemIdx + 1) % bank.length;
+      body.innerHTML = poemInner(bank[_poemIdx]);
+      body.style.transition = "none";
+      body.style.transform = "translateY(9px)";
+      void body.offsetHeight;
+      body.style.transition = "opacity .3s ease, transform .34s cubic-bezier(.22,.7,.3,1)";
+      body.style.opacity = "1";
+      body.style.transform = "translateY(0)";
+      setTimeout(function () { box.__busy = false; }, 340);
+    }, 190);
+  }
+
   function mountApp() {
     var left = $("#app-left");
     var main = $("#app-main");
@@ -1473,18 +1540,7 @@
       })
       .join("");
 
-    var _poems = (SITE.poems && SITE.poems.length)
-      ? SITE.poems
-      : (SITE.notice ? [SITE.notice] : []);
-    var _raw = _poems.length ? _poems[Math.floor(Math.random() * _poems.length)] : "";
-    var _pt = (typeof _raw === "string") ? _raw : (_raw && _raw.t ? _raw.t : "");
-    var _pby = (typeof _raw === "object" && _raw.by) ? _raw.by : "";
-    var noticeCard = _pt
-      ? '<div class="g-card"><div class="g-card-head"><span class="t">' + ICONS.info +
-        '诗笺</span></div><div class="g-notice">' + esc(_pt).replace(/\n/g, "<br>") +
-        (_pby ? '<span class="sig">—— ' + esc(_pby) + "</span>" : "") +
-        "</div></div>"
-      : "";
+    var noticeCard = poemCardHtml();
 
     left.innerHTML =
       '<div class="g-card g-profile">' +
@@ -2824,15 +2880,45 @@ function interceptLinks(e) {
     var p = postById(id);
 
     if (!p) {
-      host.innerHTML =
-        '<article class="g-article">' +
-        backLinkHtml() +
-        "<h1>没有找到这篇文章</h1>" +
-        '<div class="g-meta"><span>它可能被移动或改名了</span></div>' +
-        '<div class="g-prose prose"><p>你可以从<a href="writing.html">文章列表</a>里重新找找。</p></div>' +
-        "</article>";
+      // 内容还在路上时，不能一口咬定「没有找到」：云端那份比 data.js 新，
+      // 刚发的文章往往还没落到本地兜底数据里，等一会儿就会出现。
+      if (!window.__contentReady && id) {
+        host.setAttribute("data-post-pending", "1");
+        host.setAttribute("data-post-id", id);
+        host.removeAttribute("data-post-sig");
+        host.innerHTML =
+          '<article class="g-article">' +
+          backLinkHtml() +
+          "<h1>正在读取这一篇</h1>" +
+          '<div class="g-meta"><span>内容正在取回</span></div>' +
+          '<div class="g-prose prose"><p>稍等一会儿。如果一直停在这里，刷新一次通常就好。</p></div>' +
+          "</article>";
+        return;
+      }
+      host.removeAttribute("data-post-pending");
+      host.removeAttribute("data-post-id");
+      host.removeAttribute("data-post-sig");
+      var noNet = !window.__contentGot; // 没真正拿到云端数据（请求失败）时才这么说
+      host.innerHTML = noNet
+        ? '<article class="g-article">' +
+          backLinkHtml() +
+          "<h1>暂时读不到这一篇</h1>" +
+          '<div class="g-meta"><span>网络没接上，或者服务器在忙</span></div>' +
+          '<div class="g-prose prose"><p>刷新一次试试。如果一直这样，可以先去<a href="writing.html">文章列表</a>。</p></div>' +
+          "</article>"
+        : '<article class="g-article">' +
+          backLinkHtml() +
+          "<h1>没有找到这篇文章</h1>" +
+          '<div class="g-meta"><span>它可能被移动或改名了</span></div>' +
+          '<div class="g-prose prose"><p>你可以从<a href="writing.html">文章列表</a>里重新找找。</p></div>' +
+          "</article>";
       return;
     }
+
+    // 记下这一次画的是哪一版，云端数据回来后好判断要不要重画
+    host.removeAttribute("data-post-pending");
+    host.setAttribute("data-post-id", p.id);
+    host.setAttribute("data-post-sig", String((p.content || "").length));
 
     document.title = p.title + " · " + SITE.name;
 
@@ -3182,34 +3268,77 @@ function interceptLinks(e) {
     });
   }
 
-  /* ---------- 首屏的滚动文字（打字机） ---------- */
+  /* ---------- 首屏的滚动文字（打字机，点一下换一句） ----------
+     原来只能等它自己打完、删光、再随机换下一句，想看另一句只能等。
+     现在点一下就切到下一句：先淡出上移，换完从下面浮上来，再继续打字。
+     自动循环保留，只是换句的顺序从随机改成了按次序，点击才接得上。 */
   function startTyping(el, lines) {
+    if (!el || !lines || !lines.length) return;
+    if (el.__typingStop) { try { el.__typingStop(); } catch (e) {} }
+
     var idx = 0;
     var pos = 0;
     var deleting = false;
+    var timer = null;
+    var busy = false;
+
+    function stop() { if (timer) { clearTimeout(timer); timer = null; } }
+    function later(fn, ms) { stop(); timer = setTimeout(fn, ms); }
 
     function step() {
-      var cur = lines[idx];
+      var cur = lines[idx] || "";
       if (!deleting) {
         pos++;
         el.textContent = cur.slice(0, pos);
         if (pos >= cur.length) {
           deleting = true;
-          return setTimeout(step, 2100); // 打完停一会儿
+          return later(step, 2400); // 打完停一会儿
         }
-        return setTimeout(step, 115);
+        return later(step, 108);
       }
       pos--;
       el.textContent = cur.slice(0, pos);
       if (pos <= 0) {
         deleting = false;
-        var _ni;
-        do { _ni = Math.floor(Math.random() * lines.length); } while (lines.length > 1 && _ni === idx);
-        idx = _ni;
-        return setTimeout(step, 460); // 删完随机换下一句
+        idx = (idx + 1) % lines.length;
+        return later(step, 440);
       }
-      return setTimeout(step, 45);
+      return later(step, 44);
     }
+
+    // 点一下：当前句淡出上移 -> 换句 -> 从下面浮上来重新打
+    function jump() {
+      if (busy) return;
+      busy = true;
+      stop();
+      var box = el.parentNode || el;
+      var next = (idx + 1) % lines.length;
+      box.style.transition = "opacity .18s ease, transform .18s ease";
+      box.style.opacity = "0";
+      box.style.transform = "translateY(-7px)";
+      setTimeout(function () {
+        idx = next;
+        pos = 0;
+        deleting = false;
+        el.textContent = "";
+        box.style.transition = "none";
+        box.style.transform = "translateY(10px)";
+        void box.offsetHeight;
+        box.style.transition = "opacity .32s ease, transform .36s cubic-bezier(.22,.7,.3,1)";
+        box.style.opacity = "1";
+        box.style.transform = "translateY(0)";
+        setTimeout(function () { busy = false; step(); }, 200);
+      }, 190);
+    }
+
+    var hit = el.parentNode || el;
+    hit.style.cursor = "pointer";
+    if (!hit.getAttribute("title")) hit.setAttribute("title", "点一下换一句");
+    hit.onclick = function (e) {
+      if (e && e.preventDefault) e.preventDefault();
+      jump();
+    };
+    el.__typingStop = stop;
 
     step();
   }
@@ -3743,6 +3872,63 @@ function interceptLinks(e) {
     } catch (e) {}
   }
 
+  /* ---------- 内容本地缓存 ----------
+     为什么要缓存：/site-data/content 是一整仿、一千多 KB，回包时快时慢。
+     不缓存的话每次刷新都得等它，等不到就只能用 data.js 里的旧数据，
+     刚发的文章就会成为「没有找到」。存一份在 localStorage，下次先用它铺页面。 */
+  var CONTENT_CACHE_KEY = "reze-content-cache-v1";
+  var CONTENT_CACHE_MAX = 3.6 * 1024 * 1024; // 大概 3.6MB，留余量给别的键
+
+  function readContentCache() {
+    try {
+      var raw = localStorage.getItem(CONTENT_CACHE_KEY);
+      if (!raw) return null;
+      var d = JSON.parse(raw);
+      if (d && d.site && typeof d.site === "object" && Array.isArray(d.posts) && d.posts.length) return d;
+    } catch (e) {}
+    return null;
+  }
+
+  function writeContentCache(c) {
+    try {
+      var s = JSON.stringify({
+        site: c.site || {},
+        posts: Array.isArray(c.posts) ? c.posts : [],
+        events: Array.isArray(c.events) ? c.events : [],
+        t: Date.now()
+      });
+      if (s.length > CONTENT_CACHE_MAX) return;
+      localStorage.setItem(CONTENT_CACHE_KEY, s);
+    } catch (e) {
+      // 满了就把旧的清掉，不能因为缓存把页面弄崩
+      try { localStorage.removeItem(CONTENT_CACHE_KEY); } catch (e2) {}
+    }
+  }
+
+  /* 云端内容到达后，把「刚才没拿到」的那一页补画一遍。
+     正常浏览时这里什么都不做，只有内容比首屏晚到或版本变了才动手。 */
+  function afterContentReady() {
+    try {
+      var app = document.querySelector(".app");
+      if (!app || app.getAttribute("data-page") !== "post") return;
+      var host = $("#app-main");
+      if (!host) return;
+      var pending = host.getAttribute("data-post-pending") === "1";
+      var id = host.getAttribute("data-post-id") ||
+        new URLSearchParams(parseHash().qs).get("id") || "";
+      if (!id) return;
+      var p = postById(id);
+      var sig = p ? String((p.content || "").length) : "";
+      if (!pending && (!p || sig === host.getAttribute("data-post-sig"))) return;
+      var y = window.scrollY;
+      mountPost(host, id);
+      if (y > 0) instantScrollTo(y);
+      else if (pending) instantScrollTo(0);
+    } catch (e) {
+      if (window.console && console.error) console.error("[reze] afterContentReady", e);
+    }
+  }
+
   /* ---------- 启动 ---------- */
   function boot() {
     applyLocalCms(); // 先套用本地编辑的内容，再渲染
@@ -3778,6 +3964,19 @@ function interceptLinks(e) {
     } catch (e) {}
     window.addEventListener("hashchange", applyRoute);
     document.addEventListener("click", interceptLinks);
+    // 诗笺：点一下换一句。事件托管，左栏每次重渲染都不用重新绑
+    document.addEventListener("click", function (e) {
+      var t = e.target;
+      if (t && t.closest && t.closest(".g-notice.gn-swap")) swapPoem();
+    });
+    document.addEventListener("keydown", function (e) {
+      if (e.key !== "Enter" && e.key !== " " && e.key !== "Spacebar") return;
+      var el = document.activeElement;
+      if (el && el.classList && el.classList.contains("gn-swap")) {
+        e.preventDefault();
+        swapPoem();
+      }
+    });
     // 导航页分类筛选 / 时间线「加载更早」：事件托管，重渲染后不用重新绑
     document.addEventListener("click", function (e) {
       var chip = e.target.closest(".lk-chip, .lk-more");
@@ -3829,15 +4028,27 @@ function interceptLinks(e) {
     } catch (e) {}
 
     applyLocalCms();
+    // 先用上次成功拿到的内容把页面铺上。/site-data/content 要一两秒到十几秒，
+    // 等它回来再渲染，刷新文章页会先白屏，网络一抖还会把刚发的文章判成「没有找到」。
+    var cached = readContentCache();
+    if (cached) {
+      applyDataOver(cached.site, cached.posts);
+      if (Array.isArray(cached.events)) window.CAL_EVENTS = cached.events;
+    }
+    boot();
+    // 再向云端要一次：拿到以后原地更新，必要时把当前这一页补画一遍
     try {
       if (typeof window.loadCloudContent === "function") {
         var c = await window.loadCloudContent();
         if (c && c.site && Object.keys(c.site).length) {
           applyDataOver(c.site, Array.isArray(c.posts) ? c.posts : null);
           if (Array.isArray(c.events)) window.CAL_EVENTS = c.events;
+          writeContentCache(c);
+          window.__contentGot = true;
         }
       }
     } catch (e) {}
-    boot();
+    window.__contentReady = true;
+    afterContentReady();
   }
 })();
