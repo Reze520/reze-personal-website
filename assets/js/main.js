@@ -1102,10 +1102,13 @@
     var _poems = (SITE.poems && SITE.poems.length)
       ? SITE.poems
       : (SITE.notice ? [SITE.notice] : []);
-    var _poem = _poems.length ? _poems[Math.floor(Math.random() * _poems.length)] : "";
-    var noticeCard = _poem
+    var _raw = _poems.length ? _poems[Math.floor(Math.random() * _poems.length)] : "";
+    var _pt = (typeof _raw === "string") ? _raw : (_raw && _raw.t ? _raw.t : "");
+    var _pby = (typeof _raw === "object" && _raw.by) ? _raw.by : "";
+    var noticeCard = _pt
       ? '<div class="g-card"><div class="g-card-head"><span class="t">' + ICONS.info +
-        '诗笺</span></div><div class="g-notice">' + esc(_poem).replace(/\n/g, "<br>") +
+        '诗笺</span></div><div class="g-notice">' + esc(_pt).replace(/\n/g, "<br>") +
+        (_pby ? '<span class="sig">—— ' + esc(_pby) + "</span>" : "") +
         "</div></div>"
       : "";
 
