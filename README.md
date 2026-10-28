@@ -356,22 +356,68 @@ python -m http.server 8080
 
 ## 八、目录结构
 
+站是纯静态的，扔上去就能跑。下面这张是**仓库现在的真实样子**（不是想象版）：
+
 ```
 reze-blog/
-├── index.html          首页
-├── writing.html        全部文章（带分类筛选）
-├── post.html           文章详情（靠 ?id= 参数）
+├── index.html          首页（首屏 + 三栏）
+├── writing.html        全部文章，带分类筛选和搜索
+├── post.html           文章详情，靠 ?id= 参数取
+├── moments.html        动态 / 日常碎片
+├── album.html          相册
+├── calendar.html       日历页（农历 + 节气 + 发文记录）
+├── timeline.html       时间线，只记站点改动
+├── weather.html        多城市天气
+├── links.html          友链
 ├── about.html          关于 + 作品
-├── 404.html            404 页
+├── admin.html          后台（改内容、导数据；不在导航里）
+├── 404.html            没找到那页
 ├── robots.txt
 ├── sitemap.xml
-└── assets/
-    ├── css/style.css   全部样式（双皮肤、动态背景、首屏）
-    ├── js/data.js      ★ 内容、首屏、社交链接都在这里改
-    ├── js/main.js      渲染逻辑
-    ├── audio/bgm.wav   背景音乐（可换成自己的 mp3）
-    └── uploads/        你放图片的地方
+├── feed.xml            RSS
+├── README.md           就是这份说明
+├── .gitignore          不进库的临时东西都在这
+│
+├── assets/
+│   ├── css/style.css   全部样式（双皮肤、动态背景、首屏）
+│   ├── icons/          小图标
+│   ├── js/
+│   │   ├── data.js           ★ 内容、首屏、社交链接都在这里改
+│   │   ├── data.override.js  后台导出的覆盖配置，会盖掉 data.js 同名字段
+│   │   ├── main.js           渲染逻辑（首页、文章、播放器都在这）
+│   │   ├── cloud.js          去 /site-data/content 拉云端配置，覆盖本地
+│   │   ├── playlist.js       播放列表 + 音频 CDN 地址
+│   │   ├── weather.js        天气
+│   │   └── lunar.js          农历 / 节气
+│   ├── audio/          23 首歌（音乐播放器的音源）
+│   └── uploads/        图片（封面、头像、背景等）
+│
+├── books/              48 篇书评的原文 txt（发文章时从这里取）
+├── docs/更新日志.md
+│
+├── functions/
+│   └── site-data/[[path]].js   Cloudflare Pages Function：D1 读写接口
+│                               （/site-data/content 读，/site-data/settings 写）
+│
+├── deploy/             发布用的小脚本（加歌、生成友链、部署）
+├── build_books.py      把 books/*.txt 批量推到云端，读 _dbids.json 对 ID
+├── _dbids.json         文章 slug → 数据库 ID 的映射表（★ 别删，发文章要用）
+└── _backup/  _backup_audio/  cloud_content_*.json  _dry.log
+                        本地辅助文件，已在 .gitignore 里，不进库
 ```
+
+### 两个分支，别搞混
+
+- **`Reze520-website`** —— Cloudflare Pages 的生产分支，推它就上线。
+- **`main`** —— 音频 CDN 的源分支。`assets/js/playlist.js` 里那行 jsDelivr 地址写死了 `@main`，
+  因为 Cloudflare Pages 不返回 `Accept-Ranges`，音频得走 jsDelivr 才能拖进度条。
+  **所以 `main` 不能删**，一删 23 首歌全 404。
+
+### 为什么首页文案改了文件却不生效
+
+首页的 splash（轮播句子、签名卡）存在 **D1 数据库**里。`cloud.js` 会请求 `/site-data/content`，
+云端有数据就覆盖本地 `data.js` / `data.override.js`。
+所以一句话要真正生效，得同时动两处：静态文件（默认值和兜底）+ 云端 settings（线上真正的值）。
 
 ---
 
