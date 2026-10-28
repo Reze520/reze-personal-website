@@ -2624,7 +2624,12 @@ function currentPage() {
   var p = (app && app.getAttribute("data-page")) || "";
   if (p) return p;
   var h = parseHash().page;
-  return h === "index" ? "home" : h;
+  if (h) return h === "index" ? "home" : h;
+  // 首页的根路径没有 data-page、也没有 hash，解析出来是空串。
+  // 这里必须认成 home：否则「首页点分类 → 进文章」这一步记不下来源，
+  // 返回按钮会退化成「返回文章列表」，回不到首页那一栏。
+  var path = (location.pathname || "/").replace(/\/+$/, "");
+  return path === "" || path === "/index.html" ? "home" : "";
 }
 
 function markListSource(idHint) {
