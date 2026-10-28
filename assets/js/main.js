@@ -2767,8 +2767,10 @@ function interceptLinks(e) {
       el.textContent = cur.slice(0, pos);
       if (pos <= 0) {
         deleting = false;
-        idx = (idx + 1) % lines.length;
-        return setTimeout(step, 460); // 删完换下一句
+        var _ni;
+        do { _ni = Math.floor(Math.random() * lines.length); } while (lines.length > 1 && _ni === idx);
+        idx = _ni;
+        return setTimeout(step, 460); // 删完随机换下一句
       }
       return setTimeout(step, 45);
     }
