@@ -1,6 +1,9 @@
 这本书我在大学读的第一遍，只记住了一个奇怪的问题：为什么偏偏选这一年？书名叫《万历十五年》，公元 1587 年。后来才懂，黄仁宇选这一年，恰恰是因为这一年"毫无大事"——表面上看，四海升平，全年并无大事可叙。
 
-<figure class="pg-fig cover"><img src="assets/uploads/figs/wanli-shiwunian.jpg" alt="《万历十五年》封面"><figcaption>《万历十五年》封面</figcaption></figure>
+<figure class="pg-fig pg-cover"><img src="assets/uploads/figs/wanli-shiwunian.jpg" alt="《万历十五年》封面"><figcaption>《万历十五年》封面</figcaption></figure>
+
+> 公元 1587 年，在中国为万历十五年，论干支则为丁亥，属猪。
+> —— 黄仁宇《万历十五年》开篇
 
 可他就要在"无事"这一年里，把整个明王朝的肌理，一根一根抽出来给你看。
 

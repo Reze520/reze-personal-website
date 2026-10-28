@@ -1022,21 +1022,40 @@ button {
 .prose figure.pg-fig {
   margin: 2.6em auto;
   text-align: center;
+  /* 别被全站通用的 .cover / .wide 规则误伤（那几个带 16:10 + overflow:hidden） */
+  aspect-ratio: auto;
+  overflow: visible;
+  background: none;
+  border: 0;
+  border-radius: 0;
+}
+.prose figure.pg-fig.cover,
+.prose figure.pg-fig.wide {
+  aspect-ratio: auto;
+  overflow: visible;
+  background: none;
 }
 .prose figure.pg-fig img {
   display: block;
   margin: 0 auto;
+  width: auto;
   height: auto;
   max-width: 100%;
+  object-fit: contain;
   border-radius: 8px;
   box-shadow: 0 10px 30px rgba(12, 9, 24, 0.22);
 }
-.prose figure.pg-fig.cover img {
+.prose figure.pg-fig.cover img,
+.prose figure.pg-fig.pg-cover img {
   width: auto;
+  height: auto;
   max-width: 230px;
+  max-height: none;
 }
-.prose figure.pg-fig.wide img {
+.prose figure.pg-fig.wide img,
+.prose figure.pg-fig.pg-wide img {
   width: auto;
+  height: auto;
   max-width: min(100%, 680px);
   max-height: 520px;
 }
@@ -1045,6 +1064,83 @@ button {
   font-size: 0.8em;
   line-height: 1.6;
   color: var(--ink-3);
+}
+
+/* ---------- 正文里的原文引用块 ---------- */
+.prose blockquote.pg-quote {
+  position: relative;
+  margin: 2.5em 0;
+  padding: 22px 28px 20px 30px;
+  border: 0;
+  border-left: 3px solid rgba(184, 161, 247, 0.5);
+  border-radius: 0 12px 12px 0;
+  background: rgba(255, 255, 255, 0.045);
+  font-family: var(--serif);
+  font-size: 16.5px;
+  line-height: 2;
+  color: var(--g-text-2);
+}
+.prose blockquote.pg-quote::before {
+  content: "“";
+  position: absolute;
+  left: 12px;
+  top: -6px;
+  font-family: var(--serif);
+  font-size: 46px;
+  line-height: 1;
+  color: rgba(184, 161, 247, 0.32);
+  pointer-events: none;
+}
+.prose blockquote.pg-quote p {
+  margin: 0;
+  text-indent: 0;
+}
+.prose blockquote.pg-quote cite {
+  display: block;
+  margin-top: 0.85em;
+  font-style: normal;
+  font-size: 0.78em;
+  letter-spacing: 0.02em;
+  color: var(--g-text-3);
+  text-align: right;
+}
+
+/* ---------- 文末「参考与延伸」 ---------- */
+.prose ul.pg-refs {
+  margin: 1.2em 0 0.4em;
+  padding: 0;
+  list-style: none;
+}
+.prose ul.pg-refs li {
+  margin: 0 0 0.6em;
+  padding-left: 16px;
+  position: relative;
+  font-size: 13.5px;
+  line-height: 1.75;
+  color: var(--g-text-2);
+}
+.prose ul.pg-refs li::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0.72em;
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: rgba(168, 198, 247, 0.5);
+}
+.prose ul.pg-refs li a {
+  color: var(--g-accent);
+  border-bottom: 1px solid rgba(168, 198, 247, 0.25);
+  transition: border-color 0.25s var(--ease), color 0.25s var(--ease);
+}
+.prose ul.pg-refs li a:hover {
+  color: #fff;
+  border-bottom-color: rgba(255, 255, 255, 0.6);
+}
+.prose ul.pg-refs li .src {
+  color: var(--g-text-3);
+  font-size: 0.92em;
 }
 .prose pre {
   margin: 2em 0;
@@ -6619,4 +6715,68 @@ body {
 }
 .wx-c-thunder {
   color: #c9a0f0;
+}
+
+/* ============================================================
+   19. 卡片回到毛玻璃：背景透出来，字还得看得清
+   之前为了"让原图透出轮廓"把模糊全关了，结果背景一换就花，
+   卡片上的小字几乎浮在插画上。这里把磨砂加回来，并压暗一点，
+   悬停时变"更实"而不是变"更透"。
+   ============================================================ */
+.app,
+.post-app {
+  --glass: rgba(11, 23, 43, 0.56);
+  --glass-2: rgba(255, 255, 255, 0.06);
+  --g-accent: #a8c6f7;
+}
+
+.g-card,
+.g-post,
+.g-posth,
+.g-moment,
+.g-link,
+.g-album figure,
+.g-tabs,
+.g-filters,
+.g-article,
+.g-searchline,
+.side-block,
+.profile,
+.search-box,
+.music-btn,
+.skin-tip,
+.to-top,
+.splash-quote,
+.site-head {
+  backdrop-filter: blur(22px) saturate(135%) !important;
+  -webkit-backdrop-filter: blur(22px) saturate(135%) !important;
+}
+
+/* 卡片本身压到 0.56 之后再加一层极淡的高光边，玻璃感更明确 */
+.g-card,
+.g-post,
+.g-posth,
+.g-moment,
+.g-article {
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.06), var(--g-shadow);
+}
+
+/* 悬停 / 选中：不变透明，稍微提亮一点，字仍然压得住 */
+.g-post:hover,
+.g-posth:hover,
+.g-moment:hover {
+  background: rgba(20, 38, 68, 0.74);
+  border-color: rgba(168, 198, 247, 0.3);
+}
+
+/* 顶栏同样走磨砂，滚动时压在插画上也清楚 */
+body.has-app .site-head {
+  background: rgba(10, 22, 42, 0.6);
+  backdrop-filter: blur(22px) saturate(135%) !important;
+  -webkit-backdrop-filter: blur(22px) saturate(135%) !important;
+}
+
+/* 首屏那张签名卡也统一 */
+.splash-quote {
+  background: rgba(10, 22, 42, 0.5);
 }

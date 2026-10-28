@@ -8,7 +8,29 @@
       "书评"
     ],
     "cat": "读书",
-    "cover": ""
+    "cover": "",
+    "refs": [
+      {
+        "t": "豆瓣《活着》条目",
+        "u": "https://book.douban.com/subject/4913064/",
+        "s": "豆瓣"
+      },
+      {
+        "t": "豆瓣《活着》长评",
+        "u": "https://book.douban.com/subject/4913064/reviews",
+        "s": "豆瓣"
+      },
+      {
+        "t": "B 站：搜「活着」的书评/影评视频",
+        "u": "https://search.bilibili.com/all?keyword=%E6%B4%BB%E7%9D%80%20%E4%B9%A6%E8%AF%84",
+        "s": "视频"
+      },
+      {
+        "t": "知乎：「活着」相关讨论",
+        "u": "https://www.zhihu.com/search?type=content&q=%E6%B4%BB%E7%9D%80%20%E4%B9%A6%E8%AF%84",
+        "s": "讨论"
+      }
+    ]
   },
   {
     "id": "xu-sanguan-mai-xue-ji",
@@ -19,7 +41,29 @@
       "书评"
     ],
     "cat": "读书",
-    "cover": ""
+    "cover": "",
+    "refs": [
+      {
+        "t": "豆瓣《许三观卖血记》条目",
+        "u": "https://book.douban.com/subject/4760224/",
+        "s": "豆瓣"
+      },
+      {
+        "t": "豆瓣《许三观卖血记》长评",
+        "u": "https://book.douban.com/subject/4760224/reviews",
+        "s": "豆瓣"
+      },
+      {
+        "t": "B 站：搜「许三观卖血记」的书评/影评视频",
+        "u": "https://search.bilibili.com/all?keyword=%E8%AE%B8%E4%B8%89%E8%A7%82%E5%8D%96%E8%A1%80%E8%AE%B0%20%E4%B9%A6%E8%AF%84",
+        "s": "视频"
+      },
+      {
+        "t": "知乎：「许三观卖血记」相关讨论",
+        "u": "https://www.zhihu.com/search?type=content&q=%E8%AE%B8%E4%B8%89%E8%A7%82%E5%8D%96%E8%A1%80%E8%AE%B0%20%E4%B9%A6%E8%AF%84",
+        "s": "讨论"
+      }
+    ]
   },
   {
     "id": "bai-lu-yuan",
@@ -30,7 +74,29 @@
       "书评"
     ],
     "cat": "读书",
-    "cover": ""
+    "cover": "",
+    "refs": [
+      {
+        "t": "豆瓣《白鹿原》条目",
+        "u": "https://book.douban.com/subject/27047454/",
+        "s": "豆瓣"
+      },
+      {
+        "t": "豆瓣《白鹿原》长评",
+        "u": "https://book.douban.com/subject/27047454/reviews",
+        "s": "豆瓣"
+      },
+      {
+        "t": "B 站：搜「白鹿原」的书评/影评视频",
+        "u": "https://search.bilibili.com/all?keyword=%E7%99%BD%E9%B9%BF%E5%8E%9F%20%E4%B9%A6%E8%AF%84",
+        "s": "视频"
+      },
+      {
+        "t": "知乎：「白鹿原」相关讨论",
+        "u": "https://www.zhihu.com/search?type=content&q=%E7%99%BD%E9%B9%BF%E5%8E%9F%20%E4%B9%A6%E8%AF%84",
+        "s": "讨论"
+      }
+    ]
   },
   {
     "id": "wo-yu-ditan",
@@ -41,7 +107,29 @@
       "书评"
     ],
     "cat": "读书",
-    "cover": ""
+    "cover": "",
+    "refs": [
+      {
+        "t": "豆瓣《我与地坛》条目",
+        "u": "https://book.douban.com/subject/5910656/",
+        "s": "豆瓣"
+      },
+      {
+        "t": "豆瓣《我与地坛》长评",
+        "u": "https://book.douban.com/subject/5910656/reviews",
+        "s": "豆瓣"
+      },
+      {
+        "t": "B 站：搜「我与地坛」的书评/影评视频",
+        "u": "https://search.bilibili.com/all?keyword=%E6%88%91%E4%B8%8E%E5%9C%B0%E5%9D%9B%20%E4%B9%A6%E8%AF%84",
+        "s": "视频"
+      },
+      {
+        "t": "知乎：「我与地坛」相关讨论",
+        "u": "https://www.zhihu.com/search?type=content&q=%E6%88%91%E4%B8%8E%E5%9C%B0%E5%9D%9B%20%E4%B9%A6%E8%AF%84",
+        "s": "讨论"
+      }
+    ]
   },
   {
     "id": "yi-ju-ding-yi-wan-ju",
@@ -52,7 +140,29 @@
       "书评"
     ],
     "cat": "读书",
-    "cover": ""
+    "cover": "",
+    "refs": [
+      {
+        "t": "豆瓣《一句顶一万句》条目",
+        "u": "https://book.douban.com/subject/36062390/",
+        "s": "豆瓣"
+      },
+      {
+        "t": "豆瓣《一句顶一万句》长评",
+        "u": "https://book.douban.com/subject/36062390/reviews",
+        "s": "豆瓣"
+      },
+      {
+        "t": "B 站：搜「一句顶一万句」的书评/影评视频",
+        "u": "https://search.bilibili.com/all?keyword=%E4%B8%80%E5%8F%A5%E9%A1%B6%E4%B8%80%E4%B8%87%E5%8F%A5%20%E4%B9%A6%E8%AF%84",
+        "s": "视频"
+      },
+      {
+        "t": "知乎：「一句顶一万句」相关讨论",
+        "u": "https://www.zhihu.com/search?type=content&q=%E4%B8%80%E5%8F%A5%E9%A1%B6%E4%B8%80%E4%B8%87%E5%8F%A5%20%E4%B9%A6%E8%AF%84",
+        "s": "讨论"
+      }
+    ]
   },
   {
     "id": "xiong-di",
@@ -63,7 +173,29 @@
       "书评"
     ],
     "cat": "读书",
-    "cover": ""
+    "cover": "",
+    "refs": [
+      {
+        "t": "豆瓣《兄弟》条目",
+        "u": "https://book.douban.com/subject/20441957/",
+        "s": "豆瓣"
+      },
+      {
+        "t": "豆瓣《兄弟》长评",
+        "u": "https://book.douban.com/subject/20441957/reviews",
+        "s": "豆瓣"
+      },
+      {
+        "t": "B 站：搜「兄弟」的书评/影评视频",
+        "u": "https://search.bilibili.com/all?keyword=%E5%85%84%E5%BC%9F%20%E4%B9%A6%E8%AF%84",
+        "s": "视频"
+      },
+      {
+        "t": "知乎：「兄弟」相关讨论",
+        "u": "https://www.zhihu.com/search?type=content&q=%E5%85%84%E5%BC%9F%20%E4%B9%A6%E8%AF%84",
+        "s": "讨论"
+      }
+    ]
   },
   {
     "id": "pingfan-de-shijie",
@@ -74,7 +206,29 @@
       "书评"
     ],
     "cat": "读书",
-    "cover": ""
+    "cover": "",
+    "refs": [
+      {
+        "t": "豆瓣《平凡的世界》条目",
+        "u": "https://book.douban.com/subject/10517238/",
+        "s": "豆瓣"
+      },
+      {
+        "t": "豆瓣《平凡的世界》长评",
+        "u": "https://book.douban.com/subject/10517238/reviews",
+        "s": "豆瓣"
+      },
+      {
+        "t": "B 站：搜「平凡的世界」的书评/影评视频",
+        "u": "https://search.bilibili.com/all?keyword=%E5%B9%B3%E5%87%A1%E7%9A%84%E4%B8%96%E7%95%8C%20%E4%B9%A6%E8%AF%84",
+        "s": "视频"
+      },
+      {
+        "t": "知乎：「平凡的世界」相关讨论",
+        "u": "https://www.zhihu.com/search?type=content&q=%E5%B9%B3%E5%87%A1%E7%9A%84%E4%B8%96%E7%95%8C%20%E4%B9%A6%E8%AF%84",
+        "s": "讨论"
+      }
+    ]
   },
   {
     "id": "kanjian",
@@ -85,7 +239,29 @@
       "书评"
     ],
     "cat": "读书",
-    "cover": ""
+    "cover": "",
+    "refs": [
+      {
+        "t": "豆瓣《看见》条目",
+        "u": "https://book.douban.com/subject/30539780/",
+        "s": "豆瓣"
+      },
+      {
+        "t": "豆瓣《看见》长评",
+        "u": "https://book.douban.com/subject/30539780/reviews",
+        "s": "豆瓣"
+      },
+      {
+        "t": "B 站：搜「看见」的书评/影评视频",
+        "u": "https://search.bilibili.com/all?keyword=%E7%9C%8B%E8%A7%81%20%E4%B9%A6%E8%AF%84",
+        "s": "视频"
+      },
+      {
+        "t": "知乎：「看见」相关讨论",
+        "u": "https://www.zhihu.com/search?type=content&q=%E7%9C%8B%E8%A7%81%20%E4%B9%A6%E8%AF%84",
+        "s": "讨论"
+      }
+    ]
   },
   {
     "id": "nan-huaijin-xuanji",
@@ -96,7 +272,29 @@
       "书评"
     ],
     "cat": "读书",
-    "cover": ""
+    "cover": "",
+    "refs": [
+      {
+        "t": "豆瓣《南怀瑾选集》条目",
+        "u": "https://book.douban.com/subject/2093771/",
+        "s": "豆瓣"
+      },
+      {
+        "t": "豆瓣《南怀瑾选集》长评",
+        "u": "https://book.douban.com/subject/2093771/reviews",
+        "s": "豆瓣"
+      },
+      {
+        "t": "B 站：搜「南怀瑾选集」的书评/影评视频",
+        "u": "https://search.bilibili.com/all?keyword=%E5%8D%97%E6%80%80%E7%91%BE%E9%80%89%E9%9B%86%20%E4%B9%A6%E8%AF%84",
+        "s": "视频"
+      },
+      {
+        "t": "知乎：「南怀瑾选集」相关讨论",
+        "u": "https://www.zhihu.com/search?type=content&q=%E5%8D%97%E6%80%80%E7%91%BE%E9%80%89%E9%9B%86%20%E4%B9%A6%E8%AF%84",
+        "s": "讨论"
+      }
+    ]
   },
   {
     "id": "ruhe-yuedu-yi-benshu",
@@ -107,7 +305,29 @@
       "书评"
     ],
     "cat": "读书",
-    "cover": ""
+    "cover": "",
+    "refs": [
+      {
+        "t": "豆瓣《如何阅读一本书》条目",
+        "u": "https://book.douban.com/subject/1013208/",
+        "s": "豆瓣"
+      },
+      {
+        "t": "豆瓣《如何阅读一本书》长评",
+        "u": "https://book.douban.com/subject/1013208/reviews",
+        "s": "豆瓣"
+      },
+      {
+        "t": "B 站：搜「如何阅读一本书」的书评/影评视频",
+        "u": "https://search.bilibili.com/all?keyword=%E5%A6%82%E4%BD%95%E9%98%85%E8%AF%BB%E4%B8%80%E6%9C%AC%E4%B9%A6%20%E4%B9%A6%E8%AF%84",
+        "s": "视频"
+      },
+      {
+        "t": "知乎：「如何阅读一本书」相关讨论",
+        "u": "https://www.zhihu.com/search?type=content&q=%E5%A6%82%E4%BD%95%E9%98%85%E8%AF%BB%E4%B8%80%E6%9C%AC%E4%B9%A6%20%E4%B9%A6%E8%AF%84",
+        "s": "讨论"
+      }
+    ]
   },
   {
     "id": "tang-jihede",
@@ -118,7 +338,29 @@
       "书评"
     ],
     "cat": "读书",
-    "cover": ""
+    "cover": "",
+    "refs": [
+      {
+        "t": "豆瓣《堂吉诃德》条目",
+        "u": "https://book.douban.com/subject/34908576/",
+        "s": "豆瓣"
+      },
+      {
+        "t": "豆瓣《堂吉诃德》长评",
+        "u": "https://book.douban.com/subject/34908576/reviews",
+        "s": "豆瓣"
+      },
+      {
+        "t": "B 站：搜「堂吉诃德」的书评/影评视频",
+        "u": "https://search.bilibili.com/all?keyword=%E5%A0%82%E5%90%89%E8%AF%83%E5%BE%B7%20%E4%B9%A6%E8%AF%84",
+        "s": "视频"
+      },
+      {
+        "t": "知乎：「堂吉诃德」相关讨论",
+        "u": "https://www.zhihu.com/search?type=content&q=%E5%A0%82%E5%90%89%E8%AF%83%E5%BE%B7%20%E4%B9%A6%E8%AF%84",
+        "s": "讨论"
+      }
+    ]
   },
   {
     "id": "renlei-jianshi",
@@ -129,7 +371,29 @@
       "书评"
     ],
     "cat": "读书",
-    "cover": ""
+    "cover": "",
+    "refs": [
+      {
+        "t": "豆瓣《人类简史》条目",
+        "u": "https://book.douban.com/subject/25985021/",
+        "s": "豆瓣"
+      },
+      {
+        "t": "豆瓣《人类简史》长评",
+        "u": "https://book.douban.com/subject/25985021/reviews",
+        "s": "豆瓣"
+      },
+      {
+        "t": "B 站：搜「人类简史」的书评/影评视频",
+        "u": "https://search.bilibili.com/all?keyword=%E4%BA%BA%E7%B1%BB%E7%AE%80%E5%8F%B2%20%E4%B9%A6%E8%AF%84",
+        "s": "视频"
+      },
+      {
+        "t": "知乎：「人类简史」相关讨论",
+        "u": "https://www.zhihu.com/search?type=content&q=%E4%BA%BA%E7%B1%BB%E7%AE%80%E5%8F%B2%20%E4%B9%A6%E8%AF%84",
+        "s": "讨论"
+      }
+    ]
   },
   {
     "id": "renjian-cihua",
@@ -140,7 +404,29 @@
       "书评"
     ],
     "cat": "读书",
-    "cover": ""
+    "cover": "",
+    "refs": [
+      {
+        "t": "豆瓣《人间词话》条目",
+        "u": "https://book.douban.com/subject/1203426/",
+        "s": "豆瓣"
+      },
+      {
+        "t": "豆瓣《人间词话》长评",
+        "u": "https://book.douban.com/subject/1203426/reviews",
+        "s": "豆瓣"
+      },
+      {
+        "t": "B 站：搜「人间词话」的书评/影评视频",
+        "u": "https://search.bilibili.com/all?keyword=%E4%BA%BA%E9%97%B4%E8%AF%8D%E8%AF%9D%20%E4%B9%A6%E8%AF%84",
+        "s": "视频"
+      },
+      {
+        "t": "知乎：「人间词话」相关讨论",
+        "u": "https://www.zhihu.com/search?type=content&q=%E4%BA%BA%E9%97%B4%E8%AF%8D%E8%AF%9D%20%E4%B9%A6%E8%AF%84",
+        "s": "讨论"
+      }
+    ]
   },
   {
     "id": "wanli-shiwunian",
@@ -151,7 +437,29 @@
       "书评"
     ],
     "cat": "读书",
-    "cover": ""
+    "cover": "",
+    "refs": [
+      {
+        "t": "豆瓣《万历十五年》条目",
+        "u": "https://book.douban.com/subject/1041482/",
+        "s": "豆瓣"
+      },
+      {
+        "t": "豆瓣《万历十五年》长评",
+        "u": "https://book.douban.com/subject/1041482/reviews",
+        "s": "豆瓣"
+      },
+      {
+        "t": "B 站：搜「万历十五年」的书评/影评视频",
+        "u": "https://search.bilibili.com/all?keyword=%E4%B8%87%E5%8E%86%E5%8D%81%E4%BA%94%E5%B9%B4%20%E4%B9%A6%E8%AF%84",
+        "s": "视频"
+      },
+      {
+        "t": "知乎：「万历十五年」相关讨论",
+        "u": "https://www.zhihu.com/search?type=content&q=%E4%B8%87%E5%8E%86%E5%8D%81%E4%BA%94%E5%B9%B4%20%E4%B9%A6%E8%AF%84",
+        "s": "讨论"
+      }
+    ]
   },
   {
     "id": "meili-xin-shijie",
@@ -162,7 +470,29 @@
       "书评"
     ],
     "cat": "读书",
-    "cover": ""
+    "cover": "",
+    "refs": [
+      {
+        "t": "豆瓣《美丽新世界》条目",
+        "u": "https://book.douban.com/subject/27002046/",
+        "s": "豆瓣"
+      },
+      {
+        "t": "豆瓣《美丽新世界》长评",
+        "u": "https://book.douban.com/subject/27002046/reviews",
+        "s": "豆瓣"
+      },
+      {
+        "t": "B 站：搜「美丽新世界」的书评/影评视频",
+        "u": "https://search.bilibili.com/all?keyword=%E7%BE%8E%E4%B8%BD%E6%96%B0%E4%B8%96%E7%95%8C%20%E4%B9%A6%E8%AF%84",
+        "s": "视频"
+      },
+      {
+        "t": "知乎：「美丽新世界」相关讨论",
+        "u": "https://www.zhihu.com/search?type=content&q=%E7%BE%8E%E4%B8%BD%E6%96%B0%E4%B8%96%E7%95%8C%20%E4%B9%A6%E8%AF%84",
+        "s": "讨论"
+      }
+    ]
   },
   {
     "id": "laoji-chao",
@@ -173,7 +503,29 @@
       "书评"
     ],
     "cat": "读书",
-    "cover": ""
+    "cover": "",
+    "refs": [
+      {
+        "t": "豆瓣《老妓抄》条目",
+        "u": "https://book.douban.com/subject/35710421/",
+        "s": "豆瓣"
+      },
+      {
+        "t": "豆瓣《老妓抄》长评",
+        "u": "https://book.douban.com/subject/35710421/reviews",
+        "s": "豆瓣"
+      },
+      {
+        "t": "B 站：搜「老妓抄」的书评/影评视频",
+        "u": "https://search.bilibili.com/all?keyword=%E8%80%81%E5%A6%93%E6%8A%84%20%E4%B9%A6%E8%AF%84",
+        "s": "视频"
+      },
+      {
+        "t": "知乎：「老妓抄」相关讨论",
+        "u": "https://www.zhihu.com/search?type=content&q=%E8%80%81%E5%A6%93%E6%8A%84%20%E4%B9%A6%E8%AF%84",
+        "s": "讨论"
+      }
+    ]
   },
   {
     "id": "wo-neng-you-shenme-huaixinsi",
@@ -184,7 +536,29 @@
       "书评"
     ],
     "cat": "读书",
-    "cover": ""
+    "cover": "",
+    "refs": [
+      {
+        "t": "豆瓣《我能有什么坏心思呢》条目",
+        "u": "https://book.douban.com/subject/35632117/",
+        "s": "豆瓣"
+      },
+      {
+        "t": "豆瓣《我能有什么坏心思呢》长评",
+        "u": "https://book.douban.com/subject/35632117/reviews",
+        "s": "豆瓣"
+      },
+      {
+        "t": "B 站：搜「我能有什么坏心思呢」的书评/影评视频",
+        "u": "https://search.bilibili.com/all?keyword=%E6%88%91%E8%83%BD%E6%9C%89%E4%BB%80%E4%B9%88%E5%9D%8F%E5%BF%83%E6%80%9D%E5%91%A2%20%E4%B9%A6%E8%AF%84",
+        "s": "视频"
+      },
+      {
+        "t": "知乎：「我能有什么坏心思呢」相关讨论",
+        "u": "https://www.zhihu.com/search?type=content&q=%E6%88%91%E8%83%BD%E6%9C%89%E4%BB%80%E4%B9%88%E5%9D%8F%E5%BF%83%E6%80%9D%E5%91%A2%20%E4%B9%A6%E8%AF%84",
+        "s": "讨论"
+      }
+    ]
   },
   {
     "id": "quanqiu-tongshi",
@@ -195,7 +569,29 @@
       "书评"
     ],
     "cat": "读书",
-    "cover": ""
+    "cover": "",
+    "refs": [
+      {
+        "t": "豆瓣《全球通史》条目",
+        "u": "https://book.douban.com/subject/36609039/",
+        "s": "豆瓣"
+      },
+      {
+        "t": "豆瓣《全球通史》长评",
+        "u": "https://book.douban.com/subject/36609039/reviews",
+        "s": "豆瓣"
+      },
+      {
+        "t": "B 站：搜「全球通史」的书评/影评视频",
+        "u": "https://search.bilibili.com/all?keyword=%E5%85%A8%E7%90%83%E9%80%9A%E5%8F%B2%20%E4%B9%A6%E8%AF%84",
+        "s": "视频"
+      },
+      {
+        "t": "知乎：「全球通史」相关讨论",
+        "u": "https://www.zhihu.com/search?type=content&q=%E5%85%A8%E7%90%83%E9%80%9A%E5%8F%B2%20%E4%B9%A6%E8%AF%84",
+        "s": "讨论"
+      }
+    ]
   },
   {
     "id": "liang-shiqiu-sanwen",
@@ -206,7 +602,29 @@
       "书评"
     ],
     "cat": "读书",
-    "cover": ""
+    "cover": "",
+    "refs": [
+      {
+        "t": "豆瓣《梁实秋散文》条目",
+        "u": "https://book.douban.com/subject/1398461/",
+        "s": "豆瓣"
+      },
+      {
+        "t": "豆瓣《梁实秋散文》长评",
+        "u": "https://book.douban.com/subject/1398461/reviews",
+        "s": "豆瓣"
+      },
+      {
+        "t": "B 站：搜「梁实秋散文」的书评/影评视频",
+        "u": "https://search.bilibili.com/all?keyword=%E6%A2%81%E5%AE%9E%E7%A7%8B%E6%95%A3%E6%96%87%20%E4%B9%A6%E8%AF%84",
+        "s": "视频"
+      },
+      {
+        "t": "知乎：「梁实秋散文」相关讨论",
+        "u": "https://www.zhihu.com/search?type=content&q=%E6%A2%81%E5%AE%9E%E7%A7%8B%E6%95%A3%E6%96%87%20%E4%B9%A6%E8%AF%84",
+        "s": "讨论"
+      }
+    ]
   },
   {
     "id": "huangjin-shidai-wang-xiaobo",
@@ -217,7 +635,29 @@
       "书评"
     ],
     "cat": "读书",
-    "cover": ""
+    "cover": "",
+    "refs": [
+      {
+        "t": "豆瓣《黄金时代》条目",
+        "u": "https://book.douban.com/subject/27013741/",
+        "s": "豆瓣"
+      },
+      {
+        "t": "豆瓣《黄金时代》长评",
+        "u": "https://book.douban.com/subject/27013741/reviews",
+        "s": "豆瓣"
+      },
+      {
+        "t": "B 站：搜「黄金时代」的书评/影评视频",
+        "u": "https://search.bilibili.com/all?keyword=%E9%BB%84%E9%87%91%E6%97%B6%E4%BB%A3%20%E4%B9%A6%E8%AF%84",
+        "s": "视频"
+      },
+      {
+        "t": "知乎：「黄金时代」相关讨论",
+        "u": "https://www.zhihu.com/search?type=content&q=%E9%BB%84%E9%87%91%E6%97%B6%E4%BB%A3%20%E4%B9%A6%E8%AF%84",
+        "s": "讨论"
+      }
+    ]
   },
   {
     "id": "yinshi-yu-wenhua",
@@ -239,7 +679,29 @@
       "书评"
     ],
     "cat": "读书",
-    "cover": ""
+    "cover": "",
+    "refs": [
+      {
+        "t": "豆瓣《禅与摩托车维修艺术》条目",
+        "u": "https://book.douban.com/subject/6811366/",
+        "s": "豆瓣"
+      },
+      {
+        "t": "豆瓣《禅与摩托车维修艺术》长评",
+        "u": "https://book.douban.com/subject/6811366/reviews",
+        "s": "豆瓣"
+      },
+      {
+        "t": "B 站：搜「禅与摩托车维修艺术」的书评/影评视频",
+        "u": "https://search.bilibili.com/all?keyword=%E7%A6%85%E4%B8%8E%E6%91%A9%E6%89%98%E8%BD%A6%E7%BB%B4%E4%BF%AE%E8%89%BA%E6%9C%AF%20%E4%B9%A6%E8%AF%84",
+        "s": "视频"
+      },
+      {
+        "t": "知乎：「禅与摩托车维修艺术」相关讨论",
+        "u": "https://www.zhihu.com/search?type=content&q=%E7%A6%85%E4%B8%8E%E6%91%A9%E6%89%98%E8%BD%A6%E7%BB%B4%E4%BF%AE%E8%89%BA%E6%9C%AF%20%E4%B9%A6%E8%AF%84",
+        "s": "讨论"
+      }
+    ]
   },
   {
     "id": "bian-cheng",
@@ -250,7 +712,29 @@
       "书评"
     ],
     "cat": "读书",
-    "cover": ""
+    "cover": "",
+    "refs": [
+      {
+        "t": "豆瓣《边城》条目",
+        "u": "https://book.douban.com/subject/1057244/",
+        "s": "豆瓣"
+      },
+      {
+        "t": "豆瓣《边城》长评",
+        "u": "https://book.douban.com/subject/1057244/reviews",
+        "s": "豆瓣"
+      },
+      {
+        "t": "B 站：搜「边城」的书评/影评视频",
+        "u": "https://search.bilibili.com/all?keyword=%E8%BE%B9%E5%9F%8E%20%E4%B9%A6%E8%AF%84",
+        "s": "视频"
+      },
+      {
+        "t": "知乎：「边城」相关讨论",
+        "u": "https://www.zhihu.com/search?type=content&q=%E8%BE%B9%E5%9F%8E%20%E4%B9%A6%E8%AF%84",
+        "s": "讨论"
+      }
+    ]
   },
   {
     "id": "dawei-kebofeier",
@@ -261,7 +745,29 @@
       "书评"
     ],
     "cat": "读书",
-    "cover": ""
+    "cover": "",
+    "refs": [
+      {
+        "t": "豆瓣《大卫·科波菲尔》条目",
+        "u": "https://book.douban.com/subject/25897663/",
+        "s": "豆瓣"
+      },
+      {
+        "t": "豆瓣《大卫·科波菲尔》长评",
+        "u": "https://book.douban.com/subject/25897663/reviews",
+        "s": "豆瓣"
+      },
+      {
+        "t": "B 站：搜「大卫·科波菲尔」的书评/影评视频",
+        "u": "https://search.bilibili.com/all?keyword=%E5%A4%A7%E5%8D%AB%C2%B7%E7%A7%91%E6%B3%A2%E8%8F%B2%E5%B0%94%20%E4%B9%A6%E8%AF%84",
+        "s": "视频"
+      },
+      {
+        "t": "知乎：「大卫·科波菲尔」相关讨论",
+        "u": "https://www.zhihu.com/search?type=content&q=%E5%A4%A7%E5%8D%AB%C2%B7%E7%A7%91%E6%B3%A2%E8%8F%B2%E5%B0%94%20%E4%B9%A6%E8%AF%84",
+        "s": "讨论"
+      }
+    ]
   },
   {
     "id": "da-moxing-yuanli",
@@ -272,7 +778,24 @@
       "技术"
     ],
     "cat": "技术",
-    "cover": ""
+    "cover": "",
+    "refs": [
+      {
+        "t": "Attention Is All You Need（Transformer 原始论文）",
+        "u": "https://arxiv.org/abs/1706.03762",
+        "s": "arXiv"
+      },
+      {
+        "t": "The Illustrated Transformer（图解注意力）",
+        "u": "https://jalammar.github.io/illustrated-transformer/",
+        "s": ""
+      },
+      {
+        "t": "ChatGPT 发布说明",
+        "u": "https://openai.com/index/chatgpt/",
+        "s": "OpenAI"
+      }
+    ]
   },
   {
     "id": "rongqi-yu-k8s",
@@ -283,7 +806,24 @@
       "技术"
     ],
     "cat": "技术",
-    "cover": ""
+    "cover": "",
+    "refs": [
+      {
+        "t": "Docker 官方文档：容器与镜像",
+        "u": "https://docs.docker.com/get-started/docker-overview/",
+        "s": ""
+      },
+      {
+        "t": "Kubernetes 官方概念手册",
+        "u": "https://kubernetes.io/docs/concepts/",
+        "s": ""
+      },
+      {
+        "t": "Kubernetes 中文文档",
+        "u": "https://kubernetes.io/zh-cn/docs/concepts/",
+        "s": ""
+      }
+    ]
   },
   {
     "id": "qianduan-kuangjia",
@@ -294,7 +834,29 @@
       "技术"
     ],
     "cat": "技术",
-    "cover": ""
+    "cover": "",
+    "refs": [
+      {
+        "t": "React 官方文档",
+        "u": "https://react.dev/",
+        "s": ""
+      },
+      {
+        "t": "Vue 3 中文文档",
+        "u": "https://cn.vuejs.org/guide/introduction.html",
+        "s": ""
+      },
+      {
+        "t": "Svelte 官方文档",
+        "u": "https://svelte.dev/docs/svelte/overview",
+        "s": ""
+      },
+      {
+        "t": "Vite 官方文档",
+        "u": "https://cn.vitejs.dev/guide/",
+        "s": ""
+      }
+    ]
   },
   {
     "id": "aobenhaimo",
@@ -305,7 +867,29 @@
       "影评"
     ],
     "cat": "观影",
-    "cover": ""
+    "cover": "",
+    "refs": [
+      {
+        "t": "豆瓣《奥本海默》条目",
+        "u": "https://movie.douban.com/subject/35593344/",
+        "s": "豆瓣"
+      },
+      {
+        "t": "豆瓣《奥本海默》长评",
+        "u": "https://movie.douban.com/subject/35593344/reviews",
+        "s": "豆瓣"
+      },
+      {
+        "t": "B 站：搜「奥本海默」的书评/影评视频",
+        "u": "https://search.bilibili.com/all?keyword=%E5%A5%A5%E6%9C%AC%E6%B5%B7%E9%BB%98%20%E5%BD%B1%E8%AF%84",
+        "s": "视频"
+      },
+      {
+        "t": "知乎：「奥本海默」相关讨论",
+        "u": "https://www.zhihu.com/search?type=content&q=%E5%A5%A5%E6%9C%AC%E6%B5%B7%E9%BB%98%20%E5%BD%B1%E8%AF%84",
+        "s": "讨论"
+      }
+    ]
   },
   {
     "id": "liulang-diqiu-2",
@@ -316,7 +900,29 @@
       "影评"
     ],
     "cat": "观影",
-    "cover": ""
+    "cover": "",
+    "refs": [
+      {
+        "t": "豆瓣《流浪地球2》条目",
+        "u": "https://movie.douban.com/subject/35267208/",
+        "s": "豆瓣"
+      },
+      {
+        "t": "豆瓣《流浪地球2》长评",
+        "u": "https://movie.douban.com/subject/35267208/reviews",
+        "s": "豆瓣"
+      },
+      {
+        "t": "B 站：搜「流浪地球2」的书评/影评视频",
+        "u": "https://search.bilibili.com/all?keyword=%E6%B5%81%E6%B5%AA%E5%9C%B0%E7%90%832%20%E5%BD%B1%E8%AF%84",
+        "s": "视频"
+      },
+      {
+        "t": "知乎：「流浪地球2」相关讨论",
+        "u": "https://www.zhihu.com/search?type=content&q=%E6%B5%81%E6%B5%AA%E5%9C%B0%E7%90%832%20%E5%BD%B1%E8%AF%84",
+        "s": "讨论"
+      }
+    ]
   },
   {
     "id": "yuzhou-tansuo-bianjibu",
@@ -327,7 +933,29 @@
       "影评"
     ],
     "cat": "观影",
-    "cover": ""
+    "cover": "",
+    "refs": [
+      {
+        "t": "豆瓣《宇宙探索编辑部》条目",
+        "u": "https://movie.douban.com/subject/34941536/",
+        "s": "豆瓣"
+      },
+      {
+        "t": "豆瓣《宇宙探索编辑部》长评",
+        "u": "https://movie.douban.com/subject/34941536/reviews",
+        "s": "豆瓣"
+      },
+      {
+        "t": "B 站：搜「宇宙探索编辑部」的书评/影评视频",
+        "u": "https://search.bilibili.com/all?keyword=%E5%AE%87%E5%AE%99%E6%8E%A2%E7%B4%A2%E7%BC%96%E8%BE%91%E9%83%A8%20%E5%BD%B1%E8%AF%84",
+        "s": "视频"
+      },
+      {
+        "t": "知乎：「宇宙探索编辑部」相关讨论",
+        "u": "https://www.zhihu.com/search?type=content&q=%E5%AE%87%E5%AE%99%E6%8E%A2%E7%B4%A2%E7%BC%96%E8%BE%91%E9%83%A8%20%E5%BD%B1%E8%AF%84",
+        "s": "讨论"
+      }
+    ]
   },
   {
     "id": "wo-he-rust",
@@ -338,7 +966,24 @@
       "技术"
     ],
     "cat": "技术",
-    "cover": ""
+    "cover": "",
+    "refs": [
+      {
+        "t": "The Rust Programming Language（官方书，中文版）",
+        "u": "https://course.rs/about-book.html",
+        "s": ""
+      },
+      {
+        "t": "Rust 官方文档 std 标准库",
+        "u": "https://doc.rust-lang.org/std/",
+        "s": ""
+      },
+      {
+        "t": "Rust 官网",
+        "u": "https://www.rust-lang.org/",
+        "s": ""
+      }
+    ]
   },
   {
     "id": "tuijian-suanfa",
@@ -349,7 +994,24 @@
       "技术"
     ],
     "cat": "技术",
-    "cover": ""
+    "cover": "",
+    "refs": [
+      {
+        "t": "Amazon item-to-item 协同过滤论文",
+        "u": "https://www.cs.umd.edu/~samir/498/Amazon-Recommendations.pdf",
+        "s": "PDF"
+      },
+      {
+        "t": "YouTube 深度推荐系统论文",
+        "u": "https://static.googleusercontent.com/media/research.google.com/en//pubs/archive/45530.pdf",
+        "s": "PDF"
+      },
+      {
+        "t": "B 站：推荐算法科普",
+        "u": "https://search.bilibili.com/all?keyword=%E6%8E%A8%E8%8D%90%E7%AE%97%E6%B3%95%20%E5%8E%9F%E7%90%86%20%E7%A7%91%E6%99%AE",
+        "s": "视频"
+      }
+    ]
   },
   {
     "id": "shunxi-quanyuzhou",
@@ -360,7 +1022,29 @@
       "影评"
     ],
     "cat": "观影",
-    "cover": ""
+    "cover": "",
+    "refs": [
+      {
+        "t": "豆瓣《瞬息全宇宙》条目",
+        "u": "https://movie.douban.com/subject/30314848/",
+        "s": "豆瓣"
+      },
+      {
+        "t": "豆瓣《瞬息全宇宙》长评",
+        "u": "https://movie.douban.com/subject/30314848/reviews",
+        "s": "豆瓣"
+      },
+      {
+        "t": "B 站：搜「瞬息全宇宙」的书评/影评视频",
+        "u": "https://search.bilibili.com/all?keyword=%E7%9E%AC%E6%81%AF%E5%85%A8%E5%AE%87%E5%AE%99%20%E5%BD%B1%E8%AF%84",
+        "s": "视频"
+      },
+      {
+        "t": "知乎：「瞬息全宇宙」相关讨论",
+        "u": "https://www.zhihu.com/search?type=content&q=%E7%9E%AC%E6%81%AF%E5%85%A8%E5%AE%87%E5%AE%99%20%E5%BD%B1%E8%AF%84",
+        "s": "讨论"
+      }
+    ]
   },
   {
     "id": "zhou-chu-chu-san-hai",
@@ -371,7 +1055,29 @@
       "影评"
     ],
     "cat": "观影",
-    "cover": ""
+    "cover": "",
+    "refs": [
+      {
+        "t": "豆瓣《周处除三害》条目",
+        "u": "https://movie.douban.com/subject/36151692/",
+        "s": "豆瓣"
+      },
+      {
+        "t": "豆瓣《周处除三害》长评",
+        "u": "https://movie.douban.com/subject/36151692/reviews",
+        "s": "豆瓣"
+      },
+      {
+        "t": "B 站：搜「周处除三害」的书评/影评视频",
+        "u": "https://search.bilibili.com/all?keyword=%E5%91%A8%E5%A4%84%E9%99%A4%E4%B8%89%E5%AE%B3%20%E5%BD%B1%E8%AF%84",
+        "s": "视频"
+      },
+      {
+        "t": "知乎：「周处除三害」相关讨论",
+        "u": "https://www.zhihu.com/search?type=content&q=%E5%91%A8%E5%A4%84%E9%99%A4%E4%B8%89%E5%AE%B3%20%E5%BD%B1%E8%AF%84",
+        "s": "讨论"
+      }
+    ]
   },
   {
     "id": "shujuku-suoyin",
@@ -382,7 +1088,24 @@
       "技术"
     ],
     "cat": "技术",
-    "cover": ""
+    "cover": "",
+    "refs": [
+      {
+        "t": "MySQL 8.0 官方手册：索引",
+        "u": "https://dev.mysql.com/doc/refman/8.0/en/mysql-indexes.html",
+        "s": ""
+      },
+      {
+        "t": "Use The Index, Luke（索引科普站）",
+        "u": "https://use-the-index-luke.com/",
+        "s": ""
+      },
+      {
+        "t": "B+ 树可视化演示",
+        "u": "https://www.cs.usfca.edu/~galles/visualization/BPlusTree.html",
+        "s": "交互"
+      }
+    ]
   },
   {
     "id": "https-yuanli",
@@ -393,7 +1116,24 @@
       "技术"
     ],
     "cat": "技术",
-    "cover": ""
+    "cover": "",
+    "refs": [
+      {
+        "t": "MDN：传输层安全 TLS",
+        "u": "https://developer.mozilla.org/zh-CN/docs/Web/Security/Transport_Layer_Security",
+        "s": ""
+      },
+      {
+        "t": "Cloudflare 学习中心：什么是 HTTPS",
+        "u": "https://www.cloudflare.com/learning/ssl/what-is-https/",
+        "s": ""
+      },
+      {
+        "t": "RFC 8446（TLS 1.3 标准原文）",
+        "u": "https://www.rfc-editor.org/rfc/rfc8446",
+        "s": "RFC"
+      }
+    ]
   },
   {
     "id": "bianyi-yuanli",
@@ -404,7 +1144,24 @@
       "技术"
     ],
     "cat": "技术",
-    "cover": ""
+    "cover": "",
+    "refs": [
+      {
+        "t": "Crafting Interpreters（手写解释器）",
+        "u": "https://craftinginterpreters.com/",
+        "s": ""
+      },
+      {
+        "t": "LLVM 官方文档",
+        "u": "https://llvm.org/docs/",
+        "s": ""
+      },
+      {
+        "t": "B 站：编译原理公开课",
+        "u": "https://search.bilibili.com/all?keyword=%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86%20%E5%85%AC%E5%BC%80%E8%AF%BE",
+        "s": "视频"
+      }
+    ]
   },
   {
     "id": "fenbushi-yizhixing",
@@ -415,7 +1172,24 @@
       "技术"
     ],
     "cat": "技术",
-    "cover": ""
+    "cover": "",
+    "refs": [
+      {
+        "t": "Raft 官网（含可视化演示）",
+        "u": "https://raft.github.io/",
+        "s": ""
+      },
+      {
+        "t": "Raft 论文原文",
+        "u": "https://raft.github.io/raft.pdf",
+        "s": "PDF"
+      },
+      {
+        "t": "MIT 6.824 分布式系统课程",
+        "u": "https://pdos.csail.mit.edu/6.824/",
+        "s": ""
+      }
+    ]
   },
   {
     "id": "weiborn-wangyuanjing",
@@ -426,7 +1200,24 @@
       "随笔"
     ],
     "cat": "生活",
-    "cover": ""
+    "cover": "",
+    "refs": [
+      {
+        "t": "NASA：詹姆斯·韦伯空间望远镜",
+        "u": "https://www.nasa.gov/mission/webb-space-telescope/",
+        "s": ""
+      },
+      {
+        "t": "韦伯官方图库",
+        "u": "https://webbtelescope.org/images",
+        "s": ""
+      },
+      {
+        "t": "B 站：韦伯首批图像解读",
+        "u": "https://search.bilibili.com/all?keyword=%E9%9F%A6%E4%BC%AF%E6%9C%9B%E8%BF%9C%E9%95%9C%20%E9%A6%96%E6%89%B9%E5%9B%BE%E5%83%8F",
+        "s": "视频"
+      }
+    ]
   },
   {
     "id": "lk99-chaodao",
@@ -437,7 +1228,24 @@
       "随笔"
     ],
     "cat": "生活",
-    "cover": ""
+    "cover": "",
+    "refs": [
+      {
+        "t": "LK-99 原始预印本（arXiv）",
+        "u": "https://arxiv.org/abs/2307.12008",
+        "s": "arXiv"
+      },
+      {
+        "t": "Nature 报道：LK-99 并非超导",
+        "u": "https://www.nature.com/articles/d41586-023-02585-7",
+        "s": ""
+      },
+      {
+        "t": "B 站：LK-99 复现始末",
+        "u": "https://search.bilibili.com/all?keyword=LK-99%20%E5%AE%A4%E6%B8%A9%E8%B6%85%E5%AF%BC%20%E5%A4%8D%E7%8E%B0",
+        "s": "视频"
+      }
+    ]
   },
   {
     "id": "erjiu-shipin",
@@ -448,7 +1256,19 @@
       "随笔"
     ],
     "cat": "生活",
-    "cover": ""
+    "cover": "",
+    "refs": [
+      {
+        "t": "B 站：回村三天，二舅治好了我的精神内耗",
+        "u": "https://search.bilibili.com/all?keyword=%E5%9B%9E%E6%9D%91%E4%B8%89%E5%A4%A9%20%E4%BA%8C%E8%88%85%E6%B2%BB%E5%A5%BD%E4%BA%86%E6%88%91%E7%9A%84%E7%B2%BE%E7%A5%9E%E5%86%85%E8%80%97",
+        "s": "视频"
+      },
+      {
+        "t": "知乎：二舅视频相关讨论",
+        "u": "https://www.zhihu.com/search?type=content&q=%E4%BA%8C%E8%88%85%20%E8%A7%86%E9%A2%91%20%E4%BA%89%E8%AE%AE",
+        "s": "讨论"
+      }
+    ]
   },
   {
     "id": "neuralink-shouli",
@@ -459,6 +1279,23 @@
       "随笔"
     ],
     "cat": "生活",
-    "cover": ""
+    "cover": "",
+    "refs": [
+      {
+        "t": "Neuralink 官方博客：PRIME 研究进展",
+        "u": "https://neuralink.com/blog/prime-study-progress-update-user-experience/",
+        "s": ""
+      },
+      {
+        "t": "Neuralink 官网",
+        "u": "https://neuralink.com/",
+        "s": ""
+      },
+      {
+        "t": "B 站：首例植入者直播",
+        "u": "https://search.bilibili.com/all?keyword=Neuralink%20%E9%A6%96%E4%BE%8B%20%E6%A4%8D%E5%85%A5%20%E7%9B%B4%E6%92%AD",
+        "s": "视频"
+      }
+    ]
   }
 ]

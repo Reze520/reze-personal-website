@@ -1,6 +1,9 @@
 这本书是我在一家旧书店淘的，厚，砖头一样，纸已经发黄发脆。买它纯粹是因为翻开第一页就被一句话钉住了："白嘉轩后来引以为豪壮的是一生里娶过七房女人。"
 
-<figure class="pg-fig cover"><img src="assets/uploads/figs/bai-lu-yuan.jpg" alt="《白鹿原》封面"><figcaption>《白鹿原》封面</figcaption></figure>
+<figure class="pg-fig pg-cover"><img src="assets/uploads/figs/bai-lu-yuan.jpg" alt="《白鹿原》封面"><figcaption>《白鹿原》封面</figcaption></figure>
+
+> 白嘉轩后来引以豪壮的是一生里娶过七房女人。
+> —— 陈忠实《白鹿原》开篇
 
 这句话的力气在于它不解释。一个人一生娶了七房，他不觉得羞，反倒觉得"豪壮"。你立刻就知道，这本书要写的，是一个跟我们现在完全不一样的世界——在那个世界里，娶几房女人是男人的功业，不是 scandal。
 

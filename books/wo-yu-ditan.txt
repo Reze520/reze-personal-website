@@ -1,6 +1,9 @@
 这本书我是用手机读完的。通勤，早高峰，站着，一只手抓着扶手，一只手举着手机。看电子书有个毛病，就是很多段落你会"划"过去——屏幕小，翻得快，眼睛累，注意力是碎的。所以这本书我其实读得不算仔细，但有一句话，反而因为环境，扎得特别深。
 
-<figure class="pg-fig cover"><img src="assets/uploads/figs/wo-yu-ditan.jpg" alt="《我与地坛》封面"><figcaption>《我与地坛》封面</figcaption></figure>
+<figure class="pg-fig pg-cover"><img src="assets/uploads/figs/wo-yu-ditan.jpg" alt="《我与地坛》封面"><figcaption>《我与地坛》封面</figcaption></figure>
+
+> 死是一件不必急于求成的事，死是一个必然会降临的节日。
+> —— 史铁生《我与地坛》
 
 那天我正好读到一句，车到站，人往外挤，我被推着走了两步才反应过来手机还亮着。我把它锁了。那句话是：
 

@@ -9,7 +9,7 @@
   python build_books.py --dry      # 只打印不请求
 环境变量 REZE_PASS 提供管理员口令。
 """
-import json, os, sys, glob, urllib.request, urllib.error
+import json, os, re, sys, glob, urllib.request, urllib.error
 
 BASE = "https://reze520.pages.dev/site-data"
 PASS = os.environ.get("REZE_PASS", "")
@@ -21,17 +21,66 @@ if os.path.exists(dbp):
     DBID = json.load(open(dbp, encoding="utf-8"))
 
 
+def inline(s):
+    """把 [文字](链接) 和 **加粗** 转成 HTML，其余原样保留（正文里本来就允许直接写标签）。"""
+    s = re.sub(r"\[([^\]]+)\]\((https?://[^)\s]+)\)",
+               r'<a href="\2" target="_blank" rel="noopener">\1</a>', s)
+    s = re.sub(r"\*\*([^*]+)\*\*", r"<strong>\1</strong>", s)
+    return s
+
+
 def to_html(body):
     out = []
     for block in body.strip().split("\n\n"):
         lines = [ln.rstrip() for ln in block.split("\n")]
         if not lines or all(not ln for ln in lines):
             continue
-        if lines[0].startswith("## "):
+        head = lines[0].strip()
+        if head.startswith("## "):
             out.append("<h2>%s</h2>" % " ".join(lines)[4:].strip())
+        elif head.startswith("<"):
+            # 整块就是 HTML（比如配图用的 figure），别再包一层 <p>
+            out.append("\n".join(lines))
+        elif head.startswith(">"):
+            # 原文引用：> 正文 … / > —— 出处
+            cite = ""
+            ps = []
+            for ln in lines:
+                t = ln.lstrip(">").strip()
+                if not t:
+                    continue
+                if t.startswith("——") or t.startswith("--"):
+                    cite = t.lstrip("—-").strip()
+                else:
+                    ps.append(inline(t))
+            html = '<blockquote class="pg-quote"><p>%s</p>' % "<br>".join(ps)
+            if cite:
+                html += "<cite>—— %s</cite>" % cite
+            out.append(html + "</blockquote>")
+        elif head.startswith("- "):
+            items = []
+            for ln in lines:
+                t = ln.lstrip()
+                if t.startswith("- "):
+                    items.append("<li>%s</li>" % inline(t[2:].strip()))
+                elif items:
+                    items[-1] = items[-1][:-5] + " " + inline(t) + "</li>"
+            out.append('<ul class="pg-refs">%s</ul>' % "".join(items))
         else:
-            out.append("<p>%s</p>" % "<br>".join(ln for ln in lines if ln.strip()))
+            out.append("<p>%s</p>" % "<br>".join(inline(ln) for ln in lines if ln.strip()))
     return "\n".join(out)
+
+
+def refs_html(meta):
+    refs = meta.get("refs") or []
+    if not refs:
+        return ""
+    items = "".join(
+        '<li><a href="%s" target="_blank" rel="noopener">%s</a>%s</li>'
+        % (r["u"], r["t"], ('<span class="src"> · %s</span>' % r["s"]) if r.get("s") else "")
+        for r in refs
+    )
+    return '\n<h2>参考与延伸</h2>\n<ul class="pg-refs">%s</ul>' % items
 
 
 def send(path, method, payload):
@@ -52,7 +101,7 @@ def send(path, method, payload):
 
 def publish(meta, dry):
     body = open(os.path.join(HERE, "books", meta["id"] + ".txt"), encoding="utf-8").read()
-    html = to_html(body)
+    html = to_html(body) + refs_html(meta)
     payload = {
         "slug": meta["id"], "title": meta["title"], "date": meta["date"],
         "updated": meta.get("updated") or "", "cat": meta.get("cat", "读书"),

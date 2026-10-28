@@ -1,6 +1,9 @@
 三大本。我在旧书店买的，第一册还掉了几页，页码从 17 直接跳到 21，我拿胶带粘了一下，照样读。前后读了两个多月，是那种每天睡前翻几十页、不做别的的事。
 
-<figure class="pg-fig cover"><img src="assets/uploads/figs/pingfan-de-shijie.jpg" alt="《平凡的世界》封面"><figcaption>《平凡的世界》封面</figcaption></figure>
+<figure class="pg-fig pg-cover"><img src="assets/uploads/figs/pingfan-de-shijie.jpg" alt="《平凡的世界》封面"><figcaption>《平凡的世界》封面</figcaption></figure>
+
+> 生活不能等待别人来安排，要自己去争取和奋斗；而不论其结果是喜是悲，但可以慰藉的是，你总不枉在这世界上活了一场。
+> —— 路遥《平凡的世界》
 
 先说清楚，这本书的毛病我一点都不想替它遮。它太直白了，有些地方路遥会直接站出来讲道理，讲完再回到故事；有些感情戏写得像样板戏，一男一女对话，说的话都太整齐、太正确；还有，好人太好，坏人太坏，这种二分法现在看确实有点简单。
 

@@ -1,6 +1,9 @@
 2022 年某个周末，一个平时不怎么看电影的朋友突然发微信给我："去看《瞬息全宇宙》，别看任何剧透，直接去。"我当时第一反应是：又一部漫威式爆米花吧？那阵子漫威的"多元宇宙"都快被玩烂了，《蜘蛛侠：英雄无归》《奇异博士 2》接二连三，我老实说有点审美疲劳。所以拖了快两周才去。
 
-<figure class="pg-fig cover"><img src="assets/uploads/figs/shunxi-quanyuzhou.jpg" alt="《瞬息全宇宙》海报"><figcaption>《瞬息全宇宙》海报</figcaption></figure>
+<figure class="pg-fig pg-cover"><img src="assets/uploads/figs/shunxi-quanyuzhou.jpg" alt="《瞬息全宇宙》海报"><figcaption>《瞬息全宇宙》海报</figcaption></figure>
+
+> 要善良，尤其是在我们不知道发生了什么的时候。
+> —— 《瞬息全宇宙》
 
 结果开场十分钟我就知道自己错了。
 

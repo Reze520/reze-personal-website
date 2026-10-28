@@ -1,6 +1,9 @@
 杨绛的译本，上下两册。我是一个寒假读完的，窝在老家，每天下午靠在床头，一页一页翻。开始读之前，我以为这是一本笑话书——大家都说风车，说他把风车当巨人，说这书是"讽刺骑士小说"的。我想，那能有多厚，两本？
 
-<figure class="pg-fig cover"><img src="assets/uploads/figs/tang-jihede.jpg" alt="《堂吉诃德》封面"><figcaption>《堂吉诃德》封面</figcaption></figure>
+<figure class="pg-fig pg-cover"><img src="assets/uploads/figs/tang-jihede.jpg" alt="《堂吉诃德》封面"><figcaption>《堂吉诃德》封面</figcaption></figure>
+
+> 在拉曼恰的某处，有个村子，村名我不愿提。
+> —— 塞万提斯《堂吉诃德》开篇（杨绛 译）
 
 读完，我觉得它不是笑话书。它前半本是，后半本不是，最后那几十页，是别的东西。
 

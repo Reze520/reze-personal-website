@@ -1,6 +1,6 @@
 大学那门编译原理，我是真睡过去的。老师在黑板上推导 LL(1) 文法、讲什么"移进-归约"，我全程在想中午吃什么。当时我觉得这玩意儿离我太远了——我又不去写编译器，学它干嘛。
 
-<figure class="pg-fig wide"><img src="assets/uploads/figs/bianyi-yuanli.jpg" alt="编译器把源码翻译成可执行程序的典型流程"><figcaption>编译器把源码翻译成可执行程序的典型流程</figcaption></figure>
+<figure class="pg-fig pg-wide"><img src="assets/uploads/figs/bianyi-yuanli.jpg" alt="编译器把源码翻译成可执行程序的典型流程"><figcaption>编译器把源码翻译成可执行程序的典型流程</figcaption></figure>
 
 后来工作了，有次线上报了个错，堆栈里全是看不懂的字节码行号，我对着 `at com.xxx.Foo.bar(Foo.java:42)` 下面那一串 `invokevirtual`、`aload_0` 发愣。同事路过说了句"这是 JVM 字节码，编译器把 Java 编成这个再跑的"。我"哦"了一声，心里其实是虚的。
 

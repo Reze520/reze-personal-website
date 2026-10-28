@@ -1,6 +1,9 @@
 这本书上下两册，我连着读的，中间只隔了一个晚上。读完那个晚上我有点睡不着，不是被吓的，是被一种说不清的空揪着。
 
-<figure class="pg-fig cover"><img src="assets/uploads/figs/xiong-di.jpg" alt="《兄弟》封面"><figcaption>《兄弟》封面</figcaption></figure>
+<figure class="pg-fig pg-cover"><img src="assets/uploads/figs/xiong-di.jpg" alt="《兄弟》封面"><figcaption>《兄弟》封面</figcaption></figure>
+
+> 这就是人世间，有一个人走向死亡，可是无限眷恋晚霞映照下的生活；另一个人寻欢作乐，可是不知道落日的余晖有多么美丽。
+> —— 余华《兄弟》结尾
 
 ## 上册：文革里那个死在车站的父亲
 

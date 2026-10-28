@@ -1,6 +1,6 @@
 这本书我是在书店站着看完的。本来只想翻两页，结果站在那儿，看了大半本。旁边有个小学生也在看，看得很投入，时不时笑出声。我后来结账的时候，店员看了我一眼，大概觉得这个成年人比小孩还看得久。可我一点都不心虚——因为这本书，本来就是给所有"长大之后发现自己也就那样"的人看的。它表面是一本画着鸟的无字（或少字）漫画，内里是一代人的自白书。
 
-<figure class="pg-fig cover"><img src="assets/uploads/figs/wo-neng-you-shenme-huaixinsi.jpg" alt="《我能有什么坏心思呢》封面"><figcaption>《我能有什么坏心思呢》封面</figcaption></figure>
+<figure class="pg-fig pg-cover"><img src="assets/uploads/figs/wo-neng-you-shenme-huaixinsi.jpg" alt="《我能有什么坏心思呢》封面"><figcaption>《我能有什么坏心思呢》封面</figcaption></figure>
 
 ## 它是怎么火起来的
 
