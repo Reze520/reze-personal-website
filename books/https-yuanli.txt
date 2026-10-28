@@ -16,6 +16,9 @@ HTTPS 要干的事就三件：让你发的数据别人看不懂（加密）、�
 
 ## 加密的两条路：对称和非对称
 
+> The primary goal of TLS is to provide a secure channel between two communicating peers.
+> —— RFC 8446, The Transport Layer Security Protocol 1.3
+
 加密无非两种思路，各有各的毛病，而 HTTPS 的聪明之处，是把两种拼起来用。
 
 第一种叫对称加密。就是一把钥匙，加密解密都用它。AES 就是这类。它的优点是快，快到什么程度？现代 CPU 上 AES 能跑到每秒几个 G，用来加密大量数据毫不费力。缺点也很致命：你怎么把这把钥匙安全地交给对方？你在网上把钥匙发过去，中间人一样能截到。钥匙都泄露了，加密等于没加。

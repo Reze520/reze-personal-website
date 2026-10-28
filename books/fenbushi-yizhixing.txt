@@ -28,6 +28,9 @@ CAP 说的是，**当网络分区（P）真的发生时，你只能在 C 和 A �
 
 ## Raft 想解决的核心问题：大家都认同一个主
 
+> Raft is a consensus algorithm for managing a replicated log.
+> —— Diego Ongaro, In Search of an Understandable Consensus Algorithm
+
 Raft 的思路，我觉得特别"人间"：与其让所有节点平起平坐、商量着来（那太难协调），不如选一个"领导"，所有写请求先交给领导，领导拍板，再通知其他人。
 
 这样一来，"三个和尚没水吃"的问题就变成了"怎么保证同一时间只有一个领导，且大家都认他"。Raft 用两件事来保证：选主（leader election）和日志复制（log replication）。

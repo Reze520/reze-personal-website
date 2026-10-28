@@ -4,6 +4,9 @@
 
 ## 它到底靠什么"懂"：从一句话一个词地读到一眼看全句
 
+> We propose a new simple network architecture, the Transformer, based solely on attention mechanisms, dispensing with recurrence and convolutions entirely.
+> —— Vaswani et al., Attention Is All You Need, 2017
+
 在 Transformer 出现之前，机器读句子的方式很像我们小时候读课文：从左到右，一个词一个词地念。这种模型叫 RNN（循环神经网络），它有个天生的毛病——念到句尾，早把句首忘了。你让它理解"那只猫追着那只老鼠，因为它饿了"里的"它"到底指猫还是指老鼠，距离一长它就抓瞎。
 
 2017 年，Google 的一群人发了篇论文，标题特别直白，叫《Attention Is All You Need》（注意力就是你所需要的一切）。这篇论文几乎凭一己之力改写了之后所有做语言的 AI。它的核心想法简单到有点反直觉：别按顺序读了，让句子里的每个词，都同时去"看一眼"其他所有词，自己判断谁和谁关系大。

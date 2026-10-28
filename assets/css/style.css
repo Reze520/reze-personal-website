@@ -6725,7 +6725,7 @@ body {
    ============================================================ */
 .app,
 .post-app {
-  --glass: rgba(11, 23, 43, 0.56);
+  --glass: rgba(11, 23, 43, 0.48);
   --glass-2: rgba(255, 255, 255, 0.06);
   --g-accent: #a8c6f7;
 }
@@ -6748,8 +6748,8 @@ body {
 .to-top,
 .splash-quote,
 .site-head {
-  backdrop-filter: blur(22px) saturate(135%) !important;
-  -webkit-backdrop-filter: blur(22px) saturate(135%) !important;
+  backdrop-filter: blur(11px) saturate(118%) !important;
+  -webkit-backdrop-filter: blur(11px) saturate(118%) !important;
 }
 
 /* 卡片本身压到 0.56 之后再加一层极淡的高光边，玻璃感更明确 */
@@ -6765,18 +6765,18 @@ body {
 .g-post:hover,
 .g-posth:hover,
 .g-moment:hover {
-  background: rgba(20, 38, 68, 0.74);
+  background: rgba(20, 38, 68, 0.62);
   border-color: rgba(168, 198, 247, 0.3);
 }
 
 /* 顶栏同样走磨砂，滚动时压在插画上也清楚 */
 body.has-app .site-head {
-  background: rgba(10, 22, 42, 0.6);
-  backdrop-filter: blur(22px) saturate(135%) !important;
-  -webkit-backdrop-filter: blur(22px) saturate(135%) !important;
+  background: rgba(10, 22, 42, 0.55);
+  backdrop-filter: blur(11px) saturate(118%) !important;
+  -webkit-backdrop-filter: blur(11px) saturate(118%) !important;
 }
 
 /* 首屏那张签名卡也统一 */
 .splash-quote {
-  background: rgba(10, 22, 42, 0.5);
+  background: rgba(10, 22, 42, 0.42);
 }

@@ -4,6 +4,9 @@
 
 ## 虚拟机太重了：容器到底省了什么
 
+> A container is a standard unit of software that packages up code and all its dependencies so the application runs quickly and reliably from one computing environment to another.
+> —— Docker 官方文档
+
 要理解容器，得先知道它想取代什么。早年间，想在一台物理服务器上跑多个相互隔离的应用，主流做法是开虚拟机（VM）。虚拟机是在硬件之上，用一层叫"hypervisor"的东西，虚拟出一台台完整的"电脑"，每台里面都装着一整套操作系统内核。好处是隔离得干净；坏处是太重了——一台虚拟机动辄几十 GB，启动要等几分钟，跑起来占着一整套内核，密度低、浪费大。
 
 容器换了个思路：它不虚拟硬件，也不塞一整套操作系统，而是直接共享宿主机（就是那台真实服务器）的操作系统内核，只在应用层做隔离。你可以把虚拟机想成"同一块地皮上各自盖一栋带地基带承重墙的独立别墅"，容器则是"同一栋大楼里隔出来的不同房间"——墙是隔开了，但地基、水管、电路都是整栋楼共享的。

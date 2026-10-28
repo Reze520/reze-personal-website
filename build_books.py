@@ -37,7 +37,8 @@ def to_html(body):
             continue
         head = lines[0].strip()
         if head.startswith("## "):
-            out.append("<h2>%s</h2>" % " ".join(lines)[4:].strip())
+            # 注意 "## " 只有 3 个字符，截 4 位会把标题第一个字也切掉
+            out.append("<h2>%s</h2>" % " ".join(lines)[3:].strip())
         elif head.startswith("<"):
             # 整块就是 HTML（比如配图用的 figure），别再包一层 <p>
             out.append("\n".join(lines))

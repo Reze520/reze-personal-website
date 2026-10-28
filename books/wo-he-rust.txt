@@ -23,6 +23,9 @@ println!("{} {}", r1, r2);
 
 ## 所有权这事儿，得用生活里的笨办法想
 
+> Ownership is Rust’s most unique feature and it enables Rust to make memory safety guarantees without needing a garbage collector.
+> —— The Rust Programming Language, 第 4 章
+
 Rust 最劝退人的概念叫"所有权"（ownership）。教科书式的说法是：每一个值都有一个被称为所有者的变量，当所有者离开作用域，值就被丢弃。听着像绕口令。我自己的笨办法是这样理解的：
 
 你借了朋友一本书。这本书"属于"你，你负责还。你看完了，把书还回去（作用域结束，drop），这很正常。但 Rust 还有个更狠的规矩：书在你手里的时候，你不能说"我把它同时借给另外两个人，还都让他们拿笔在上面划重点"。要么大家都只能看不能划（共享只读），要么只有一个人能看能划（独占可变）。一旦你想划，别人手里的"看"的权限立刻作废。
