@@ -5512,28 +5512,66 @@ body.has-app .site-head.is-over-hero .nav-more-btn:hover {
   }
 }
 
-/* 右下角悬浮迷你播放器（由「悬浮播放器」按钮切换显隐） */
+/* 右下角悬浮播放器（顶栏音乐按钮 / 侧栏「悬浮」按钮都能唤起，可拖动） */
 .float-player {
   position: fixed;
   right: 22px;
-  bottom: 22px;
+  bottom: 74px;
   z-index: 86;
   display: none;
-  align-items: center;
-  gap: 11px;
-  padding: 10px 14px 10px 10px;
+  flex-direction: column;
+  gap: 8px;
+  width: 238px;
+  padding: 15px 12px 10px;
   border-radius: 16px;
-  background: rgba(18, 14, 34, 0.7);
+  background: rgba(14, 12, 26, 0.93);
   border: 1px solid rgba(255, 255, 255, 0.14);
-  box-shadow: 0 16px 48px rgba(0, 0, 0, 0.5);
+  box-shadow: 0 18px 52px rgba(0, 0, 0, 0.55);
+  color: #ece8f6;
+  touch-action: none; /* 拖动时不顺带滚动页面 */
+  user-select: none;
+  cursor: grab;
+}
+/* 顶部那道小横杠＝拖动提示 */
+.float-player::before {
+  content: "";
+  position: absolute;
+  top: 6px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 26px;
+  height: 3px;
+  border-radius: 2px;
+  background: rgba(255, 255, 255, 0.2);
 }
 .float-player.on {
   display: flex;
-  animation: searchIn 0.26s var(--ease) both;
+  animation: fpIn 0.24s var(--ease) both;
+}
+.float-player.is-dragging {
+  cursor: grabbing;
+  box-shadow: 0 24px 64px rgba(0, 0, 0, 0.6);
+}
+@keyframes fpIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.fp-top {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  min-width: 0;
 }
 .fp-cover {
-  width: 44px;
-  height: 44px;
+  width: 38px;
+  height: 38px;
   border-radius: 50%;
   overflow: hidden;
   flex: none;
@@ -5552,6 +5590,7 @@ body.has-app .site-head.is-over-hero .nav-more-btn:hover {
 }
 .fp-meta {
   min-width: 0;
+  flex: 1;
 }
 .fp-meta b {
   display: block;
@@ -5560,34 +5599,120 @@ body.has-app .site-head.is-over-hero .nav-more-btn:hover {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  max-width: 130px;
 }
 .fp-meta span {
   display: block;
   font-size: 10.5px;
   color: rgba(236, 232, 246, 0.45);
   margin-top: 2px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
-.fp-play {
-  width: 34px;
-  height: 34px;
+.fp-close {
+  width: 22px;
+  height: 22px;
   flex: none;
   border: none;
   border-radius: 50%;
-  background: #fff;
-  color: #14111d;
+  background: transparent;
+  color: rgba(236, 232, 246, 0.5);
   cursor: pointer;
   display: grid;
   place-items: center;
+  transition: all 0.2s var(--ease);
 }
-.fp-play svg {
-  width: 14px;
-  height: 14px;
+.fp-close:hover {
+  color: #fff;
+  background: rgba(255, 255, 255, 0.12);
+}
+.fp-close svg {
+  width: 11px;
+  height: 11px;
+}
+
+/* 卡片里的单行/两行歌词：高度固定，切句不跳 */
+.fp-lyric {
+  display: flex;
+  align-items: center;
+  min-height: 38px;
+  padding: 6px 9px;
+  border-radius: 9px;
+  background: rgba(255, 255, 255, 0.05);
+  font-size: 11.5px;
+  line-height: 1.45;
+  color: rgba(236, 232, 246, 0.62);
+  overflow: hidden;
+}
+.fp-lyric span {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.fp-lyric.has-line {
+  color: #f3f0fa;
+}
+.fp-lyric.has-line span {
+  font-weight: 500;
+}
+
+.fp-ctl {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+}
+.fp-ctl button {
+  position: relative;
+  width: 28px;
+  height: 28px;
+  flex: none;
+  border: none;
+  border-radius: 50%;
+  background: transparent;
+  color: rgba(236, 232, 246, 0.82);
+  cursor: pointer;
+  display: grid;
+  place-items: center;
+  transition: all 0.2s var(--ease);
+}
+.fp-ctl button[data-mode="one"] .ply-mode-badge {
+  display: block;
+}
+.fp-ctl button:hover {
+  background: rgba(255, 255, 255, 0.12);
+  color: #fff;
+}
+.fp-ctl svg {
+  width: 15px;
+  height: 15px;
+}
+.fp-ctl .fp-play {
+  width: 32px;
+  height: 32px;
+  margin: 0 3px;
+  background: #fff;
+  color: #14111d;
+}
+.fp-ctl .fp-play:hover {
+  background: #fff;
+  color: #14111d;
+}
+.fp-ctl .fp-play svg {
+  width: 13px;
+  height: 13px;
+}
+.fp-ctl .fp-mode {
+  margin-left: auto;
+}
+.fp-ctl .fp-mode.is-on {
+  color: #c9a7ff;
 }
 @media (max-width: 620px) {
   .float-player {
     right: 14px;
-    bottom: 14px;
+    bottom: 66px;
+    width: 214px;
   }
 }
 
@@ -6752,8 +6877,7 @@ body {
 .music-btn,
 .skin-tip,
 .to-top,
-.splash-quote,
-.site-head {
+.splash-quote {
   backdrop-filter: blur(11px) saturate(118%) !important;
   -webkit-backdrop-filter: blur(11px) saturate(118%) !important;
 }
@@ -6775,11 +6899,11 @@ body {
   border-color: rgba(168, 198, 247, 0.3);
 }
 
-/* 顶栏同样走磨砂，滚动时压在插画上也清楚 */
+/* 顶栏不再走磨砂：实底，滚动时压在插画上也清楚（2026-10-28 按要求去掉毛玻璃） */
 body.has-app .site-head {
-  background: rgba(10, 22, 42, 0.55);
-  backdrop-filter: blur(11px) saturate(118%) !important;
-  -webkit-backdrop-filter: blur(11px) saturate(118%) !important;
+  background: #0a1629;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
 }
 
 /* 首屏那张签名卡也统一 */
@@ -6836,4 +6960,23 @@ body.has-app .site-head {
   white-space: nowrap;
   letter-spacing: -0.01em;
   text-indent: 0.01em;
+}
+
+/* ============================================================
+   18. 顶栏去毛玻璃（最终收口）
+   前面若干段样式（含 !important 的玻璃列表）会把 backdrop-filter 加回顶栏，
+   这一段放在文件最末，专门把顶栏的模糊彻底清掉，只保留纯色底。
+   ============================================================ */
+.site-head,
+.site-head.is-stuck,
+.site-head.is-over-hero,
+body.has-app .site-head,
+body.has-app .site-head.is-stuck,
+body.has-app .site-head.is-over-hero {
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+/* 滚动后给个实底，别让正文从顶栏底下透出来 */
+body.has-app .site-head.is-stuck {
+  background: #0a1629;
 }

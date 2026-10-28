@@ -63,6 +63,10 @@
       '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M18 5v14L8 12l10-7Z" fill="currentColor" stroke="none"/><path d="M5 5v14"/></svg>',
     skipFwd:
       '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 5v14l10-7L6 5Z" fill="currentColor" stroke="none"/><path d="M19 5v14"/></svg>',
+    close:
+      '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M5 5l14 14M19 5L5 19"/></svg>',
+    grip:
+      '<svg viewBox="0 0 24 24" fill="currentColor" stroke="none"><circle cx="9" cy="7" r="1.5"/><circle cx="15" cy="7" r="1.5"/><circle cx="9" cy="12" r="1.5"/><circle cx="15" cy="12" r="1.5"/><circle cx="9" cy="17" r="1.5"/><circle cx="15" cy="17" r="1.5"/></svg>',
     activity:
       '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12h3l2.5-7 4 14 2.5-7H21"/></svg>',
     info:
@@ -110,6 +114,9 @@
   var playerList = [];
   var playerIdx = 0;
   var playMode = "list"; // list 顺序循环 / one 单曲循环 / shuffle 随机
+  // 当前这首的歌词（解析好的）。放成共享变量：首页会重渲染多次，
+  // 每份闭包各存一份 lyricLines 就会互相打架（切歌后歌词对不上）。
+  var curLyricLines = [];
 
   /* ---------- 音频线路 ----------
      页面在 Cloudflare Pages 上，但 Pages 不支持 Range 请求（进度条拖不动），
@@ -234,6 +241,248 @@
           next();
         });
     })();
+  }
+
+  /* ---------- 悬浮播放器 ----------
+     顶栏「背景音乐」或侧栏「悬浮」按钮都能唤起它：
+     可拖动（位置记住）、可切歌、可换播放模式、可关闭、实时显示当前歌词。 */
+  var FP_POS_KEY = "reze-fp-pos";
+  var FP_MODES = ["list", "one", "shuffle"];
+  var FP_MODE_TIP = { list: "顺序循环", one: "单曲循环", shuffle: "随机播放" };
+  var fpDrag = null;
+
+  function fpEl() {
+    return document.getElementById("floatPlayer");
+  }
+
+  function fpPlace(el, l, t) {
+    var w = el.offsetWidth || 238;
+    var h = el.offsetHeight || 150;
+    var maxL = Math.max(8, window.innerWidth - w - 8);
+    var maxT = Math.max(8, window.innerHeight - h - 8);
+    el.style.left = Math.min(Math.max(8, l), maxL) + "px";
+    el.style.top = Math.min(Math.max(8, t), maxT) + "px";
+    el.style.right = "auto";
+    el.style.bottom = "auto";
+  }
+
+  function fpRestorePos(el) {
+    try {
+      var raw = localStorage.getItem(FP_POS_KEY);
+      if (!raw) return;
+      var o = JSON.parse(raw);
+      if (!o || typeof o.l !== "number" || typeof o.t !== "number") return;
+      fpPlace(el, o.l, o.t);
+    } catch (e) {}
+  }
+
+  function fpPaintTrack(t) {
+    var el = fpEl();
+    if (!el) return;
+    var cov = el.querySelector("#fp-cover");
+    var ti = el.querySelector("#fp-title");
+    var ar = el.querySelector("#fp-artist");
+    var title = (t && t.title) || "未知曲目";
+    var artist = (t && t.artist) || "";
+    if (ti) ti.textContent = title;
+    if (ar) ar.textContent = artist;
+    if (cov) {
+      cov.innerHTML = t && t.cover ? '<img src="' + esc(t.cover) + '" alt="">' : ICONS.disc;
+    }
+    var ly = el.querySelector("#fp-lyric");
+    if (ly && !ly.classList.contains("has-line")) {
+      ly.innerHTML = "<span>♪ " + esc(artist ? title + " · " + artist : title) + "</span>";
+    }
+  }
+
+  function fpPaintLyric(text, hasLine) {
+    var el = fpEl();
+    if (!el) return;
+    var ly = el.querySelector("#fp-lyric");
+    if (!ly) return;
+    ly.innerHTML = "<span>" + esc(text) + "</span>";
+    ly.classList.toggle("has-line", !!hasLine);
+  }
+
+  function fpPaintPlaying(playing) {
+    var el = fpEl();
+    if (!el) return;
+    var play = el.querySelector("#fp-play");
+    var cov = el.querySelector("#fp-cover");
+    if (play) play.innerHTML = playing ? ICONS.pause : ICONS.play;
+    if (cov) cov.classList.toggle("spinning", !!playing);
+  }
+
+  function fpPaintMode() {
+    var el = fpEl();
+    if (!el) return;
+    var b = el.querySelector("#fp-mode");
+    if (!b) return;
+    b.innerHTML =
+      (playMode === "shuffle" ? ICONS.shuffle : ICONS.loop) +
+      '<i class="ply-mode-badge" aria-hidden="true">1</i>';
+    b.classList.toggle("is-on", playMode !== "list");
+    b.setAttribute("data-mode", playMode);
+    b.setAttribute("aria-label", "播放模式：" + (FP_MODE_TIP[playMode] || "顺序循环"));
+  }
+
+  function openFloatPlayer() {
+    var el = fpEl();
+    if (!el) return;
+    el.classList.add("on");
+    var btn = document.getElementById("p-float");
+    if (btn) btn.classList.add("on");
+    fpPaintTrack(trackAt(playerIdx));
+    fpPaintPlaying(bgmAudio ? !bgmAudio.paused : false);
+    fpPaintMode();
+    if (!el.style.left) fpRestorePos(el);
+    fpPlace(el, el.getBoundingClientRect().left, el.getBoundingClientRect().top);
+  }
+
+  function closeFloatPlayer() {
+    var el = fpEl();
+    if (!el) return;
+    el.classList.remove("on");
+    var btn = document.getElementById("p-float");
+    if (btn) btn.classList.remove("on");
+  }
+
+  function toggleFloatPlayer() {
+    var el = fpEl();
+    if (!el) return;
+    if (el.classList.contains("on")) closeFloatPlayer();
+    else openFloatPlayer();
+  }
+
+  // 切歌优先借侧栏播放器的按钮（那边逻辑最全），没有就自己切
+  function fpStep(step) {
+    var b = document.getElementById(step > 0 ? "p-fwd" : "p-back");
+    if (b) {
+      b.click();
+      fpPaintTrack(trackAt(playerIdx));
+      return;
+    }
+    if (!playerList.length) return;
+    playerIdx = ((playerIdx + step) % playerList.length + playerList.length) % playerList.length;
+    var t = trackAt(playerIdx);
+    setTrackSrc(t, true);
+    fpPaintTrack(t);
+    try {
+      localStorage.setItem("reze-track", String(playerIdx));
+    } catch (e) {}
+  }
+
+  function fpCycleMode() {
+    var b = document.getElementById("p-loop");
+    if (b) {
+      b.click();
+      fpPaintMode();
+      return;
+    }
+    var i = FP_MODES.indexOf(playMode);
+    playMode = FP_MODES[(i + 1) % FP_MODES.length];
+    if (bgmAudio) bgmAudio.loop = playMode === "one";
+    try {
+      localStorage.setItem("reze-play-mode", playMode);
+    } catch (e) {}
+    fpPaintMode();
+  }
+
+  function initFloatPlayer() {
+    if (fpEl()) return;
+    var el = document.createElement("div");
+    el.className = "float-player";
+    el.id = "floatPlayer";
+    el.setAttribute("role", "group");
+    el.setAttribute("aria-label", "悬浮播放器");
+    el.innerHTML =
+      '<div class="fp-top">' +
+      '<div class="fp-cover" id="fp-cover">' +
+      ICONS.disc +
+      "</div>" +
+      '<div class="fp-meta"><b id="fp-title">未知曲目</b><span id="fp-artist"></span></div>' +
+      '<button type="button" class="fp-close" id="fp-close" aria-label="关闭悬浮播放器">' +
+      ICONS.close +
+      "</button>" +
+      "</div>" +
+      '<div class="fp-lyric" id="fp-lyric"><span>♪ 还没播放</span></div>' +
+      '<div class="fp-ctl">' +
+      '<button type="button" id="fp-prev" aria-label="上一首">' +
+      ICONS.skipBack +
+      "</button>" +
+      '<button type="button" class="fp-play" id="fp-play" aria-label="播放 / 暂停">' +
+      ICONS.play +
+      "</button>" +
+      '<button type="button" id="fp-next" aria-label="下一首">' +
+      ICONS.skipFwd +
+      "</button>" +
+      '<button type="button" class="fp-mode" id="fp-mode" aria-label="播放模式">' +
+      ICONS.loop +
+      "</button>" +
+      "</div>";
+    document.body.appendChild(el);
+
+    el.addEventListener("click", function (e) {
+      var b = e.target.closest ? e.target.closest("button") : null;
+      if (!b || !el.contains(b)) return;
+      if (b.id === "fp-play") {
+        if (bgmAudio && !bgmAudio.paused) {
+          audioWantPlay = false;
+          bgmAudio.pause();
+        } else {
+          playAudio();
+        }
+      } else if (b.id === "fp-prev") fpStep(-1);
+      else if (b.id === "fp-next") fpStep(1);
+      else if (b.id === "fp-mode") fpCycleMode();
+      else if (b.id === "fp-close") closeFloatPlayer();
+    });
+
+    // 拖动：按住卡片（按钮除外）就能拖，松手记住位置
+    el.addEventListener("pointerdown", function (e) {
+      if (e.button) return;
+      if (e.target.closest && e.target.closest("button")) return;
+      var r = el.getBoundingClientRect();
+      fpDrag = { id: e.pointerId, dx: e.clientX - r.left, dy: e.clientY - r.top };
+      el.classList.add("is-dragging");
+      try {
+        el.setPointerCapture(e.pointerId);
+      } catch (err) {}
+    });
+    el.addEventListener("pointermove", function (e) {
+      if (!fpDrag || e.pointerId !== fpDrag.id) return;
+      e.preventDefault();
+      fpPlace(el, e.clientX - fpDrag.dx, e.clientY - fpDrag.dy);
+    });
+    function endDrag(e) {
+      if (!fpDrag) return;
+      if (e && e.pointerId !== undefined && e.pointerId !== fpDrag.id) return;
+      fpDrag = null;
+      el.classList.remove("is-dragging");
+      var r = el.getBoundingClientRect();
+      try {
+        localStorage.setItem(
+          FP_POS_KEY,
+          JSON.stringify({ l: Math.round(r.left), t: Math.round(r.top) })
+        );
+      } catch (err) {}
+    }
+    el.addEventListener("pointerup", endDrag);
+    el.addEventListener("pointercancel", endDrag);
+    window.addEventListener("resize", function () {
+      if (!el.classList.contains("on")) return;
+      var r = el.getBoundingClientRect();
+      fpPlace(el, r.left, r.top);
+    });
+
+    if (bgmAudio) {
+      bgmAudio.addEventListener("play", function () {
+        fpPaintPlaying(true);
+      });
+      bgmAudio.addEventListener("pause", function () {
+        fpPaintPlaying(false);
+      });
+    }
   }
 
   // 下一首该放哪个：随机模式下随机挑一首（避免连续重复同一首）
@@ -1539,7 +1788,9 @@
     var lbBtn = $("#p-lyricbox"); // 播放器内歌词
     var flyBtn = $("#p-flylric"); // 悬浮单行歌词
     var floatBtn = $("#p-float"); // 悬浮播放器
-    var lyricLines = parseLrc(SITE.lyrics || "");
+    // 上一次听到哪首就按哪首取歌词，别一律拿第一首的（不然刷新后歌词对不上）
+    var lyricLines = parseLrc(curTrack.lyrics || SITE.lyrics || "");
+    curLyricLines = lyricLines;
     var lastLyric = -2;
 
     // 播放器内滚动歌词
@@ -1578,36 +1829,7 @@
     }
     var nlText = nowBar.querySelector("#nlText");
 
-    // 右下角「悬浮迷你播放器」，由 #p-float 切换显隐
-    if (!document.getElementById("floatPlayer")) {
-      var fp = document.createElement("div");
-      fp.className = "float-player";
-      fp.id = "floatPlayer";
-      fp.innerHTML =
-        '<div class="fp-cover" id="fp-cover">' +
-        (curTrack.cover ? '<img src="' + esc(curTrack.cover) + '" alt="">' : ICONS.disc) +
-        "</div>" +
-        '<div class="fp-meta"><b id="fp-title">' +
-        esc(curTrack.title || "") +
-        '</b><span id="fp-artist">' +
-        esc(curTrack.artist || "") +
-        "</span></div>" +
-        '<button class="fp-play" id="fp-play" data-tip="播放 / 暂停">' +
-        ICONS.play +
-        "</button>";
-      document.body.appendChild(fp);
-      var fpPlay = fp.querySelector("#fp-play");
-      var fpCover = fp.querySelector("#fp-cover");
-      fpPlay.addEventListener("click", togglePlay);
-      function paintFloat() {
-        var playing = audio && !audio.paused;
-        fpPlay.innerHTML = playing ? ICONS.pause : ICONS.play;
-        fpCover.classList.toggle("spinning", !!playing);
-      }
-      audio.addEventListener("play", paintFloat);
-      audio.addEventListener("pause", paintFloat);
-      paintFloat();
-    }
+    // 右下角悬浮播放器由 initFloatPlayer() 负责（点顶栏音乐按钮也能叫出来）
 
     if (lbBtn && lyricBox) {
       lbBtn.addEventListener("click", function () {
@@ -1632,19 +1854,18 @@
     }
     if (floatBtn) {
       floatBtn.addEventListener("click", function () {
-        var fp = document.getElementById("floatPlayer");
-        if (!fp) return;
-        var open = fp.classList.toggle("on");
-        floatBtn.classList.toggle("on", open);
+        toggleFloatPlayer();
       });
     }
 
     function syncLyric() {
-      if (!lyricLines.length || !audio) return;
+      // 用共享的那份歌词：首页重渲染过的话，各份闭包手里的 lyricLines 会过时
+      var lines = curLyricLines;
+      if (!lines.length || !audio) return;
       var t = audio.currentTime;
       var idx = -1;
-      for (var i = 0; i < lyricLines.length; i++) {
-        if (lyricLines[i].t <= t + 0.25) idx = i;
+      for (var i = 0; i < lines.length; i++) {
+        if (lines[i].t <= t + 0.25) idx = i;
         else break;
       }
       if (idx === lastLyric) return;
@@ -1667,17 +1888,28 @@
         }
       }
       // 悬浮单行歌词
-      if (!nlText) return;
+      if (nlText) {
+        if (idx >= 0) {
+          nlText.textContent = lines[idx].text;
+          nowBar.classList.add("has-line");
+        } else {
+          // 间奏 / 还没到第一句：显示歌名占位
+          var ct2 = trackAt(playerIdx);
+          nlText.textContent = ct2.title
+            ? ct2.title + (ct2.artist ? " · " + ct2.artist : "")
+            : "纯音乐，请欣赏";
+          nowBar.classList.remove("has-line");
+        }
+      }
+      // 悬浮播放器里的歌词
       if (idx >= 0) {
-        nlText.textContent = lyricLines[idx].text;
-        nowBar.classList.add("has-line");
+        fpPaintLyric(lines[idx].text, true);
       } else {
-        // 间奏 / 还没到第一句：显示歌名占位
-        var ct2 = trackAt(playerIdx);
-        nlText.textContent = ct2.title
-          ? ct2.title + (ct2.artist ? " · " + ct2.artist : "")
-          : "纯音乐，请欣赏";
-        nowBar.classList.remove("has-line");
+        var ct3 = trackAt(playerIdx);
+        fpPaintLyric(
+          "♪ " + (ct3.title || "纯音乐") + (ct3.artist ? " · " + ct3.artist : ""),
+          false
+        );
       }
     }
 
@@ -1726,18 +1958,13 @@
 
       // 歌词换成这一首的
       lyricLines = parseLrc(t.lyrics || "");
+      curLyricLines = lyricLines;
       if (lyricBox) renderLyrics(lyricBox, lyricLines);
       lastLyric = -2;
 
-      // 悬浮迷你播放器同步
-      var fpT = document.getElementById("fp-title");
-      var fpA = document.getElementById("fp-artist");
-      var fpC = document.getElementById("fp-cover");
-      if (fpT) fpT.textContent = t.title || "";
-      if (fpA) fpA.textContent = t.artist || "";
-      if (fpC) {
-        fpC.innerHTML = t.cover ? '<img src="' + esc(t.cover) + '" alt="">' : ICONS.disc;
-      }
+      // 悬浮播放器同步
+      fpPaintTrack(t);
+      fpPaintLyric("♪ " + (t.title || "") + (t.artist ? " · " + t.artist : ""), false);
 
       paintTrackList();
       tick();
@@ -3087,6 +3314,9 @@ function interceptLinks(e) {
     // 先按「已知能用的线路」装好地址，能立刻播（同源保底，不会哑）
     setTrackSrc(list[playerIdx], false);
 
+    // 悬浮播放器：点顶栏这颗音乐按钮就能唤起
+    initFloatPlayer();
+
     // 后台探一下 CDN 通不通：通了就切过去，进度条才能拖
     probeAudioLine(list[playerIdx].src, function (base) {
       if (!base || audioDead || !audio.paused) return;
@@ -3117,6 +3347,10 @@ function interceptLinks(e) {
 
     btn.addEventListener("click", function () {
       asked = true;
+      // 面板没开：叫出来（顺便开始播）；面板已经开着：这颗按钮就当播放/暂停用
+      var el = fpEl();
+      var wasOpen = !!(el && el.classList.contains("on"));
+      openFloatPlayer();
       // 上一轮全挂了：用户再点就从头再试一遍（网络可能已经好了）
       if (audioDead) {
         audioDead = false;
@@ -3129,7 +3363,8 @@ function interceptLinks(e) {
       }
       if (audio.paused) {
         playAudio();
-      } else {
+      } else if (wasOpen) {
+        // 面板本来就开着，这一下才算「暂停」；刚才是关着的就别一开就停
         audioWantPlay = false;
         audio.pause();
       }
