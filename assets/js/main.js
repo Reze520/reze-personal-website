@@ -2049,7 +2049,15 @@ function applyRoute() {
   app.setAttribute("data-page", page);
   app.__params = new URLSearchParams(r.qs);
   // 从列表里点进文章时记一下「从哪个列表来的」，返回时才能回到原处。
-  if (page === "post") markListSource();
+  // 注意：真正可靠的一次记录发生在 interceptLinks 里（那时还在列表页）。
+  // 这里只做兜底——比如直接打开文章链接、或者刷新文章页时没有来源可依；
+  // 已经有来源、且说的就是这篇时不要重写，否则会把首页/写作页的来源
+  // 覆盖成兜底的 writing，返回就掉回文章列表了。
+  if (page === "post") {
+    var idNow = new URLSearchParams(r.qs).get("id") || "";
+    var prevSrc = readListSource();
+    if (!prevSrc || prevSrc.id !== idNow) markListSource();
+  }
   syncSplash();
   renderMain();
 }
@@ -2092,16 +2100,16 @@ function currentPage() {
   return h === "index" ? "home" : h;
 }
 
-function markListSource() {
+function markListSource(idHint) {
   var page = currentPage();
   if (!page) return;
   // 文章页之间互相跳（上一篇 / 下一篇）：来源没变，别覆盖
   if (page === "post") {
-    // 从文章里点「下一篇」不算换来源；但列表页 -> 文章 -> （直接打开另一篇文章）
-    // 这种情况要重新记，否则返回时会落到上一次的来源
+    // 注意 idHint：在列表页点文章的那一刻，hash 还停在列表路由上、读不出文章 id，
+    // 所以由调用方（interceptLinks）把目标 id 传进来。
     var hh = (location.hash || "").split("?")[1] || "";
     var pq = new URLSearchParams(hh);
-    var idNow = pq.get("id") || "";
+    var idNow = idHint || pq.get("id") || "";
     var prev = readListSource();
     if (prev && prev.id === idNow) return;
     saveListSource(prev && (prev.p === "home" || prev.p === "writing") ? prev.p : "writing",
@@ -2246,8 +2254,9 @@ function interceptLinks(e) {
   var app = document.querySelector(".app");
   var from = (app && app.getAttribute("data-page")) || "";
   var toPost = file === "post";
-  // 先定位来源（此刻还停在列表页），再记下来源列表
-  if (toPost) markListSource();
+  // 先定位来源（此刻还停在列表页），再记下来源列表。
+  // 目标文章的 id 从链接里取，不能等 hash 变过去——那时候页面已经不在列表上了。
+  if (toPost) markListSource(u.searchParams.get("id") || "");
   var src = toPost ? null : readListSource();
   goPage("#/" + file + (u.search || ""));
   // 从文章页点返回：把来源列表当时的分类和滚动位置还回去
