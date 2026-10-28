@@ -252,9 +252,6 @@
   function wordCount(post) {
     return plain(post.content).length;
   }
-  function readMin(post) {
-    return Math.max(1, Math.round(wordCount(post) / 380));
-  }
 
   // 从正文里截一段，尽量包含命中的词
   function snippet(text, terms, len) {
@@ -566,8 +563,7 @@
       (chips ? '<div class="chips">' + chips + "</div>" : "") +
       '<p class="excerpt">' + esc(p.excerpt) + "</p>" +
       '<div class="meta"><span>' + ICONS.cal + fmtDate(p.date) + "</span>" +
-      "<span>" + ICONS.doc + wordCount(p).toLocaleString() + " 字</span>" +
-      "<span>" + ICONS.clock + readMin(p) + " 分钟</span></div>" +
+      "<span>" + ICONS.doc + wordCount(p).toLocaleString() + " 字</span></div>" +
       "</div>" +
       (thumb ? '<div class="thumb">' + thumb + "</div>" : "") +
       "</a>"
@@ -2159,9 +2155,7 @@ function interceptLinks(e) {
       "<span>" +
       ICONS.doc +
       wordCount(p).toLocaleString() +
-      " 字 · 约 " +
-      readMin(p) +
-      " 分钟</span>" +
+      " 字</span>" +
       "</div>";
 
     var cover = p.cover
