@@ -12,6 +12,14 @@
 /*.html
   Cache-Control: public, max-age=0, must-revalidate
 
+# 后台和构建脚本会随仓库一起部署（Pages 部署整个仓库，没有排除目录的开关），
+# 代码里不含口令，只是不该被搜索引擎收进去
+/tools/*
+  X-Robots-Tag: noindex
+
+/admin.html
+  X-Robots-Tag: noindex, nofollow
+
 # 下面这些文件都带 ?v= 版本号，改文件必然换地址，可以放心 immutable
 /assets/css/*
   Cache-Control: public, max-age=31536000, immutable
