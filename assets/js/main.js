@@ -2299,10 +2299,86 @@ function syncListQuery(cat, tag, page) {
   } catch (e) {}
 }
 
+/* ---------- 每个路由的标题与描述 ----------
+   子页面（about.html、writing.html…）打开时会 location.replace 到
+   index.html#/xxx，浏览器标签就只剩首页那一句「伤心公主 · 什么都沾一点」，
+   description / og 也全停在首页。收藏、分享、搜索结果里八个页面长得一模一样。
+   这里按路由重写一遍，值和各静态页 <head> 里写的保持一致。 */
+var PAGE_META = {
+  home: ["伤心公主 · 什么都沾一点", "伤心公主的个人博客，记录生活、兴趣和随手做的小东西。"],
+  writing: ["全部文章 · 伤心公主", "伤心公主写过的全部文章，按分类和标签浏览。"],
+  moments: ["动态 · 伤心公主", "随手记下的碎片，想到什么写什么。"],
+  album: ["相册 · 伤心公主", "存下来的照片。"],
+  links: ["导航 · 伤心公主", "常去的地方。"],
+  weather: ["天气 · 伤心公主", "几个城市放在一起看，点一下就能换。"],
+  timeline: ["时间线 · 伤心公主", "这个站的重大改动记录。"],
+  about: ["关于我 · 伤心公主", "关于伤心公主：一个什么都想试试的人，以及这个站在做什么。"],
+  post: ["文章 · 伤心公主", "伤心公主的个人博客。"]
+};
+var SITE_ORIGIN = "https://reze520.pages.dev";
+
+function setMetaTag(attr, key, val) {
+  var sel = attr === "name" ? 'meta[name="' + key + '"]' : 'meta[property="' + key + '"]';
+  var el = document.head.querySelector(sel);
+  if (!el) {
+    el = document.createElement("meta");
+    el.setAttribute(attr, key);
+    document.head.appendChild(el);
+  }
+  if (el.getAttribute("content") !== val) el.setAttribute("content", val);
+}
+
+function syncMeta(page, params) {
+  var m = PAGE_META[page] || PAGE_META.home;
+  var title = m[0];
+  var desc = m[1];
+  var url = SITE_ORIGIN + (page === "home" ? "/" : "/" + page + ".html");
+  var type = "website";
+
+  if (page === "post") {
+    var id = (params && params.get("id")) || new URLSearchParams(location.search).get("id") || "";
+    var p = postById(id);
+    if (p) {
+      title = p.title + " · " + SITE.name;
+      // 摘要优先，没有就截正文开头，去掉标签和多余空白
+      desc = String(p.excerpt || p.content || "")
+        .replace(/<[^>]*>/g, " ")
+        .replace(/\s+/g, " ")
+        .trim()
+        .slice(0, 110);
+      url = SITE_ORIGIN + "/post.html?id=" + encodeURIComponent(p.id);
+      type = "article";
+    } else {
+      title = "没有找到这篇文章 · " + SITE.name;
+      desc = "这篇文章可能被移动或改名了，可以去文章列表里重新找找。";
+    }
+  } else if (page === "about") {
+    type = "profile";
+  }
+
+  if (document.title !== title) document.title = title;
+  setMetaTag("name", "description", desc);
+  setMetaTag("property", "og:title", title);
+  setMetaTag("property", "og:description", desc);
+  setMetaTag("property", "og:url", url);
+  setMetaTag("property", "og:type", type);
+  setMetaTag("name", "twitter:card", "summary");
+
+  var link = document.head.querySelector('link[rel="canonical"]');
+  if (!link) {
+    link = document.createElement("link");
+    link.setAttribute("rel", "canonical");
+    document.head.appendChild(link);
+  }
+  if (link.getAttribute("href") !== url) link.setAttribute("href", url);
+}
+
 function renderMain() {
   var app = document.querySelector(".app");
   var main = $("#app-main");
   if (!main) return;
+  // 静态页（changelog.html）正文是编译好的，别被首页版式覆盖掉
+  if (app && app.getAttribute("data-static")) return;
   var page = (app && app.getAttribute("data-page")) || "home";
   var params = (app && app.__params) || new URLSearchParams();
   var prog = $("#progress");
@@ -2349,6 +2425,7 @@ function renderMain() {
   }
   armScrollRestore(page);
   postRouteFix();
+  syncMeta(page, params);
 }
 
 /* goPage 会同步渲染一次、hashchange 再渲染一次。返回文章列表时 hash 还是旧的
@@ -2397,6 +2474,9 @@ function applyRoute() {
   var r = parseHash();
   var app = document.querySelector(".app");
   if (!app) return;
+  // 静态页（如 changelog.html）正文是编译好的 HTML，不需要路由接管；
+  // 带上 data-static 就跳过渲染，顶栏按钮、播放器这些仍然照常初始化。
+  if (app.getAttribute("data-static")) return;
   // 没有 hash 时一律回首页：不能用上一次的 data-page，
   // 否则从文章页后退会拿空 id 再渲染一次 post，显示「没有找到这篇文章」
   var page = r.page || "home";

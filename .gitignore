@@ -10,15 +10,15 @@ Thumbs.db
 _t*.html
 *.log
 
+# 只在本地用、不随站点发布的东西（原始书籍、备份、临时 JSON、完整字体等）
+# Cloudflare Pages 部署的是整个仓库，所以「不进 git」就等于「不上线」。
+_local/
+
 # 改写文案用的辅助文件（不上线）
 _rewrite.py
 _cloud_patch.json
-_backup/
 cloud_content_*.json
 docx_fulltext.txt
-
-# 音频重编码前的备份（不发布）
-_backup_audio/
 
 # 截图用的调试脚本（本地工具，不发布）
 _cdp.js

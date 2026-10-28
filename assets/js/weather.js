@@ -582,17 +582,22 @@
   }
 
   /* ---------- 组装整页 ---------- */
-  function mainHtml() {
+  // 只出「容器里面那层」。repaintAll 要往 #wx-wrap.innerHTML 里塞，
+  // 所以它绝不能带上 #wx-wrap 本身 —— 否则重画一次就多套一层同名容器，
+  // #wx-wrap 出现重复 id，.wx-wrap 的 margin-top / gap 也会双倍生效。
+  function innerHtml() {
     return (
-      '<div class="wx-wrap" id="wx-wrap">' +
       barHtml() +
       miniRowHtml() +
       heroHtml() +
       hourHtml() +
       weekHtml() +
-      addPanelHtml() +
-      "</div>"
+      addPanelHtml()
     );
+  }
+
+  function mainHtml() {
+    return '<div class="wx-wrap" id="wx-wrap">' + innerHtml() + "</div>";
   }
 
   // 重画整块。搜索框正在输入时保留光标和内容，别让人物打字打一半被吃掉
@@ -609,7 +614,7 @@
 
     var panelOpen = state.addOpen;
     var q = state.query;
-    wrap.innerHTML = mainHtml();
+    wrap.innerHTML = innerHtml();
 
     if (panelOpen) {
       var p = $("#wx-addpanel");

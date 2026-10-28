@@ -357,7 +357,16 @@ python -m http.server 8080
 
 仓库里配了双推，一次 `git push` 两个分支一起更新，不用推两遍。
 
-静态资源改了，记得把 `?v=` 的版本号往前推一格，不然浏览器还读旧缓存。
+静态资源（CSS / JS）改了，记得把 `?v=` 的版本号往前推一格，不然浏览器还读旧缓存。
+现在全站只认一个版本号：
+
+```bash
+python tools/bump_version.py 20261101a
+```
+
+一次改完 11 个页面里的全部 `?v=`。之前是手改的，改漏过好几次 ——
+出现过 `style.css?v=20261030d` 配 `main.js?v=20261030b` 这种混搭，
+刷新后新样式生效了、新脚本没有，查起来很费神。
 
 文章内容、设置这些走后端，存在 Cloudflare Pages Functions + D1 里，不在这个静态目录里。
 
@@ -365,19 +374,30 @@ python -m http.server 8080
 
 ---
 
-## 七、SEO 这块顺手做了
+## 七、SEO 与可发现性
 
 - `robots.txt`：允许抓取，指向 sitemap
-- `sitemap.xml`：已列好所有页面，**加新文章后记得补一条**
-- 每页都有 `title` / `description` / `og:` 标签
-- 上线后去[百度搜索资源平台](https://ziyuan.baidu.com/)提交 sitemap，
-  否则百度可能很久才发现你
+- `sitemap.xml`：**自动生成**，现在 83 条（9 个静态页 + 74 篇文章）。
+  以前是手写的，写着写着就和线上对不上了 —— 老文章的 id 从 `huo-zhe` 这种手写 slug
+  改成了数据库自增的 `post-74`，sitemap 里 59 条全是旧地址，点进去一律「没有找到这篇文章」。
+  现在统一由 `tools/gen_feeds.py` 从线上内容生成，**别手改**。
+- `feed.xml`：RSS，收最近 30 篇，同样自动生成。之前那份停在 2026 年 4 月，
+  33 条链接也全是旧 id —— 订阅器里点开就是空页。
+- 每页有独立的 `title` / `description` / `canonical` / `og:*` / `twitter:card`。
+  子页面是「跳转到 `index.html#/xxx`」的 hash 路由，跳过去之后标题会掉回首页那一句，
+  所以 `main.js` 里的 `syncMeta()` 会按路由再改一遍标题、描述和 canonical。
+- `admin.html` 和 `404.html` 带 `noindex`，不进搜索引擎。
+- `_headers`：给静态资源开长缓存（都带 `?v=` 号），补了几个安全头。
+
+> 自定义域名 `reze520.top` 目前 **DNS 解析不出来**（公共 DNS 返回 NXDOMAIN），
+> 站点实际只活在 `reze520.pages.dev`。所以 sitemap / feed / canonical 里写的都是 pages.dev，
+> 等域名恢复了要整站替换一次（`tools/gen_feeds.py` 顶部有 `ORIGIN` 常量）。
 
 ---
 
 ## 八、目录结构
 
-站是纯静态的，扔上去就能跑。下面这张是**仓库现在的真实样子**（不是想象版）：
+站是纯静态的，扔上去就能跑。下面这张是**仓库现在的真实样子**：
 
 ```
 reze-blog/
@@ -386,18 +406,19 @@ reze-blog/
 ├── post.html           文章详情，靠 ?id= 参数取
 ├── moments.html        动态 / 日常碎片
 ├── album.html          相册
-├── calendar.html       日历页（农历 + 节气 + 发文记录）
 ├── timeline.html       时间线，只记站点改动
+├── changelog.html      更新日志（由 docs/更新日志.md 编译，别手改）
 ├── weather.html        多城市天气
 ├── links.html          友链
 ├── about.html          关于 + 作品
 ├── admin.html          后台（改内容、导数据；不在导航里）
 ├── 404.html            没找到那页
 ├── robots.txt
-├── sitemap.xml
-├── feed.xml            RSS
+├── sitemap.xml         ← 自动生成
+├── feed.xml            ← 自动生成
+├── _headers            Cloudflare Pages 响应头（安全头 + 缓存）
 ├── README.md           就是这份说明
-├── .gitignore          不进库的临时东西都在这
+├── .gitignore
 │
 ├── assets/
 │   ├── css/style.css   全部样式（双皮肤、动态背景、首屏）
@@ -410,22 +431,42 @@ reze-blog/
 │   │   ├── playlist.js       播放列表 + 音频 CDN 地址
 │   │   ├── weather.js        天气
 │   │   └── lunar.js          农历 / 节气
+│   ├── fonts/          mashanzheng.woff2（裁过的子集，148 KB）
 │   ├── audio/          23 首歌（音乐播放器的音源）
 │   └── uploads/        图片（封面、头像、背景等）
 │
-├── books/              48 篇书评的原文 txt（发文章时从这里取）
-├── docs/更新日志.md
+├── docs/更新日志.md    更新日志的源文件（改完跑一次 tools/build_changelog.py）
 │
 ├── functions/
 │   └── site-data/[[path]].js   Cloudflare Pages Function：D1 读写接口
 │                               （/site-data/content 读，/site-data/settings 写）
 │
-├── deploy/             发布用的小脚本（加歌、生成友链、部署）
-├── build_books.py      把 books/*.txt 批量推到云端，读 _dbids.json 对 ID
-├── _dbids.json         文章 slug → 数据库 ID 的映射表（★ 别删，发文章要用）
-└── _backup/  _backup_audio/  cloud_content_*.json  _dry.log
-                        本地辅助文件，已在 .gitignore 里，不进库
+├── tools/              发布用的小脚本（注意：这层目录会随站点一起发布）
+│   ├── deploy.sh           一键提交 + 双推
+│   ├── gen_feeds.py        生成 sitemap.xml / feed.xml
+│   ├── build_changelog.py  md → changelog.html
+│   ├── subset_font.py      毛笔字体裁子集
+│   ├── add_song.py         加歌（转码 + 压封面 + 写播放列表）
+│   ├── fetch_song.py       下载音频
+│   ├── build_links.py      生成友链
+│   └── bulk_add.py         批量推文章
+│
+└── _local/             ★ 不进 git（等于不上线）：原始书籍、备份、完整字体、临时 JSON
 ```
+
+### 关于 `_local/`
+
+Cloudflare Pages 部署的是**整个仓库**，不是「挑出来的目录」。
+所以「不进 git」就是「不上线」的同义词 —— 任何不该被公开的东西都得放进 `_local/`，
+它在 `.gitignore` 里。现在里面躺着：
+
+| 东西 | 为什么不能上线 |
+|---|---|
+| `books/`（48 篇 txt，584 KB） | 受版权保护的整本书原文，之前是被公开直连的 |
+| `_backup/`、`_backup_audio/` | 改稿前的旧文件，53 MB |
+| `fonts/mashanzheng-full.woff2` | 完整字库 2.6 MB，裁子集要拿它当源 |
+| `_dbids.json`、`cloud_content_*.json` | 内部 id 映射和内容快照 |
+| `nginx.conf`、`links.json`、`build_books.py` | 早先折腾服务器留下的东西，站上没用 |
 
 ### 两个分支，别搞混
 
@@ -439,6 +480,25 @@ reze-blog/
 首页的 splash（轮播句子、签名卡）存在 **D1 数据库**里。`cloud.js` 会请求 `/site-data/content`，
 云端有数据就覆盖本地 `data.js` / `data.override.js`。
 所以一句话要真正生效，得同时动两处：静态文件（默认值和兜底）+ 云端 settings（线上真正的值）。
+
+---
+
+## 九、几个小工具
+
+```bash
+# 重新生成 sitemap.xml 和 feed.xml（加了文章之后跑一次）
+curl -s https://reze520.pages.dev/site-data/content -o /tmp/content.json
+python tools/gen_feeds.py /tmp/content.json
+
+# 更新日志改了之后，重新编译成页面
+python tools/build_changelog.py
+
+# 诗笺加了新诗之后，重裁字体（否则新字会退回宋体，字形不一样）
+python tools/subset_font.py                      # 直接从线上取诗词
+python tools/subset_font.py /tmp/content.json     # 或者用本地快照
+```
+
+三个脚本都只动生成物，不改源文件，跑完看一眼 diff 再提交就行。
 
 ---
 
@@ -463,7 +523,7 @@ reze-blog/
 
 ---
 
-## 九、常见问题
+## 十、常见问题
 
 **改了文章但页面没变？**
 浏览器缓存。Ctrl + F5 强制刷新。
