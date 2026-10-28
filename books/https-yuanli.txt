@@ -1,6 +1,6 @@
 有次在商场连着公共 WiFi，准备登一个网站，密码都敲了一半，我忽然停了。一个念头冒出来：这网是别人家的，我这一串密码，在路上会不会被人看得一清二楚？说实话，我天天写接口、天天调 https，但那一刻我发现自己其实说不清它到底怎么保的密。
 
-<figure class="pg-fig"><img src="assets/uploads/figs/https-yuanli.jpg" alt="TLS 握手中，客户端与服务器协商密钥"><figcaption>TLS 握手中，客户端与服务器协商密钥</figcaption></figure>
+<figure class="pg-fig wide"><img src="assets/uploads/figs/https-yuanli.jpg" alt="TLS 握手中，客户端与服务器协商密钥"><figcaption>TLS 握手中，客户端与服务器协商密钥</figcaption></figure>
 
 回去之后我认真补了一遍 TLS 的课，才发现这里面的设计漂亮得有点过分。它不是靠一个什么神秘的东西，而是靠一套"先商量、再加密、再验身份"的组合拳，环环相扣。这篇文章我尽量不用教科书腔，就把我理解的顺序讲一遍。
 

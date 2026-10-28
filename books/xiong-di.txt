@@ -1,6 +1,6 @@
 这本书上下两册，我连着读的，中间只隔了一个晚上。读完那个晚上我有点睡不着，不是被吓的，是被一种说不清的空揪着。
 
-<figure class="pg-fig"><img src="assets/uploads/figs/xiong-di.jpg" alt="《兄弟》封面"><figcaption>《兄弟》封面</figcaption></figure>
+<figure class="pg-fig cover"><img src="assets/uploads/figs/xiong-di.jpg" alt="《兄弟》封面"><figcaption>《兄弟》封面</figcaption></figure>
 
 ## 上册：文革里那个死在车站的父亲
 

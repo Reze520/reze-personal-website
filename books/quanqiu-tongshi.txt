@@ -1,6 +1,6 @@
 这套书我买了很久，上下两册，很厚，一直摆在书架最下面一格。我从来没从头到尾读完过——一次都没有。但我翻它的次数，比很多"读完"的书都多。它不是那种被"读完"的书，它是那种被"用"的书。这句话听起来像借口，但用过的人会懂：有些书是小说，你一口气咽下去；有些书是地图，你平时不看，迷路了才摊开。
 
-<figure class="pg-fig"><img src="assets/uploads/figs/quanqiu-tongshi.jpg" alt="《全球通史》封面"><figcaption>《全球通史》封面</figcaption></figure>
+<figure class="pg-fig cover"><img src="assets/uploads/figs/quanqiu-tongshi.jpg" alt="《全球通史》封面"><figcaption>《全球通史》封面</figcaption></figure>
 
 ## 我是怎么用它：一本当工具书，不当故事书
 

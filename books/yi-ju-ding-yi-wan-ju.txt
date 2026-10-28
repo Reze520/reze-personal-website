@@ -1,6 +1,6 @@
 读这本书之前，一个朋友跟我说了一句话：这书写的就是，人一辈子找一个人说话。
 
-<figure class="pg-fig"><img src="assets/uploads/figs/yi-ju-ding-yi-wan-ju.jpg" alt="《一句顶一万句》封面"><figcaption>《一句顶一万句》封面</figcaption></figure>
+<figure class="pg-fig cover"><img src="assets/uploads/figs/yi-ju-ding-yi-wan-ju.jpg" alt="《一句顶一万句》封面"><figcaption>《一句顶一万句》封面</figcaption></figure>
 
 我当时想，这算什么主题，太轻了，轻到不像一本书要扛的东西。后来读完，觉得它一点都不轻，重得我好几天没缓过来。
 

@@ -1,6 +1,6 @@
 这本书的书名很唬人。我买的时候，脑子里转过两个误会：要么是一本教你怎么修摩托车的工具书，要么是一本披着"禅"字、教你怎么在车库里静心的鸡汤。两个都不是。读完之后我发现，它既不是修车手册，也不是禅修指南，而是一本穿着旅行外衣的哲学书——而且是一本，会中途把外衣脱掉，露出满身伤疤的书。作者罗伯特·波西格，是个挺传奇也挺惨的人。他写这本书之前，真的研究过哲学，教过修辞学，后来因为一套关于"良质"的想法，跟整个学术体系对上了，精神崩溃，接受过电击治疗。这本书，某种程度上，是他在把自己拼回去的过程中，写下来的。
 
-<figure class="pg-fig"><img src="assets/uploads/figs/chan-yu-motuoche-weixiu-yishu.jpg" alt="《禅与摩托车维修艺术》封面"><figcaption>《禅与摩托车维修艺术》封面</figcaption></figure>
+<figure class="pg-fig cover"><img src="assets/uploads/figs/chan-yu-motuoche-weixiu-yishu.jpg" alt="《禅与摩托车维修艺术》封面"><figcaption>《禅与摩托车维修艺术》封面</figcaption></figure>
 
 ## 前面的旅行，真的很好看
 

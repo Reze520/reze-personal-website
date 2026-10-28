@@ -1,6 +1,6 @@
 这本书是我在图书馆借的，很薄，一百多页，字还大。我当时想，一个晚上，最多两个晚上，肯定翻完。结果这本薄书，我读了一年，还没读完。现在它压在床头那摞书中间，里面夹着一支笔，笔迹都淡了。
 
-<figure class="pg-fig"><img src="assets/uploads/figs/renjian-cihua.jpg" alt="《人间词话》封面"><figcaption>《人间词话》封面</figcaption></figure>
+<figure class="pg-fig cover"><img src="assets/uploads/figs/renjian-cihua.jpg" alt="《人间词话》封面"><figcaption>《人间词话》封面</figcaption></figure>
 
 为什么读不完？因为读两页就想停。不是读不懂——王国维写的是文言夹白话，不难。是读完两句，就有别的东西冒出来，接不下去。他说一句关于词的判断，我脑子里就跳出一首不相干的词，或者一件自己的事。
 
