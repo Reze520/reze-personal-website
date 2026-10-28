@@ -1,7 +1,9 @@
 <!DOCTYPE html>
 <html lang="zh-CN" data-theme="light" data-skin="soft">
 <head>
-<meta charset="utf-8">
+  <!-- 以前这里会把子页面转到 index.html#/xxx，地址栏变成 /index.html#/writing。
+       现在这一页直接自己渲染，地址就是 /writing，刷新也不用再多跳一次。 -->
+  <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>更新日志 · 伤心公主</title>
 <meta name="description" content="这个站怎么一点点长成现在这样：每一版改了什么、为什么改、卡在哪儿。">
@@ -69,6 +71,17 @@
   <aside class="col col-left" id="app-left"></aside>
 
   <main class="col col-main" id="app-main"><article class="g-article g-changelog"><h1>更新日志</h1><div class="g-meta"><span>这个站怎么一点点长成现在这样。按时间倒着排。</span></div><div class="g-prose prose"><h2>2026.10</h2>
+<h3>内页地址换成了真路径</h3>
+<ul>
+<li>以前每个内页都是先跳一圈：点「文章」先到 <code>writing.html</code>，页面里一段脚本再把人送到 <code>index.html#/writing</code>。地址栏最后留下的是 <code>index.html#/writing</code> 这段，复制分享出去也是它，看着不像个正经网址。</li>
+<li>现在就是 <code>/writing</code>、<code>/post?id=xxx</code>、<code>/album</code>。刷新、收藏、右键新窗口打开，拿到的都是这个。顺手把站内所有链接也换了，点的时候不用再多跳一次 308。</li>
+<li>改法：路由解析 <code>parseHash()</code> 先看路径、再看 hash。所以老书签 <code>/#/writing</code> 照样能用，<code>/writing.html</code> 由 Cloudflare 308 一次落到 <code>/writing</code>，不会断。</li>
+<li>八个子页面开头那段 <code>location.replace("index.html#/" + p)</code> 的跳板拆了，让页面就地渲染。<code>post.html</code> 那段没全拆——它还兼着把老链接 <code>post.html#/post?id=xx</code> 里的 id 搬到查询串上，改成只搬一次就收手。</li>
+<li>卡了半天的坑：<code>updateNavActive()</code> 原来用 <code>href.indexOf(want) &gt;= 0</code> 判断当前页，链接换成路径以后，首页那个 <code>/</code> 是任何地址的子串，于是每一页都把「主页」点亮。改成把 href 的路径段截出来整段比。</li>
+<li>第二个坑更要命：<code>currentPage()</code> 在没有 <code>data-page</code> 时靠 hash 兜底认首页。以前首页地址里挂着 <code>#/home</code> 认得出来，换成 <code>/</code> 之后解析成空串，「首页点分类 → 进文章」这一步的来源就记不下，返回按钮退化成「返回文章列表」，回不到原来那一栏。补上「根路径就是 home」才算完。</li>
+<li>验证：无头 Edge 本地跑一遍、线上再跑一遍，共 51 项 —— 点导航、切分类、进文章、点返回、直接打开深链、刷新、前进后退、老 hash 链接、导航高亮，全部通过，无页面报错。</li>
+<li>版本号一并推到 <code>20261101c</code>。</li>
+</ul>
 <h3>往站里放了今年写下的三篇</h3>
 <ul>
 <li>三篇是《喉咙里那块骨头》（2021.7.22）、《过早》（2022.3.19）、《那几层没租出去的楼》（2022.9.27）。日期都往前放，跟最近这几篇隔开快一年半 —— 前面连着五个多月全是读书笔记，再往上压新随笔，翻列表会觉得节奏很怪。</li>
