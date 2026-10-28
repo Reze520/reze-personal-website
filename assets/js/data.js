@@ -39,7 +39,7 @@ window.SITE = {
   ],
   startYear: 2020,
   avatar: "assets/uploads/avatar.gif", // 头像：留空显示「蕾」字
-  icp: "待备案", // 备案下来后填：苏ICP备2026xxxxxx号-1
+  icp: "个人站点",
 
   // 背景音乐
   bgm: "assets/audio/song.mp3",

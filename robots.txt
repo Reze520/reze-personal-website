@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://reze520.top/sitemap.xml
+Sitemap: https://reze520.pages.dev/sitemap.xml

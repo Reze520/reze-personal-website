@@ -1740,7 +1740,7 @@ function aboutHtml() {
   return (
     '<article class="g-article">' +
     '<h1>关于我</h1>' +
-    '<div class="g-prose" style="padding-top:26px">' +
+    '<div class="g-prose prose" style="padding-top:26px">' +
     '<h2>我是谁</h2>' +
     '<p>我叫伤心公主，<strong>reze</strong> 是我在网上的名字。没有什么非做不可的事，也没有哪个领域算专精——什么都想试试，什么都沾一点。</p>' +
     '<p>不太擅长自我介绍。每次被要求“简单说说你自己”，我都会卡住。但如果让我讲一个最近在想的问题，我可以讲很久。</p>' +
@@ -2131,7 +2131,7 @@ function interceptLinks(e) {
         " 返回文章列表</a>" +
         "<h1>没有找到这篇文章</h1>" +
         '<div class="g-meta"><span>它可能被移动或改名了</span></div>' +
-        '<div class="g-prose"><p>你可以从<a href="writing.html">文章列表</a>里重新找找。</p></div>' +
+        '<div class="g-prose prose"><p>你可以从<a href="writing.html">文章列表</a>里重新找找。</p></div>' +
         "</article>";
       return;
     }
@@ -2216,7 +2216,7 @@ function interceptLinks(e) {
       "</h1>" +
       meta +
       cover +
-      '<div class="g-prose">' +
+      '<div class="g-prose prose">' +
       p.content +
       "</div>" +
       '<div class="g-article-foot">' +
