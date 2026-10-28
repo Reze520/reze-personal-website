@@ -3305,6 +3305,16 @@ body.has-app .site-foot .brand .brand-mark {
   border-top: 1px solid rgba(255, 255, 255, 0.1);
   margin: 2.6em 0;
 }
+.g-prose .g-tablewrap {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  margin: 1.3em 0;
+}
+.g-prose .g-tablewrap table {
+  margin: 0;
+  min-width: 460px;
+}
+
 .g-prose table {
   width: 100%;
   border-collapse: collapse;
