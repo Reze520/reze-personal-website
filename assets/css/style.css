@@ -6780,3 +6780,54 @@ body.has-app .site-head {
 .splash-quote {
   background: rgba(10, 22, 42, 0.42);
 }
+
+/* ============================================================
+   28. 签名那句「漫漫长路锤炼身躯，幽幽魂灵雕琢心智」
+   ------------------------------------------------------------
+   两边共用一句：首屏签名卡 + 侧栏个人卡。两边字体一不一样会显得像
+   抄来的，所以统一走 --motto。
+   字体选了楷体那一支（KaiTi / STKaiti / LXGW WenKai）：楷书有手写的
+   起落，比宋体软、比黑体有人味，刚好配这种对仗的句子。都不在就用
+   衬线体兜底，不会掉到黑体去。
+   不换行 = 14 个字排成一行。首屏卡片原宽 420px 放不下，于是放宽到
+   760px 并把字号设成随视口缩放，窄屏靠 letter-spacing 收一点，
+   实在放不下才让 nowrap 生效后略有溢出，而不是折成两行。
+   ============================================================ */
+:root {
+  --motto: "KaiTi", "STKaiti", "Kaiti SC", "LXGW WenKai", "Songti SC",
+    "Source Han Serif SC", "Noto Serif SC", "SimSun", Georgia, "Times New Roman",
+    serif;
+}
+
+/* 首屏签名卡：放宽 + 一句一行 */
+.splash-quote {
+  max-width: min(760px, 92vw);
+  text-align: center;
+  padding: 18px clamp(14px, 3.4vw, 30px);
+}
+.splash-quote p {
+  font-family: var(--motto);
+  font-size: clamp(15px, 2.6vw, 25px);
+  line-height: 1.6;
+  letter-spacing: clamp(-0.04em, 0.06vw, 0.1em);
+  white-space: nowrap;
+  text-indent: 0.1em; /* nowrap 下末字右侧的 letter-spacing 会让整体偏左 */
+}
+.splash-quote span {
+  font-family: var(--motto);
+  font-size: 11.5px;
+  letter-spacing: 0.14em;
+  text-align: center;
+  margin-top: 6px;
+}
+
+/* 侧栏个人卡的签名同样一句一行，卡片窄，靠字号和字距压进去 */
+.g-bio,
+.profile .bio {
+  font-family: var(--motto);
+  font-size: 12.5px;
+  line-height: 1.75;
+  white-space: nowrap;
+  letter-spacing: -0.01em;
+  text-indent: 0.01em;
+}

@@ -3,7 +3,7 @@ window.SITE = {
   "name": "伤心公主",
   "en": "sad princess",
   "domain": "reze520.top",
-  "slogan": "什么都沾一点，想到什么记什么。",
+  "slogan": "漫漫长路锤炼身躯，幽幽魂灵雕琢心智。",
   "intro": "这里是我的自留地。生活、兴趣、随手做的小东西，还有那些没头没尾的想法，都放在这儿。没有推荐算法，也不会突然消失。",
   "email": "1806754672@qq.com",
   "github": "https://github.com/Reze520",
@@ -1413,8 +1413,8 @@ window.SITE = {
       "什么都沾一点，想到什么记什么。",
       "夜里也有花开。"
     ],
-    "quote": "",
-    "quoteFrom": "",
+    "quote": "漫漫长路锤炼身躯，幽幽魂灵雕琢心智。",
+    "quoteFrom": "— 伤心公主",
     "scrollText": "向下滑动"
   }
 };
