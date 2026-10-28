@@ -2200,9 +2200,9 @@ body::after {
   --glass-2: rgba(255, 255, 255, 0.05);
   --glass-line: 1px solid rgba(255, 255, 255, 0.08);
   --glass-line-2: rgba(255, 255, 255, 0.14);
-  --g-text: #ece8f6;
-  --g-text-2: rgba(236, 232, 246, 0.62);
-  --g-text-3: rgba(236, 232, 246, 0.38);
+  --g-text: #f3f0fa;
+  --g-text-2: rgba(243, 240, 250, 0.88);
+  --g-text-3: rgba(243, 240, 250, 0.66);
   --g-accent: #b8a1f7;
   --g-shadow: 0 8px 32px rgba(8, 6, 14, 0.35);
 
@@ -3143,9 +3143,9 @@ body.has-app .site-foot .brand .brand-mark {
 .post-app {
   --glass: rgba(24, 20, 36, 0.66);
   --glass-line: 1px solid rgba(255, 255, 255, 0.08);
-  --g-text: #ece8f6;
-  --g-text-2: rgba(236, 232, 246, 0.66);
-  --g-text-3: rgba(236, 232, 246, 0.4);
+  --g-text: #f3f0fa;
+  --g-text-2: rgba(243, 240, 250, 0.88);
+  --g-text-3: rgba(243, 240, 250, 0.66);
   --g-accent: #b8a1f7;
   --g-shadow: 0 8px 32px rgba(8, 6, 14, 0.35);
 
@@ -3607,7 +3607,7 @@ body.has-app .site-foot .brand .brand-mark {
 /* 公告卡 */
 .g-notice {
   padding: 4px 16px 16px;
-  font-size: 12px;
+  font-size: 13px;
   line-height: 1.8;
   color: var(--g-text-2);
 }
