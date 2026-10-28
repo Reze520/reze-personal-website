@@ -857,9 +857,12 @@
     barEl.addEventListener("click", function (e) {
       var b = e.target.closest(".g-tab[data-cat]");
       if (!b) return;
-      apply(b.getAttribute("data-cat"), "", 0);
+      var c = b.getAttribute("data-cat");
+      apply(c, "", 0);
+      // 地址栏跟上分类：返回时才能带着它回来（不触发路由，只改地址）
       try {
-        history.replaceState(null, "", location.pathname.split("/").pop() || "index.html");
+        var q = c && c !== "全部" ? "?cat=" + encodeURIComponent(c) : "";
+        history.replaceState(null, "", (location.pathname.split("/").pop() || "index.html") + q + "#/home" + q);
       } catch (err) {}
     });
 
@@ -946,9 +949,11 @@
     barEl.addEventListener("click", function (e) {
       var b = e.target.closest(".g-chip");
       if (!b) return;
-      apply(b.getAttribute("data-cat"), "", 0);
+      var c = b.getAttribute("data-cat");
+      apply(c, "", 0);
       try {
-        history.replaceState(null, "", "writing.html");
+        var q = c && c !== "全部" ? "?cat=" + encodeURIComponent(c) : "";
+        history.replaceState(null, "", (location.pathname.split("/").pop() || "writing.html") + q + "#/writing" + q);
       } catch (err) {}
     });
 
@@ -1946,6 +1951,7 @@ function renderMain() {
   updateNavActive(page);
   renderRightForPage(page);
   settleScroll(page);
+  armScrollRestore(page);
 }
 
 function updateNavActive(page) {
@@ -1972,10 +1978,101 @@ function applyRoute() {
   // 否则从文章页后退会拿空 id 再渲染一次 post，显示「没有找到这篇文章」
   var page = r.page || "home";
   if (page === "index") page = "home";
+  // 老地址没带分类、但眼下停在某个分类上（点了返回）时，把分类补进 hash，
+  // 这样刷新一下也还停在这一栏，不会掉回全部
+  if ((page === "home" || page === "writing") && !r.qs && _pendingCat) {
+    r.qs = "?cat=" + encodeURIComponent(_pendingCat);
+    try {
+      history.replaceState(null, "", location.pathname + location.search + "#/" + page + r.qs);
+    } catch (e) {}
+  }
+  _pendingCat = "";
   app.setAttribute("data-page", page);
   app.__params = new URLSearchParams(r.qs);
+  // 从列表里点进文章时记一下「从哪个列表来的」，返回时才能回到原处
+  if (page === "post") markListSource();
   syncSplash();
   renderMain();
+}
+
+/* ---------- 记住列表来源 ----------
+   在首页点了「生活」再进文章，看完点返回，原来是直接跳回整个首页，
+   分类和位置全丢了。这里把来源页、分类、标签、翻到第几页和当时的滚动位置
+   记在 sessionStorage 里，文章页的返回按钮照着它拼地址。
+   历史栈里没退路（比如从收藏夹直达文章）时只当作没记录。 */
+var LIST_SRC_KEY = "reze-list-src";
+var _pendingCat = ""; // 从文章返回时要补回 hash 的分类
+
+function saveListSource(page, extra) {
+  var state = { p: page || "home", at: Date.now() };
+  if (extra) for (var k in extra) state[k] = extra[k];
+  try {
+    sessionStorage.setItem(LIST_SRC_KEY, JSON.stringify(state));
+  } catch (e) {}
+}
+
+function readListSource() {
+  try {
+    var raw = sessionStorage.getItem(LIST_SRC_KEY);
+    if (!raw) return null;
+    var o = JSON.parse(raw);
+    return o && o.p ? o : null;
+  } catch (e) {
+    return null;
+  }
+}
+
+/* 列表页在进入文章的那一刻，把当前状态存起来 */
+function markListSource() {
+  var app = document.querySelector(".app");
+  var page = (app && app.getAttribute("data-page")) || "";
+  // 文章页互相跳（上一篇 / 下一篇）时 page 已经是 post，不覆盖原来的来源
+  if (!page || page === "post") return;
+  var qs = new URLSearchParams(location.hash.split("?")[1] || "");
+  var extra = { y: Math.round(window.pageYOffset || 0) };
+  if (page === "home" || page === "writing") {
+    var box = document.querySelector("#g-tabs .g-tab[aria-pressed='true'], #g-filters .g-chip[aria-pressed='true']");
+    if (box) extra.cat = box.getAttribute("data-cat") || "";
+    var tag = qs.get("tag");
+    if (tag) extra.tag = tag;
+    var on = document.querySelector("#g-list .pg-btn.on");
+    if (on) extra.p = Number(on.getAttribute("data-p")) || 0;
+  }
+  saveListSource(page, extra);
+}
+
+/* 文章页「返回」按钮的地址：能回到来源列表就带上分类，否则回全部文章 */
+function backLinkHtml() {
+  var src = readListSource();
+  var href = "writing.html";
+  var label = "返回文章列表";
+  if (src && (src.p === "home" || src.p === "writing")) {
+    var q = [];
+    if (src.tag) {
+      q.push("tag=" + encodeURIComponent(src.tag));
+      label = "返回「" + src.tag + "」";
+    } else if (src.cat && src.cat !== "全部") {
+      q.push("cat=" + encodeURIComponent(src.cat));
+      label = "返回「" + src.cat + "」";
+    }
+    href = (src.p === "home" ? "index.html" : "writing.html") + (q.length ? "?" + q.join("&") : "");
+  }
+  return '<a class="back" href="' + href + '">' + ICONS.back + " " + esc(label) + "</a>";
+}
+
+/* 返回列表后把滚动位置放回去：分类要重新筛一遍，直接复用记下的值，
+   不依赖浏览器的 scrollRestoration */
+var _restoreY = null;
+
+function armScrollRestore(page) {
+  var src = _restoreY;
+  if (!src || src.p !== page) return;
+  _restoreY = null;
+  if (typeof src.y !== "number" || src.y < 0) return;
+  var go = function () { instantScrollTo(src.y); };
+  go();
+  requestAnimationFrame(go);
+  setTimeout(go, 60);
 }
 
 /* 欢迎首屏：常驻在页面最上方，任何时候往上滑都能回到它。
@@ -2050,7 +2147,18 @@ function interceptLinks(e) {
   e.preventDefault();
   var file = u.pathname.split("/").pop().replace(/\.html$/, "") || "home";
   if (file === "index") file = "home";
+  var app = document.querySelector(".app");
+  var from = (app && app.getAttribute("data-page")) || "";
+  var toPost = file === "post";
+  // 点文章链接时先记下来源列表：等路由切过去以后已经看不出是从哪个列表来的
+  if (toPost) markListSource();
+  var src = toPost ? null : readListSource();
   goPage("#/" + file + (u.search || ""));
+  // 从文章页点返回：把来源列表当时的分类和滚动位置还回去
+  if (from === "post" && src && src.p === file) {
+    _restoreY = src;
+    _pendingCat = !u.search && !src.tag ? src.cat || "" : "";
+  }
 }
 
   /* ---------- 列表页 ---------- */
@@ -2126,9 +2234,8 @@ function interceptLinks(e) {
 
     if (!p) {
       host.innerHTML =
-        '<article class="g-article"><a class="back" href="writing.html">' +
-        ICONS.back +
-        " 返回文章列表</a>" +
+        '<article class="g-article">' +
+        backLinkHtml() +
         "<h1>没有找到这篇文章</h1>" +
         '<div class="g-meta"><span>它可能被移动或改名了</span></div>' +
         '<div class="g-prose prose"><p>你可以从<a href="writing.html">文章列表</a>里重新找找。</p></div>' +
@@ -2208,9 +2315,7 @@ function interceptLinks(e) {
 
     host.innerHTML =
       '<article class="g-article">' +
-      '<a class="back" href="writing.html">' +
-      ICONS.back +
-      " 返回文章列表</a>" +
+      backLinkHtml() +
       "<h1>" +
       esc(p.title) +
       "</h1>" +

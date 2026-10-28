@@ -1369,5 +1369,64 @@
         "s": ""
       }
     ]
+  },
+  {
+    "id": "wuhan-hanjiang",
+    "title": "第一次在武汉下车",
+    "cat": "生活",
+    "date": "2023-09-17",
+    "excerpt": "车门一开，热气先扑过来，不是晒的那种热，是湿的。我拖着箱子站在站厅外，箱子上坐了一会儿才想起来该给我妈发消息。",
+    "tags": [
+      "随笔"
+    ],
+    "cover": "",
+    "pinned": false,
+    "refs": [
+      {
+        "t": "《春江花月夜》张若虚 · 古诗文网",
+        "u": "https://so.gushiwen.cn/shiwenv_3a2b0a2b1b0f.aspx",
+        "s": "原文"
+      },
+      {
+        "t": "知乎：在武汉生活是什么体验",
+        "u": "https://www.zhihu.com/search?type=content&q=%E5%9C%A8%E6%AD%A6%E6%B1%89%E7%94%9F%E6%B4%BB%E6%98%AF%E4%BB%80%E4%B9%88%E4%BD%93%E9%AA%8C",
+        "s": "讨论"
+      },
+      {
+        "t": "B 站：搜「武汉 江滩」的夜景与人像",
+        "u": "https://search.bilibili.com/all?keyword=%E6%AD%A6%E6%B1%89%20%E6%B1%9F%E6%BB%A9",
+        "s": "视频"
+      }
+    ]
+  },
+  {
+    "id": "chunjiang-yueye",
+    "title": "江月年年望相似",
+    "cat": "生活",
+    "date": "2023-11-05",
+    "excerpt": "高中背这首诗只想着默写，后来在武汉的一个晚上，我站在江边，忽然明白它问的是我。",
+    "tags": [
+      "随笔",
+      "摘录"
+    ],
+    "cover": "",
+    "pinned": false,
+    "refs": [
+      {
+        "t": "《春江花月夜》全文 · 古诗文网",
+        "u": "https://so.gushiwen.cn/shiwenv_3a2b0a2b1b0f.aspx",
+        "s": "原文"
+      },
+      {
+        "t": "知乎：如何理解「人生代代无穷已」",
+        "u": "https://www.zhihu.com/search?type=content&q=%E4%BA%BA%E7%94%9F%E4%BB%A3%E4%BB%A3%E6%97%A0%E7%A9%B7%E5%B7%B2%20%E6%B1%9F%E6%9C%88%E5%B9%B4%E5%B9%B4%E6%9C%9B%E7%9B%B8%E4%BC%BC",
+        "s": "讨论"
+      },
+      {
+        "t": "B 站：搜《春江花月夜》朗诵与讲解",
+        "u": "https://search.bilibili.com/all?keyword=%E6%98%A5%E6%B1%9F%E8%8A%B1%E6%9C%88%E5%A4%9C%20%E8%AF%97%E6%9C%97%E8%AF%B5",
+        "s": "视频"
+      }
+    ]
   }
 ]
