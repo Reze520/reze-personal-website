@@ -6980,3 +6980,41 @@ body.has-app .site-head.is-over-hero {
 body.has-app .site-head.is-stuck {
   background: #0a1629;
 }
+
+/* ============================================================
+   19. 顶栏「更多」按钮配色收口
+   「更多」是 <button>，前面给顶栏 .nav a 上色的规则一条都管不到它，
+   浅色主题下它就掉回 body 的深色字（--ink = #16161a），压在深色顶栏上
+   几乎看不见（深色主题下 --ink 是浅色，所以以前没暴露）。
+   这里按顶栏的几种状态，让它和导航链接同色。
+   ============================================================ */
+/* 常态 / 滚动吸顶：与导航链接一致的半透明白 */
+body.has-app .site-head .nav-more-btn,
+.site-head .nav-more-btn {
+  color: rgba(255, 255, 255, 0.82);
+}
+/* 浮在首屏（透明顶栏压着首屏插画）：纯白 + 同样的文字投影 */
+body.has-app .site-head.is-over-hero .nav-more-btn,
+.site-head.is-over-hero .nav-more-btn {
+  color: #fff;
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.6), 0 2px 16px rgba(0, 0, 0, 0.45);
+}
+/* 悬停 / 键盘聚焦 / 菜单展开：提亮到纯白 */
+body.has-app .site-head .nav-more-btn:hover,
+body.has-app .site-head .nav-more-btn:focus-visible,
+body.has-app .site-head .nav-more.open .nav-more-btn,
+.site-head .nav-more-btn:hover,
+.site-head .nav-more-btn:focus-visible,
+.site-head .nav-more.open .nav-more-btn {
+  color: #fff;
+}
+
+/* 「更多」本身就有文字标签、点开还有菜单，那个悬浮提示只会压在菜单上面，去掉 */
+.nav-more-btn::after,
+.nav-more-btn:hover::after,
+.nav-more-btn:focus-visible::after,
+.nav-more:hover .nav-more-btn::after,
+.nav-more.open .nav-more-btn::after {
+  opacity: 0 !important;
+  visibility: hidden !important;
+}
