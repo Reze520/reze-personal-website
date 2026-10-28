@@ -1,7 +1,8 @@
 # reze520.top 使用说明
 
-一套零依赖的静态博客：3 个 HTML、1 个 CSS、2 个 JS，没有框架、没有构建步骤、没有第三方统计。
-双击 `index.html` 就能在浏览器里看，改完直接上传服务器即可。
+这是我自己一点点搭起来的站，没用框架，也没引依赖，HTML、CSS、JS 全是手写的。没有构建步骤，没有第三方统计，双击 `index.html` 就能在本地看。
+
+写这份说明，一半是给自己留个备忘——过几个月准忘了哪个文件管什么；一半是万一有人想照着搭一个，字段和路径可以直接拿去用。
 
 ---
 
@@ -285,8 +286,8 @@ var HUE_POOL = [180, 198, 216, 234, 252, 270, 288, 306, 324, 342];
 左下角有个唱片按钮，播放时图标会转。
 
 **必须先说明一件事**：浏览器不允许网页自动播放声音。这不是代码没写好，
-是 Chrome / Edge / Safari 统一的规范——用户必须先有一次点击，才允许出声。
-所以任何说「打开就自动响」的教程，实际上都在违规或者靠用户提前点过。
+是 Chrome / Edge / Safari 统一的规矩——访客得先点一下，页面才允许出声。
+所以那些说「打开就自动响」的教程，要么在钻空子，要么靠访客事先点过。
 
 用法：**已经自带一段 48 秒的原创环境音**（`assets/audio/bgm.wav`，四和弦缓慢交替，
 自己写代码合成的，没有任何版权问题），所以点按钮就能听。
@@ -306,8 +307,8 @@ bgm: "assets/audio/你的歌.mp3",
 
 1. **版权** — 公开站点别用有版权的歌，找无版权音源或用自己录的
 2. **体积** — 一首 3 分钟的 mp3 约 3MB，比整个站（121KB）大 25 倍，
-   手机流量用户会明显感觉到慢。建议压到 2MB 以内，或只截一段循环
-3. **礼貌** — 默认不响、要用户主动点，这个设计本身就是对的
+   用手机流量听的人会明显感觉到慢。建议压到 2MB 以内，或只截一段循环
+3. **礼貌** — 默认不响、等访客自己点，这个设计本身就对
 
 ---
 
@@ -325,67 +326,25 @@ python -m http.server 8080
 
 ---
 
-## 六、上线到阿里云（备案路线）
+## 六、怎么上线
 
-顺序不能颠倒：
+现在走的是 git + Cloudflare Pages，没有服务器，也不折腾备案。
 
-1. **等域名实名通过**（1–3 个工作日，阿里云控制台看状态）
-2. **买服务器**：轻量应用服务器最低配就够（静态站几乎不吃资源），
-   系统镜像选 Ubuntu 22.04 或 Alibaba Cloud Linux
-3. **备案**：在阿里云「ICP 备案」里提交，需要域名实名已满 3 天、服务器已购买，
-   个人备案约 7–20 个工作日，期间网站不能对外访问
-4. **备案通过后**：域名解析到服务器公网 IP（A 记录）
-5. **传文件**：把 `reze-blog` 里的全部内容传到服务器 `/var/www/reze/`
-6. **装 Nginx** 并配置（见下）
+1. 代码推到 GitHub。
+2. Cloudflare Pages 接上仓库，生产分支选 `Reze520-website`——不是 `main`。我一开始就栽在这儿，推 `main` 半天不更新。
+3. 推完等构建，一般几十秒，偶尔也会慢到十几分钟。
 
-### Nginx 配置
+仓库里配了双推，一次 `git push` 两个分支一起更新，不用推两遍。
 
-```nginx
-server {
-    listen 80;
-    server_name reze520.top www.reze520.top;
-    root /var/www/reze;
-    index index.html;
+静态资源改了，记得把 `?v=` 的版本号往前推一格，不然浏览器还读旧缓存。
 
-    error_page 404 /404.html;
+文章内容、设置这些走后端，存在 Cloudflare Pages Functions + D1 里，不在这个静态目录里。
 
-    # 静态资源缓存
-    location ~* \.(css|js|jpg|jpeg|png|webp|svg|woff2)$ {
-        expires 30d;
-        add_header Cache-Control "public, immutable";
-    }
-
-    # 开 gzip，文字内容压得更小
-    gzip on;
-    gzip_types text/css application/javascript text/html image/svg+xml;
-    gzip_min_length 1024;
-}
-```
-
-传文件用 WinSCP 或命令行：
-
-```bash
-scp -r ./reze-blog/* root@你的服务器IP:/var/www/reze/
-```
-
-### 备案号要挂出来
-
-备案通过后，把 `data.js` 里的 `icp` 改成真实号码（如 `苏ICP备2026000000号-1`），
-页脚会自动显示。**国内备案要求页脚可见备案号并链接到 beian.miit.gov.cn**，
-现在页脚已留位置，改这一个字段就行。
-
-### 免费 HTTPS
-
-```bash
-apt install certbot python3-certbot-nginx
-certbot --nginx -d reze520.top -d www.reze520.top
-```
-
-证书 90 天自动续期，装完就忘掉它。
+（最早还认真研究过阿里云 + 备案那条路，后来域名退了，就没再弄。）
 
 ---
 
-## 七、SEO 已经替你做了
+## 七、SEO 这块顺手做了
 
 - `robots.txt`：允许抓取，指向 sitemap
 - `sitemap.xml`：已列好所有页面，**加新文章后记得补一条**
@@ -446,8 +405,7 @@ reze-blog/
 看网址里 `?id=` 后面的值和 `data.js` 里的 `id` 是否完全一致（区分大小写）。
 
 **想加评论？**
-静态站没后端。两个轻量方案：giscus（基于 GitHub Discussions，免费无广告）
-或 Waline（需要一台小服务器）。要加跟我说。
+静态站没后端，要评论只能接第三方。两个轻量的：giscus（基于 GitHub Discussions，免费、无广告）和 Waline（得有一台小服务器）。我一直没加，觉得这个站暂时用不着。
 
 **想换字体？**
 `style.css` 顶部的 `--sans` 和 `--serif` 改成你想要的字体栈。
