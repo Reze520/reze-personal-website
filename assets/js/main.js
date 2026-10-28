@@ -2332,7 +2332,8 @@ function syncMeta(page, params) {
   var m = PAGE_META[page] || PAGE_META.home;
   var title = m[0];
   var desc = m[1];
-  var url = SITE_ORIGIN + (page === "home" ? "/" : "/" + page + ".html");
+  // Cloudflare Pages 会把 /xxx.html 308 到 /xxx，canonical 直接写最终地址，别写跳转前那个
+  var url = SITE_ORIGIN + (page === "home" ? "/" : "/" + page);
   var type = "website";
 
   if (page === "post") {
@@ -2346,7 +2347,7 @@ function syncMeta(page, params) {
         .replace(/\s+/g, " ")
         .trim()
         .slice(0, 110);
-      url = SITE_ORIGIN + "/post.html?id=" + encodeURIComponent(p.id);
+      url = SITE_ORIGIN + "/post?id=" + encodeURIComponent(p.id);
       type = "article";
     } else {
       title = "没有找到这篇文章 · " + SITE.name;

@@ -388,6 +388,10 @@ python tools/bump_version.py 20261101a
   所以 `main.js` 里的 `syncMeta()` 会按路由再改一遍标题、描述和 canonical。
 - `admin.html` 和 `404.html` 带 `noindex`，不进搜索引擎。
 - `_headers`：给静态资源开长缓存（都带 `?v=` 号），补了几个安全头。
+- Cloudflare Pages 会把 `/xxx.html` **308 跳到 `/xxx`**（自动去后缀），
+  所以 canonical / `og:url` / sitemap / RSS 里写的都是不带 `.html` 的最终地址，
+  免得每个地址都要多跳一次。站内链接还是 `.html`（会多一跳 308，但能用）；
+  哪天想统一，nav、页脚和 JS 里拼的链接要一起改，别只改一半。
 
 > 自定义域名 `reze520.top` 目前 **DNS 解析不出来**（公共 DNS 返回 NXDOMAIN），
 > 站点实际只活在 `reze520.pages.dev`。所以 sitemap / feed / canonical 里写的都是 pages.dev，

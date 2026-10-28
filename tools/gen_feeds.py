@@ -24,14 +24,14 @@ ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # 静态页：路径 -> (changefreq, priority)
 STATIC_PAGES = [
     ("/", "weekly", "1.0"),
-    ("/writing.html", "daily", "0.9"),
-    ("/moments.html", "weekly", "0.7"),
-    ("/album.html", "weekly", "0.7"),
-    ("/links.html", "monthly", "0.6"),
-    ("/weather.html", "weekly", "0.5"),
-    ("/timeline.html", "monthly", "0.6"),
-    ("/about.html", "monthly", "0.6"),
-    ("/changelog.html", "monthly", "0.5"),
+    ("/writing", "daily", "0.9"),
+    ("/moments", "weekly", "0.7"),
+    ("/album", "weekly", "0.7"),
+    ("/links", "monthly", "0.6"),
+    ("/weather", "weekly", "0.5"),
+    ("/timeline", "monthly", "0.6"),
+    ("/about", "monthly", "0.6"),
+    ("/changelog", "monthly", "0.5"),
 ]
 
 
@@ -67,7 +67,7 @@ def main(path):
                    % (ORIGIN, path_, freq, pri))
     for p in posts:
         d = parse_date(p.get("updated") or p.get("date"))
-        loc = "%s/post.html?id=%s" % (ORIGIN, quote(str(p["id"])))
+        loc = "%s/post?id=%s" % (ORIGIN, quote(str(p["id"])))
         out.append("  <url><loc>%s</loc>%s<changefreq>yearly</changefreq><priority>0.8</priority></url>"
                    % (esc(loc), "<lastmod>%s</lastmod>" % d.strftime("%Y-%m-%d") if d else ""))
     out.append("</urlset>")
@@ -91,7 +91,7 @@ def main(path):
         d = parse_date(p.get("date"))
         if not d:
             continue
-        link = "%s/post.html?id=%s" % (ORIGIN, quote(str(p["id"])))
+        link = "%s/post?id=%s" % (ORIGIN, quote(str(p["id"])))
         body = strip_html(p.get("excerpt") or p.get("content"))[:300]
         pub = d.strftime("%a, %d %b %Y 00:00:00 +0800")
         cats = ""

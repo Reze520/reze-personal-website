@@ -108,11 +108,11 @@ def main():
     tpl = re.sub(r'<meta property="og:description" content="[^"]*"',
                  '<meta property="og:description" content="%s"' % desc, tpl, count=1)
     tpl = re.sub(r'<meta property="og:url" content="[^"]*"',
-                 '<meta property="og:url" content="%s/changelog.html"' % ORIGIN, tpl, count=1)
+                 '<meta property="og:url" content="%s/changelog"' % ORIGIN, tpl, count=1)
     tpl = re.sub(r'<meta property="og:type" content="[^"]*"',
                  '<meta property="og:type" content="article"', tpl, count=1)
     tpl = re.sub(r'<link rel="canonical" href="[^"]*"',
-                 '<link rel="canonical" href="%s/changelog.html"' % ORIGIN, tpl, count=1)
+                 '<link rel="canonical" href="%s/changelog"' % ORIGIN, tpl, count=1)
 
     # 3) 正文
     article = (
