@@ -3605,11 +3605,20 @@ body.has-app .site-foot .brand .brand-mark {
 }
 
 /* 公告卡 */
+/* 公告用的毛笔楷书：词牌显示更搭；自托管走 Pages，国内稳定加载 */
+@font-face {
+  font-family: "Ma Shan Zheng";
+  src: url("/assets/fonts/mashanzheng.woff2") format("woff2");
+  font-weight: 400;
+  font-display: swap;
+}
 .g-notice {
   padding: 4px 16px 16px;
-  font-size: 13px;
-  line-height: 1.8;
-  color: var(--g-text-2);
+  font-size: 15px;
+  line-height: 1.95;
+  letter-spacing: .3px;
+  color: var(--g-text);
+  font-family: "Ma Shan Zheng", var(--serif);
 }
 .g-notice b {
   color: var(--g-text);
