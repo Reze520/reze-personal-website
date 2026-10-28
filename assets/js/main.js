@@ -3923,23 +3923,47 @@ function interceptLinks(e) {
 
   /* 云端内容到达后，把「刚才没拿到」的那一页补画一遍。
      正常浏览时这里什么都不做，只有内容比首屏晚到或版本变了才动手。 */
+  /* 内容指纹：篇数 + 时间线条数。够用来判断「云端那份和刚才画的那份是不是同一份」，
+     不用把所有正文都比一遍。 */
+  function contentSig() {
+    return (window.POSTS || []).length + "|" + (((window.SITE && window.SITE.timeline) || []).length);
+  }
+  var _bootSig = "";
+
   function afterContentReady() {
     try {
       var app = document.querySelector(".app");
-      if (!app || app.getAttribute("data-page") !== "post") return;
-      var host = $("#app-main");
-      if (!host) return;
-      var pending = host.getAttribute("data-post-pending") === "1";
-      var id = host.getAttribute("data-post-id") ||
-        new URLSearchParams(parseHash().qs).get("id") || "";
-      if (!id) return;
-      var p = postById(id);
-      var sig = p ? String((p.content || "").length) : "";
-      if (!pending && (!p || sig === host.getAttribute("data-post-sig"))) return;
-      var y = window.scrollY;
-      mountPost(host, id);
-      if (y > 0) instantScrollTo(y);
-      else if (pending) instantScrollTo(0);
+      if (!app || app.getAttribute("data-static")) return;
+      var page = app.getAttribute("data-page") || "home";
+      if (page === "post") {
+        var host = $("#app-main");
+        if (!host) return;
+        var pending = host.getAttribute("data-post-pending") === "1";
+        var id = host.getAttribute("data-post-id") ||
+          new URLSearchParams(parseHash().qs).get("id") || "";
+        if (!id) return;
+        var p = postById(id);
+        var sig = p ? String((p.content || "").length) : "";
+        if (!pending && (!p || sig === host.getAttribute("data-post-sig"))) return;
+        var y = window.scrollY;
+        mountPost(host, id);
+        if (y > 0) instantScrollTo(y);
+        else if (pending) instantScrollTo(0);
+        return;
+      }
+      /* 列表、归档、动态这些页面原来只在启动时画一次。
+         可本地 data.js 里只有几篇占位，真正的七十多篇在云端，
+         第一次访问（浏览器里还没缓存）就会先画出那几篇，然后一直停在那儿，
+         非得刷新一次才齐。这里内容一到、份数对不上，就补画一遍，滚动位置按住不放。 */
+      var now = contentSig();
+      if (now === _bootSig) return;
+      _bootSig = now;
+      var keepY = window.scrollY || window.pageYOffset || 0;
+      renderMain();
+      if (keepY > 0) {
+        instantScrollTo(keepY);
+        requestAnimationFrame(function () { instantScrollTo(keepY); });
+      }
     } catch (e) {
       if (window.console && console.error) console.error("[reze] afterContentReady", e);
     }
@@ -4058,6 +4082,8 @@ function interceptLinks(e) {
       if (Array.isArray(cached.events)) window.CAL_EVENTS = cached.events;
     }
     boot();
+    // 记下「刚才画的是哪一份」，云端那份回来以后好对比要不要补画
+    _bootSig = contentSig();
     // 再向云端要一次：拿到以后原地更新，必要时把当前这一页补画一遍
     try {
       if (typeof window.loadCloudContent === "function") {
