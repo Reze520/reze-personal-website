@@ -861,9 +861,11 @@
       var c = b.getAttribute("data-cat");
       apply(c, "", 0);
       // 地址栏跟上分类：返回时才能带着它回来（不触发路由，只改地址）
+      // 文件名要写死：站点根路径下 location.pathname 是 "/"，split 出来是空串，
+      // 拼出来的 "/#/home" 刷新后既没有 ?cat= 也定位不到首页文件。
       try {
         var q = c && c !== "全部" ? "?cat=" + encodeURIComponent(c) : "";
-        history.replaceState(null, "", (location.pathname.split("/").pop() || "index.html") + q + "#/home" + q);
+        history.replaceState(null, "", "index.html" + q + "#/home" + q);
       } catch (err) {}
     });
 
@@ -957,7 +959,7 @@
       apply(c, "", 0);
       try {
         var q = c && c !== "全部" ? "?cat=" + encodeURIComponent(c) : "";
-        history.replaceState(null, "", (location.pathname.split("/").pop() || "writing.html") + q + "#/writing" + q);
+        history.replaceState(null, "", "writing.html" + q + "#/writing" + q);
       } catch (err) {}
     });
 
@@ -2038,12 +2040,25 @@ function applyRoute() {
   var page = r.page || "home";
   if (page === "index") page = "home";
   // 老地址没带分类、但眼下停在某个分类上（点了返回）时，把分类补进 hash，
-  // 这样刷新一下也还停在这一栏，不会掉回全部
-  if ((page === "home" || page === "writing") && !r.qs && _pendingCat) {
-    r.qs = "?cat=" + encodeURIComponent(_pendingCat);
-    try {
-      history.replaceState(null, "", location.pathname + location.search + "#/" + page + r.qs);
-    } catch (e) {}
+  // 这样刷新一下也还停在这一栏，不会掉回全部。
+  // 另外：地址里的 ?cat= 也要留在 hash 里 —— 之前切到写作页会把 location.search 清掉，
+  // 页面看着还是技术栏，地址已经只剩 #/writing，一刷新就退回全部。
+  if ((page === "home" || page === "writing") && !r.qs) {
+    var fromSearch = new URLSearchParams(location.search || "");
+    var keepCat = _pendingCat || fromSearch.get("cat") || "";
+    var keepTag = fromSearch.get("tag") || "";
+    // 首页没分类可补时不补，免得每回首页都被改写成带着 ?cat=
+    if (keepCat || keepTag || page === "writing") {
+      var sq = [];
+      if (keepCat) sq.push("cat=" + encodeURIComponent(keepCat));
+      if (keepTag) sq.push("tag=" + encodeURIComponent(keepTag));
+      if (sq.length) {
+        r.qs = "?" + sq.join("&");
+        try {
+          history.replaceState(null, "", location.pathname + "#/" + page + r.qs);
+        } catch (e) {}
+      }
+    }
   }
   _pendingCat = "";
   app.setAttribute("data-page", page);
@@ -2235,8 +2250,11 @@ function watchBuild() {
 function goPage(hash) {
   // 首页点分类会把 ?cat= 写到地址栏；切到别的页面时必须丢掉，
   // 否则那个分类会被带到写作页，把它的筛选按钮全筛成「不存在」。
+  // 但首页 / 写作页自己带着分类进来时不能清：清了以后刷新就丢掉筛选，
+  // 表现就是「返回回到技术栏，一刷新又变回全部」。
   var hPage = (hash.replace(/^#\/?/, "").split("?")[0] || "").toLowerCase();
-  if (hPage && hPage !== "home" && location.search) {
+  var keepsCat = hPage === "home" || hPage === "writing";
+  if (hPage && !keepsCat && location.search) {
     try {
       history.replaceState(null, "", location.pathname);
     } catch (e) {}
@@ -2271,6 +2289,17 @@ function interceptLinks(e) {
   // 目标文章的 id 从链接里取，不能等 hash 变过去——那时候页面已经不在列表上了。
   if (toPost) markListSource(u.searchParams.get("id") || "");
   var src = toPost ? null : readListSource();
+  if (from !== file && (from === "writing" || from === "home" || from === "post")) {
+    // 地址栏里还挂着上一个页面的文件名（写作页 → 文章、文章 → 首页），
+    // 换页时同步过去，否则刷新会落到另一个文件上，hash 里再带着 #/xxx 也不对
+    var dstName = file === "home" ? "index.html" : file + ".html";
+    var curName = location.pathname.split("/").pop() || "index.html";
+    if (curName !== dstName) {
+      try {
+        history.replaceState(null, "", dstName + location.search + location.hash);
+      } catch (e) {}
+    }
+  }
   goPage("#/" + file + (u.search || ""));
   // 从文章页点返回：把来源列表当时的分类和滚动位置还回去
   if (from === "post" && src && src.p === file) {
@@ -2287,7 +2316,8 @@ function interceptLinks(e) {
 
     var counts = catCounts();
     var cats = Object.keys(counts).sort();
-    var params = new URLSearchParams(location.search);
+    var _hq = new URLSearchParams(location.hash.split("?")[1] || "");
+    var params = _hq.get("cat") ? _hq : (location.search ? new URLSearchParams(location.search) : new URLSearchParams());
     var active = params.get("cat") || "全部";
     var activeTag = params.get("tag") || "";
 
