@@ -849,6 +849,7 @@
       listEl.querySelectorAll(".pg-btn").forEach(function (b) {
         b.onclick = function () {
           apply(c, t, Number(b.getAttribute("data-p")));
+          syncListQuery(c, t, b.getAttribute("data-p"));
           try { listEl.scrollIntoView({ behavior: "smooth", block: "start" }); } catch (err) {}
         };
       });
@@ -866,6 +867,7 @@
       } catch (err) {}
     });
 
+    bindPostTabs.__apply = apply;
     apply(startCat, startTag, 0);
   }
 
@@ -909,7 +911,8 @@
     if (!listEl || !barEl) return;
 
     var PER = 12; // 每页篇数
-    var params = new URLSearchParams(location.search);
+    // 分类/标签/页码也从 hash 的 query 读：返回列表时分类写在 #/writing?cat=xx 里
+    var params = new URLSearchParams((location.hash.split("?")[1] || "") || location.search);
     var startCat = params.get("cat") || "全部";
     var startTag = params.get("tag") || "";
 
@@ -941,6 +944,7 @@
       listEl.querySelectorAll(".pg-btn").forEach(function (b) {
         b.onclick = function () {
           apply(c, t, Number(b.getAttribute("data-p")));
+          syncListQuery(c, t, b.getAttribute("data-p"));
           try { listEl.scrollIntoView({ behavior: "smooth", block: "start" }); } catch (err) {}
         };
       });
@@ -957,6 +961,7 @@
       } catch (err) {}
     });
 
+    bindWritingFilters.__apply = apply;
     apply(startCat, startTag, 0);
   }
 
@@ -1914,6 +1919,22 @@ function settleScroll(page) {
   });
 }
 
+/* 列表的分类/标签/页码同步进地址栏：返回时靠它把落点拼回去，
+   刷新也不会掉回「全部」。用 replaceState，不产生新的历史记录。 */
+function syncListQuery(cat, tag, page) {
+  var q = [];
+  if (cat && cat !== "全部") q.push("cat=" + encodeURIComponent(cat));
+  if (tag) q.push("tag=" + encodeURIComponent(tag));
+  if (page && Number(page) > 0) q.push("p=" + Number(page));
+  var app = document.querySelector(".app");
+  var cur = (app && app.getAttribute("data-page")) || "home";
+  var file = cur === "writing" ? "writing.html" : cur === "home" ? "index.html" : "";
+  if (!file) return;
+  try {
+    history.replaceState(null, "", file + (q.length ? "?" + q.join("&") : "") + "#/" + cur + (q.length ? "?" + q.join("&") : ""));
+  } catch (e) {}
+}
+
 function renderMain() {
   var app = document.querySelector(".app");
   var main = $("#app-main");
@@ -1944,6 +1965,10 @@ function renderMain() {
     main.innerHTML = aboutHtml();
   } else if (page === "post") {
     mountPost(main, params.get("id"));
+  } else if (page === "writing") {
+    // 写作页：分类 chips + 分页列表（和首页那种「帖子区块」不是一个版式）
+    main.innerHTML = writingMainHtml();
+    bindWritingFilters(main);
   } else {
     main.innerHTML = postsMainHtml();
     bindPostTabs(main, params);
@@ -1951,7 +1976,41 @@ function renderMain() {
   updateNavActive(page);
   renderRightForPage(page);
   settleScroll(page);
+  // 地址里明确带了 cat=xx 时，列表要真的停在这一栏（刷新、返回都靠这条）
+  if ((page === "home" || page === "writing") && params.get("cat")) {
+    var fn = page === "home" ? bindPostTabs.__apply : bindWritingFilters.__apply;
+    if (typeof fn === "function") {
+      fn(params.get("cat"), params.get("tag") || "", Number(params.get("p")) || 0);
+    }
+  }
   armScrollRestore(page);
+  postRouteFix();
+}
+
+/* goPage 会同步渲染一次、hashchange 再渲染一次。返回文章列表时 hash 还是旧的
+   （#/post?…），那一次同步渲染拿不到 cat，会先把列表拉成「全部」。
+   等 hashchange 落地后再补一次分类筛选，保证落点正确。 */
+var _lastRouteKey = "";
+function postRouteFix() {
+  var key = (location.hash || "") + "|" + ((document.querySelector(".app") || {}).getAttribute
+    ? document.querySelector(".app").getAttribute("data-page") : "");
+  if (key === _lastRouteKey) return;
+  _lastRouteKey = key;
+  if (!_pendingCat) return;
+  var cat = _pendingCat;
+  _pendingCat = "";
+  setTimeout(function () {
+    var app = document.querySelector(".app");
+    var page = (app && app.getAttribute("data-page")) || "";
+    if (page !== "home" && page !== "writing") return;
+    var fn = page === "home" ? bindPostTabs.__apply : bindWritingFilters.__apply;
+    if (typeof fn === "function") fn(cat, "", 0);
+    if (_restoreY && _restoreY.p === page && typeof _restoreY.y === "number") {
+      var y = _restoreY.y;
+      instantScrollTo(y);
+      setTimeout(function () { instantScrollTo(y); }, 60);
+    }
+  }, 40);
 }
 
 function updateNavActive(page) {
@@ -1989,7 +2048,7 @@ function applyRoute() {
   _pendingCat = "";
   app.setAttribute("data-page", page);
   app.__params = new URLSearchParams(r.qs);
-  // 从列表里点进文章时记一下「从哪个列表来的」，返回时才能回到原处
+  // 从列表里点进文章时记一下「从哪个列表来的」，返回时才能回到原处。
   if (page === "post") markListSource();
   syncSplash();
   renderMain();
@@ -2022,18 +2081,46 @@ function readListSource() {
   }
 }
 
-/* 列表页在进入文章的那一刻，把当前状态存起来 */
-function markListSource() {
+/* 列表页在进入文章的那一刻，把当前状态存起来。
+   注意别只看 .app 的 data-page：首页初次加载时这个属性还是空的，
+   只看它会让「首页 -> 文章」这一步根本不记来源，返回时就掉回文章列表。 */
+function currentPage() {
   var app = document.querySelector(".app");
-  var page = (app && app.getAttribute("data-page")) || "";
-  // 文章页互相跳（上一篇 / 下一篇）时 page 已经是 post，不覆盖原来的来源
-  if (!page || page === "post") return;
-  var qs = new URLSearchParams(location.hash.split("?")[1] || "");
+  var p = (app && app.getAttribute("data-page")) || "";
+  if (p) return p;
+  var h = parseHash().page;
+  return h === "index" ? "home" : h;
+}
+
+function markListSource() {
+  var page = currentPage();
+  if (!page) return;
+  // 文章页之间互相跳（上一篇 / 下一篇）：来源没变，别覆盖
+  if (page === "post") {
+    // 从文章里点「下一篇」不算换来源；但列表页 -> 文章 -> （直接打开另一篇文章）
+    // 这种情况要重新记，否则返回时会落到上一次的来源
+    var hh = (location.hash || "").split("?")[1] || "";
+    var pq = new URLSearchParams(hh);
+    var idNow = pq.get("id") || "";
+    var prev = readListSource();
+    if (prev && prev.id === idNow) return;
+    saveListSource(prev && (prev.p === "home" || prev.p === "writing") ? prev.p : "writing",
+      { y: prev ? prev.y : 0, cat: prev ? prev.cat : "", tag: prev ? prev.tag : "", id: idNow });
+    return;
+  }
+  // 分类/标签/页码「以地址栏为准」：点分类时地址栏会同步成 ?cat=xx，
+  // 但点文章那一刻按钮上的 aria-pressed 未必已经刷新，直接从地址读最稳。
+  var hashQs = new URLSearchParams(location.hash.split("?")[1] || "");
+  var pageQs = new URLSearchParams(location.search || "");
   var extra = { y: Math.round(window.pageYOffset || 0) };
   if (page === "home" || page === "writing") {
-    var box = document.querySelector("#g-tabs .g-tab[aria-pressed='true'], #g-filters .g-chip[aria-pressed='true']");
-    if (box) extra.cat = box.getAttribute("data-cat") || "";
-    var tag = qs.get("tag");
+    var cat = hashQs.get("cat") || pageQs.get("cat") || "";
+    var tag = hashQs.get("tag") || pageQs.get("tag") || "";
+    if (!cat) {
+      var box = document.querySelector("#g-tabs .g-tab[aria-pressed='true'], #g-filters .g-chip[aria-pressed='true']");
+      if (box) cat = box.getAttribute("data-cat") || "";
+    }
+    if (!cat || cat === "全部") delete extra.cat; else extra.cat = cat;
     if (tag) extra.tag = tag;
     var on = document.querySelector("#g-list .pg-btn.on");
     if (on) extra.p = Number(on.getAttribute("data-p")) || 0;
@@ -2055,6 +2142,7 @@ function backLinkHtml() {
       q.push("cat=" + encodeURIComponent(src.cat));
       label = "返回「" + src.cat + "」";
     }
+    if (src.p && Number(src.pn) > 0) q.push("p=" + Number(src.pn));
     href = (src.p === "home" ? "index.html" : "writing.html") + (q.length ? "?" + q.join("&") : "");
   }
   return '<a class="back" href="' + href + '">' + ICONS.back + " " + esc(label) + "</a>";
@@ -2124,6 +2212,14 @@ function watchBuild() {
 }
 
 function goPage(hash) {
+  // 首页点分类会把 ?cat= 写到地址栏；切到别的页面时必须丢掉，
+  // 否则那个分类会被带到写作页，把它的筛选按钮全筛成「不存在」。
+  var hPage = (hash.replace(/^#\/?/, "").split("?")[0] || "").toLowerCase();
+  if (hPage && hPage !== "home" && location.search) {
+    try {
+      history.replaceState(null, "", location.pathname);
+    } catch (e) {}
+  }
   if (location.hash === hash) {
     applyRoute();
     return;
@@ -2150,7 +2246,7 @@ function interceptLinks(e) {
   var app = document.querySelector(".app");
   var from = (app && app.getAttribute("data-page")) || "";
   var toPost = file === "post";
-  // 点文章链接时先记下来源列表：等路由切过去以后已经看不出是从哪个列表来的
+  // 先定位来源（此刻还停在列表页），再记下来源列表
   if (toPost) markListSource();
   var src = toPost ? null : readListSource();
   goPage("#/" + file + (u.search || ""));
