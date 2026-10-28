@@ -528,6 +528,30 @@
     ]
   },
   {
+    "id": "yidu-buhui",
+    "title": "已读不回这件事",
+    "cat": "生活",
+    "date": "2024-06-08",
+    "excerpt": "那天晚上十一点发出去的消息，十二点半变成了“已读”。我盯着那两个字看了很久，它什么都没说，却比什么都清楚。",
+    "tags": [
+      "随笔"
+    ],
+    "cover": "",
+    "pinned": false,
+    "refs": [
+      {
+        "t": "知乎：已读不回",
+        "u": "https://www.zhihu.com/search?type=content&q=%E5%B7%B2%E8%AF%BB%E4%B8%8D%E5%9B%9E%20%E5%BF%83%E7%90%86",
+        "s": "讨论"
+      },
+      {
+        "t": "B 站：关于已读回执的讨论",
+        "u": "https://search.bilibili.com/all?keyword=%E5%B7%B2%E8%AF%BB%E4%B8%8D%E5%9B%9E",
+        "s": "视频"
+      }
+    ]
+  },
+  {
     "id": "wo-neng-you-shenme-huaixinsi",
     "title": "一排不想上班的鸟",
     "date": "2024-05-16",
@@ -561,6 +585,39 @@
     ]
   },
   {
+    "id": "qianduan-kuangjia",
+    "title": "从 jQuery 到 React，我没搞懂的那些",
+    "date": "2024-05-09",
+    "excerpt": "从我用 $ 选择器改 DOM，到看见 React 要先套 useState，中间隔着的不是一行代码，是一整套心智。",
+    "tags": [
+      "技术"
+    ],
+    "cat": "技术",
+    "cover": "",
+    "refs": [
+      {
+        "t": "React 官方文档",
+        "u": "https://react.dev/",
+        "s": ""
+      },
+      {
+        "t": "Vue 3 中文文档",
+        "u": "https://cn.vuejs.org/guide/introduction.html",
+        "s": ""
+      },
+      {
+        "t": "Svelte 官方文档",
+        "u": "https://svelte.dev/docs/svelte/overview",
+        "s": ""
+      },
+      {
+        "t": "Vite 官方文档",
+        "u": "https://cn.vitejs.dev/guide/",
+        "s": ""
+      }
+    ]
+  },
+  {
     "id": "quanqiu-tongshi",
     "title": "《全球通史》我是当工具书用的",
     "date": "2024-03-29",
@@ -589,6 +646,67 @@
       {
         "t": "知乎：「全球通史」相关讨论",
         "u": "https://www.zhihu.com/search?type=content&q=%E5%85%A8%E7%90%83%E9%80%9A%E5%8F%B2%20%E4%B9%A6%E8%AF%84",
+        "s": "讨论"
+      }
+    ]
+  },
+  {
+    "id": "neuralink-shouli",
+    "title": "看着一个人用意念挪光标",
+    "date": "2024-03-22",
+    "excerpt": "Neuralink 首例受试者直播用意念下棋，我看完又高兴又发怵。技术落到了具体的人身上，才看得清它的重量。",
+    "tags": [
+      "随笔"
+    ],
+    "cat": "生活",
+    "cover": "",
+    "refs": [
+      {
+        "t": "Neuralink 官方博客：PRIME 研究进展",
+        "u": "https://neuralink.com/blog/prime-study-progress-update-user-experience/",
+        "s": ""
+      },
+      {
+        "t": "Neuralink 官网",
+        "u": "https://neuralink.com/",
+        "s": ""
+      },
+      {
+        "t": "B 站：首例植入者直播",
+        "u": "https://search.bilibili.com/all?keyword=Neuralink%20%E9%A6%96%E4%BE%8B%20%E6%A4%8D%E5%85%A5%20%E7%9B%B4%E6%92%AD",
+        "s": "视频"
+      }
+    ]
+  },
+  {
+    "id": "zhou-chu-chu-san-hai",
+    "title": "阮经天开枪那一下",
+    "date": "2024-03-16",
+    "excerpt": "春节档刚散，一部 1370 万的台湾小片突然逆跌 6 亿。灵修堂那场戏，我旁边大哥攥紧了爆米花桶。",
+    "tags": [
+      "影评"
+    ],
+    "cat": "观影",
+    "cover": "",
+    "refs": [
+      {
+        "t": "豆瓣《周处除三害》条目",
+        "u": "https://movie.douban.com/subject/36151692/",
+        "s": "豆瓣"
+      },
+      {
+        "t": "豆瓣《周处除三害》长评",
+        "u": "https://movie.douban.com/subject/36151692/reviews",
+        "s": "豆瓣"
+      },
+      {
+        "t": "B 站：搜「周处除三害」的书评/影评视频",
+        "u": "https://search.bilibili.com/all?keyword=%E5%91%A8%E5%A4%84%E9%99%A4%E4%B8%89%E5%AE%B3%20%E5%BD%B1%E8%AF%84",
+        "s": "视频"
+      },
+      {
+        "t": "知乎：「周处除三害」相关讨论",
+        "u": "https://www.zhihu.com/search?type=content&q=%E5%91%A8%E5%A4%84%E9%99%A4%E4%B8%89%E5%AE%B3%20%E5%BD%B1%E8%AF%84",
         "s": "讨论"
       }
     ]
@@ -627,6 +745,34 @@
     ]
   },
   {
+    "id": "fenbushi-yizhixing",
+    "title": "三台机器怎么保证说的是同一件事",
+    "date": "2024-01-14",
+    "excerpt": "网络抽风那晚，两台机器各自选出了一个主，数据全乱。后来我把 Raft 翻了一遍。",
+    "tags": [
+      "技术"
+    ],
+    "cat": "技术",
+    "cover": "",
+    "refs": [
+      {
+        "t": "Raft 官网（含可视化演示）",
+        "u": "https://raft.github.io/",
+        "s": ""
+      },
+      {
+        "t": "Raft 论文原文",
+        "u": "https://raft.github.io/raft.pdf",
+        "s": "PDF"
+      },
+      {
+        "t": "MIT 6.824 分布式系统课程",
+        "u": "https://pdos.csail.mit.edu/6.824/",
+        "s": ""
+      }
+    ]
+  },
+  {
     "id": "huangjin-shidai-wang-xiaobo",
     "title": "王二那份交代材料",
     "date": "2023-12-24",
@@ -656,6 +802,34 @@
         "t": "知乎：「黄金时代」相关讨论",
         "u": "https://www.zhihu.com/search?type=content&q=%E9%BB%84%E9%87%91%E6%97%B6%E4%BB%A3%20%E4%B9%A6%E8%AF%84",
         "s": "讨论"
+      }
+    ]
+  },
+  {
+    "id": "da-moxing-yuanli",
+    "title": "第一次被一个聊天框吓到",
+    "date": "2023-11-12",
+    "excerpt": "2022 年冬天，一个聊天框改对了我的正则，还顺手解释了为什么。我这才意识到，得搞清楚它到底怎么“懂”人话。",
+    "tags": [
+      "技术"
+    ],
+    "cat": "技术",
+    "cover": "",
+    "refs": [
+      {
+        "t": "Attention Is All You Need（Transformer 原始论文）",
+        "u": "https://arxiv.org/abs/1706.03762",
+        "s": "arXiv"
+      },
+      {
+        "t": "The Illustrated Transformer（图解注意力）",
+        "u": "https://jalammar.github.io/illustrated-transformer/",
+        "s": ""
+      },
+      {
+        "t": "ChatGPT 发布说明",
+        "u": "https://openai.com/index/chatgpt/",
+        "s": "OpenAI"
       }
     ]
   },
@@ -704,161 +878,6 @@
     ]
   },
   {
-    "id": "bian-cheng",
-    "title": "《边城》最后那一句",
-    "date": "2023-08-02",
-    "excerpt": "“这个人也许永远不回来了，也许明天回来。”我在这句上停了很久，然后又从头翻了一遍。",
-    "tags": [
-      "书评"
-    ],
-    "cat": "读书",
-    "cover": "",
-    "refs": [
-      {
-        "t": "豆瓣《边城》条目",
-        "u": "https://book.douban.com/subject/1057244/",
-        "s": "豆瓣"
-      },
-      {
-        "t": "豆瓣《边城》长评",
-        "u": "https://book.douban.com/subject/1057244/reviews",
-        "s": "豆瓣"
-      },
-      {
-        "t": "B 站：搜「边城」的书评/影评视频",
-        "u": "https://search.bilibili.com/all?keyword=%E8%BE%B9%E5%9F%8E%20%E4%B9%A6%E8%AF%84",
-        "s": "视频"
-      },
-      {
-        "t": "知乎：「边城」相关讨论",
-        "u": "https://www.zhihu.com/search?type=content&q=%E8%BE%B9%E5%9F%8E%20%E4%B9%A6%E8%AF%84",
-        "s": "讨论"
-      }
-    ]
-  },
-  {
-    "id": "dawei-kebofeier",
-    "title": "朵拉死的那一章",
-    "date": "2023-06-15",
-    "excerpt": "厚厚两大本，读到那一章的时候我在医院陪床。那一段我读了很久，因为一直读不进去。",
-    "tags": [
-      "书评"
-    ],
-    "cat": "读书",
-    "cover": "",
-    "refs": [
-      {
-        "t": "豆瓣《大卫·科波菲尔》条目",
-        "u": "https://book.douban.com/subject/25897663/",
-        "s": "豆瓣"
-      },
-      {
-        "t": "豆瓣《大卫·科波菲尔》长评",
-        "u": "https://book.douban.com/subject/25897663/reviews",
-        "s": "豆瓣"
-      },
-      {
-        "t": "B 站：搜「大卫·科波菲尔」的书评/影评视频",
-        "u": "https://search.bilibili.com/all?keyword=%E5%A4%A7%E5%8D%AB%C2%B7%E7%A7%91%E6%B3%A2%E8%8F%B2%E5%B0%94%20%E4%B9%A6%E8%AF%84",
-        "s": "视频"
-      },
-      {
-        "t": "知乎：「大卫·科波菲尔」相关讨论",
-        "u": "https://www.zhihu.com/search?type=content&q=%E5%A4%A7%E5%8D%AB%C2%B7%E7%A7%91%E6%B3%A2%E8%8F%B2%E5%B0%94%20%E4%B9%A6%E8%AF%84",
-        "s": "讨论"
-      }
-    ]
-  },
-  {
-    "id": "da-moxing-yuanli",
-    "title": "第一次被一个聊天框吓到",
-    "date": "2023-11-12",
-    "excerpt": "2022 年冬天，一个聊天框改对了我的正则，还顺手解释了为什么。我这才意识到，得搞清楚它到底怎么“懂”人话。",
-    "tags": [
-      "技术"
-    ],
-    "cat": "技术",
-    "cover": "",
-    "refs": [
-      {
-        "t": "Attention Is All You Need（Transformer 原始论文）",
-        "u": "https://arxiv.org/abs/1706.03762",
-        "s": "arXiv"
-      },
-      {
-        "t": "The Illustrated Transformer（图解注意力）",
-        "u": "https://jalammar.github.io/illustrated-transformer/",
-        "s": ""
-      },
-      {
-        "t": "ChatGPT 发布说明",
-        "u": "https://openai.com/index/chatgpt/",
-        "s": "OpenAI"
-      }
-    ]
-  },
-  {
-    "id": "rongqi-yu-k8s",
-    "title": "那个“在我机器上能跑”的晚上",
-    "date": "2021-08-23",
-    "excerpt": "代码一模一样，环境照着装，服务器上却跑不起来。那个翻车的夜晚，逼我去学了容器和编排。",
-    "tags": [
-      "技术"
-    ],
-    "cat": "技术",
-    "cover": "",
-    "refs": [
-      {
-        "t": "Docker 官方文档：容器与镜像",
-        "u": "https://docs.docker.com/get-started/docker-overview/",
-        "s": ""
-      },
-      {
-        "t": "Kubernetes 官方概念手册",
-        "u": "https://kubernetes.io/docs/concepts/",
-        "s": ""
-      },
-      {
-        "t": "Kubernetes 中文文档",
-        "u": "https://kubernetes.io/zh-cn/docs/concepts/",
-        "s": ""
-      }
-    ]
-  },
-  {
-    "id": "qianduan-kuangjia",
-    "title": "从 jQuery 到 React，我没搞懂的那些",
-    "date": "2024-05-09",
-    "excerpt": "从我用 $ 选择器改 DOM，到看见 React 要先套 useState，中间隔着的不是一行代码，是一整套心智。",
-    "tags": [
-      "技术"
-    ],
-    "cat": "技术",
-    "cover": "",
-    "refs": [
-      {
-        "t": "React 官方文档",
-        "u": "https://react.dev/",
-        "s": ""
-      },
-      {
-        "t": "Vue 3 中文文档",
-        "u": "https://cn.vuejs.org/guide/introduction.html",
-        "s": ""
-      },
-      {
-        "t": "Svelte 官方文档",
-        "u": "https://svelte.dev/docs/svelte/overview",
-        "s": ""
-      },
-      {
-        "t": "Vite 官方文档",
-        "u": "https://cn.vitejs.dev/guide/",
-        "s": ""
-      }
-    ]
-  },
-  {
     "id": "aobenhaimo",
     "title": "《奥本海默》散场之后",
     "date": "2023-09-03",
@@ -892,34 +911,147 @@
     ]
   },
   {
-    "id": "liulang-diqiu-2",
-    "title": "看《流浪地球2》，记住的是那群普通人",
-    "date": "2023-02-11",
-    "excerpt": "它没靠个人英雄，而是让所有有核国家把原子弹都献出来炸月亮。这种集体主义，被我们自己的面孔演出来，格外烫心。",
+    "id": "shouji-yueyong-yueman",
+    "title": "手机为什么越用越慢",
+    "cat": "技术",
+    "date": "2023-08-27",
+    "excerpt": "三年前买的手机，现在点开微信要等一下白屏。我以为是装得太多，清了空间、换了电池之后才明白，变慢的其实是好几件事叠在一起。",
     "tags": [
-      "影评"
+      "技术"
     ],
-    "cat": "观影",
+    "cover": "",
+    "pinned": false,
+    "refs": [
+      {
+        "t": "Apple：电池与性能",
+        "u": "https://www.apple.com/cn/batteries/maximizing-performance/",
+        "s": "官方"
+      },
+      {
+        "t": "知乎：手机越用越卡的原因",
+        "u": "https://www.zhihu.com/search?type=content&q=%E6%89%8B%E6%9C%BA%E8%B6%8A%E7%94%A8%E8%B6%8A%E5%8D%A1%20%E5%8E%9F%E5%9B%A0",
+        "s": "讨论"
+      }
+    ]
+  },
+  {
+    "id": "lk99-chaodao",
+    "title": "那年夏天我在群里当了回传声筒",
+    "date": "2023-08-19",
+    "excerpt": "LK-99 刷屏那几天我转了，还配了句「有生之年」。现在回头看，那是我那年最想删掉的一条转发。",
+    "tags": [
+      "随笔"
+    ],
+    "cat": "生活",
     "cover": "",
     "refs": [
       {
-        "t": "豆瓣《流浪地球2》条目",
-        "u": "https://movie.douban.com/subject/35267208/",
+        "t": "LK-99 原始预印本（arXiv）",
+        "u": "https://arxiv.org/abs/2307.12008",
+        "s": "arXiv"
+      },
+      {
+        "t": "Nature 报道：LK-99 并非超导",
+        "u": "https://www.nature.com/articles/d41586-023-02585-7",
+        "s": ""
+      },
+      {
+        "t": "B 站：LK-99 复现始末",
+        "u": "https://search.bilibili.com/all?keyword=LK-99%20%E5%AE%A4%E6%B8%A9%E8%B6%85%E5%AF%BC%20%E5%A4%8D%E7%8E%B0",
+        "s": "视频"
+      }
+    ]
+  },
+  {
+    "id": "bian-cheng",
+    "title": "《边城》最后那一句",
+    "date": "2023-08-02",
+    "excerpt": "“这个人也许永远不回来了，也许明天回来。”我在这句上停了很久，然后又从头翻了一遍。",
+    "tags": [
+      "书评"
+    ],
+    "cat": "读书",
+    "cover": "",
+    "refs": [
+      {
+        "t": "豆瓣《边城》条目",
+        "u": "https://book.douban.com/subject/1057244/",
         "s": "豆瓣"
       },
       {
-        "t": "豆瓣《流浪地球2》长评",
-        "u": "https://movie.douban.com/subject/35267208/reviews",
+        "t": "豆瓣《边城》长评",
+        "u": "https://book.douban.com/subject/1057244/reviews",
         "s": "豆瓣"
       },
       {
-        "t": "B 站：搜「流浪地球2」的书评/影评视频",
-        "u": "https://search.bilibili.com/all?keyword=%E6%B5%81%E6%B5%AA%E5%9C%B0%E7%90%832%20%E5%BD%B1%E8%AF%84",
+        "t": "B 站：搜「边城」的书评/影评视频",
+        "u": "https://search.bilibili.com/all?keyword=%E8%BE%B9%E5%9F%8E%20%E4%B9%A6%E8%AF%84",
         "s": "视频"
       },
       {
-        "t": "知乎：「流浪地球2」相关讨论",
-        "u": "https://www.zhihu.com/search?type=content&q=%E6%B5%81%E6%B5%AA%E5%9C%B0%E7%90%832%20%E5%BD%B1%E8%AF%84",
+        "t": "知乎：「边城」相关讨论",
+        "u": "https://www.zhihu.com/search?type=content&q=%E8%BE%B9%E5%9F%8E%20%E4%B9%A6%E8%AF%84",
+        "s": "讨论"
+      }
+    ]
+  },
+  {
+    "id": "bianyi-yuanli",
+    "title": "一行代码怎么变成能跑的程序",
+    "date": "2023-06-17",
+    "excerpt": "编译原理课我睡过去了。直到写了个几十行的迷你解释器，才把从文本到机器码这条路走通一遍。",
+    "tags": [
+      "技术"
+    ],
+    "cat": "技术",
+    "cover": "",
+    "refs": [
+      {
+        "t": "Crafting Interpreters（手写解释器）",
+        "u": "https://craftinginterpreters.com/",
+        "s": ""
+      },
+      {
+        "t": "LLVM 官方文档",
+        "u": "https://llvm.org/docs/",
+        "s": ""
+      },
+      {
+        "t": "B 站：编译原理公开课",
+        "u": "https://search.bilibili.com/all?keyword=%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86%20%E5%85%AC%E5%BC%80%E8%AF%BE",
+        "s": "视频"
+      }
+    ]
+  },
+  {
+    "id": "dawei-kebofeier",
+    "title": "朵拉死的那一章",
+    "date": "2023-06-15",
+    "excerpt": "厚厚两大本，读到那一章的时候我在医院陪床。那一段我读了很久，因为一直读不进去。",
+    "tags": [
+      "书评"
+    ],
+    "cat": "读书",
+    "cover": "",
+    "refs": [
+      {
+        "t": "豆瓣《大卫·科波菲尔》条目",
+        "u": "https://book.douban.com/subject/25897663/",
+        "s": "豆瓣"
+      },
+      {
+        "t": "豆瓣《大卫·科波菲尔》长评",
+        "u": "https://book.douban.com/subject/25897663/reviews",
+        "s": "豆瓣"
+      },
+      {
+        "t": "B 站：搜「大卫·科波菲尔」的书评/影评视频",
+        "u": "https://search.bilibili.com/all?keyword=%E5%A4%A7%E5%8D%AB%C2%B7%E7%A7%91%E6%B3%A2%E8%8F%B2%E5%B0%94%20%E4%B9%A6%E8%AF%84",
+        "s": "视频"
+      },
+      {
+        "t": "知乎：「大卫·科波菲尔」相关讨论",
+        "u": "https://www.zhihu.com/search?type=content&q=%E5%A4%A7%E5%8D%AB%C2%B7%E7%A7%91%E6%B3%A2%E8%8F%B2%E5%B0%94%20%E4%B9%A6%E8%AF%84",
         "s": "讨论"
       }
     ]
@@ -958,6 +1090,91 @@
     ]
   },
   {
+    "id": "tuijian-suanfa",
+    "title": "它怎么知道我凌晨三点在想什么",
+    "date": "2023-03-19",
+    "excerpt": "凌晨两点随手划了一条「停止精神内耗」，第二天首页全是心理学。我把抖音卸载又装回六七次，就想搞懂它怎么这么懂我。",
+    "tags": [
+      "技术"
+    ],
+    "cat": "技术",
+    "cover": "",
+    "refs": [
+      {
+        "t": "Amazon item-to-item 协同过滤论文",
+        "u": "https://www.cs.umd.edu/~samir/498/Amazon-Recommendations.pdf",
+        "s": "PDF"
+      },
+      {
+        "t": "YouTube 深度推荐系统论文",
+        "u": "https://static.googleusercontent.com/media/research.google.com/en//pubs/archive/45530.pdf",
+        "s": "PDF"
+      },
+      {
+        "t": "B 站：推荐算法科普",
+        "u": "https://search.bilibili.com/all?keyword=%E6%8E%A8%E8%8D%90%E7%AE%97%E6%B3%95%20%E5%8E%9F%E7%90%86%20%E7%A7%91%E6%99%AE",
+        "s": "视频"
+      }
+    ]
+  },
+  {
+    "id": "liulang-diqiu-2",
+    "title": "看《流浪地球2》，记住的是那群普通人",
+    "date": "2023-02-11",
+    "excerpt": "它没靠个人英雄，而是让所有有核国家把原子弹都献出来炸月亮。这种集体主义，被我们自己的面孔演出来，格外烫心。",
+    "tags": [
+      "影评"
+    ],
+    "cat": "观影",
+    "cover": "",
+    "refs": [
+      {
+        "t": "豆瓣《流浪地球2》条目",
+        "u": "https://movie.douban.com/subject/35267208/",
+        "s": "豆瓣"
+      },
+      {
+        "t": "豆瓣《流浪地球2》长评",
+        "u": "https://movie.douban.com/subject/35267208/reviews",
+        "s": "豆瓣"
+      },
+      {
+        "t": "B 站：搜「流浪地球2」的书评/影评视频",
+        "u": "https://search.bilibili.com/all?keyword=%E6%B5%81%E6%B5%AA%E5%9C%B0%E7%90%832%20%E5%BD%B1%E8%AF%84",
+        "s": "视频"
+      },
+      {
+        "t": "知乎：「流浪地球2」相关讨论",
+        "u": "https://www.zhihu.com/search?type=content&q=%E6%B5%81%E6%B5%AA%E5%9C%B0%E7%90%832%20%E5%BD%B1%E8%AF%84",
+        "s": "讨论"
+      }
+    ]
+  },
+  {
+    "id": "chouxiang-hua",
+    "title": "我们怎么就不会好好说话了",
+    "cat": "生活",
+    "date": "2022-11-19",
+    "excerpt": "半夜刷到一条讲抽象话的视频，看完躺着没动。我把自己这几年的说话方式从头想了一遍，发现我早就学会先加三个限定词，再开口。",
+    "tags": [
+      "随笔"
+    ],
+    "cover": "",
+    "pinned": false,
+    "refs": [
+      {
+        "t": "B 站：关于抽象话的深度研究",
+        "u": "https://www.bilibili.com/video/BV1Vd4y1b71B/",
+        "s": "视频"
+      },
+      {
+        "t": "知乎：抽象话与网络表达",
+        "u": "https://www.zhihu.com/search?type=content&q=%E6%8A%BD%E8%B1%A1%E8%AF%9D%20%E7%BD%91%E7%BB%9C%E8%AF%AD%E8%A8%80",
+        "s": "讨论"
+      }
+    ]
+  },
+  {
     "id": "wo-he-rust",
     "title": "跟借用检查器较劲的三个月",
     "date": "2022-11-13",
@@ -986,10 +1203,10 @@
     ]
   },
   {
-    "id": "tuijian-suanfa",
-    "title": "它怎么知道我凌晨三点在想什么",
-    "date": "2023-03-19",
-    "excerpt": "凌晨两点随手划了一条「停止精神内耗」，第二天首页全是心理学。我把抖音卸载又装回六七次，就想搞懂它怎么这么懂我。",
+    "id": "https-yuanli",
+    "title": "输入密码的时候，谁在替你保密",
+    "date": "2022-08-21",
+    "excerpt": "在商场连公共 WiFi，密码敲到一半我停了。天天调 https，却说不太清它到底怎么保的密。",
     "tags": [
       "技术"
     ],
@@ -997,18 +1214,69 @@
     "cover": "",
     "refs": [
       {
-        "t": "Amazon item-to-item 协同过滤论文",
-        "u": "https://www.cs.umd.edu/~samir/498/Amazon-Recommendations.pdf",
-        "s": "PDF"
+        "t": "MDN：传输层安全 TLS",
+        "u": "https://developer.mozilla.org/zh-CN/docs/Web/Security/Transport_Layer_Security",
+        "s": ""
       },
       {
-        "t": "YouTube 深度推荐系统论文",
-        "u": "https://static.googleusercontent.com/media/research.google.com/en//pubs/archive/45530.pdf",
-        "s": "PDF"
+        "t": "Cloudflare 学习中心：什么是 HTTPS",
+        "u": "https://www.cloudflare.com/learning/ssl/what-is-https/",
+        "s": ""
       },
       {
-        "t": "B 站：推荐算法科普",
-        "u": "https://search.bilibili.com/all?keyword=%E6%8E%A8%E8%8D%90%E7%AE%97%E6%B3%95%20%E5%8E%9F%E7%90%86%20%E7%A7%91%E6%99%AE",
+        "t": "RFC 8446（TLS 1.3 标准原文）",
+        "u": "https://www.rfc-editor.org/rfc/rfc8446",
+        "s": "RFC"
+      }
+    ]
+  },
+  {
+    "id": "erjiu-shipin",
+    "title": "那条让我哭了的视频",
+    "date": "2022-07-30",
+    "excerpt": "「二舅」那条视频我看了两遍，转到了家族群。后来争议出来，我心情挺复杂。",
+    "tags": [
+      "随笔"
+    ],
+    "cat": "生活",
+    "cover": "",
+    "refs": [
+      {
+        "t": "B 站：回村三天，二舅治好了我的精神内耗",
+        "u": "https://search.bilibili.com/all?keyword=%E5%9B%9E%E6%9D%91%E4%B8%89%E5%A4%A9%20%E4%BA%8C%E8%88%85%E6%B2%BB%E5%A5%BD%E4%BA%86%E6%88%91%E7%9A%84%E7%B2%BE%E7%A5%9E%E5%86%85%E8%80%97",
+        "s": "视频"
+      },
+      {
+        "t": "知乎：二舅视频相关讨论",
+        "u": "https://www.zhihu.com/search?type=content&q=%E4%BA%8C%E8%88%85%20%E8%A7%86%E9%A2%91%20%E4%BA%89%E8%AE%AE",
+        "s": "讨论"
+      }
+    ]
+  },
+  {
+    "id": "weiborn-wangyuanjing",
+    "title": "七千六百光年外的那张“山”",
+    "date": "2022-07-14",
+    "excerpt": "韦伯望远镜首批图发布那天我在宿舍摸鱼，一张「宇宙悬崖」把我钉住了。后来才知道它是一台时间机器。",
+    "tags": [
+      "随笔"
+    ],
+    "cat": "生活",
+    "cover": "",
+    "refs": [
+      {
+        "t": "NASA：詹姆斯·韦伯空间望远镜",
+        "u": "https://www.nasa.gov/mission/webb-space-telescope/",
+        "s": ""
+      },
+      {
+        "t": "韦伯官方图库",
+        "u": "https://webbtelescope.org/images",
+        "s": ""
+      },
+      {
+        "t": "B 站：韦伯首批图像解读",
+        "u": "https://search.bilibili.com/all?keyword=%E9%9F%A6%E4%BC%AF%E6%9C%9B%E8%BF%9C%E9%95%9C%20%E9%A6%96%E6%89%B9%E5%9B%BE%E5%83%8F",
         "s": "视频"
       }
     ]
@@ -1047,39 +1315,6 @@
     ]
   },
   {
-    "id": "zhou-chu-chu-san-hai",
-    "title": "阮经天开枪那一下",
-    "date": "2024-03-16",
-    "excerpt": "春节档刚散，一部 1370 万的台湾小片突然逆跌 6 亿。灵修堂那场戏，我旁边大哥攥紧了爆米花桶。",
-    "tags": [
-      "影评"
-    ],
-    "cat": "观影",
-    "cover": "",
-    "refs": [
-      {
-        "t": "豆瓣《周处除三害》条目",
-        "u": "https://movie.douban.com/subject/36151692/",
-        "s": "豆瓣"
-      },
-      {
-        "t": "豆瓣《周处除三害》长评",
-        "u": "https://movie.douban.com/subject/36151692/reviews",
-        "s": "豆瓣"
-      },
-      {
-        "t": "B 站：搜「周处除三害」的书评/影评视频",
-        "u": "https://search.bilibili.com/all?keyword=%E5%91%A8%E5%A4%84%E9%99%A4%E4%B8%89%E5%AE%B3%20%E5%BD%B1%E8%AF%84",
-        "s": "视频"
-      },
-      {
-        "t": "知乎：「周处除三害」相关讨论",
-        "u": "https://www.zhihu.com/search?type=content&q=%E5%91%A8%E5%A4%84%E9%99%A4%E4%B8%89%E5%AE%B3%20%E5%BD%B1%E8%AF%84",
-        "s": "讨论"
-      }
-    ]
-  },
-  {
     "id": "shujuku-suoyin",
     "title": "索引为什么长成一棵倒过来的树",
     "date": "2021-12-05",
@@ -1108,10 +1343,10 @@
     ]
   },
   {
-    "id": "https-yuanli",
-    "title": "输入密码的时候，谁在替你保密",
-    "date": "2022-08-21",
-    "excerpt": "在商场连公共 WiFi，密码敲到一半我停了。天天调 https，却说不太清它到底怎么保的密。",
+    "id": "rongqi-yu-k8s",
+    "title": "那个“在我机器上能跑”的晚上",
+    "date": "2021-08-23",
+    "excerpt": "代码一模一样，环境照着装，服务器上却跑不起来。那个翻车的夜晚，逼我去学了容器和编排。",
     "tags": [
       "技术"
     ],
@@ -1119,182 +1354,19 @@
     "cover": "",
     "refs": [
       {
-        "t": "MDN：传输层安全 TLS",
-        "u": "https://developer.mozilla.org/zh-CN/docs/Web/Security/Transport_Layer_Security",
+        "t": "Docker 官方文档：容器与镜像",
+        "u": "https://docs.docker.com/get-started/docker-overview/",
         "s": ""
       },
       {
-        "t": "Cloudflare 学习中心：什么是 HTTPS",
-        "u": "https://www.cloudflare.com/learning/ssl/what-is-https/",
+        "t": "Kubernetes 官方概念手册",
+        "u": "https://kubernetes.io/docs/concepts/",
         "s": ""
       },
       {
-        "t": "RFC 8446（TLS 1.3 标准原文）",
-        "u": "https://www.rfc-editor.org/rfc/rfc8446",
-        "s": "RFC"
-      }
-    ]
-  },
-  {
-    "id": "bianyi-yuanli",
-    "title": "一行代码怎么变成能跑的程序",
-    "date": "2023-06-17",
-    "excerpt": "编译原理课我睡过去了。直到写了个几十行的迷你解释器，才把从文本到机器码这条路走通一遍。",
-    "tags": [
-      "技术"
-    ],
-    "cat": "技术",
-    "cover": "",
-    "refs": [
-      {
-        "t": "Crafting Interpreters（手写解释器）",
-        "u": "https://craftinginterpreters.com/",
+        "t": "Kubernetes 中文文档",
+        "u": "https://kubernetes.io/zh-cn/docs/concepts/",
         "s": ""
-      },
-      {
-        "t": "LLVM 官方文档",
-        "u": "https://llvm.org/docs/",
-        "s": ""
-      },
-      {
-        "t": "B 站：编译原理公开课",
-        "u": "https://search.bilibili.com/all?keyword=%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86%20%E5%85%AC%E5%BC%80%E8%AF%BE",
-        "s": "视频"
-      }
-    ]
-  },
-  {
-    "id": "fenbushi-yizhixing",
-    "title": "三台机器怎么保证说的是同一件事",
-    "date": "2024-01-14",
-    "excerpt": "网络抽风那晚，两台机器各自选出了一个主，数据全乱。后来我把 Raft 翻了一遍。",
-    "tags": [
-      "技术"
-    ],
-    "cat": "技术",
-    "cover": "",
-    "refs": [
-      {
-        "t": "Raft 官网（含可视化演示）",
-        "u": "https://raft.github.io/",
-        "s": ""
-      },
-      {
-        "t": "Raft 论文原文",
-        "u": "https://raft.github.io/raft.pdf",
-        "s": "PDF"
-      },
-      {
-        "t": "MIT 6.824 分布式系统课程",
-        "u": "https://pdos.csail.mit.edu/6.824/",
-        "s": ""
-      }
-    ]
-  },
-  {
-    "id": "weiborn-wangyuanjing",
-    "title": "七千六百光年外的那张“山”",
-    "date": "2022-07-14",
-    "excerpt": "韦伯望远镜首批图发布那天我在宿舍摸鱼，一张「宇宙悬崖」把我钉住了。后来才知道它是一台时间机器。",
-    "tags": [
-      "随笔"
-    ],
-    "cat": "生活",
-    "cover": "",
-    "refs": [
-      {
-        "t": "NASA：詹姆斯·韦伯空间望远镜",
-        "u": "https://www.nasa.gov/mission/webb-space-telescope/",
-        "s": ""
-      },
-      {
-        "t": "韦伯官方图库",
-        "u": "https://webbtelescope.org/images",
-        "s": ""
-      },
-      {
-        "t": "B 站：韦伯首批图像解读",
-        "u": "https://search.bilibili.com/all?keyword=%E9%9F%A6%E4%BC%AF%E6%9C%9B%E8%BF%9C%E9%95%9C%20%E9%A6%96%E6%89%B9%E5%9B%BE%E5%83%8F",
-        "s": "视频"
-      }
-    ]
-  },
-  {
-    "id": "lk99-chaodao",
-    "title": "那年夏天我在群里当了回传声筒",
-    "date": "2023-08-19",
-    "excerpt": "LK-99 刷屏那几天我转了，还配了句「有生之年」。现在回头看，那是我那年最想删掉的一条转发。",
-    "tags": [
-      "随笔"
-    ],
-    "cat": "生活",
-    "cover": "",
-    "refs": [
-      {
-        "t": "LK-99 原始预印本（arXiv）",
-        "u": "https://arxiv.org/abs/2307.12008",
-        "s": "arXiv"
-      },
-      {
-        "t": "Nature 报道：LK-99 并非超导",
-        "u": "https://www.nature.com/articles/d41586-023-02585-7",
-        "s": ""
-      },
-      {
-        "t": "B 站：LK-99 复现始末",
-        "u": "https://search.bilibili.com/all?keyword=LK-99%20%E5%AE%A4%E6%B8%A9%E8%B6%85%E5%AF%BC%20%E5%A4%8D%E7%8E%B0",
-        "s": "视频"
-      }
-    ]
-  },
-  {
-    "id": "erjiu-shipin",
-    "title": "那条让我哭了的视频",
-    "date": "2022-07-30",
-    "excerpt": "「二舅」那条视频我看了两遍，转到了家族群。后来争议出来，我心情挺复杂。",
-    "tags": [
-      "随笔"
-    ],
-    "cat": "生活",
-    "cover": "",
-    "refs": [
-      {
-        "t": "B 站：回村三天，二舅治好了我的精神内耗",
-        "u": "https://search.bilibili.com/all?keyword=%E5%9B%9E%E6%9D%91%E4%B8%89%E5%A4%A9%20%E4%BA%8C%E8%88%85%E6%B2%BB%E5%A5%BD%E4%BA%86%E6%88%91%E7%9A%84%E7%B2%BE%E7%A5%9E%E5%86%85%E8%80%97",
-        "s": "视频"
-      },
-      {
-        "t": "知乎：二舅视频相关讨论",
-        "u": "https://www.zhihu.com/search?type=content&q=%E4%BA%8C%E8%88%85%20%E8%A7%86%E9%A2%91%20%E4%BA%89%E8%AE%AE",
-        "s": "讨论"
-      }
-    ]
-  },
-  {
-    "id": "neuralink-shouli",
-    "title": "看着一个人用意念挪光标",
-    "date": "2024-03-22",
-    "excerpt": "Neuralink 首例受试者直播用意念下棋，我看完又高兴又发怵。技术落到了具体的人身上，才看得清它的重量。",
-    "tags": [
-      "随笔"
-    ],
-    "cat": "生活",
-    "cover": "",
-    "refs": [
-      {
-        "t": "Neuralink 官方博客：PRIME 研究进展",
-        "u": "https://neuralink.com/blog/prime-study-progress-update-user-experience/",
-        "s": ""
-      },
-      {
-        "t": "Neuralink 官网",
-        "u": "https://neuralink.com/",
-        "s": ""
-      },
-      {
-        "t": "B 站：首例植入者直播",
-        "u": "https://search.bilibili.com/all?keyword=Neuralink%20%E9%A6%96%E4%BE%8B%20%E6%A4%8D%E5%85%A5%20%E7%9B%B4%E6%92%AD",
-        "s": "视频"
       }
     ]
   }
