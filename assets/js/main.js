@@ -2072,7 +2072,11 @@ var _pendingCat = ""; // 从文章返回时要补回 hash 的分类
 
 function saveListSource(page, extra) {
   var state = { p: page || "home", at: Date.now() };
-  if (extra) for (var k in extra) state[k] = extra[k];
+  if (extra) for (var k in extra) {
+    if (k === "p") continue;   // 页面归属只由第一个参数决定，extra 里同名的页码键不许覆盖它
+    if (extra[k] === undefined || extra[k] === null || extra[k] === "") continue;
+    state[k] = extra[k];
+  }
   try {
     sessionStorage.setItem(LIST_SRC_KEY, JSON.stringify(state));
   } catch (e) {}
@@ -2112,8 +2116,14 @@ function markListSource(idHint) {
     var idNow = idHint || pq.get("id") || "";
     var prev = readListSource();
     if (prev && prev.id === idNow) return;
-    saveListSource(prev && (prev.p === "home" || prev.p === "writing") ? prev.p : "writing",
-      { y: prev ? prev.y : 0, cat: prev ? prev.cat : "", tag: prev ? prev.tag : "", id: idNow });
+    // 已经有合法来源（列表页记下的 home / writing + 分类）时，这里只补 id，
+    // 不能拿空值去覆盖 cat / tag / y，否则「返回」会退回全部文章。
+    if (prev && (prev.p === "home" || prev.p === "writing")) {
+      prev.id = idNow;
+      saveListSource(prev.p, prev);
+      return;
+    }
+    saveListSource("writing", { id: idNow });
     return;
   }
   // 分类/标签/页码「以地址栏为准」：点分类时地址栏会同步成 ?cat=xx，
@@ -2130,8 +2140,11 @@ function markListSource(idHint) {
     }
     if (!cat || cat === "全部") delete extra.cat; else extra.cat = cat;
     if (tag) extra.tag = tag;
+    // 注意：分页号必须叫 pn，不能叫 p —— p 是「来源页」的键，
+    // 一旦被页码（数字 0）覆盖，readListSource 就认不出这是列表页，
+    // 返回按钮会退回默认的「全部文章」（线上 64 篇的场景就是这么坏的）。
     var on = document.querySelector("#g-list .pg-btn.on");
-    if (on) extra.p = Number(on.getAttribute("data-p")) || 0;
+    if (on) extra.pn = Number(on.getAttribute("data-p")) || 0;
   }
   saveListSource(page, extra);
 }
