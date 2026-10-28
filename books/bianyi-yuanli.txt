@@ -2,7 +2,7 @@
 
 <figure class="pg-fig pg-wide"><img src="assets/uploads/figs/bianyi-yuanli.jpg" alt="编译器把源码翻译成可执行程序的典型流程"><figcaption>编译器把源码翻译成可执行程序的典型流程</figcaption></figure>
 
-后来工作了，有次线上报了个错，堆栈里全是看不懂的字节码行号，我对着 `at com.xxx.Foo.bar(Foo.java:42)` 下面那一串 `invokevirtual`、`aload_0` 发愣。同事路过说了句"这是 JVM 字节码，编译器把 Java 编成这个再跑的"。我"哦"了一声，心里其实是虚的。
+后来自己写 Java，有次报了个错，堆栈里全是看不懂的字节码行号，我对着 `at com.xxx.Foo.bar(Foo.java:42)` 下面那一串 `invokevirtual`、`aload_0` 发愣。搜了半天才在一个博客里看到答案："这是 JVM 字节码，编译器把 Java 编成这个再跑的。"我"哦"了一声，心里其实是虚的。
 
 再后来我好奇，自己动手写了个几十行的迷你解释器，才算把"代码怎么变成能跑的东西"这条路走通了一遍。走完我才明白，编译原理根本不是给写编译器的人准备的，它是理解"你敲的那几行字，机器凭什么能执行"的底层地图。
 
