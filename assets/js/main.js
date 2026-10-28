@@ -756,7 +756,7 @@
       .slice(0, 4)
       .map(function (p) {
         return (
-          '<li><a href="post.html?id=' +
+          '<li><a href="/post?id=' +
           encodeURIComponent(p.id) +
           '">' +
           esc(p.title) +
@@ -773,7 +773,7 @@
       })
       .map(function (t) {
         return (
-          '<a href="writing.html?tag=' +
+          '<a href="/writing?tag=' +
           encodeURIComponent(t) +
           '" style="--tag-h:' +
           tagHue(t) +
@@ -846,7 +846,7 @@
       '<article class="card reveal" data-cat="' +
       esc(p.cat) +
       '">' +
-      '<a href="post.html?id=' +
+      '<a href="/post?id=' +
       encodeURIComponent(p.id) +
       '">' +
       '<div class="card-body">' +
@@ -906,7 +906,7 @@
   function postsMainHtml() {
     var counts = catCounts();
     var tabs =
-      '<a class="g-tab" href="timeline.html">归档</a>' +
+      '<a class="g-tab" href="/timeline">归档</a>' +
       '<button class="g-tab" data-cat="全部" aria-pressed="true">全部<span class="n">' +
       POSTS.length + "</span></button>";
     Object.keys(counts).forEach(function (c) {
@@ -929,7 +929,7 @@
       })
       .join("");
     return (
-      '<a class="g-posth" href="post.html?id=' + encodeURIComponent(p.id) + '">' +
+      '<a class="g-posth" href="/post?id=' + encodeURIComponent(p.id) + '">' +
       '<div class="info">' +
       '<div class="ttl"><span class="mark">' + ICONS.doc + "</span>" +
       "<h2>" + esc(p.title) + "</h2>" +
@@ -1239,7 +1239,7 @@
       // 拼出来的 "/#/home" 刷新后既没有 ?cat= 也定位不到首页文件。
       try {
         var q = c && c !== "全部" ? "?cat=" + encodeURIComponent(c) : "";
-        history.replaceState(null, "", "index.html" + q + "#/home" + q);
+        history.replaceState(null, "", "/" + q);
       } catch (err) {}
     });
 
@@ -1269,7 +1269,7 @@
       })
       .join("");
     return (
-      '<a class="g-post" href="post.html?id=' + encodeURIComponent(p.id) + '">' +
+      '<a class="g-post" href="/post?id=' + encodeURIComponent(p.id) + '">' +
       '<div class="top"><span>' + fmtDate(p.date) + "</span>" +
       '<span class="dot"></span><span class="cat">' + esc(p.cat) + "</span>" +
       (p.pinned ? '<span class="pin">置顶</span>' : "") +
@@ -1288,7 +1288,7 @@
 
     var PER = 12; // 每页篇数
     // 分类/标签/页码也从 hash 的 query 读：返回列表时分类写在 #/writing?cat=xx 里
-    var params = new URLSearchParams((location.hash.split("?")[1] || "") || location.search);
+    var params = new URLSearchParams(parseHash().qs || "");
     var startCat = params.get("cat") || "全部";
     var startTag = params.get("tag") || "";
 
@@ -1333,7 +1333,7 @@
       apply(c, "", 0);
       try {
         var q = c && c !== "全部" ? "?cat=" + encodeURIComponent(c) : "";
-        history.replaceState(null, "", "writing.html" + q + "#/writing" + q);
+        history.replaceState(null, "", "/writing" + q);
       } catch (err) {}
     });
 
@@ -1521,7 +1521,7 @@
     var catsHtml = Object.keys(cc)
       .map(function (c) {
         return (
-          '<a class="g-cat" href="writing.html?cat=' + encodeURIComponent(c) + '">' +
+          '<a class="g-cat" href="/writing?cat=' + encodeURIComponent(c) + '">' +
           ICONS.folder + esc(c) + '<span class="n">' + cc[c] + "</span></a>"
         );
       })
@@ -1530,7 +1530,7 @@
     var tagsHtml = tagNames
       .map(function (t) {
         return (
-          '<a class="g-tag" href="writing.html?tag=' + encodeURIComponent(t) +
+          '<a class="g-tag" href="/writing?tag=' + encodeURIComponent(t) +
           '" style="--tag-h:' + tagHue(t) + '">' + esc(t) + "</a>"
         );
       })
@@ -1599,7 +1599,7 @@
       '<div class="g-card">' +
       '<div class="g-card-head"><span class="t">' + ICONS.folder + "分类</span></div>" +
       '<div class="g-cats">' + catsHtml +
-      '<a class="g-cat-foot" href="writing.html">查看全部文章 →</a></div>' +
+      '<a class="g-cat-foot" href="/writing">查看全部文章 →</a></div>' +
       "</div>" +
       '<div class="g-card">' +
       '<div class="g-card-head"><span class="t">' + ICONS.tag + "标签</span></div>" +
@@ -1641,12 +1641,12 @@
     right.innerHTML =
       '<div class="g-card">' +
       '<div class="g-card-head"><span class="t">' + ICONS.clock +
-      '动态</span><a class="more" href="timeline.html">更多</a></div>' +
+      '动态</span><a class="more" href="/timeline">更多</a></div>' +
       '<ul class="g-feed">' + feed + "</ul></div>" +
       statCard +
       '<div class="g-card g-wx-mini">' +
       '<div class="g-card-head"><span class="t">' + ICONS.sun + "天气</span>" +
-      '<a class="more" href="weather.html">更多</a></div>' +
+      '<a class="more" href="/weather">更多</a></div>' +
       '<div class="wxm-body" id="wx-mini-body"><div class="wxm-fail">正在获取…</div></div></div>' +
       '<div class="g-card g-cal-card">' +
       '<div class="g-card-head"><span class="t">' + ICONS.cal + "日历</span>" +
@@ -2182,9 +2182,9 @@ function aboutHtml() {
     '<blockquote><p>一个不需要向任何人解释的地方，是我想给自己留的东西。</p></blockquote>' +
     '<h2 id="works">做过的东西</h2>' +
     '<ul>' +
-    '<li><a href="post.html?id=a-cat-that-counts">会数数的猫</a>：把专注时间变成猫的食粮。中途走开它会生气，坚持够久它能吃到一条鱼。</li>' +
-    '<li><a href="post.html?id=why-i-built-this-blog">reze520.top</a>：就是你正在看的这个站。零依赖、纯静态，随便哪个浏览器都能打开。</li>' +
-    '<li><a href="writing.html">一些随手记</a>：排版、配色、动效上的小实验，散落在几篇文章里。</li>' +
+    '<li><a href="/post?id=a-cat-that-counts">会数数的猫</a>：把专注时间变成猫的食粮。中途走开它会生气，坚持够久它能吃到一条鱼。</li>' +
+    '<li><a href="/post?id=why-i-built-this-blog">reze520.top</a>：就是你正在看的这个站。零依赖、纯静态，随便哪个浏览器都能打开。</li>' +
+    '<li><a href="/writing">一些随手记</a>：排版、配色、动效上的小实验，散落在几篇文章里。</li>' +
     '</ul>' +
     '<h2>联系我</h2>' +
     '<p>写信比留言更可靠，我基本都会回。</p>' +
@@ -2318,8 +2318,10 @@ var _firstRoute = true;
 var _lastSettle = null;
 
 function settleScroll(page) {
-  // goPage 会同步渲染一次、hashchange 再跑一次，同一路由只落一次
-  var key = page + "|" + location.hash;
+  // goPage 会同步渲染一次、popstate 再跑一次，同一路由只落一次。
+  // 键里必须带上 path + search：地址从 hash 换成真实路径后，只看 hash 会是空串，
+  // 同一页换分类（/writing?cat=A → /writing?cat=B）就认不出是两次了。
+  var key = page + "|" + (location.pathname || "") + (location.search || "") + (location.hash || "");
   if (_lastSettle === key) return;
   _lastSettle = key;
 
@@ -2344,10 +2346,9 @@ function syncListQuery(cat, tag, page) {
   if (page && Number(page) > 0) q.push("p=" + Number(page));
   var app = document.querySelector(".app");
   var cur = (app && app.getAttribute("data-page")) || "home";
-  var file = cur === "writing" ? "writing.html" : cur === "home" ? "index.html" : "";
-  if (!file) return;
+  if (cur !== "writing" && cur !== "home") return;
   try {
-    history.replaceState(null, "", file + (q.length ? "?" + q.join("&") : "") + "#/" + cur + (q.length ? "?" + q.join("&") : ""));
+    history.replaceState(null, "", (cur === "writing" ? "/writing" : "/") + (q.length ? "?" + q.join("&") : ""));
   } catch (e) {}
 }
 
@@ -2481,12 +2482,12 @@ function renderMain() {
   syncMeta(page, params);
 }
 
-/* goPage 会同步渲染一次、hashchange 再渲染一次。返回文章列表时 hash 还是旧的
-   （#/post?…），那一次同步渲染拿不到 cat，会先把列表拉成「全部」。
-   等 hashchange 落地后再补一次分类筛选，保证落点正确。 */
+/* goPage 会同步渲染一次、popstate 再渲染一次。返回文章列表时地址还是旧的
+   （/post?…），那一次同步渲染拿不到 cat，会先把列表拉成「全部」。
+   等路由落地后再补一次分类筛选，保证落点正确。 */
 var _lastRouteKey = "";
 function postRouteFix() {
-  var key = (location.hash || "") + "|" + ((document.querySelector(".app") || {}).getAttribute
+  var key = (location.pathname || "") + (location.search || "") + (location.hash || "") + "|" + ((document.querySelector(".app") || {}).getAttribute
     ? document.querySelector(".app").getAttribute("data-page") : "");
   if (key === _lastRouteKey) return;
   _lastRouteKey = key;
@@ -2508,16 +2509,28 @@ function postRouteFix() {
 }
 
 function updateNavActive(page) {
-  var navMap = { home: "index.html", moments: "moments.html", writing: "writing.html", album: "album.html", links: "links.html", weather: "weather.html" };
+  // 链接现在都是 /writing 这种路径，得按路径整段比，不能再用 indexOf 找子串：
+  // 首页的 "/" 是任何地址的子串，那样每一页都会把「主页」点亮。
+  var navMap = { home: "/", moments: "/moments", writing: "/writing", album: "/album", links: "/links", weather: "/weather" };
   var want = navMap[page];
   document.querySelectorAll(".nav a").forEach(function (a) {
-    var href = a.getAttribute("href") || "";
-    if (want && href.indexOf(want) >= 0) a.setAttribute("aria-current", "page");
+    var path = (a.getAttribute("href") || "").split(/[?#]/)[0] || "/";
+    if (want && path === want) a.setAttribute("aria-current", "page");
     else a.removeAttribute("aria-current");
   });
 }
 
+/* 路由从地址里读。现在内页是 /writing、/post?id=xx 这种干净地址
+   （直接敲 /writing.html 也不是不行，Cloudflare 会 308 到 /writing，这里两种都认）。
+   以前所有内页都往 /index.html#/writing 跳，老书签和老外链不能废，所以 hash 继续兜底。 */
 function parseHash() {
+  var seg = (location.pathname || "/")
+    .replace(/\/+$/, "")
+    .split("/")
+    .pop()
+    .replace(/\.html$/i, "")
+    .toLowerCase();
+  if (seg && seg !== "index") return { page: seg, qs: location.search || "" };
   var h = (location.hash || "").replace(/^#\/?/, "");
   var qi = h.indexOf("?");
   return { page: qi < 0 ? h : h.slice(0, qi), qs: qi < 0 ? "" : h.slice(qi) };
@@ -2550,7 +2563,7 @@ function applyRoute() {
       if (sq.length) {
         r.qs = "?" + sq.join("&");
         try {
-          history.replaceState(null, "", location.pathname + "#/" + page + r.qs);
+          history.replaceState(null, "", (page === "home" ? "/" : "/" + page) + r.qs);
         } catch (e) {}
       }
     }
@@ -2621,7 +2634,7 @@ function markListSource(idHint) {
   if (page === "post") {
     // 注意 idHint：在列表页点文章的那一刻，hash 还停在列表路由上、读不出文章 id，
     // 所以由调用方（interceptLinks）把目标 id 传进来。
-    var hh = (location.hash || "").split("?")[1] || "";
+    var hh = parseHash().qs || "";
     var pq = new URLSearchParams(hh);
     var idNow = idHint || pq.get("id") || "";
     var prev = readListSource();
@@ -2638,7 +2651,7 @@ function markListSource(idHint) {
   }
   // 分类/标签/页码「以地址栏为准」：点分类时地址栏会同步成 ?cat=xx，
   // 但点文章那一刻按钮上的 aria-pressed 未必已经刷新，直接从地址读最稳。
-  var hashQs = new URLSearchParams(location.hash.split("?")[1] || "");
+  var hashQs = new URLSearchParams(parseHash().qs || "");
   var pageQs = new URLSearchParams(location.search || "");
   var extra = { y: Math.round(window.pageYOffset || 0) };
   if (page === "home" || page === "writing") {
@@ -2662,7 +2675,7 @@ function markListSource(idHint) {
 /* 文章页「返回」按钮的地址：能回到来源列表就带上分类，否则回全部文章 */
 function backLinkHtml() {
   var src = readListSource();
-  var href = "writing.html";
+  var href = "/writing";
   var label = "返回文章列表";
   if (src && (src.p === "home" || src.p === "writing")) {
     var q = [];
@@ -2674,7 +2687,7 @@ function backLinkHtml() {
       label = "返回「" + src.cat + "」";
     }
     if (src.p && Number(src.pn) > 0) q.push("p=" + Number(src.pn));
-    href = (src.p === "home" ? "index.html" : "writing.html") + (q.length ? "?" + q.join("&") : "");
+    href = (src.p === "home" ? "/" : "/writing") + (q.length ? "?" + q.join("&") : "");
   }
   return '<a class="back" href="' + href + '">' + ICONS.back + " " + esc(label) + "</a>";
 }
@@ -2742,24 +2755,36 @@ function watchBuild() {
   window.addEventListener("focus", check);
 }
 
+/* 内部路由（#/page?qs）翻成真实地址：首页 → "/"，其余 → "/page?qs"。
+   站里所有页面都在根目录，路径深度只有一层，相对资源不会因为换了地址而错位。 */
+function routeToPath(hash) {
+  var p = String(hash || "").replace(/^#\/?/, "");
+  var qi = p.indexOf("?");
+  var page = (qi < 0 ? p : p.slice(0, qi)).toLowerCase();
+  var qs = qi < 0 ? "" : p.slice(qi);
+  if (!page || page === "index" || page === "home") return "/" + qs;
+  return "/" + page + qs;
+}
+
 function goPage(hash) {
   // 首页点分类会把 ?cat= 写到地址栏；切到别的页面时必须丢掉，
   // 否则那个分类会被带到写作页，把它的筛选按钮全筛成「不存在」。
   // 但首页 / 写作页自己带着分类进来时不能清：清了以后刷新就丢掉筛选，
   // 表现就是「返回回到技术栏，一刷新又变回全部」。
-  var hPage = (hash.replace(/^#\/?/, "").split("?")[0] || "").toLowerCase();
-  var keepsCat = hPage === "home" || hPage === "writing";
-  if (hPage && !keepsCat && location.search) {
-    try {
-      history.replaceState(null, "", location.pathname);
-    } catch (e) {}
-  }
-  if (location.hash === hash) {
+  // 现在整条地址由 pushState 一次写定，不用再先把 search 抹一遍。
+  var dest = routeToPath(hash);
+  if ((location.pathname || "/") + (location.search || "") === dest) {
     applyRoute();
     return;
   }
-  location.hash = hash;
-  // hashchange 是异步的，这里同步渲染一次，避免切页有延迟感（hashchange 触发时会再跑一次，幂等无害）
+  try {
+    history.pushState(null, "", dest);
+  } catch (e) {
+    // 极老的浏览器没有 pushState：退回整页跳转，功能不能丢
+    location.href = dest;
+    return;
+  }
+  // pushState 不会触发任何事件，这里同步渲染一次，避免切页有延迟感
   applyRoute();
 }
 
@@ -2784,17 +2809,8 @@ function interceptLinks(e) {
   // 目标文章的 id 从链接里取，不能等 hash 变过去——那时候页面已经不在列表上了。
   if (toPost) markListSource(u.searchParams.get("id") || "");
   var src = toPost ? null : readListSource();
-  if (from !== file && (from === "writing" || from === "home" || from === "post")) {
-    // 地址栏里还挂着上一个页面的文件名（写作页 → 文章、文章 → 首页），
-    // 换页时同步过去，否则刷新会落到另一个文件上，hash 里再带着 #/xxx 也不对
-    var dstName = file === "home" ? "index.html" : file + ".html";
-    var curName = location.pathname.split("/").pop() || "index.html";
-    if (curName !== dstName) {
-      try {
-        history.replaceState(null, "", dstName + location.search + location.hash);
-      } catch (e) {}
-    }
-  }
+  // 地址栏不用在这里补：goPage 会用 pushState 把整条地址一次写对，
+  // 以前那种「先把文件名换成 post.html、再往 hash 里塞 #/post」的做法已经不需要了。
   goPage("#/" + file + (u.search || ""));
   // 从文章页点返回：把来源列表当时的分类和滚动位置还回去
   if (from === "post" && src && src.p === file) {
@@ -2811,7 +2827,7 @@ function interceptLinks(e) {
 
     var counts = catCounts();
     var cats = Object.keys(counts).sort();
-    var _hq = new URLSearchParams(location.hash.split("?")[1] || "");
+    var _hq = new URLSearchParams(parseHash().qs || "");
     var params = _hq.get("cat") ? _hq : (location.search ? new URLSearchParams(location.search) : new URLSearchParams());
     var active = params.get("cat") || "全部";
     var activeTag = params.get("tag") || "";
@@ -2861,7 +2877,7 @@ function interceptLinks(e) {
         active = btn.dataset.cat;
         activeTag = "";
         apply(active, "");
-        history.replaceState(null, "", "writing.html");
+        history.replaceState(null, "", "/writing");
       });
     }
 
@@ -2900,13 +2916,13 @@ function interceptLinks(e) {
           backLinkHtml() +
           "<h1>暂时读不到这一篇</h1>" +
           '<div class="g-meta"><span>网络没接上，或者服务器在忙</span></div>' +
-          '<div class="g-prose prose"><p>刷新一次试试。如果一直这样，可以先去<a href="writing.html">文章列表</a>。</p></div>' +
+          '<div class="g-prose prose"><p>刷新一次试试。如果一直这样，可以先去<a href="/writing">文章列表</a>。</p></div>' +
           "</article>"
         : '<article class="g-article">' +
           backLinkHtml() +
           "<h1>没有找到这篇文章</h1>" +
           '<div class="g-meta"><span>它可能被移动或改名了</span></div>' +
-          '<div class="g-prose prose"><p>你可以从<a href="writing.html">文章列表</a>里重新找找。</p></div>' +
+          '<div class="g-prose prose"><p>你可以从<a href="/writing">文章列表</a>里重新找找。</p></div>' +
           "</article>";
       return;
     }
@@ -2950,7 +2966,7 @@ function interceptLinks(e) {
     var navItems = [];
     if (prev) {
       navItems.push(
-        '<a href="post.html?id=' +
+        '<a href="/post?id=' +
           encodeURIComponent(prev.id) +
           '"><span class="k">← 上一篇</span><span class="t">' +
           esc(prev.title) +
@@ -2959,7 +2975,7 @@ function interceptLinks(e) {
     }
     if (next) {
       navItems.push(
-        '<a class="next" href="post.html?id=' +
+        '<a class="next" href="/post?id=' +
           encodeURIComponent(next.id) +
           '"><span class="k">下一篇 →</span><span class="t">' +
           esc(next.title) +
@@ -2975,7 +2991,7 @@ function interceptLinks(e) {
     var tags = (p.tags || [])
       .map(function (t) {
         return (
-          '<a href="writing.html?tag=' +
+          '<a href="/writing?tag=' +
           encodeURIComponent(t) +
           '" style="--tag-h:' +
           tagHue(t) +
@@ -3678,7 +3694,7 @@ function interceptLinks(e) {
           return (
             '<a class="search-item" data-i="' +
             i +
-            '" href="post.html?id=' +
+            '" href="/post?id=' +
             encodeURIComponent(p.id) +
             '">' +
             "<h4>" +
@@ -3958,7 +3974,9 @@ function interceptLinks(e) {
     try {
       observeReveal(document);
     } catch (e) {}
+    // 老链接（/#/writing）还是走 hashchange；新地址（/writing）靠 popstate 接前进后退
     window.addEventListener("hashchange", applyRoute);
+    window.addEventListener("popstate", applyRoute);
     document.addEventListener("click", interceptLinks);
     // 诗笺：点一下换一句。事件托管，左栏每次重渲染都不用重新绑
     document.addEventListener("click", function (e) {
@@ -3993,8 +4011,12 @@ function interceptLinks(e) {
         if (main) main.innerHTML = timelineMainHtml();
       }
     });
-    if (location.hash) applyRoute();
-    // 没有 hash 时也要判断一次：老访客直接进首页，不再弹欢迎大屏
+    // 内页地址现在是 /writing 这种真实路径，不再靠 hash 判断要不要跑路由。
+    // 静态页（changelog.html）正文是自己编译好的，路由不接管，首屏那层照旧收一下。
+    var _app0 = document.querySelector(".app");
+    if (_app0 && _app0.getAttribute("data-static")) syncSplash("home");
+    else if (parseHash().page || location.hash) applyRoute();
+    // 没有路由时也要判断一次：老访客直接进首页，不再弹欢迎大屏
     else syncSplash("home");
     watchBuild();
   }

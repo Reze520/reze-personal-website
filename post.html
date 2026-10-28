@@ -3,17 +3,15 @@
 <head>
   <script>
   (function () {
-    var p = location.pathname.split("/").pop().replace(/\.html$/, "");
-    if (!p || p === "index") return;
+    /* 老链接把文章 id 塞在 hash 里（post.html#/post?id=post-75），现在 id 走查询串。
+       这里只搬这最后一次，搬完地址就是 /post?id=post-75，后面交给路由渲染。 */
     var h = location.hash || "";
-    // 地址里已经带了 hash（例如 post.html#/post?id=post-75）时以 hash 为准。
-    // 原来只搬 location.search，hash 一丢 id 就没了，刷新后变成「没有找到这篇文章」。
-    if (h.indexOf("#/") === 0) {
-      var dest = "index.html" + h;
-      if (h.indexOf("?") < 0 && location.search) dest += location.search;
-      return location.replace(dest);
-    }
-    location.replace("index.html#/" + p + location.search);
+    if (h.indexOf("#/") !== 0) return;
+    var page = h.replace(/^#\//, "").split("?")[0] || "post";
+    var qs = h.split("?")[1] || "";
+    if (qs) qs = "?" + qs;
+    else if (h.indexOf("?") < 0 && location.search) qs = location.search;
+    location.replace("/" + page + qs);
   })();
   </script>
   <meta charset="utf-8">
@@ -44,29 +42,29 @@
 
 <header class="site-head">
   <div class="head-inner">
-    <a class="brand" href="index.html">
+    <a class="brand" href="/">
       伤心公主
       <em>Sad Princess</em>
     </a>
     <nav class="nav">
-      <a href="index.html" data-tip="返回首页"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="m3 10.2 9-7.2 9 7.2V20a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><path d="M9.5 22v-7.5h5V22"/></svg><span>主页</span></a>
-      <a href="moments.html" data-tip="日常碎片"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v3.6M12 17.4V21M3 12h3.6M17.4 12H21M5.8 5.8l2.5 2.5M15.7 15.7l2.5 2.5M18.2 5.8l-2.5 2.5M8.3 15.7l-2.5 2.5"/></svg><span>动态</span></a>
-      <a href="writing.html" data-tip="全部文章"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/></svg><span>文章</span></a>
-      <a href="weather.html" data-tip="多城市天气"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4.1"/><path d="M12 2.6v2.3M12 19.1v2.3M2.6 12h2.3M19.1 12h2.3M5.2 5.2l1.7 1.7M17.1 17.1l1.7 1.7M18.8 5.2l-1.7 1.7M6.9 17.1l-1.7 1.7"/></svg><span>天气</span></a>
-      <a href="album.html" data-tip="照片墙"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="2.5"/><circle cx="8.5" cy="9.5" r="1.5"/><path d="m21 16-5-5-6.5 7"/></svg><span>相册</span></a>
-      <a href="links.html" data-tip="常用网站"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="m15.6 8.4-2.1 5.1-5.1 2.1 2.1-5.1z"/></svg><span>导航</span></a>
+      <a href="/" data-tip="返回首页"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="m3 10.2 9-7.2 9 7.2V20a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><path d="M9.5 22v-7.5h5V22"/></svg><span>主页</span></a>
+      <a href="/moments" data-tip="日常碎片"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v3.6M12 17.4V21M3 12h3.6M17.4 12H21M5.8 5.8l2.5 2.5M15.7 15.7l2.5 2.5M18.2 5.8l-2.5 2.5M8.3 15.7l-2.5 2.5"/></svg><span>动态</span></a>
+      <a href="/writing" data-tip="全部文章"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/></svg><span>文章</span></a>
+      <a href="/weather" data-tip="多城市天气"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4.1"/><path d="M12 2.6v2.3M12 19.1v2.3M2.6 12h2.3M19.1 12h2.3M5.2 5.2l1.7 1.7M17.1 17.1l1.7 1.7M18.8 5.2l-1.7 1.7M6.9 17.1l-1.7 1.7"/></svg><span>天气</span></a>
+      <a href="/album" data-tip="照片墙"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="2.5"/><circle cx="8.5" cy="9.5" r="1.5"/><path d="m21 16-5-5-6.5 7"/></svg><span>相册</span></a>
+      <a href="/links" data-tip="常用网站"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="m15.6 8.4-2.1 5.1-5.1 2.1 2.1-5.1z"/></svg><span>导航</span></a>
       <div class="nav-more">
         <button class="nav-more-btn" type="button" data-tip="关于与时间线"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg><span>更多</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="chev"><path d="m6 9 6 6 6-6"/></svg></button>
         <div class="nav-more-menu">
-          <a href="index.html" class="m-dupe">主页</a>
-          <a href="moments.html" class="m-dupe">动态</a>
-          <a href="writing.html" class="m-dupe">文章</a>
-          <a href="weather.html" class="m-dupe">天气</a>
-          <a href="album.html" class="m-dupe">相册</a>
-          <a href="links.html" class="m-dupe">导航</a>
-          <a href="about.html">关于我</a>
-          <a href="timeline.html">时间线</a>
-          <a href="changelog.html">更新日志</a>
+          <a href="/" class="m-dupe">主页</a>
+          <a href="/moments" class="m-dupe">动态</a>
+          <a href="/writing" class="m-dupe">文章</a>
+          <a href="/weather" class="m-dupe">天气</a>
+          <a href="/album" class="m-dupe">相册</a>
+          <a href="/links" class="m-dupe">导航</a>
+          <a href="/about">关于我</a>
+          <a href="/timeline">时间线</a>
+          <a href="/changelog">更新日志</a>
         </div>
       </div>
     </nav>
@@ -87,17 +85,17 @@
 <footer class="site-foot">
   <div class="foot-inner">
     <div class="foot-left">
-      <a class="brand" href="index.html">
+      <a class="brand" href="/">
         伤心公主
       </a>
       <p>什么都沾一点，想到什么记什么。<br>© <span class="js-year">2026</span> 伤心公主 · 保留所有权利</p>
     </div>
     <div class="foot-links">
-      <a href="index.html">首页</a>
-      <a href="writing.html">文章</a>
-      <a href="about.html">关于</a>
-      <a href="timeline.html">时间线</a>
-      <a href="changelog.html">更新日志</a>
+      <a href="/">首页</a>
+      <a href="/writing">文章</a>
+      <a href="/about">关于</a>
+      <a href="/timeline">时间线</a>
+      <a href="/changelog">更新日志</a>
       <a href="mailto:1806754672@qq.com">写信</a>
     </div>
   </div>
