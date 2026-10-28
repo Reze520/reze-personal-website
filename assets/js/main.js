@@ -1105,7 +1105,7 @@
     var _poem = _poems.length ? _poems[Math.floor(Math.random() * _poems.length)] : "";
     var noticeCard = _poem
       ? '<div class="g-card"><div class="g-card-head"><span class="t">' + ICONS.info +
-        '公告</span></div><div class="g-notice">' + esc(_poem).replace(/\n/g, "<br>") +
+        '诗笺</span></div><div class="g-notice">' + esc(_poem).replace(/\n/g, "<br>") +
         "</div></div>"
       : "";
 
