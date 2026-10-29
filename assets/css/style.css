@@ -9653,3 +9653,127 @@ body.has-app .site-head.is-stuck {
   background: color-mix(in srgb, var(--panel) 92%, var(--accent-glow));
   border-color: rgba(255, 255, 255, 0.1);
 }
+
+/* ---------- 文章留言（读者留言） ---------- */
+.g-comments {
+  margin-top: 30px;
+  padding-top: 22px;
+  border-top: 1px solid var(--line);
+}
+.g-comments-title {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  margin: 0 0 14px;
+  font-size: 1.05rem;
+  font-weight: 600;
+}
+.g-comments-count {
+  font-size: .8rem;
+  font-weight: 400;
+  color: var(--ink-3);
+}
+.g-cmt-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.g-cmt {
+  position: relative;
+  padding: 12px 14px;
+  border: var(--card-border);
+  border-radius: 12px;
+  background: var(--card-bg);
+}
+.g-cmt-head {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  margin-bottom: 4px;
+}
+.g-cmt-who { font-weight: 600; font-size: .92rem; }
+.g-cmt-when { font-size: .76rem; color: var(--ink-3); }
+.g-cmt-body {
+  line-height: 1.7;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+.g-cmt-empty {
+  margin: 4px 0;
+  font-size: .9rem;
+  color: var(--ink-3);
+}
+.g-cmt-del {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  padding: 2px 6px;
+  font-size: .72rem;
+  color: var(--ink-3);
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+.g-cmt-del:hover { color: #c0392b; }
+.g-cmt-form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 16px;
+}
+.g-cmt-name {
+  max-width: 260px;
+}
+.g-cmt-name,
+.g-cmt-text {
+  box-sizing: border-box;
+  width: 100%;
+  padding: 9px 11px;
+  font: inherit;
+  color: var(--ink);
+  background: var(--card-bg);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  resize: vertical;
+}
+.g-cmt-name:focus,
+.g-cmt-text:focus {
+  outline: none;
+  border-color: var(--accent);
+}
+.g-cmt-name::placeholder,
+.g-cmt-text::placeholder { color: var(--ink-3); }
+.g-cmt-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.g-cmt-submit {
+  padding: 8px 18px;
+  font: inherit;
+  color: var(--accent-ink);
+  background: var(--accent);
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+}
+.g-cmt-submit:disabled {
+  opacity: .55;
+  cursor: default;
+}
+.g-cmt-status {
+  font-size: .82rem;
+  color: var(--ink-3);
+}
+.g-cmt-admin {
+  margin-top: 10px;
+  padding: 4px 10px;
+  font: inherit;
+  font-size: .8rem;
+  color: var(--ink-3);
+  background: none;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  cursor: pointer;
+}
+.g-cmt-admin:hover { color: var(--ink); }

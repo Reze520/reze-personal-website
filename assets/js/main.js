@@ -3010,6 +3010,190 @@ function interceptLinks(e) {
     }
   }
 
+  /* ---------- 文章留言（读者留言） ----------
+     在文章详情页底部挂载一个留言区：列表 + 表单。
+     数据走 /site-data/comments（与内容同源，无 CORS）。
+     所有用户内容一律用 textContent 渲染，避免 XSS。 */
+  function fmtCmtTime(s) {
+    if (!s) return "";
+    var m = /^(\d{4})-(\d{2})-(\d{2})[ T](\d{2}):(\d{2})/.exec(s);
+    if (!m) return s;
+    var d = new Date(Date.UTC(+m[1], +m[2] - 1, +m[3], +m[4], +m[5]));
+    d = new Date(d.getTime() + 8 * 3600 * 1000); // 服务器 UTC，转北京时间显示
+    function p(n) { return (n < 10 ? "0" : "") + n; }
+    return d.getUTCFullYear() + "-" + p(d.getUTCMonth() + 1) + "-" + p(d.getUTCDate()) +
+      " " + p(d.getUTCHours()) + ":" + p(d.getUTCMinutes());
+  }
+
+  function mountComments(host, postId) {
+    if (!host || !postId) return;
+    var sec = host.querySelector(".g-comments");
+    if (sec && sec.getAttribute("data-post") === postId) {
+      loadComments(sec, postId);
+      return;
+    }
+    if (sec) sec.remove();
+
+    sec = document.createElement("section");
+    sec.className = "g-comments";
+    sec.setAttribute("data-post", postId);
+
+    var h = document.createElement("h2");
+    h.className = "g-comments-title";
+    h.appendChild(document.createTextNode("留言 "));
+    var count = document.createElement("span");
+    count.className = "g-comments-count";
+    count.textContent = "0";
+    h.appendChild(count);
+    sec.appendChild(h);
+
+    var list = document.createElement("div");
+    list.className = "g-cmt-list";
+    sec.appendChild(list);
+
+    var form = document.createElement("form");
+    form.className = "g-cmt-form";
+    form.setAttribute("autocomplete", "off");
+
+    var nameI = document.createElement("input");
+    nameI.type = "text";
+    nameI.name = "name";
+    nameI.className = "g-cmt-name";
+    nameI.maxLength = 40;
+    nameI.placeholder = "昵称（留空默认匿名）";
+
+    var ta = document.createElement("textarea");
+    ta.name = "text";
+    ta.className = "g-cmt-text";
+    ta.rows = 3;
+    ta.maxLength = 2000;
+    ta.required = true;
+    ta.placeholder = "说点什么吧（最多 2000 字）";
+
+    var row = document.createElement("div");
+    row.className = "g-cmt-actions";
+    var btn = document.createElement("button");
+    btn.type = "submit";
+    btn.className = "g-cmt-submit";
+    btn.textContent = "发表留言";
+    var status = document.createElement("span");
+    status.className = "g-cmt-status";
+    row.appendChild(btn);
+    row.appendChild(status);
+
+    form.appendChild(nameI);
+    form.appendChild(ta);
+    form.appendChild(row);
+
+    var adminBtn = document.createElement("button");
+    adminBtn.type = "button";
+    adminBtn.className = "g-cmt-admin";
+    adminBtn.textContent = "管理留言";
+    adminBtn.addEventListener("click", function () {
+      var pass = sessionStorage.getItem("reze-admin-pass");
+      if (!pass) {
+        pass = window.prompt("输入管理口令以删除留言：");
+        if (!pass) return;
+        sessionStorage.setItem("reze-admin-pass", pass);
+      }
+      sec.setAttribute("data-admin", "1");
+      loadComments(sec, postId);
+    });
+
+    form.addEventListener("submit", function (e) {
+      e.preventDefault();
+      var name = nameI.value.trim();
+      var text = ta.value.trim();
+      if (!text) { status.textContent = "写点内容再发吧"; return; }
+      status.textContent = "发送中…";
+      btn.disabled = true;
+      fetch("/site-data/comments", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ post: postId, name: name, text: text })
+      })
+        .then(function (r) { return r.json().then(function (j) { return { ok: r.ok, j: j }; }); })
+        .then(function (res) {
+          if (res.ok && res.j && res.j.ok) {
+            ta.value = "";
+            status.textContent = "已发表";
+            loadComments(sec, postId);
+          } else {
+            status.textContent = (res.j && res.j.error) || "发送失败，稍后再试";
+          }
+        })
+        .catch(function () { status.textContent = "网络出错，稍后再试"; })
+        .then(function () { btn.disabled = false; });
+    });
+
+    sec.appendChild(adminBtn);
+    sec.appendChild(form);
+    host.appendChild(sec);
+    loadComments(sec, postId);
+  }
+
+  function loadComments(sec, postId) {
+    var list = sec.querySelector(".g-cmt-list");
+    var count = sec.querySelector(".g-comments-count");
+    var isAdmin = sec.getAttribute("data-admin") === "1";
+    var pass = sessionStorage.getItem("reze-admin-pass");
+    fetch("/site-data/comments?post=" + encodeURIComponent(postId), { cache: "no-store" })
+      .then(function (r) { return r.json(); })
+      .then(function (data) {
+        var cs = (data && data.comments) || [];
+        count.textContent = String(cs.length);
+        list.innerHTML = "";
+        if (!cs.length) {
+          var empty = document.createElement("p");
+          empty.className = "g-cmt-empty";
+          empty.textContent = "还没有留言，来当第一个。";
+          list.appendChild(empty);
+          return;
+        }
+        cs.forEach(function (c) {
+          var item = document.createElement("div");
+          item.className = "g-cmt";
+          var head = document.createElement("div");
+          head.className = "g-cmt-head";
+          var who = document.createElement("span");
+          who.className = "g-cmt-who";
+          who.textContent = c.name || "匿名";
+          var when = document.createElement("span");
+          when.className = "g-cmt-when";
+          when.textContent = fmtCmtTime(c.created_at);
+          head.appendChild(who);
+          head.appendChild(when);
+          var body = document.createElement("div");
+          body.className = "g-cmt-body";
+          body.textContent = c.text;
+          item.appendChild(head);
+          item.appendChild(body);
+          if (isAdmin && pass) {
+            var del = document.createElement("button");
+            del.type = "button";
+            del.className = "g-cmt-del";
+            del.textContent = "删除";
+            del.addEventListener("click", function () {
+              if (!window.confirm("删除这条留言？")) return;
+              fetch("/site-data/comments/" + c.id, {
+                method: "DELETE",
+                headers: { "X-Admin-Pass": pass }
+              }).then(function (r) { if (r.ok) loadComments(sec, postId); });
+            });
+            item.appendChild(del);
+          }
+          list.appendChild(item);
+        });
+      })
+      .catch(function () {
+        list.innerHTML = "";
+        var err = document.createElement("p");
+        err.className = "g-cmt-empty";
+        err.textContent = "留言加载失败。";
+        list.appendChild(err);
+      });
+  }
+
   function mountPost(host, id) {
     if (!host) host = $("#post");
     if (!host) return;
@@ -3177,6 +3361,9 @@ function interceptLinks(e) {
       window.addEventListener("scroll", onScroll, { passive: true });
       onScroll();
     }
+
+    // 文章底部挂上读者留言区
+    mountComments(host, p.id);
   }
 
   /* ---------- 顶栏「更多」下拉 ---------- */

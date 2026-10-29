@@ -38,6 +38,16 @@ async function initSchema(env) {
       type TEXT DEFAULT 'note', created_at TEXT DEFAULT (datetime('now'))
     )`
   ).run();
+  await env.DB.prepare(
+    `CREATE TABLE IF NOT EXISTS comments (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      post_id TEXT DEFAULT '',
+      name TEXT DEFAULT '',
+      text TEXT DEFAULT '',
+      ip TEXT DEFAULT '',
+      created_at TEXT DEFAULT (datetime('now'))
+    )`
+  ).run();
 }
 
 function authorized(request, env) {
@@ -89,6 +99,39 @@ export async function onRequest(context) {
     const body = await request.json().catch(function () { return {}; });
     if (env.ADMIN_PASS && body.pass === env.ADMIN_PASS) return json({ ok: true });
     return json({ ok: false, error: "口令错误" }, 401);
+  }
+
+  // 公开读评论（无需口令）
+  if (method === "GET" && seg.length === 1 && seg[0] === "comments") {
+    const post = new URL(request.url).searchParams.get("post") || "";
+    const rows = await env.DB.prepare(
+      "SELECT id, post_id, name, text, created_at FROM comments WHERE post_id=? ORDER BY id ASC"
+    ).bind(post).all();
+    return new Response(JSON.stringify({ comments: rows.results || [] }), {
+      status: 200,
+      headers: { ...JSON_HEADERS, "Cache-Control": "no-store" }
+    });
+  }
+
+  // 公开发表评论（无需口令，带基础校验与限速）
+  if (method === "POST" && seg.length === 1 && seg[0] === "comments") {
+    const b = await request.json().catch(function () { return {}; });
+    const post = String(b.post || "").slice(0, 80);
+    let name = String(b.name || "").trim().slice(0, 40);
+    const text = String(b.text || "").trim();
+    if (!/^[\w\-]+$/.test(post)) return json({ error: "文章标识无效" }, 400);
+    if (!text) return json({ error: "写点内容再发吧" }, 400);
+    if (text.length > 2000) return json({ error: "太长了，最多 2000 字" }, 400);
+    if (!name) name = "匿名";
+    const ip = request.headers.get("CF-Connecting-IP") || "";
+    const recent = await env.DB.prepare(
+      "SELECT COUNT(*) AS c FROM comments WHERE post_id=? AND ip=? AND created_at > datetime('now','-60 seconds')"
+    ).bind(post, ip).first();
+    if (recent && recent.c >= 6) return json({ error: "太快了，稍等一下再发" }, 429);
+    const r = await env.DB.prepare(
+      "INSERT INTO comments (post_id, name, text, ip, created_at) VALUES (?,?,?,?,datetime('now'))"
+    ).bind(post, name, text, ip).run();
+    return json({ ok: true, id: r && r.meta && r.meta.last_row_id });
   }
 
   // 以下都需要管理员口令
@@ -144,6 +187,14 @@ export async function onRequest(context) {
       ).bind(b.date || "", b.title || "", b.desc || "", b.type || "note", id).run();
       return json({ ok: true });
     }
+  }
+
+  // 删除评论（管理员口令）
+  if (method === "DELETE" && seg.length === 2 && seg[0] === "comments") {
+    if (!authorized(request, env)) return json({ error: "未授权" }, 401);
+    const id = Number(seg[1]);
+    await env.DB.prepare("DELETE FROM comments WHERE id=?").bind(id).run();
+    return json({ ok: true });
   }
 
   // 设置
