@@ -3369,6 +3369,69 @@ body.has-app .site-foot .brand .brand-mark {
   text-transform: uppercase;
 }
 
+/* ===== 文章类别气质皮肤 =====
+   统一设计语言下按类别给不同气质：点缀色一律跟随用户主题色 --g-accent，
+   只改结构 / 字体气质，保证全站和谐、不突兀。 */
+
+/* 读书 / 书评：杂志特稿风 —— 首字下沉 + 加粗引文竖线 */
+.g-prose.prose--reading > p:first-of-type::first-letter {
+  float: left;
+  font-family: var(--serif);
+  font-weight: 700;
+  font-size: 3.1em;
+  line-height: 0.78;
+  padding: 0.04em 0.14em 0 0;
+  color: var(--g-accent);
+}
+.g-prose.prose--reading blockquote {
+  border-left-width: 3px;
+  padding-left: 24px;
+}
+
+/* 技术：代码优先 —— 代码块加深 + 左侧 accent 细线 */
+.g-prose.prose--tech pre {
+  background: rgba(0, 0, 0, 0.5);
+  border-left: 3px solid var(--g-accent);
+  border-radius: 10px 12px 12px 10px;
+}
+.g-prose.prose--tech code {
+  background: rgba(0, 0, 0, 0.42);
+}
+
+/* 电影：影像叙事 —— 引文转为居中宽幅 pull quote（字幕感） */
+.g-prose.prose--movie blockquote {
+  border-left: none;
+  margin: 2.6em 0;
+  padding: 20px 6%;
+  text-align: center;
+  font-style: italic;
+  font-size: calc(var(--prose-quote-fs) + 3px);
+  border-top: 1px solid rgba(255, 255, 255, 0.16);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.16);
+}
+
+/* 文史 / 古诗：东方古风 —— 标题与引文用衬线 */
+.g-prose.prose--history h2,
+.g-prose.prose--history h3 {
+  font-family: var(--serif);
+  font-weight: 600;
+  letter-spacing: 0.02em;
+}
+.g-prose.prose--history blockquote {
+  font-family: var(--serif);
+  border-left-width: 3px;
+}
+
+/* 移动端收一下首字下沉与宽引文，避免拥挤 */
+@media (max-width: 620px) {
+  .g-prose.prose--reading > p:first-of-type::first-letter {
+    font-size: 2.4em;
+  }
+  .g-prose.prose--movie blockquote {
+    padding: 18px 4%;
+  }
+}
+
 .g-article-foot {
   margin-top: 38px;
   padding-top: 24px;

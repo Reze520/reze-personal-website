@@ -3039,7 +3039,9 @@ function interceptLinks(e) {
       "</h1>" +
       meta +
       cover +
-      '<div class="g-prose prose">' +
+      var CAT_SKIN = { "读书": "reading", "技术": "tech", "日常": "daily", "电影": "movie", "杂记": "notes", "文史": "history" };
+      var skin = CAT_SKIN[p && p.cat] || "";
+      '<div class="g-prose prose' + (skin ? " prose--" + skin : "") + '">'
       p.content +
       "</div>" +
       '<div class="g-article-foot">' +
