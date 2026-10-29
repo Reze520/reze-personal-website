@@ -21,7 +21,7 @@
 <meta property="og:image:width" content="474">
 <meta property="og:image:height" content="474">
 <link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20viewBox%3D%270%200%2064%2064%27%3E%3Crect%20width%3D%2764%27%20height%3D%2764%27%20rx%3D%2715%27%20fill%3D%27%23241f33%27%2F%3E%3Cg%20transform%3D%27translate%286%2C6%29%20scale%282.1667%29%27%3E%3Cpath%20d%3D%27M21%2012.79A9%209%200%201%201%2011.21%203%207%207%200%200%200%2021%2012.79z%27%20fill%3D%27%23f6f1e7%27%2F%3E%3C%2Fg%3E%3C%2Fsvg%3E">
-<link rel="stylesheet" href="assets/css/style.css?v=20261101g">
+<link rel="stylesheet" href="assets/css/style.css?v=20261029a">
   <link rel="alternate" type="application/rss+xml" title="RezeのBlog" href="feed.xml">
 </head>
 <body class="has-app">
@@ -71,6 +71,14 @@
   <aside class="col col-left" id="app-left"></aside>
 
   <main class="col col-main" id="app-main"><article class="g-article g-changelog"><h1>更新日志</h1><div class="g-meta"><span>这个站怎么一点点长成现在这样。按时间倒着排。</span></div><div class="g-prose prose"><h2>2026.10</h2>
+<h3>只剩 git + Cloudflare 这条路了</h3>
+<ul>
+<li>域名既然不打算要了，那站就明明白白住在 <code>https://reze520.pages.dev</code>，说明文档里不再挂「以后要整站替换域名」这种待办。文档第六章新加了一张表：真要接新域名，改哪几个常量、哪几个文件、D1 里那份也得跟着改，一目了然。</li>
+<li>页脚那行小字现在写「个人站点」。<code>data.override.js</code> 加载在 <code>data.js</code> 后面，两份都得改；D1 里也还是老值 —— 三处一起才对。</li>
+<li><code>sitemap.xml</code> 和 <code>feed.xml</code> 重新生成：线上内容已经攒到 77 篇，sitemap 从 83 条变成 86 条（9 个静态页 + 77 篇文章），feed 仍是最近 30 篇。逐条核对过，没有一条对不上真实 id。</li>
+<li>抓出一个漏网的死链：<code>about.html</code> 这个静态文件里，「会数数的猫」和「这个博客」两个链接还指着当年想用的英文 slug。上一轮改的是 <code>main.js</code> 里动态生成的「关于」页，静态那份忘了。点进去照样是「没有找到这篇文章」。这次改成真实 id（<code>post-7</code> 和 <code>post-2</code>）。</li>
+<li>现在文档里对部署的描述统一成「git + Cloudflare Pages，没有服务器，不折腾备案，也不用自定义域名」。</li>
+</ul>
 <h3>域名不续了，站就留在 pages.dev</h3>
 <ul>
 <li><code>reze520.top</code> 到期没续，退掉了。以前总想着「哪天把解析修好」，说明文档里一直挂着「等域名恢复了要整站替换一次」；这次把这句话删了 —— 不打算再弄，站就固定在 <code>reze520.pages.dev</code>，sitemap / feed / canonical 里写的就是最终地址。</li>
@@ -323,9 +331,9 @@
   } catch (e) {}
 })();
 </script>
-<script defer src="assets/js/data.js?v=20261101g"></script>
-<script defer src="assets/js/cloud.js?v=20261101g"></script>
-<script defer src="assets/js/weather.js?v=20261101g"></script>
-<script defer src="assets/js/main.js?v=20261101g"></script>
+<script defer src="assets/js/data.js?v=20261029a"></script>
+<script defer src="assets/js/cloud.js?v=20261029a"></script>
+<script defer src="assets/js/weather.js?v=20261029a"></script>
+<script defer src="assets/js/main.js?v=20261029a"></script>
 </body>
 </html>

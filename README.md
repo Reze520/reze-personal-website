@@ -349,7 +349,8 @@ python -m http.server 8080
 
 ## 六、怎么上线
 
-现在走的是 git + Cloudflare Pages，没有服务器，也不折腾备案。
+走的是 git + Cloudflare Pages：没有服务器，不折腾备案，也不用自定义域名。
+站就住在 `https://reze520.pages.dev` 上，够用了。
 
 1. 代码推到 GitHub。
 2. Cloudflare Pages 接上仓库，生产分支选 `Reze520-website`——不是 `main`。我一开始就栽在这儿，推 `main` 半天不更新。
@@ -370,6 +371,25 @@ python tools/bump_version.py 20261101a
 
 文章内容、设置这些走后端，存在 Cloudflare Pages Functions + D1 里，不在这个静态目录里。
 
+### 域名的事
+
+`reze520.top` 早几年注册过，2026.10 到期没续，退掉了，也不打算再捡回来。
+所以现在没有任何「以后要换域名」的待办 —— sitemap、feed、canonical 里写的就是最终地址。
+
+站名和代码里还留着 reze520，只当个叫惯了的称呼，不是还指着那个域名。
+要是哪天真买了新域名要接进来，改这几处：
+
+| 位置 | 改什么 |
+|---|---|
+| `assets/js/main.js` | `SITE_ORIGIN` 常量（canonical、og:url 都从这儿来） |
+| `tools/gen_feeds.py` | 顶部 `ORIGIN` 常量，然后重跑一次生成 sitemap / feed |
+| `assets/js/data.js`、`data.override.js` | `site.domain`（页脚那行小字） |
+| D1 里的 `site` | 同上，云端那份也得改，否则会被盖回来 |
+| 各 HTML 的 `<head>` | `og:url` 和 `canonical` 两行 |
+
+Cloudflare Pages 的自定义域名在 **Pages 项目 → Custom domains** 里加，
+加完它会自己签证书。这步不着急。
+
 （最早还认真研究过阿里云 + 备案那条路，后来域名退了，就没再弄。）
 
 ---
@@ -377,15 +397,15 @@ python tools/bump_version.py 20261101a
 ## 七、SEO 与可发现性
 
 - `robots.txt`：允许抓取，指向 sitemap
-- `sitemap.xml`：**自动生成**，现在 83 条（9 个静态页 + 74 篇文章）。
+- `sitemap.xml`：**自动生成**，现在 86 条（9 个静态页 + 77 篇文章）。
   以前是手写的，写着写着就和线上对不上了 —— 老文章的 id 从 `huo-zhe` 这种手写 slug
   改成了数据库自增的 `post-74`，sitemap 里 59 条全是旧地址，点进去一律「没有找到这篇文章」。
   现在统一由 `tools/gen_feeds.py` 从线上内容生成，**别手改**。
 - `feed.xml`：RSS，收最近 30 篇，同样自动生成。之前那份停在 2026 年 4 月，
   33 条链接也全是旧 id —— 订阅器里点开就是空页。
 - 每页有独立的 `title` / `description` / `canonical` / `og:*` / `twitter:card`。
-  子页面是「跳转到 `index.html#/xxx`」的 hash 路由，跳过去之后标题会掉回首页那一句，
-  所以 `main.js` 里的 `syncMeta()` 会按路由再改一遍标题、描述和 canonical。
+  子页面现在是真路径（`/writing`），不是以前的 `index.html#/writing`；
+  路由一变，`main.js` 里的 `syncMeta()` 就按新路径再改一遍标题、描述和 canonical。
 - `admin.html` 和 `404.html` 带 `noindex`，不进搜索引擎。
 - `_headers`：给静态资源开长缓存（都带 `?v=` 号），补了几个安全头。
 - Cloudflare Pages 会把 `/xxx.html` **308 跳到 `/xxx`**（自动去后缀），
@@ -397,6 +417,7 @@ python tools/bump_version.py 20261101a
 > `reze520.top` 是早几年注册的，没续费，已经退掉了，也不打算再捡回来 ——
 > 所以不存在「以后换域名要批量替换」这件事，sitemap / feed / canonical 里写的就是最终地址。
 > 站名里还留着 reze520，只当个叫惯了的称呼，不是还指着那个域名。
+> 真要接新域名，改哪儿见第六章那张表。
 
 ---
 
