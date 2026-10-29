@@ -3,6 +3,7 @@
    ------------------------------------------------------------
    加歌：往数组里加一条就行（title / artist / src / cover / lyrics）。
    lyrics 是 LRC 文本，没有就留空字符串，歌词区会显示「暂无歌词」。
+   默认播放模式是单曲循环，打开网页不自动播放，点一下才响。
    ============================================================ */
 /* 音频走这个 CDN：Cloudflare Pages 不返回 Accept-Ranges，浏览器没法拖动进度条。
    jsDelivr 支持 Range 请求（206），所以音频单独走它，页面仍然在 Cloudflare。
@@ -15,8 +16,199 @@ window.PLAYLIST_CDN_MIRRORS = [
   "https://gcore.jsdelivr.net/gh/Reze520/reze-personal-website@main/assets/audio/",
   "https://fastly.jsdelivr.net/gh/Reze520/reze-personal-website@main/assets/audio/"
 ];
+/* 默认播放模式：list 顺序循环 / one 单曲循环 / shuffle 随机 */
+window.PLAYLIST_DEFAULT_MODE = "one";
 
 window.PLAYLIST = [
+  {
+    "title": "Eutopia",
+    "artist": "Yoohsic Roomz",
+    "src": "assets/audio/m05.mp3",
+    "cover": "assets/uploads/covers/m05.jpg",
+    "lyrics": "[00:00.00]纯音乐，请欣赏"
+  },
+  {
+    "title": "Autumn Leaf",
+    "artist": "RePlus",
+    "src": "assets/audio/m01.mp3",
+    "cover": "assets/uploads/covers/m01.jpg",
+    "lyrics": "[00:00.00]纯音乐，请欣赏"
+  },
+  {
+    "title": "Beautiful World",
+    "artist": "宇多田ヒカル",
+    "src": "assets/audio/m02.mp3",
+    "cover": "assets/uploads/covers/m02.jpg",
+    "lyrics": "[00:00.020]Beautiful World\n[00:04.940]歌手：宇多田光\n[00:07.170]It's only love\n[00:12.030]It's only love\n[00:17.620]もしも願い一つだけ\n[00:23.380]叶うなら\n[00:25.840]君の側で眠らせて\n[00:30.850]どんな場所でもいいよ\n[00:34.180]Beautiful world\n[00:37.230]迷わず君だけを見つめている\n[00:42.420]Beautiful boy\n[00:45.310]自分の美しさまだ知らないの\n[00:54.150]It's only love\n[00:59.070]寝ても覚めても少年マンガ\n[01:05.130]夢見てばっか\n[01:07.310]自分が好きじゃないの\n[01:15.050]何が欲しいか 分からなくて\n[01:21.710]ただ欲しがって\n[01:24.050]ぬるい涙が頬を伝う\n[01:32.510]言いたいことなんか無い\n[01:34.520]ただもう一度会いたい\n[01:40.840]言いたいこと言えない\n[01:42.800]根性無しかもしれない\n[01:47.670]それでいいけど\n[01:49.540]もしも願い一つだけ\n[01:55.160]叶うなら\n[01:57.500]君の側で眠らせて\n[02:02.600]どんな場所でもいいよ\n[02:05.900]Beautiful world\n[02:08.910]迷わず君だけを見つめている\n[02:14.260]Beautiful boy\n[02:17.220]自分の美しさまだ知らないの\n[02:25.650]It's only love\n[02:30.850]どんなことでも やってみて\n[02:36.720]損をしたって\n[02:39.080]少し経験値上がる\n[02:47.490]新聞なんかいらない\n[02:49.390]肝心なことが載ってない\n[02:53.450]最近調子どうだい?\n[02:58.000]元気にしてるなら\n[03:01.190]別にいいけど\n[03:04.520]僕の世界消えるまで\n[03:10.200]会えぬなら\n[03:12.790]君の側で眠らせて\n[03:17.700]どんな場所でも結構\n[03:21.070]Beautiful world\n[03:24.030]儚く過ぎて行く日々の中で\n[03:29.370]Beautiful boy\n[03:32.420]気分のムラは仕方ないね\n[03:37.740]もしも願い一つだけ\n[03:42.710]叶うなら\n[03:46.020]君の側で眠らせて\n[04:10.320]Beautiful world...\n[04:19.580]Beautiful boy...\n[04:27.790]Beautiful world...\n[04:36.130]Beautiful boy...\n[04:44.470]Beautiful world...\n[04:52.810]Beautiful boy...\n[05:00.990]Beautiful world..."
+  },
+  {
+    "title": "Believe",
+    "artist": "岡村孝子",
+    "src": "assets/audio/m03.mp3",
+    "cover": "assets/uploads/covers/m03.jpg",
+    "lyrics": "[00:25.32]最後の言葉を人の波に消されて\n[00:36.44]これですべてが終わったね 何もかも\n[00:46.95]あふれる涙をぬぐうこともできずに\n[00:57.87]遠く去りゆく面影に　別れを告げた\n[01:08.38]あなたのすべてを誰よりも知っていると思ってた\n[01:19.35]優しくなれずに　最後まで傷つけ合った\n[01:30.06]さよなら　二人が見つけた言葉だけが\n[01:41.13]遠く旅立つ生き方の行方を見てる\n[02:10.53]こぼれる陽ざしが少し強くなっても\n[02:21.34]まるで明日が見えなくて　泣きたくなる\n[02:32.11]着なれた上着をいつかぬぎすてるよう\n[02:43.18]きっと誰もが進むのね　悲しいけれど\n[02:53.74]もいちどあの日にもどれたら愛を素直に信じたい\n[03:04.55]あなたとふたりでどこまでも歩いてゆくと\n[03:15.31]今ではこんなに遠く生きてるけれど\n[03:26.34]あの日のぬくもりを消せずに 崩れそうよ\n[03:36.87]もういちど明日を信じたい　どんなことに出会っても\n[03:47.63]息づく時間をいつだって感じていたい\n[03:58.34]さよなら　私が　決めた答えだから\n[04:09.35]想い出抱きしめて　心の瞳をとじた"
+  },
+  {
+    "title": "DJ Got Us Fallin' in Love",
+    "artist": "Usher、Pitbull",
+    "src": "assets/audio/m04.mp3",
+    "cover": "assets/uploads/covers/m04.jpg",
+    "lyrics": "[00:06.880]Yeah man\n[00:08.600]So we back in the club\n[00:10.260]Get that bodies rockin from side to side (side to side)\n[00:16.560]Thank God the week is done\n[00:18.280]I feel like a zombie gone back to life (back to life)\n[00:24.270]Hands up, and suddenly we all got our hands up\n[00:30.40]No control of my body\n[00:32.659]Ain't I seen you before?\n[00:34.450]I think I remember those eyes, eyes, eyes, eyes\n[00:39.190]Cause baby tonight\n[00:42.80]The DJ got us falling in love again\n[00:47.140]Yeah, baby tonight\n[00:50.50]The DJ got us falling in love again\n[00:56.180]So dance, dance, like it’s the last, last night of your life, life\n[01:01.400]Gonna get you right\n[01:03.310]Cause baby tonight\n[01:06.70]The DJ got us falling in love again\n[01:12.590]Keep downing drinks like this\n[01:14.300]Not tomorrow that just right now, now, now, now, now, now\n[01:20.410]Gonna set the roof on fire\n[01:22.470]Gonna burn this mother ****** down, down, down, down, down, down\n[01:28.270]Hands up, when the music drops\n[01:31.310]We both put our hands up\n[01:34.220]Put your hands on my body\n[01:36.740]Swear I seen you before\n[01:38.570]I think I remember those eyes, eyes, eyes, eyes\n[01:43.410]Cause baby tonight\n[01:46.9]The DJ got us falling in love again\n[01:51.410]Yeah, baby tonight\n[01:53.930]The DJ got us falling in love again\n[02:00.90]So dance, dance, like it’s the last, last night of your life, life\n[02:05.320]Gonna get you right\n[02:07.220]Cause baby tonight\n[02:10.20]The DJ got us falling in love again\n[02:14.310]PITBULL:\n[02:16.320]You know evil, speak no evil, see no evil\n[02:19.329]Get it baby, hope you catch that GO\n[02:21.380]That's how we roll\n[02:22.280]My life is a movie and you just TIVO\n[02:24.470]Mami got me switchin like a dreadlock\n[02:26.430]She don't wrestle but I got her in a headlock\n[02:28.640]Yabadabadoo make her bedrock- mami on fire, red hot\n[02:32.610]badabingbadaboom Mr. Worldwide as I step in the room\n[02:35.970]I'm a hustler baby\n[02:37.400]But that you knew and tonight it's just me and you\n[02:39.400]Cause baby tonight\n[02:42.170]The DJ got us falling in love again\n[02:47.240]Yeah, baby tonight\n[02:50.329]The DJ got us falling in love again\n[02:56.340]So dance, dance, like it’s the last, last night of your life, life\n[03:01.290]Gonna get you right\n[03:03.200]Cause baby tonight\n[03:05.930]The DJ got us falling in love again\n[03:10.980]Yeah, baby tonight\n[03:13.920]The DJ got us falling in love again\n[03:20.10]So dance, dance, like it’s the last, last night of your life, life\n[03:25.370]Gonna get you right\n[03:27.120]Cause baby tonight\n[03:29.980]The DJ got us falling in love again\n[03:37.600]Yeah, thank you DJ haha"
+  },
+  {
+    "title": "Falling U",
+    "artist": "T-ara",
+    "src": "assets/audio/m06.mp3",
+    "cover": "assets/uploads/covers/m06.jpg",
+    "lyrics": "[00:06.240]Love is pain\n[00:11.330]Say good bye\n[00:15.110]한참을 멍하니 걷고 있었어\n[00:18.130]이렇게 날 두고 가는 그 어쩌자고 끝나\n[00:22.260]뒷모습을 보였니 울음만 터져나와\n[00:26.200]돌아버리겠어 I'm crazy crazy crazy\n[00:30.180]너 너무 미워 정말 너 uh uh uh uh\n[00:33.410]너 절대다시 안볼꺼야 uh uh uh uh\n[00:37.150]미안하지도 않니 다른 여자 만나도\n[00:41.220]바람을 피워도 다 용서해줬잖아\n[00:44.880]be be be be be be be be my love\n[00:48.180]bad ba ba ba ba ba baby want you telling me\n[00:52.100]가만히 있다가도 설움이 복받쳐서 너무 미워\n[00:56.800]아무나 나를 도와줘\n[00:59.370]fall fall fall fall fall fall fall fall falling U\n[01:03.300]너무너무 사랑해서 빠져나올수 없어\n[01:06.830]I'm falling in you I'm falling in you\n[01:10.610]널 떨쳐 버리려고 별짓을 다해봐도\n[01:14.220]fall fall fall fall fall fall fall fall falling U\n[01:17.830]falling falling falling falling fall falling U\n[01:21.420]바로 내일 부터는 너를 못볼 생각에 하늘이 무너져\n[01:26.830]I'm falling In You\n[01:29.490]Do ....Do....\n[01:35.250]Na Na Na Na Na Na\n[01:36.930]Do....Do....\n[01:42.120]I I I can't live\n[01:43.759]우리 자주 가던 커피숍에 매일 같이 앉았던 그 자리에\n[01:48.880]（우리 맨날 만나던 같은 시간에）\n[01:51.420]너를 기다리고 있어 지금 너 올까봐 기다리고있어\n[01:55.300]기다려도 안오는데 눈물만 나오는데\n[01:58.520]be be be be be be be be my love\n[02:02.000]bad ba ba ba ba ba baby want you telling me\n[02:05.840]참을 만한 이별이 쓰러지게 아프게 해\n[02:09.550]처음으로 가슴에 구멍이 났어\n[02:13.400]fall fall fall fall fall fall fall fall falling U\n[02:16.840]너무너무 사랑해서 빠져나올수 없어\n[02:20.720]I'm falling in you I'm falling in you\n[02:24.390]널 떨쳐 버리려고 별짓을 다해봐도\n[02:28.150]fall fall fall fall fall fall fall fall falling U\n[02:31.610]falling falling falling falling fall falling U\n[02:35.400]바로 내일 부터는 너를 못볼 생각에 하늘이 무너져\n[02:40.590]I'm falling In You\n[02:43.000]fall fall fall fall fall fall fall fall falling U\n[02:46.410]혼자하는 사랑에는 아무 방법이 없어\n[02:50.280]I'm falling in you I'm falling in you\n[02:54.150]미워해도 못잊는데 어떻게 하면 될까\n[02:57.840]fall fall fall fall fall fall fall fall falling U\n[03:01.210]falling falling falling falling fall falling U\n[03:04.710]바로 내일 부터는 너를 못볼 생각에 하늘이 무너져\n[03:10.000]I'm falling in you\n[03:12.890]Do ....Do....\n[03:18.670]Na Na Na Na Na Na\n[03:20.310]Do....Do....\n[03:25.960]Na Na Na Na Na Na.."
+  },
+  {
+    "title": "Gee",
+    "artist": "少女时代",
+    "src": "assets/audio/m07.mp3",
+    "cover": "assets/uploads/covers/m07.jpg",
+    "lyrics": "[00:01.570]A-ha! listen boy\n[00:06.120]my first love story\n[00:11.300]my angel\n[00:13.600]and my girls\n[00:15.940]my sunshine\n[00:17.780]oh oh let's go\n[00:19.570]너무 너무 멋져 눈이 눈이 부셔\n[00:22.290]숨을 못 쉬겠어 떨리는 걸\n[00:24.560]Gee Gee Gee Gee baby baby baby\n[00:26.950]Gee Gee Gee Gee baby baby baby\n[00:29.460]oh 너무 부끄러워 쳐다 볼 수 없어\n[00:31.870]사랑에 빠졌어 수줍은 걸\n[00:34.260]Gee Gee Gee Gee baby baby baby\n[00:36.600]Gee Gee Gee Gee babe babe.......\n[00:39.350]어떻게 하죠(어떡하죠)\n[00:41.480]떨리는 마음(떨리는 맘은요)\n[00:44.030](두근 두근 두근 두근)두근 두근 거려밤에잠도못이루죠\n[00:44.710]나는 나는 바본가봐요\n[00:49.260]그대 그대밖에 모르는 바보\n[00:54.210]그래요 그댈 보는 난\n[00:57.640]너무 반짝반짝 눈이 부셔 no no no no no\n[01:02.380]너무 깜짝깜짝 놀란 나는 oh oh oh oh oh\n[01:07.190]너무 짜릿짜릿 몸이 떨려 Gee Gee Gee Gee Gee\n[01:11.910]젖은 눈빛(oh yeah )좋은 향기(oh yeah yeah yeah)\n[01:19.710]oh 너무 너무 예뻐 맘이 너무 예뻐\n[01:22.210]첫눈에 반했어 꼭 찝은 걸\n[01:24.630]Gee Gee Gee Gee baby baby baby baby\n[01:27.090]Gee Gee Gee Gee baby baby baby baby\n[01:29.280]너무나 뜨거워 만질수가 없어\n[01:31.860]사랑에 타버려 후끈한걸\n[01:34.240]Gee Gee Gee Gee baby baby baby\n[01:36.570]Gee Gee Gee Gee babe babe......\n[01:39.290]어쩌면 좋아(어쩌면 좋아요)\n[01:41.430]수줍은 나는(수줍은 나는요)\n[01:44.160](몰라 몰라 몰라 몰라 몰라)\n[01:44.740]몰라 몰라하며\n[01:46.210]매일 그대만 그리죠\n[01:49.600]친한 친구들은 말하죠\n[01:51.980]정말 너는 정말 못말려 바보\n[01:55.390]하지만 그댈 보는 난\n[01:57.660]너무 반짝반짝 눈이 부셔 no no no no no\n[02:02.370]너무 깜짝깜짝 놀란 나는 oh oh oh oh oh\n[02:07.170]너무 짜릿짜릿 몸이 떨려 Gee Gee Gee Gee Gee\n[02:11.920]젖은 눈빛(oh yeah)좋은 향기(oh yeah yeah yeah)\n[02:18.380]말도 못했는 걸\n[02:20.730]너무 부끄러워 하는 날\n[02:27.530]용기가 없는 걸까\n[02:29.730]어떡해야 좋은걸까\n[02:32.140]두근두근 맘 졸이며 바라보고 있죠\n[02:36.210]너무 반짝반짝 눈이 부셔 no no no no no\n[02:40.860]너무 깜짝깜짝 놀란 나는 oh oh oh oh oh\n[02:45.610]너무 짜릿짜릿 몸이 떨려 Gee Gee Gee Gee Gee\n[02:50.350]젖은 눈빛(oh yeah)좋은 향기(oh yeah yeah yeah)\n[02:55.280]너무 반짝반짝 눈이 부셔 no no no no no\n[03:00.000]너무 깜짝깜짝 놀란 나는 oh oh oh oh oh\n[03:04.850]너무 짜릿짜릿 몸이 떨려 Gee Gee Gee Gee Gee\n[03:09.640]젖은 눈빛(oh yeah)좋은 향기(oh yeah yeah yeah)"
+  },
+  {
+    "title": "Here With You",
+    "artist": "Asher Monroe",
+    "src": "assets/audio/m08.mp3",
+    "cover": "assets/uploads/covers/m08.jpg",
+    "lyrics": "[00:06.260]To all my friends\n[00:08.080]The night is young\n[00:09.650]The music is loud\n[00:11.540]They are playing our song\n[00:13.510]Nowhere else that I belong\n[00:17.070]Than here with you\n[00:21.010]Than here with you\n[00:22.670]Oh oh oh oh oh oh（x7）\n[00:35.410]Ain't felt this good since I remember\n[00:38.850]This night got started when you entered\n[00:42.610]I hope we can get a little closer\n[00:46.540]Maybe even get to know your name\n[00:50.190]I wanna hear the music so loud\n[00:53.540]Get some drinks inside me right now\n[00:57.260]So baby let it go\n[00:59.730]You had me at hello\n[01:01.460]Let's raise our glass and toast\n[01:03.470]DJ play that once more\n[01:05.390]To all my friends\n[01:07.020]The night is young\n[01:08.770]The music's loud\n[01:10.610]They are playing our song\n[01:12.700]There is nowhere else that I belong\n[01:16.320]Than here with you\n[01:20.210]Than here with you\n[01:22.070]Oh oh oh oh oh oh\n[01:34.650]Gonna see the sun\n[01:36.070]Before we know it\n[01:37.970]If you got some money\n[01:39.300]Time to blow it\n[01:41.730]Girl, the way you got me feeling so sick\n[01:45.480]Dancing the night\n[01:46.650]Away with you, with you, with you yeah\n[01:49.910]Nobody here is sober\n[01:52.840]Last call don't mean it's over yeah\n[01:56.960]So baby let it go\n[01:59.820]You had me at hello\n[02:01.370]Let's raise our glass and toast\n[02:05.180]To all my friends\n[02:07.010]The night is young\n[02:08.590]The music's loud\n[02:10.610]They are playing our song\n[02:12.530]There is nowhere else that I belong\n[02:16.130]Than here with you\n[02:17.980]Than here with you\n[02:19.870]Than here with you\n[02:21.770]Oh oh oh oh oh oh\n[02:24.300]Than here with you\n[02:27.450]Than here with you\n[02:29.980]Oh oh oh oh oh oh\n[02:34.840]I wanna hear the music so loud yeah\n[02:42.110]I wanna hear the music so loud yeah\n[02:53.180]To all my friends\n[02:54.890]The night is young\n[02:56.760]The music's loud\n[02:58.590]They are playing our song\n[03:00.360]There is nowhere else that I belong\n[03:04.110]Than here with you\n[03:05.950]Than here with you\n[03:07.880]Than here with you\n[03:10.680]Oh oh oh oh oh oh\n[03:11.820]Than here with you\n[03:15.580]Oh oh oh oh oh oh\n[03:15.910]Than here with you\n[03:17.980]Oh oh oh oh oh oh\n[03:19.260]Than here with you\n[03:21.840]Oh oh oh oh oh oh"
+  },
+  {
+    "title": "My Oh My",
+    "artist": "Aqua",
+    "src": "assets/audio/m09.mp3",
+    "cover": "assets/uploads/covers/m09.jpg",
+    "lyrics": "[00:11.040]My oh my do you wanna say goodbye\n[00:14.520]To have their Kingdom baby tell me why\n[00:18.360]My oh my do you wanna say goodbye\n[00:21.630]To rule a country baby you and I\n[00:26.240]If you were my king\n[00:29.110]My oh my do you wanna say goodbye\n[00:32.520]To have their Kingdom baby tell me why\n[00:36.200]My oh my do you wanna say goodbye\n[00:39.640]To rule a Country baby you and I\n[00:45.160]A little princess in a terrible mess\n[00:48.770]a kingdom alone with no lovers confess\n[00:53.150]dreams of a prince on a tall white horse\n[00:56.710]runs like a spirit by the castle walls\n[01:00.500]Gotta steal from the rich when they don't know I'm coming\n[01:03.510]gotta give to the poor no time for lovin'\n[01:07.700]My oh my don't you cry coz there is no way I'm staying\n[01:11.260]I will leave say bye bye I'm going my way\n[01:16.150]My oh my do you wanna say goodbye\n[01:19.910]To have their Kingdom baby tell me why\n[01:23.830]My oh my do you wanna say goodbye\n[01:27.070]To rule a Country baby you and I\n[01:31.700]If you were my King\n[01:35.800]I would be your queen\n[01:38.950]If you were my King\n[01:42.460]I would be your queen\n[01:47.200]Mystery deep in the royal heart\n[01:50.790]crying at night I wanna be a part\n[01:54.490]Prince O prince are you really sincere\n[01:58.030]that you one day are gonna disappear\n[02:01.910]Gotta steal from the rich when they don't know I'm coming\n[02:05.500]gotta give to the poor no time for lovin'\n[02:09.130]My oh my don't you cry coz there is no way I'm staying\n[02:12.800]I will leave say bye bye I'm going my way\n[02:17.850]My oh my\n[02:21.440]My oh my\n[02:24.940]My oh my\n[02:28.600]MY OH MY!\n[02:32.300]My oh my do you wanna say goodbye\n[02:35.750]To have their Kingdom baby tell me why\n[02:39.390]My oh my do you wanna say goodbye\n[02:42.860]To rule a Country baby you and I\n[02:46.670]My oh my do you wanna say goodbye\n[02:50.080]To have their Kingdom baby tell me why\n[02:53.920]My oh my do you wanna say goodbye\n[02:57.320]To rule a Country baby you and I\n[03:01.930]If you were my King\n[03:05.530]I would be your queen\n[03:09.150]If you were my King\n[03:12.710]I would be your queen"
+  },
+  {
+    "title": "One Last Kiss",
+    "artist": "宇多田ヒカル",
+    "src": "assets/audio/m10.mp3",
+    "cover": "assets/uploads/covers/m10.jpg",
+    "lyrics": "[00:20.542]初めてのルーブルは\n[00:22.559]なんてことはなかったわ\n[00:24.765]私だけのモナリザ\n[00:26.713]もうとっくに出会ってたから\n[00:29.125]初めてあなたを見た\n[00:30.973]あの日動き出した歯車\n[00:33.327]止められない喪失の予感\n[00:37.728]もういっぱいあるけど\n[00:43.372]もう一つ増やしましょう\n[00:47.700](Can you give me one last kiss？)\n[00:51.975]忘れたくないこと\n[00:54.809]Oh oh oh oh oh…\n[01:00.578]忘れたくないこと\n[01:03.356]Oh oh oh oh oh…\n[01:09.181]I love you more than you'll ever know\n[01:20.498]「写真は苦手なんだ」\n[01:22.381]でもそんなものはいらないわ\n[01:24.745]あなたが焼きついたまま\n[01:26.677]私の心のプロジェクター\n[01:28.996]寂しくないふりしてた\n[01:30.812]まあ、そんなのお互い様か\n[01:33.243]誰かを求めることは\n[01:35.107]即ち傷つくことだった\n[01:37.796]Oh, can you give me one last kiss？\n[01:43.364]燃えるようなキスをしよう\n[01:47.611]忘れたくても\n[01:51.927]忘れられないほど\n[01:54.809]Oh oh oh oh oh…\n[02:00.643]I love you more than you'll ever know\n[02:03.272]Oh oh oh oh oh…\n[02:09.161]I love you more than you'll ever know\n[02:29.060]もう分かっているよ\n[02:34.761]この世の終わりでも\n[02:39.113]年をとっても\n[02:45.707]忘れられない人\n[02:47.964]Oh oh oh oh oh…\n[02:49.953]忘れられない人\n[02:58.990]Oh oh oh oh oh…\n[03:00.809]I love you more than you'll ever know\n[03:03.760]Oh oh oh oh oh…\n[03:09.242]忘れられない人\n[03:12.367]Oh oh oh oh oh…\n[03:17.854]I love you more than you'll ever know\n[03:46.026]吹いていった風の後を\n[03:50.237]追いかけた　眩しい午後"
+  },
+  {
+    "title": "Where Did U Go",
+    "artist": "G.E.M. 邓紫棋",
+    "src": "assets/audio/m11.mp3",
+    "cover": "assets/uploads/covers/m11.jpg",
+    "lyrics": "[00:23.92]曾看着同星空 闲聊吹风\n[00:27.13]看日出多心动\n[00:29.73]曾每日缠一起 傻傻讲起\n[00:32.89]能爱到下世纪\n[00:35.55]怎么你俘虏这个心\n[00:37.08]却抽身退隐 不再亲近\n[00:41.91]独自苦等 仍然空等\n[00:44.47]难藏泪印\n[00:47.86]看着 电话中短讯\n[00:50.79]听着 录音的口讯\n[00:53.64]昨天的你哪天再接近\n[00:59.17]Tell me where did you go\n[01:01.96]心声都不可细诉\n[01:04.18]Oh tell me baby where did you hide\n[01:07.82]辛苦都未被谅解\n[01:11.26]Where did you go\n[01:13.58]数数多久不碰到\n[01:16.76]我在每夜 彻夜狂想\n[01:21.69]Where did you go\n[01:28.46]而这夜月光中\n[01:29.92]再见影踪 再献花多感动\n[01:34.16]而似蜜甜的心\n[01:35.86]明明开心 为何又骤降温\n[01:39.93]怎么你一下子抱紧\n[01:41.53]却一下子转身 不再亲近\n[01:46.32]独自苦等 仍然空等\n[01:48.94]难藏泪印\n[01:52.17]看着 电话中短讯\n[01:55.19]听着 录音的口讯\n[01:57.96]昨天的你哪天再接近\n[02:03.55]Tell me where did you go\n[02:06.49]心声都不可细诉\n[02:08.45]Oh tell me baby where did you hide\n[02:12.25]辛苦都未被谅解\n[02:15.63]Where did you go\n[02:18.03]数数多久不碰到\n[02:21.23]我在每夜 彻夜狂想\n[02:26.53]Where did you go\n[02:29.68]Where did you go\n[02:32.79]怎会当这刻我需要你\n[02:35.62]你却没在我身边\n[02:38.15]Where did you go\n[02:41.37]Where did you go\n[02:44.51]这秒钟很挂牵\n[02:45.82]你却不可感觉到\n[02:50.16]Where did you go\n[02:54.24]Where where did you go\n[03:02.11]Tell me where did you go\n[03:04.88]心声都不可细诉\n[03:07.38]Oh tell me baby where did you hide\n[03:10.73]辛苦都未被谅解\n[03:14.17]Where did you go\n[03:16.53]数数多久不碰到\n[03:19.60]我在每夜 彻夜狂想\n[03:25.49]Tell me where did you go\n[03:28.38]心声都不可细诉\n[03:30.51]Oh tell me baby where did you hide\n[03:34.22]辛苦都未被谅解\n[03:37.60]Where did you go\n[03:39.97]数数多久不碰到\n[03:42.96]我在每夜 彻夜狂想\n[03:48.12]Where did you go"
+  },
+  {
+    "title": "ありがとう…",
+    "artist": "KOKIA",
+    "src": "assets/audio/m12.mp3",
+    "cover": "assets/uploads/covers/m12.jpg",
+    "lyrics": "[00:14.46]誰もが気付かぬうちに\n[00:21.92]何かを失っている\n[00:30.10]フッと気付けばあなたはいない\n[00:35.86]思い出だけを残して\n[00:44.14]せわしい時の中\n[00:46.77]言葉を失った人形達のように\n[00:58.16]街角に溢れたノラネコのように\n[01:03.97]声にならない叫びが聞こえてくる\n[01:10.94]もしも　もう一度あなたに会えるなら\n[01:18.06]たった一言伝えたい\n[01:24.45]ありがとう\n[01:31.44]ありがとう\n[01:39.04]時には傷つけあっても\n[01:46.51]あなたを感じていたい\n[01:54.65]思い出はせめてもの慰め\n[02:00.42]いつまでもあなたはここにいる\n[02:06.49]もしも　もう一度あなたに会えるなら\n[02:14.60]たった一言伝えたい\n[02:21.25]ありがとう\n[02:28.24]ありがとう\n[02:55.90]もしも　もう一度あなたに会えるなら\n[03:03.95]たった一言伝えたい\n[03:10.62]もしも　もう一度あなたに会えるなら\n[03:18.03]たった一言伝えたい\n[03:24.61]ありがとう\n[03:31.60]ありがとう\n[03:40.70]時には傷つけあっても\n[03:48.49]あなたを感じてたい"
+  },
+  {
+    "title": "サムライハート",
+    "artist": "SPYAIR",
+    "src": "assets/audio/m13.mp3",
+    "cover": "assets/uploads/covers/m13.jpg",
+    "lyrics": "[00:12.550]どっか上の空で\n[00:14.550]さっぱり聞いてないんだろう？\n[00:17.290]わざとこぼすサイン 見逃す君\n[00:21.020]ほら いつだって 同じで\n[00:22.670]分かり合ってる？ ･･とんだ勘違いだよ\n[00:25.810]ここに居る僕に気付けないんだろう\n[00:29.700]人込みにまぎれて ひとり\n[00:31.800]虚しくって 見上げる空\n[00:33.940]届かない会話キャッチボール\n[00:36.030]孤独は増してく\n[00:38.340]Hey!! Hey!!\n[00:39.290]応えて 誰かいませんか？\n[00:42.530]ずっと探しても 答えないや\n[00:46.730]Hey!! Hey!!\n[00:47.730]僕だけが僕を作るから\n[00:50.920]泣いたって、笑って\n[00:52.590]憎んだって愛して 生きていこう\n[00:57.410]Hey! Hey!\n[00:58.310]サムライハート(some like it hot)\n[01:07.830]のっぺりとした Day by Day\n[01:09.870]まったく今日も同じだろう？\n[01:12.510]とけ込めない人に 慣れない街\n[01:16.140]Ah 人波に 立ち止まり\n[01:17.990]振り返り 確かめた足跡\n[01:20.980]前より ほんの少しは歩けてるかも\n[01:24.960]すれ違った街のガラスに\n[01:26.950]寂しげに映った自分\n[01:29.090]ムカつくんだ そんな自分も\n[01:31.080]無関心な世界も\n[01:33.380]Hey!! Hey!!\n[01:34.380]応えて 誰かいませんか？\n[01:37.560]ずっと探しても 答えないや\n[01:41.850]Hey!! Hey!!\n[01:42.750]僕だけが僕を作るなら\n[01:45.980]「どうだっていい」なんて\n[01:47.670]思わないで 本当の声を･･\n[02:11.820]Hey!! Hey!!\n[02:12.720]ひとりじゃ 生きられないだろ？\n[02:16.000]ハート捨ててまで とけ込めない\n[02:20.140]Hey!! Hey!!\n[02:21.140]諦める理由はいらない\n[02:24.380]君だって 踏ん張って\n[02:25.980]この街で 生きていくんだ\n[02:28.760]Hey!! Hey!!\n[02:29.660]応えて 誰かいませんか？\n[02:32.840]ずっと探しても 答えないから\n[02:37.020]Hey!! Hey!!\n[02:38.020]僕だけが僕を作るんだ\n[02:41.580]泣いたって、笑って\n[02:42.920]憎んだって愛して 生きていこう\n[02:45.800]Hey!! Hey!!\n[02:49.980]Hey!! Hey!!\n[02:51.520]サムライハート(some like it hot)\n[02:54.220]Hey!! Hey!!\n[02:58.460]泣いたって、笑って\n[02:59.900]憎んだって愛して 生きていこう\n[03:04.900]Hey!! Hey!!\n[03:05.850]サムライハート(some like it hot)"
+  },
+  {
+    "title": "光辉岁月",
+    "artist": "Beyond",
+    "src": "assets/audio/m14.mp3",
+    "cover": "assets/uploads/covers/m14.jpg",
+    "lyrics": "[00:28.650]钟声响起归家的讯号\n[00:33.036]在他生命里\n[00:36.281]仿佛带点唏嘘\n[00:41.564]黑色肌肤给他的意义\n[00:46.038]是一生奉献 肤色斗争中\n[00:54.543]年月把拥有变做失去\n[01:01.056]疲倦的双眼带着期望\n[01:07.551]今天只有残留的躯壳\n[01:11.162]迎接光辉岁月\n[01:14.391]风雨中抱紧自由\n[01:20.515]一生经过彷徨的挣扎\n[01:24.167]自信可改变未来\n[01:27.343]问谁又能做到\n[01:43.174]可否不分肤色的界限\n[01:47.643]愿这土地里\n[01:50.774]不分你我高低\n[01:56.103]缤纷色彩闪出的美丽\n[02:00.572]是因它没有\n[02:03.764]分开每种色彩\n[02:09.060]年月把拥有变做失去\n[02:15.509]疲倦的双眼带着期望\n[02:22.001]今天只有残留的躯壳\n[02:25.740]迎接光辉岁月\n[02:28.901]风雨中抱紧自由\n[02:34.992]一生经过彷徨的挣扎\n[02:38.655]自信可改变未来\n[02:41.900]问谁又能做到\n[03:23.643]今天只有残留的躯壳\n[03:27.339]迎接光辉岁月\n[03:30.561]风雨中抱紧自由\n[03:36.626]一生经过彷徨的挣扎\n[03:40.315]自信可改变未来\n[03:43.493]问谁又能做到\n[03:48.026]Woo\n[03:55.305]Ah\n[03:59.359]今天只有残留的躯壳\n[04:02.934]迎接光辉岁月\n[04:06.174]风雨中抱紧自由\n[04:12.267]一生经过彷徨的挣扎\n[04:15.855]自信可改变未来\n[04:19.047]问谁又能做到\n[04:23.624]Woo\n[04:30.932]Ah\n[04:35.027]今天只有残留的躯壳\n[04:38.580]迎接光辉岁月\n[04:41.808]风雨中抱紧自由\n[04:47.928]一生经过彷徨的挣扎\n[04:51.555]自信可改变未来\n[04:53.560] Synth Programming : Gordon O'Yang / 叶世荣"
+  },
+  {
+    "title": "分手快乐",
+    "artist": "梁静茹",
+    "src": "assets/audio/m15.mp3",
+    "cover": "assets/uploads/covers/m15.jpg",
+    "lyrics": "[00:06.130]大提琴：吴世杰\n[00:07.130]小提琴：李琪/蓝国融/梁钟尹\n[00:15.130]ISRC TW-A45-02-72602\n[00:39.130]我无法帮你预言\n[00:42.080]委曲求全 有没有用\n[00:45.620]可是我多么不舍\n[00:48.820]朋友爱得 那么苦痛\n[00:52.580]爱可以不问对错\n[00:55.740]至少有喜悦感动\n[00:58.120]如果他总为别人撑伞\n[01:01.610]你何苦非为他等在雨中\n[01:06.640]泡咖啡让你暖手\n[01:09.610]想挡挡你 心口里的风\n[01:13.630]你却想上街走走\n[01:16.590]吹吹冷风 会清醒得多\n[01:20.540]你说你不怕分手\n[01:23.520]只有点遗憾难过\n[01:26.070]情人节就要来了\n[01:28.470]剩自己一个\n[01:30.320]其实爱对了人\n[01:32.190]情人节每天都过\n[01:36.240]分手快乐 祝你快乐\n[01:39.580]你可以找到更好的\n[01:43.090]不想过冬 厌倦沉重\n[01:46.440]就飞去热带的岛屿游泳\n[01:50.070]分手快乐 请你快乐\n[01:53.380]挥别错的才能和对的相逢\n[01:57.370]离开旧爱 像坐慢车\n[02:00.400]看透彻了心就会是晴朗的\n[02:04.450]没人能把谁的幸福没收\n[02:10.320]你发誓你会活得有笑容\n[02:50.910]泡咖啡让你暖手\n[02:53.980]想挡挡你 心口里的风\n[02:57.760]你却想上街走走\n[03:00.880]吹吹冷风 会清醒得多\n[03:04.720]你说你不怕分手\n[03:07.800]只有点遗憾难过\n[03:10.350]情人节就要来了\n[03:12.860]剩自己一个\n[03:14.710]其实爱对了人\n[03:16.430]情人节每天都过\n[03:20.510]分手快乐 祝你快乐\n[03:23.840]你可以找到更好的\n[03:27.390]不想过冬 厌倦沉重\n[03:30.860]就飞去热带的岛屿游泳\n[03:34.340]分手快乐 请你快乐\n[03:37.680]挥别错的才能和对的相逢\n[03:41.720]离开旧爱 像坐慢车\n[03:44.750]看透彻了心就会是晴朗的\n[03:48.470]没人能把谁的幸福没收\n[03:55.200]你发誓你会活得有笑容\n[04:02.200]你自信时候真的美多了"
+  },
+  {
+    "title": "后来",
+    "artist": "刘若英",
+    "src": "assets/audio/m16.mp3",
+    "cover": "assets/uploads/covers/m16.jpg",
+    "lyrics": "[00:12.571]后来 我总算学会了如何去爱\n[00:19.303]可惜你 早已远去 消失在人海\n[00:25.238]后来 终于在眼泪中明白\n[00:32.064]有些人 一旦错过就不在\n[00:39.800]栀子花 白花瓣\n[00:46.027]落在我蓝色百褶裙上\n[00:51.763]爱你 你轻声说\n[00:58.844]我低下头 闻见一阵芬芳\n[01:05.371]那个永恒的夜晚\n[01:09.341]十七岁仲夏\n[01:12.104]你吻我的那个夜晚\n[01:18.232]让我往后的时光\n[01:21.749]每当有感叹\n[01:24.862]总想起当天的星光\n[01:30.992]那时候的爱情\n[01:37.422]为什么就能那样简单\n[01:42.493]而又是为什么 人年少时\n[01:50.179]一定要让深爱的人受伤\n[01:56.301]在这相似的深夜里\n[02:00.566]你是否一样 也在静静追悔感伤\n[02:09.350]如果当时我们能\n[02:13.015]不那么倔强\n[02:16.079]现在也 不那么遗憾\n[02:21.053]你都如何回忆我\n[02:24.014]带着笑或是很沉默\n[02:27.231]这些年来\n[02:28.837]有没有人能让你不寂寞\n[02:33.455]后来 我总算学会了如何去爱\n[02:40.238]可惜你 早已远去 消失在人海\n[02:46.318]后来 终于在眼泪中明白\n[02:53.042]有些人 一旦错过就不在\n[03:25.379]你都如何回忆我\n[03:28.132]带着笑或是很沉默\n[03:31.296]这些年来\n[03:32.953]有没有人能让你不寂寞\n[03:37.523]后来\n[03:39.530]我总算学会了如何去爱\n[03:44.301]可惜你 早已远去 消失在人海\n[03:50.174]后来 终于在眼泪中明白\n[03:57.104]有些人 一旦错过就不在\n[04:03.136]后来 我总算学会了如何去爱\n[04:09.965]可惜你 早已远去 消失在人海\n[04:15.937]后来 终于在眼泪中明白\n[04:22.771]有些人 一旦错过就不在\n[04:29.598]永远不会再重来\n[04:35.510]有一个男孩爱着那个女孩\n[05:10.555]ISRC TW-A45-99-62502"
+  },
+  {
+    "title": "寂寞烟火",
+    "artist": "蓝心羽",
+    "src": "assets/audio/m17.mp3",
+    "cover": "assets/uploads/covers/m17.jpg",
+    "lyrics": "[00:02.00] 原唱 : 朱婧汐Akini Jing\n[00:17.49]我已经又习惯一个人生活\n[00:25.47]一开始不就是一个人生活\n[00:32.46]我的房间你最爱的角落\n[00:40.77]那本你没读完的书\n[00:43.71]还在原地放着\n[00:49.47]我已经学会如何享受寂寞\n[00:57.48]朋友快乐时我也跟着快乐\n[01:04.38]跨年的烟火绽放天空\n[01:12.69]我想起我们最快乐时的笑容\n[01:20.25]我曾经走过多遥远的路\n[01:24.21]跨越过多少海洋去看你\n[01:28.29]孤单的黑夜途中\n[01:30.72]只要想着你\n[01:32.73]我就不会惶恐\n[01:36.18]时光的岸上人来了又走\n[01:40.26]离开时你不用说我都懂\n[01:44.19]感谢你曾让我\n[01:47.49]留在你眼中\n[02:09.51]我已经学会如何享受寂寞\n[02:17.49]朋友快乐时我也跟着快乐\n[02:24.42]跨年的烟火绽放天空\n[02:32.70]我想起我们最快乐时的笑容\n[02:40.29]我曾经走过多遥远的路\n[02:44.22]跨越过多少海洋去看你\n[02:48.21]孤单的黑夜途中\n[02:50.70]只要想着你\n[02:52.74]我就不会惶恐\n[02:56.19]时光的岸上人来了又走\n[03:00.24]离开时你不用说我都懂\n[03:04.23]感谢你曾让我\n[03:07.50]留在你眼中\n[03:12.21]我曾经走过最遥远的路\n[03:16.20]想要去拥抱未成真的梦\n[03:20.22]迷失的黑夜途中\n[03:22.68]只要想起你\n[03:24.69]就点亮了星空\n[03:28.29]流浪的纸船忘不掉港口\n[03:32.22]渐灭的花火割不断彩虹\n[03:36.27]你就是我心中\n[03:39.54]永恒的天空\n[04:06.98] 封面摄影 : NEGI\n[04:07.70] 营销推广 : 网易飓风\n[04:08.77] 【本歌曲已获得正版授权】"
+  },
+  {
+    "title": "富士山下",
+    "artist": "陈奕迅",
+    "src": "assets/audio/m18.mp3",
+    "cover": "assets/uploads/covers/m18.jpg",
+    "lyrics": "[00:21.961]拦路雨偏似雪花 饮泣的你冻吗\n[00:26.464]这风褛我给你磨到有襟花\n[00:31.023]连调了职也不怕 怎么始终牵挂\n[00:35.618]苦心选中今天想车你回家\n[00:40.181]原谅我不再送花 伤口应要结疤\n[00:44.739]花瓣铺满心里坟场才害怕\n[00:49.337]如若你非我不嫁 彼此终必火化\n[00:53.878]一生一世等一天需要代价\n[00:58.438]谁都只得那双手靠拥抱亦难任你拥有\n[01:03.612]要拥有必先懂失去怎接受\n[01:08.177]曾沿着雪路浪游 为何为好事泪流\n[01:12.733]谁能凭爱意要富士山私有\n[01:17.292]何不把悲哀感觉假设是来自你虚构\n[01:21.912]试管里找不到它染污眼眸\n[01:26.405]前尘硬化像石头 随缘地抛下便逃走\n[01:34.143]我绝不罕有 往街里绕过一周\n[01:38.559]我便化乌有\n[01:42.640]情人节不要说穿 只敢抚你发端\n[01:47.193]这种姿态可会令你更心酸\n[01:51.795]留在汽车里取暖 应该怎么规劝\n[01:56.376]怎么可以将手腕忍痛划损\n[02:00.953]人活到几岁算短 失恋只有更短\n[02:05.501]归家需要几里路谁能预算\n[02:10.088]忘掉我跟你恩怨 樱花开了几转\n[02:14.697]东京之旅一早比一世遥远\n[02:19.226]谁都只得那双手靠拥抱亦难任你拥有\n[02:24.393]要拥有必先懂失去怎接受\n[02:28.941]曾沿着雪路浪游 为何为好事泪流\n[02:33.512]谁能凭爱意要富士山私有\n[02:38.087]何不把悲哀感觉假设是来自你虚构\n[02:42.681]试管里找不到它染污眼眸\n[02:47.210]前尘硬化像石头 随缘地抛下便逃走\n[02:54.214]我绝不罕有 往街里绕过一周\n[02:59.066]我便化乌有\n[03:03.313]谁都只得那双手靠拥抱亦难任你拥有\n[03:08.689]要拥有必先懂失去怎接受\n[03:13.391]曾沿着雪路浪游 为何为好事泪流\n[03:18.156]谁能凭爱意要富士山私有\n[03:22.849]何不把悲哀感觉假设是来自你虚构\n[03:27.562]试管里找不到它染污眼眸\n[03:32.248]前尘硬化像石头 随缘地抛下便逃走\n[03:41.286]我绝不罕有 往街里绕过一周\n[03:46.586]我便化乌有\n[03:52.009]你还嫌不够 我把这陈年风褛 送赠你解咒\n[04:03.699]Production Coordination: Stanley Leung\n[04:04.699]Keyboards & Programming: 陈珀 / C.Y.Kong (江志仁)\n[04:05.699]Drums: Davy Chan (陈匡荣)\n[04:06.699]Bass: 细威\n[04:07.699]Guitar: Joey Tang (邓建明)\n[04:08.699]Percussion: Davy Chan & Kevin (Hardpack)\n[04:09.699]Strings Arranged & Conducted by 陈珀\n[04:10.699]Recorded at aroom studio & seewisehk,\n[04:11.699]Engineered by Davy Chan, Rob Porter & C.Y.Kong\n[04:12.699]Vocals Recorded at Avon Studios,\n[04:13.699]Engineered by Anthony Leung"
+  },
+  {
+    "title": "心墙",
+    "artist": "郭静",
+    "src": "assets/audio/m19.mp3",
+    "cover": "assets/uploads/covers/m19.jpg",
+    "lyrics": "[00:00.400]一个人 眺望碧海和蓝天\n[00:08.460]在心里面 那抹灰就淡一些\n[00:15.190]海豚从眼前 飞越\n[00:19.200]我看见了最阳光的笑脸\n[00:23.380]好时光都该被宝贝 因为有限\n[00:32.119]我学着不去担心得太远\n[00:35.870]不计划太多 反而能勇敢冒险\n[00:39.580]丰富地过每一天 快乐地看每一天\n[00:47.350]第一次遇见阴天 遮住你侧脸\n[00:51.800]有什么故事好想了解\n[00:54.710]我感觉我懂 你的特别\n[01:01.130]你的心有一道墙 但我发现一扇窗\n[01:10.190]偶尔透出 一丝暖暖的微光\n[01:17.300]就算你有一道墙 我的爱会攀上窗台盛放\n[01:24.880]打开窗你会看到 悲伤融化\n[01:48.789]我学着不去担心得太远\n[01:53.000]不计划太多 反而能勇敢冒险\n[01:56.789]丰富地过每一天 快乐地看每一天\n[02:03.840]第一次遇见阴天 遮住你侧脸\n[02:08.280]有什么故事好想了解\n[02:11.790]我感觉我懂 你的特别\n[02:18.290]你的心有一道墙 但我发现一扇窗\n[02:27.790]偶尔透出 一丝暖暖的微光\n[02:34.900]就算你有一道墙 我的爱会攀上窗台盛放\n[02:42.400]打开窗你会看到 悲伤融化\n[02:50.620]你的心有一道墙 但我发现一扇窗\n[02:59.160]偶尔透出 一丝暖暖的微光\n[03:05.630]就算你有一道墙 我的爱会攀上窗台盛放\n[03:14.100]打开窗你会看到 悲伤融化\n[03:21.720]你会闻到幸福晴朗 的芬芳"
+  },
+  {
+    "title": "忘记时间",
+    "artist": "胡歌",
+    "src": "assets/audio/m20.mp3",
+    "cover": "assets/uploads/covers/m20.jpg",
+    "lyrics": "[00:33.538]沉默着走了有 多遥远\n[00:40.979]抬起头 蓦然间 才发现\n[00:47.784]一直倒退 倒退到原点\n[00:55.374]倔强坚持 对抗时间\n[01:03.129]说好了的永远 断了线\n[01:10.522]期许了 不变的 却都已改变\n[01:17.331]紧闭 双眼 才能看的见\n[01:24.464]那些曾经温暖 鲜艳过的画面\n[01:31.290]渐渐地忘记 赶不上明天\n[01:35.046]只要用力地抓紧了想念\n[01:39.231]明天再也 没有你的笑脸\n[01:46.106]渐渐地忘记 忘记了时间\n[01:49.791]我只要沿着记忆的路线\n[01:54.306]到最深处 纵然那只是瞬间\n[02:02.103]当眼泪 滑落的 是句点\n[02:09.437]心里面 始终你 从没有走远\n[02:16.389]耳边 誓言 还在回旋\n[02:23.409]我会好好珍惜 没有你的明天\n[02:59.930]渐渐地忘记 赶不上明天\n[03:03.587]只要用力地抓紧了想念\n[03:07.783]明天再也 没有你的笑脸\n[03:14.676]渐渐地忘记 忘记了时间\n[03:18.356]我只要沿着记忆的路线\n[03:22.805]到最深处 纵然那只是瞬间\n[03:29.467]渐渐地忘记 忘记了时间\n[03:33.198]我只要沿着记忆的路线\n[03:37.604]到最深处 纵然那只是瞬间"
+  },
+  {
+    "title": "慢慢喜欢你",
+    "artist": "莫文蔚",
+    "src": "assets/audio/m21.mp3",
+    "cover": "assets/uploads/covers/m21.jpg",
+    "lyrics": "[00:01.88]书里总爱写到喜出望外的傍晚\n[00:08.450]骑的单车还有他和她的对谈\n[00:15.420]女孩的白色衣裳男孩爱看她穿\n[00:23.280]好多桥段\n[00:25.050]好多都浪漫\n[00:26.920]好多人心酸\n[00:28.790]好聚好散\n[00:31.190]好多天都看不完\n[00:37.110]刚才吻了你一下你也喜欢对吗\n[00:45.120]不然怎么一直牵我的手不放\n[00:52.370]你说你好想带我回去你的家乡\n[01:00.148]绿瓦红砖\n[01:01.817]柳树和青苔\n[01:03.798]过去和现在\n[01:05.566]都一个样\n[01:07.897]你说你也会这样\n[01:14.177]慢慢喜欢你\n[01:16.718]慢慢的亲密\n[01:18.498]慢慢聊自己\n[01:20.328]慢慢和你走在一起\n[01:24.049]慢慢我想配合你\n[01:26.680]慢慢把我给你\n[01:29.117]慢慢喜欢你\n[01:31.358]慢慢的回忆\n[01:33.180]慢慢地陪你 慢慢地老去\n[01:39.418]因为慢慢是个最好的原因\n[02:01.918]晚餐后的甜点就点你喜欢的吧\n[02:10.138]今晚就换你去床的右边睡吧\n[02:17.288]这次旅行我还想去上次的沙滩\n[02:25.068]球鞋手表\n[02:26.748]袜子和衬衫都已经烫好\n[02:30.369]放行李箱\n[02:32.848]早上等着你起床\n[02:38.810]慢慢喜欢你\n[02:41.759]慢慢的亲密\n[02:43.388]慢慢聊自己\n[02:45.209]慢慢和你走在一起\n[02:49.009]慢慢我想配合你\n[02:51.348]慢慢把我给你\n[02:54.038]慢慢喜欢你\n[02:56.310]慢慢的回忆\n[02:58.128]慢慢地陪你 慢慢地老去\n[03:04.518]因为慢慢是个最好的原因\n[03:18.128]书里总爱写到喜出望外的傍晚\n[03:38.11] 打击乐 : 荒井十一\n[03:38.52] 小提琴 : Leslie Ryang\n[03:38.94] 大提琴 : Anna Kwan"
+  },
+  {
+    "title": "普通Disco",
+    "artist": "洛天依、言和",
+    "src": "assets/audio/m22.mp3",
+    "cover": "",
+    "lyrics": ""
+  },
+  {
+    "title": "海阔天空",
+    "artist": "Beyond",
+    "src": "assets/audio/m23.mp3",
+    "cover": "",
+    "lyrics": ""
+  },
+  {
+    "title": "爱情转移",
+    "artist": "陈奕迅",
+    "src": "assets/audio/m24.mp3",
+    "cover": "",
+    "lyrics": ""
+  },
+  {
+    "title": "至少还有你",
+    "artist": "林忆莲",
+    "src": "assets/audio/m25.mp3",
+    "cover": "",
+    "lyrics": ""
+  },
+  {
+    "title": "龙卷风",
+    "artist": "G.E.M.邓紫棋",
+    "src": "assets/audio/m26.mp3",
+    "cover": "",
+    "lyrics": ""
+  },
+  {
+    "title": "라일락",
+    "artist": "IU",
+    "src": "assets/audio/m27.mp3",
+    "cover": "",
+    "lyrics": ""
+  },
   {
     "title": "容易受伤的女人",
     "artist": "王菲",
