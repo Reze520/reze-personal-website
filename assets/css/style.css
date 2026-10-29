@@ -9893,3 +9893,186 @@ body.has-app .site-head.is-stuck {
   height: 100%;
   border: 0;
 }
+
+/* ---------- 右栏「动态」：整条可点 ---------- */
+.g-feed-a {
+  display: block;
+  margin: -10px -16px;
+  padding: 10px 16px;
+  border-radius: 8px;
+  color: inherit;
+  text-decoration: none;
+  transition: background 0.18s ease;
+}
+.g-feed-a span {
+  display: block;
+}
+.g-feed-a:hover,
+.g-feed-a:focus-visible {
+  background: var(--g-fill-3);
+}
+
+/* ---------- 文章页浮动目录 ----------
+   长文目录不占正文一列，浮在旁边：默认收成圆钮，点开是列表，可拖、位置记得住。 */
+.ftoc {
+  position: fixed;
+  right: 26px;
+  top: 38vh;
+  z-index: 70;
+  font-size: 13px;
+}
+.ftoc.dragging {
+  cursor: grabbing;
+  user-select: none;
+}
+.ftoc-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+  width: 54px;
+  height: 54px;
+  padding: 0;
+  border-radius: 50%;
+  border: 1px solid var(--g-line);
+  background: var(--surface-2);
+  color: var(--g-text-2);
+  box-shadow: 0 8px 22px rgba(0, 0, 0, 0.1);
+  cursor: grab;
+}
+.ftoc-btn:hover {
+  color: var(--g-accent);
+  border-color: var(--g-accent);
+}
+.ftoc-ic {
+  display: flex;
+}
+.ftoc-ic svg {
+  width: 17px;
+  height: 17px;
+}
+.ftoc-n {
+  font-size: 11px;
+  color: var(--g-text-3);
+  font-variant-numeric: tabular-nums;
+}
+.ftoc[data-open="1"] .ftoc-btn {
+  display: none;
+}
+.ftoc-panel {
+  display: none;
+  flex-direction: column;
+  width: 246px;
+  max-height: 62vh;
+  background: var(--surface-2);
+  border: 1px solid var(--g-line);
+  border-radius: 14px;
+  box-shadow: 0 14px 40px rgba(0, 0, 0, 0.14);
+  overflow: hidden;
+}
+.ftoc[data-open="1"] .ftoc-panel {
+  display: flex;
+}
+.ftoc-head {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 12px 8px;
+  cursor: grab;
+}
+.ftoc-t {
+  font-size: 12px;
+  color: var(--g-text-2);
+  letter-spacing: 0.04em;
+}
+.ftoc-at {
+  margin-left: auto;
+  font-size: 11px;
+  color: var(--g-text-3);
+  font-variant-numeric: tabular-nums;
+}
+.ftoc-x {
+  border: 0;
+  background: transparent;
+  color: var(--g-text-3);
+  font-size: 16px;
+  line-height: 1;
+  padding: 2px 4px;
+  cursor: pointer;
+}
+.ftoc-x:hover {
+  color: var(--g-ink);
+}
+.ftoc-prog {
+  height: 2px;
+  margin: 0 12px 6px;
+  border-radius: 2px;
+  background: var(--g-line);
+  overflow: hidden;
+}
+.ftoc-prog i {
+  display: block;
+  width: 0;
+  height: 100%;
+  background: var(--g-accent);
+  transition: width 0.2s linear;
+}
+.ftoc-nav {
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding: 4px 6px 10px;
+  scrollbar-width: thin;
+}
+.ftoc-nav::-webkit-scrollbar {
+  width: 5px;
+}
+.ftoc-nav::-webkit-scrollbar-thumb {
+  background: var(--g-line);
+  border-radius: 3px;
+}
+.ftoc-link {
+  display: block;
+  margin: 1px 0;
+  padding: 6px 10px;
+  border-left: 2px solid transparent;
+  border-radius: 7px;
+  color: var(--g-text-2);
+  text-decoration: none;
+  font-size: 12.5px;
+  line-height: 1.5;
+}
+.ftoc-link.lv3 {
+  padding-left: 20px;
+  font-size: 12px;
+  color: var(--g-text-3);
+}
+.ftoc-link:hover {
+  background: var(--g-fill-3);
+  color: var(--g-ink);
+}
+.ftoc-link.on {
+  border-left-color: var(--g-accent);
+  background: var(--g-fill-3);
+  color: var(--g-ink);
+}
+
+@media (max-width: 760px) {
+  .ftoc {
+    right: 14px;
+    top: auto;
+    bottom: 84px;
+  }
+  .ftoc-btn {
+    width: 48px;
+    height: 48px;
+  }
+  .ftoc-panel {
+    width: min(78vw, 262px);
+    max-height: 54vh;
+  }
+}
+@media print {
+  .ftoc {
+    display: none;
+  }
+}

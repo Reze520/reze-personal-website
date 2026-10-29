@@ -1610,12 +1610,15 @@
       "</div>";
 
     /* ---- 右栏 ---- */
+    /* 右栏「动态」：直接是最近四篇，点哪条进哪篇 */
     var feed = byDateList()
       .slice(0, 4)
       .map(function (p) {
         return (
-          "<li><time>" + fmtDate(p.date) + "</time>" +
-          esc((p.excerpt || "").slice(0, 42)) + "…</li>"
+          '<li><a class="g-feed-a" href="/post?id=' +
+          encodeURIComponent(p.id) + '">' +
+          "<time>" + fmtDate(p.date) + "</time>" +
+          "<span>" + esc((p.excerpt || "").slice(0, 42)) + "…</span></a></li>"
         );
       })
       .join("");
@@ -2218,7 +2221,7 @@ function tocOffset() {
   return (head ? head.offsetHeight : 64) + 22;
 }
 
-function unbindToc() {
+function clearTocScroll() {
   if (_tocHandler) {
     window.removeEventListener("scroll", _tocHandler);
     _tocHandler = null;
@@ -2227,6 +2230,12 @@ function unbindToc() {
     window.removeEventListener("scroll", _tocProgressHandler);
     _tocProgressHandler = null;
   }
+}
+
+// 换页时连浮层一起收掉；bindToc 内部只清滚动监听，不能把浮层也拆了
+function unbindToc() {
+  clearTocScroll();
+  destroyFloatToc();
 }
 
 /* 正文容器在两种页面上位置不同：
@@ -2278,23 +2287,197 @@ function buildPostTocHtml() {
   );
 }
 
-/* 把目录插进 .post-app：宽屏时 CSS 把它排到正文右侧（sticky），
-   窄屏时 order:-1 让它落在正文上方。两种都不需要 JS 判断屏宽。 */
-function insertPostToc(host) {
-  if (!host) host = $("#post");
+/* 文章详情页的目录：浮在正文旁边，不再占一列。
+   原来那份目录跟着文章往下走，读到下半篇就滑出视野；长文动辄二十几节，
+   一屏放不下，回头找一节还得先滚回顶部。现在改成浮层：
+   默认收成一个小圆标签（显示总节数），点开是一张能自己滚的列表，
+   可以拖到顺手的地方，位置记在 localStorage 里。 */
+var _ftocHandlers = [];
+
+function destroyFloatToc() {
+  var n = document.querySelector(".ftoc");
+  if (n && n.parentNode) n.parentNode.removeChild(n);
+  _ftocHandlers.forEach(function (h) {
+    window.removeEventListener(h[0], h[1]);
+  });
+  _ftocHandlers = [];
+}
+
+function mountFloatToc() {
+  destroyFloatToc();
+  var host = document.querySelector("#post") || document.querySelector(".post-app");
   if (!host) return;
-  var old = host.querySelector(".post-toc");
-  if (old) old.remove();
-  var html = buildPostTocHtml();
-  if (!html) return;
-  var tmp = document.createElement("div");
-  tmp.innerHTML = html;
-  var node = tmp.firstElementChild;
-  // 挂在文章卡后面，作为 grid 的第二列
-  var art = host.querySelector(".g-article");
-  if (art && art.parentNode === host) host.insertBefore(node, art.nextSibling);
-  else host.appendChild(node);
-  bindToc();
+  var stale = host.querySelector(".post-toc");
+  if (stale) stale.remove();
+  var prose = document.querySelector(PROSE_SEL);
+  if (!prose) return;
+  var hs = prose.querySelectorAll("h2, h3");
+  if (hs.length < 4) return;
+
+  var items = [];
+  Array.prototype.forEach.call(hs, function (h, i) {
+    var text = (h.textContent || "").trim();
+    if (!text) return;
+    var id = "sec-" + i;
+    h.id = id;
+    items.push({ id: id, text: text, lv: h.tagName === "H3" ? 3 : 2 });
+  });
+  if (items.length < 4) return;
+
+  var wrap = document.createElement("div");
+  wrap.className = "ftoc";
+  wrap.setAttribute("data-open", "0");
+  wrap.innerHTML =
+    '<button class="ftoc-btn" type="button" aria-expanded="false" aria-label="展开文章目录">' +
+    '<span class="ftoc-ic">' + ICONS.doc + "</span>" +
+    '<span class="ftoc-n">' + items.length + "</span></button>" +
+    '<div class="ftoc-panel">' +
+    '<div class="ftoc-head"><span class="ftoc-t">目录</span>' +
+    '<span class="ftoc-at"><b>1</b>/' + items.length + "</span>" +
+    '<button class="ftoc-x" type="button" aria-label="收起目录">×</button></div>' +
+    '<div class="ftoc-prog"><i></i></div>' +
+    '<nav class="ftoc-nav">' +
+    items
+      .map(function (it) {
+        return (
+          '<a class="ftoc-link lv' + it.lv + '" href="#" data-target="' +
+          it.id + '">' + esc(it.text) + "</a>"
+        );
+      })
+      .join("") +
+    "</nav></div>";
+  document.body.appendChild(wrap);
+
+  var btn = wrap.querySelector(".ftoc-btn");
+  var head = wrap.querySelector(".ftoc-head");
+  var nav = wrap.querySelector(".ftoc-nav");
+  var links = Array.prototype.slice.call(nav.querySelectorAll("a[data-target]"));
+  var atEl = wrap.querySelector(".ftoc-at b");
+  var progEl = wrap.querySelector(".ftoc-prog i");
+
+  function add(ev, fn, opt) {
+    window.addEventListener(ev, fn, opt || false);
+    _ftocHandlers.push([ev, fn]);
+  }
+  function setOpen(v) {
+    wrap.setAttribute("data-open", v ? "1" : "0");
+    btn.setAttribute("aria-expanded", v ? "true" : "false");
+  }
+  setOpen(false);
+
+  // 记忆上次拖到的位置
+  try {
+    var saved = JSON.parse(localStorage.getItem("ftoc-pos") || "null");
+    if (saved && saved.l) {
+      wrap.style.left = saved.l;
+      wrap.style.top = saved.t;
+      wrap.style.right = "auto";
+    }
+  } catch (e) {}
+
+  btn.addEventListener("click", function () {
+    if (wrap.getAttribute("data-drag") === "1") {
+      wrap.setAttribute("data-drag", "0");
+      return;
+    }
+    setOpen(wrap.getAttribute("data-open") !== "1");
+  });
+  wrap.querySelector(".ftoc-x").addEventListener("click", function () {
+    setOpen(false);
+  });
+
+  nav.addEventListener("click", function (e) {
+    var a = e.target.closest("a[data-target]");
+    if (!a) return;
+    e.preventDefault();
+    var el = document.getElementById(a.getAttribute("data-target"));
+    if (!el) return;
+    var y = el.getBoundingClientRect().top + window.pageYOffset - tocOffset();
+    window.scrollTo({ top: y, behavior: "smooth" });
+    links.forEach(function (x) {
+      x.classList.toggle("on", x === a);
+    });
+    if (window.innerWidth < 760) setOpen(false);
+  });
+
+  // 拖动：按住圆钮或面板顶部都能拖，松手位置写进 localStorage
+  var drag = null;
+  function startDrag(e) {
+    if (e.button != null && e.button !== 0) return;
+    var r = wrap.getBoundingClientRect();
+    drag = { x: e.clientX, y: e.clientY, l: r.left, t: r.top, moved: false };
+    wrap.style.left = r.left + "px";
+    wrap.style.top = r.top + "px";
+    wrap.style.right = "auto";
+    wrap.classList.add("dragging");
+  }
+  function moveDrag(e) {
+    if (!drag) return;
+    var dx = e.clientX - drag.x;
+    var dy = e.clientY - drag.y;
+    if (Math.abs(dx) + Math.abs(dy) > 3) drag.moved = true;
+    var maxL = window.innerWidth - 64;
+    var maxT = window.innerHeight - 64;
+    wrap.style.left = Math.max(8, Math.min(maxL, drag.l + dx)) + "px";
+    wrap.style.top = Math.max(8, Math.min(maxT, drag.t + dy)) + "px";
+  }
+  function endDrag() {
+    if (!drag) return;
+    wrap.classList.remove("dragging");
+    if (drag.moved) {
+      wrap.setAttribute("data-drag", "1");
+      try {
+        localStorage.setItem(
+          "ftoc-pos",
+          JSON.stringify({ l: wrap.style.left, t: wrap.style.top })
+        );
+      } catch (e) {}
+    }
+    drag = null;
+  }
+  [btn, head].forEach(function (h) {
+    h.addEventListener("mousedown", startDrag);
+    h.addEventListener("touchstart", function (e) {
+      var t = e.touches[0];
+      if (t) startDrag({ clientX: t.clientX, clientY: t.clientY, button: 0 });
+    }, { passive: true });
+  });
+  add("mousemove", moveDrag);
+  add("mouseup", endDrag);
+  add("touchmove", function (e) {
+    var t = e.touches[0];
+    if (t) moveDrag({ clientX: t.clientX, clientY: t.clientY });
+  }, { passive: true });
+  add("touchend", endDrag);
+
+  // 滚动时高亮当前节，并把列表滚到看得见的位置
+  function onScroll() {
+    var idx = 0;
+    for (var i = 0; i < links.length; i++) {
+      var el = document.getElementById(links[i].getAttribute("data-target"));
+      if (el && el.getBoundingClientRect().top <= tocOffset() + 12) idx = i;
+    }
+    links.forEach(function (a, i) {
+      a.classList.toggle("on", i === idx);
+    });
+    if (atEl) atEl.textContent = idx + 1;
+    followToc(nav, links[idx]);
+    if (progEl) {
+      var r = prose.getBoundingClientRect();
+      var total = r.height - window.innerHeight * 0.6;
+      var done = tocOffset() - r.top;
+      var pct = total > 0 ? (done / total) * 100 : 100;
+      progEl.style.width = Math.min(100, Math.max(0, pct)).toFixed(1) + "%";
+    }
+  }
+  add("scroll", onScroll, { passive: true });
+  add("resize", onScroll);
+  onScroll();
+}
+
+/* 兼容旧调用点：详情页目录改由浮层负责 */
+function insertPostToc(host) {
+  mountFloatToc();
 }
 
 /* 目录本身也能滚（50 个条目的长文，一屏放不下）。
@@ -2314,7 +2497,7 @@ function followToc(nav, current) {
 }
 
 function bindToc() {
-  unbindToc();
+  clearTocScroll();
   // 文章详情页有自己那份时就绑它，否则绑右栏那份
   var nav =
     document.querySelector("#post .post-toc .toc") ||
