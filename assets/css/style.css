@@ -4907,9 +4907,11 @@ body.has-app .site-head.is-over-hero .icon-btn {
   .nav-more-menu a.m-dupe {
     display: block;
   }
-  /* 窄屏把这两项收进「更多」，避免顶栏挤在一起 */
-  .nav > a[href="album.html"],
-  .nav > a[href="links.html"] {
+  /* 窄屏把这两项收进「更多」，避免顶栏挤在一起。
+     链接早改成真路径了（/album、/links），这里的选择器也得跟着改，
+     否则匹配不到、规则等于没写。 */
+  .nav > a[href="/album"],
+  .nav > a[href="/links"] {
     display: none;
   }
 }
@@ -6020,12 +6022,19 @@ body.has-app .site-head.is-over-hero .nav-more-btn:hover {
 /* ============================================================
    24. 移动端顶栏适配（防重叠）
    窄屏下顶栏内容总宽超出视口会导致按钮互相叠压，分级收纳：
-   ≤760px：导航藏「相册/导航」，保留 主页/动态/文章/更多；
+   ≤760px：导航藏「天气/相册/导航」，保留 主页/动态/文章/更多；
    ≤620px：按钮缩到 30px、藏「皮肤/音乐」按钮、站名副标题隐藏；
-   ≤400px：导航只留「主页 + 更多」。
+   ≤400px：再藏「文章」，只剩 主页/动态/更多。
+   窄屏下导航项只显示图标（文字用 .nav a span { display:none } 藏了），
+   每项约 32px，320px 屏上还余 10px，所以不用藏太狠。
+   隐藏项都收在「更多」的下拉菜单里，那份菜单本来就全。
    ============================================================ */
 @media (max-width: 760px) {
-  .nav a:nth-child(n + 4) {
+  /* 原来写的是 .nav a:nth-child(n + 4) —— 按下标隐藏。
+     以后往导航里加一项，藏的就不是预期那个了。改成按 href 精确指定。 */
+  .nav > a[href="/weather"],
+  .nav > a[href="/album"],
+  .nav > a[href="/links"] {
     display: none;
   }
 }
@@ -6069,7 +6078,11 @@ body.has-app .site-head.is-over-hero .nav-more-btn:hover {
   }
 }
 @media (max-width: 400px) {
-  .nav a:nth-child(n + 2) {
+  /* 最窄的一档：只留「主页 + 更多」。
+     窄屏下导航项本来就只显示图标（每项约 32px），
+     算下来 320px 屏上还余 10px，所以这一档只藏到「文章」就够，
+     「动态」留着 —— 那是常用项，藏进下拉菜单等于多一次点击。 */
+  .nav > a[href="/writing"] {
     display: none;
   }
 }
@@ -7070,4 +7083,510 @@ body.has-app .site-head .nav > a[aria-current="page"]::before {
 /* 浮在首屏时容器有底板，多留 1px 内缩，让高亮块与弧线之间透气 */
 body.has-app .site-head.is-over-hero .nav {
   padding: 4px;
+}
+
+/* ============================================================
+   21. 移动端阅读适配
+   手机上「变形」不是一处两处的，是成片的：
+   - 表格：内容里写的是 <div class="pg-tablewrap" style="overflow-x:auto">，
+     而 CSS 里定义的是 .g-tablewrap，两个类名对不上，样式根本没生效；
+     另有 2 个 table 干脆没包容器，直接把版面撑破。
+   - 图片 / figure / cite / details：正文里这些标签一个样式都没有，
+     图片按原尺寸铺开，宽度一超就顶出卡片。
+   - 英文长词、URL：默认不断行，窄屏上横着溢出。
+   下面按「先保证不出框、再调阅读手感」的顺序补。
+   ============================================================ */
+
+/* ---------- 21.1 兜底：任何情况都不许横向撑破 ---------- */
+.g-prose img,
+.g-prose video,
+.g-prose iframe,
+.g-prose figure img {
+  max-width: 100%;
+  height: auto;
+}
+
+/* 行内图片别被基线拖出多余空白 */
+.g-prose img {
+  vertical-align: middle;
+}
+
+/* ---------- 21.2 表格：容器可横向滚，表格保持最小宽度 ---------- */
+/* 两个类名都收：pg-tablewrap 是内容里写的，g-tablewrap 是样式表里原有的 */
+.g-prose .pg-tablewrap,
+.g-prose .g-tablewrap {
+  display: block;
+  width: 100%;
+  max-width: 100%;
+  overflow-x: auto;
+  overflow-y: hidden;
+  -webkit-overflow-scrolling: touch;
+  margin: 1.4em 0;
+  border-radius: 10px;
+  /* 滚动条在桌面隐藏，触屏保留系统手势 */
+  scrollbar-width: thin;
+}
+
+/* 表格本体：内容里用内联 style 写了 min-width:560~640px，
+   窄屏上让它保持这个宽度并靠容器滚动，而不是被压成每格一个字 */
+.g-prose .pg-tablewrap > table,
+.g-prose .g-tablewrap > table {
+  margin: 0;
+  border-collapse: collapse;
+  font-size: 13.5px;
+  min-width: 520px;
+  width: max-content;
+}
+
+/* 没包容器的裸表格：给它补一个滚动壳由 JS 处理，这里先保证不溢出 */
+.g-prose > table {
+  display: block;
+  width: 100%;
+  max-width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  font-size: 13px;
+}
+.g-prose > table > thead,
+.g-prose > table > tbody,
+.g-prose > table > tr {
+  display: table;
+  width: 100%;
+  min-width: 520px;
+  table-layout: fixed;
+}
+
+/* 窄屏上表格用横向滚会让人漏看右边，表头给个固定提示 */
+@media (max-width: 620px) {
+  .g-prose .pg-tablewrap,
+  .g-prose .g-tablewrap {
+    position: relative;
+    /* 右边压一层渐变，暗示还有内容 */
+    background-image: linear-gradient(to left, rgba(0, 0, 0, 0.28), rgba(0, 0, 0, 0) 26px);
+    background-repeat: no-repeat;
+    background-attachment: local, scroll;
+    background-position: right center;
+    background-size: 26px 100%;
+  }
+  .g-prose .pg-tablewrap > table,
+  .g-prose .g-tablewrap > table {
+    min-width: 460px;
+    font-size: 13px;
+  }
+  .g-prose th,
+  .g-prose td {
+    padding: 8px 10px;
+  }
+}
+
+/* ---------- 21.3 figure / figcaption / 图片说明 ---------- */
+.g-prose figure {
+  margin: 1.6em 0;
+  padding: 0;
+}
+.g-prose figure img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+.g-prose figcaption {
+  margin-top: 0.6em;
+  font-size: 12.5px;
+  line-height: 1.7;
+  color: var(--g-text-3);
+  text-align: center;
+}
+/* 内容里有些图片自己带了 caption 结构，这里兼容 div 变体 */
+.g-prose .wp-caption-text,
+.g-prose .caption {
+  margin-top: 0.5em;
+  font-size: 12.5px;
+  color: var(--g-text-3);
+  text-align: center;
+}
+
+/* ---------- 21.4 cite / 引用出处 ---------- */
+.g-prose cite {
+  display: inline-block;
+  font-style: normal;
+  font-size: 0.92em;
+  color: var(--g-text-3);
+}
+.g-prose cite::before {
+  content: "《";
+  opacity: 0.6;
+}
+.g-prose cite::after {
+  content: "》";
+  opacity: 0.6;
+}
+
+/* ---------- 21.5 details 折叠块 ---------- */
+.g-prose details {
+  margin: 1.4em 0;
+  padding: 0;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+  background: rgba(0, 0, 0, 0.18);
+  overflow: hidden;
+}
+.g-prose summary {
+  padding: 12px 14px;
+  font-size: 14.5px;
+  font-weight: 600;
+  color: var(--g-text);
+  cursor: pointer;
+  list-style: none;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  -webkit-tap-highlight-color: transparent;
+}
+.g-prose summary::-webkit-details-marker {
+  display: none;
+}
+.g-prose summary::before {
+  content: "▸";
+  font-size: 11px;
+  color: var(--g-accent);
+  transition: transform 0.2s var(--ease);
+  flex: none;
+}
+.g-prose details[open] > summary::before {
+  transform: rotate(90deg);
+}
+.g-prose details > *:not(summary) {
+  padding: 0 14px;
+}
+.g-prose details > *:not(summary):last-child {
+  padding-bottom: 14px;
+}
+
+/* ---------- 21.6 长串不断行（英文、URL） ---------- */
+.g-prose p,
+.g-prose li,
+.g-prose td,
+.g-prose th,
+.g-prose blockquote {
+  overflow-wrap: break-word;
+  word-break: break-word;
+}
+/* 但代码、链接里的下划线该保留原样，别把 URL 拆得太碎 */
+.g-prose pre,
+.g-prose code {
+  word-break: normal;
+  overflow-wrap: break-word;
+}
+.g-prose pre {
+  white-space: pre;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+/* 行内 code 里的长串还是要能断，不然一行代码顶破版 */
+.g-prose :not(pre) > code {
+  word-break: break-all;
+}
+
+/* ---------- 21.7 窄屏下的浮动件 ---------- */
+/* 设置面板原本固定 300px 宽。手机上这宽度是「算得出来的」但不好看：
+   面板顶到屏幕边、右侧留白不匀。这里让它跟着屏幕走，右边留一点余量。
+   断点取 560px —— 平板竖屏也一起处理掉。 */
+@media (max-width: 560px) {
+  .set-overlay {
+    padding: 70px 12px 12px;
+  }
+  .set-panel {
+    width: 100%;
+    max-width: 340px;
+    max-height: calc(100vh - 90px);
+    padding: 15px;
+  }
+}
+
+/* 悬浮播放器：手机上宽度要跟着屏幕走，别占掉半个版面 */
+@media (max-width: 560px) {
+  .float-player {
+    right: 10px;
+    left: 10px;
+    width: auto;
+    max-width: 320px;
+    margin-left: auto;
+  }
+}
+
+/* ---------- 21.8 正文在手机上的阅读手感 ---------- */
+@media (max-width: 620px) {
+  /* 卡片内边距收窄一点，正文能多出两三个字 */
+  .g-article {
+    padding: 20px 16px 22px;
+    border-radius: 14px;
+  }
+  /* 行高略降、行长变短 —— 手机上 1.95 太松，段落之间也显得散 */
+  .g-prose {
+    font-size: 16px;
+    line-height: 1.82;
+  }
+  .g-prose > * + * {
+    margin-top: 1.15em;
+  }
+  /* 标题上下留白压缩 */
+  .g-prose h2 {
+    font-size: 18px;
+    margin-top: 1.9em;
+    margin-bottom: 0.55em;
+  }
+  .g-prose h3 {
+    font-size: 15.5px;
+    margin-top: 1.6em;
+  }
+  /* 引用块左边线收窄、字号略小 */
+  .g-prose blockquote {
+    padding: 2px 0 2px 14px;
+    font-size: 15px;
+    line-height: 1.8;
+    margin: 1.6em 0;
+  }
+  /* 列表缩进少一点，中文列表项长，缩进多了正文就窄 */
+  .g-prose ul,
+  .g-prose ol {
+    padding-left: 1.15em;
+  }
+  /* 代码块贴边，跟已有的 pre 负边距处理一致 */
+  .g-prose pre {
+    margin-left: -16px;
+    margin-right: -16px;
+    padding: 14px 16px;
+    border-radius: 0;
+    border-left: none;
+    border-right: none;
+    font-size: 12.5px;
+    line-height: 1.75;
+  }
+  /* 行内代码别撑破 */
+  .g-prose :not(pre) > code {
+    font-size: 0.84em;
+    padding: 0.14em 0.36em;
+  }
+  /* 分隔线留白压缩 */
+  .g-prose hr {
+    margin: 2em 0;
+  }
+  /* 图片圆角小一点，跟卡片协调 */
+  .g-prose figure img {
+    border-radius: 8px;
+  }
+  .g-prose figcaption {
+    font-size: 12px;
+  }
+}
+
+/* 特别窄的屏（iPhone SE 一代 320px）再收一档 */
+@media (max-width: 360px) {
+  .g-article {
+    padding: 18px 13px 20px;
+  }
+  .g-prose {
+    font-size: 15.5px;
+  }
+  /* 标题跟着正文一起缩，否则 15.5px 的正文配 18px 的标题显得头重脚轻 */
+  .g-prose h2 {
+    font-size: 16.5px;
+    margin-top: 1.7em;
+  }
+  .g-prose h3 {
+    font-size: 14.5px;
+  }
+  .g-prose > * + * {
+    margin-top: 1em;
+  }
+  .g-prose blockquote {
+    padding-left: 11px;
+    font-size: 14.5px;
+  }
+  .g-prose pre {
+    margin-left: -13px;
+    margin-right: -13px;
+    padding: 13px;
+  }
+}
+
+/* ---------- 21.9 刘海屏安全区（iPhone 横屏时内容会被切到刘海下面） ---------- */
+/* viewport-fit=cover 之后，页面会铺满整个屏幕，
+   所以左右和底部要用 env() 让出刘海与home指示条的位置 */
+@supports (padding: max(0px)) {
+  .head-inner {
+    padding-left: max(16px, env(safe-area-inset-left));
+    padding-right: max(16px, env(safe-area-inset-right));
+  }
+  @media (max-width: 620px) {
+    .head-inner {
+      padding-left: max(14px, env(safe-area-inset-left));
+      padding-right: max(14px, env(safe-area-inset-right));
+    }
+  }
+  .app {
+    padding-left: max(14px, env(safe-area-inset-left));
+    padding-right: max(14px, env(safe-area-inset-right));
+    padding-bottom: max(30px, env(safe-area-inset-bottom));
+  }
+  .post-app {
+    padding-left: max(14px, env(safe-area-inset-left));
+    padding-right: max(14px, env(safe-area-inset-right));
+    padding-bottom: max(30px, env(safe-area-inset-bottom));
+  }
+  .site-foot {
+    padding-left: max(16px, env(safe-area-inset-left));
+    padding-right: max(16px, env(safe-area-inset-right));
+    padding-bottom: max(20px, env(safe-area-inset-bottom));
+  }
+  /* 悬浮播放器贴着右边，要避开刘海 */
+  .float-player {
+    right: max(14px, env(safe-area-inset-right));
+  }
+  @media (max-width: 560px) {
+    .float-player {
+      left: max(10px, env(safe-area-inset-left));
+      right: max(10px, env(safe-area-inset-right));
+    }
+  }
+}
+
+/* ---------- 21.10 触摸设备 ---------- */
+/* 触摸屏没有真正的 hover：点一下按钮，那个 hover 样式会一直挂着，
+   看着像「点歪了没弹回来」。所以在 hover: none 的设备上把 hover 效果
+   换成按下时的效果（:active），手指一松就复原。 */
+@media (hover: none) {
+  .g-post,
+  .g-posth,
+  .g-card,
+  .nav a,
+  .nav-more-btn,
+  .icon-btn,
+  .btn,
+  .lk-card,
+  .g-moment,
+  .g-album-item {
+    -webkit-tap-highlight-color: transparent;
+  }
+  /* 卡片类元素改成按压反馈，触摸感更明确 */
+  .g-post:active,
+  .g-posth:active,
+  .g-card:active,
+  .lk-card:active {
+    transform: scale(0.985);
+    transition: transform 0.12s var(--ease);
+  }
+}
+
+/* 全局去掉点击时的灰色高亮块（Android Chrome 默认行为） */
+a,
+button,
+[role="button"],
+.summary,
+.g-moment,
+.g-post,
+.g-posth,
+.g-card,
+.lk-card {
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* 触摸设备上按钮最小点击区域 44×44（苹果人机指南），
+   顶栏那些 30px 的图标按钮偏小，容易点错 */
+@media (pointer: coarse) {
+  .icon-btn {
+    min-width: 38px;
+    min-height: 38px;
+  }
+  .nav-more-btn {
+    min-height: 38px;
+  }
+}
+
+/* ---------- 21.11 视频嵌入（B 站播放器等） ---------- */
+/* 内容里的 iframe 写了 width:100%;max-width:660px;aspect-ratio:16/10，
+   比例本身是对的，但 width:100% 得有父级宽度撑着。
+   figure 在窄屏上如果是块级就没事，这里明确一下，别让它缩成一条线。 */
+.g-prose figure iframe,
+.g-prose .video-wrap iframe,
+.g-prose iframe {
+  display: block;
+  width: 100%;
+  max-width: 100%;
+  border-radius: 10px;
+  border: 0;
+  background: #000;
+}
+/* 带 aspect-ratio 的（内容里写的那些）保持自己的比例；
+   没写比例的给个 16/9 兜底，不然会塌成一条缝 */
+.g-prose iframe:not([style*="aspect-ratio"]) {
+  aspect-ratio: 16 / 9;
+}
+/* figure 本身在窄屏上收一收边距 */
+@media (max-width: 620px) {
+  .g-prose figure.pg-fig {
+    margin: 1.6em 0;
+  }
+  .g-prose figure.pg-fig.wide img,
+  .g-prose figure.pg-fig.pg-wide img {
+    max-width: 100%;
+    max-height: 420px;
+  }
+  .g-prose figure.pg-fig figcaption {
+    font-size: 12px;
+    line-height: 1.65;
+  }
+}
+
+/* ---------- 21.12 列表卡片在窄屏 ---------- */
+@media (max-width: 480px) {
+  /* 横版卡片：720px 那档还留 118px 缩略图，
+     375px 屏上正文只剩两百来像素，标题一行都放不下。
+     这里把缩略图收到 88px，并把间距压紧。 */
+  .g-posth {
+    grid-template-columns: minmax(0, 1fr) 88px;
+    gap: 10px;
+    padding: 11px 12px;
+  }
+  .g-posth h2 {
+    font-size: 13.5px;
+    line-height: 1.45;
+  }
+  .g-posth .excerpt {
+    font-size: 11px;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+  }
+  .g-posth .thumb {
+    min-height: 72px;
+  }
+  /* 竖版卡片内边距收一点 */
+  .g-post {
+    padding: 16px 15px;
+  }
+}
+
+/* 更窄的屏：横版卡片干脆竖排，缩略图放到下面做小图
+   —— 挤在右边反而两边都看不清 */
+@media (max-width: 360px) {
+  .g-posth {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .g-posth .thumb {
+    order: 2;
+    height: 130px;
+    min-height: 0;
+  }
+}
+
+/* 卡片在触屏上没有 hover，用按压反馈代替 */
+@media (hover: none) {
+  .g-post:hover,
+  .g-posth:hover {
+    transform: none;
+    background: var(--glass);
+    border-color: var(--glass-line);
+  }
 }

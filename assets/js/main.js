@@ -2889,6 +2889,27 @@ function interceptLinks(e) {
   }
 
   /* ---------- 详情页 ---------- */
+
+  /* 给没有滚动容器的表格补一个。
+     内容里表格有两种写法：一种外面已经包了 <div class="pg-tablewrap">，
+     一种是裸的。裸的那种在窄屏上会顺着版面铺开，把整篇文章顶出屏幕。
+     这里是渲染完之后扫一遍正文，把裸表格裹进同样的容器里。 */
+  function wrapBareTables(host) {
+    if (!host) return;
+    var prose = host.querySelector(".g-prose");
+    if (!prose) return;
+    var tables = prose.querySelectorAll("table");
+    for (var i = 0; i < tables.length; i++) {
+      var t = tables[i];
+      // 已经有容器的跳过（pg-tablewrap / g-tablewrap 都算）
+      if (t.parentElement && /tablewrap/i.test(t.parentElement.className || "")) continue;
+      var wrap = document.createElement("div");
+      wrap.className = "pg-tablewrap";
+      t.parentNode.insertBefore(wrap, t);
+      wrap.appendChild(t);
+    }
+  }
+
   function mountPost(host, id) {
     if (!host) host = $("#post");
     if (!host) return;
@@ -3024,6 +3045,11 @@ function interceptLinks(e) {
       nav +
       "</div>" +
       "</article>";
+
+    // 手机上表格必须能横向滚。内容里的表格有两种写法：
+    // 一种自己包了 <div class="pg-tablewrap">，一种什么都没包 ——
+    // 后者在窄屏上直接把版面撑破，这里给它补上容器。
+    wrapBareTables(host);
 
     // 详情页也铺背景图（沿用当前选中的那张，不重置选择）
     var bgEl = $("#page-bg");
