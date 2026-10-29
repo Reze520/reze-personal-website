@@ -9961,6 +9961,9 @@ body.has-app .site-head.is-stuck {
 }
 .ftoc-panel {
   display: none;
+  position: absolute;
+  right: 0;
+  top: 0;
   flex-direction: column;
   width: 246px;
   max-height: 62vh;

@@ -2418,7 +2418,9 @@ function mountFloatToc() {
     if (Math.abs(dx) + Math.abs(dy) > 3) drag.moved = true;
     var maxL = window.innerWidth - 64;
     var maxT = window.innerHeight - 64;
-    wrap.style.left = Math.max(8, Math.min(maxL, drag.l + dx)) + "px";
+    // 展开时面板从右往左长，左边界要留出面板宽度，别拖出屏幕
+    var minL = wrap.getAttribute("data-open") === "1" ? 254 : 8;
+    wrap.style.left = Math.max(minL, Math.min(maxL, drag.l + dx)) + "px";
     wrap.style.top = Math.max(8, Math.min(maxT, drag.t + dy)) + "px";
   }
   function endDrag() {
