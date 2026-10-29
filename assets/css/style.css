@@ -6198,6 +6198,45 @@ body.has-app .site-head.is-over-hero .nav-more-btn:hover {
   background: var(--g-fill);
 }
 
+/* 右栏目录：条目一多，卡片会被撑过一屏。
+   卡头固定，.toc 自己滚，滚动条收细，当前项色块做足。 */
+#app-right .g-toc {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+#app-right .g-toc .g-card-head {
+  flex: 0 0 auto;
+}
+#app-right .g-toc .toc {
+  max-height: calc(100vh - 200px);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  scrollbar-width: thin;
+  scrollbar-color: var(--g-line) transparent;
+  padding-right: 2px;
+}
+#app-right .g-toc .toc::-webkit-scrollbar {
+  width: 6px;
+}
+#app-right .g-toc .toc::-webkit-scrollbar-track {
+  background: transparent;
+}
+#app-right .g-toc .toc::-webkit-scrollbar-thumb {
+  background: var(--g-line);
+  border-radius: 3px;
+}
+#app-right .g-toc .toc::-webkit-scrollbar-thumb:hover {
+  background: var(--g-text-3);
+}
+#app-right .g-toc .toc-link {
+  border-left-width: 3px;
+}
+#app-right .g-toc .toc-link.on {
+  background: var(--g-fill-3);
+  box-shadow: inset 0 0 0 1px var(--g-line);
+}
+
 /* ============================================================
    23. 个人卡 GIF 头像 + 首屏滚动淡出
    左栏个人卡：GIF 在横幅里整体上移，顶部 seseren 水印被框裁掉，
