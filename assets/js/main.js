@@ -3010,6 +3010,70 @@ function interceptLinks(e) {
     }
   }
 
+  /* ---------- 站内视频卡（data-bvid） ----------
+     正文里只写 <div data-bvid="BV..." data-title="..."></div>，
+     这里把它变成一张封面卡；点一下才塞进 iframe，省流量也不拖首屏。 */
+  function mountVideos(host) {
+    if (!host) return;
+    var nodes = host.querySelectorAll("[data-bvid]");
+    for (var i = 0; i < nodes.length; i++) {
+      (function (el) {
+        if (el.getAttribute("data-video-ready")) return;
+        el.setAttribute("data-video-ready", "1");
+
+        var bv = (el.getAttribute("data-bvid") || "").trim();
+        var title = el.getAttribute("data-title") || "点击播放";
+        // BV 号格式不对就别留个空框，直接藏掉
+        if (!/^BV[0-9A-Za-z]{10}$/.test(bv)) {
+          el.style.display = "none";
+          return;
+        }
+        if (!el.className) el.className = "g-bv";
+        el.setAttribute("role", "button");
+        el.setAttribute("tabindex", "0");
+        el.setAttribute("aria-label", "播放视频：" + title);
+
+        var play = document.createElement("span");
+        play.className = "g-bv-play";
+        play.setAttribute("aria-hidden", "true");
+        var cap = document.createElement("span");
+        cap.className = "g-bv-title";
+        cap.textContent = title;
+        el.innerHTML = "";
+        el.appendChild(play);
+        el.appendChild(cap);
+
+        function start() {
+          if (el.getAttribute("data-playing")) return;
+          el.setAttribute("data-playing", "1");
+          el.classList.add("is-playing");
+          el.removeAttribute("role");
+          el.removeAttribute("tabindex");
+          var f = document.createElement("iframe");
+          f.className = "g-bv-frame";
+          f.setAttribute("scrolling", "no");
+          f.setAttribute("frameborder", "0");
+          f.setAttribute("allowfullscreen", "true");
+          f.setAttribute("allow", "autoplay; fullscreen");
+          f.src =
+            "https://player.bilibili.com/player.html?bvid=" +
+            bv +
+            "&page=1&high_quality=1&danmaku=0&autoplay=1";
+          el.innerHTML = "";
+          el.appendChild(f);
+        }
+
+        el.addEventListener("click", start);
+        el.addEventListener("keydown", function (e) {
+          if (e.key === "Enter" || e.key === " " || e.keyCode === 13 || e.keyCode === 32) {
+            e.preventDefault();
+            start();
+          }
+        });
+      })(nodes[i]);
+    }
+  }
+
   /* ---------- 文章留言（读者留言） ----------
      在文章详情页底部挂载一个留言区：列表 + 表单。
      数据走 /site-data/comments（与内容同源，无 CORS）。
@@ -3337,6 +3401,9 @@ function interceptLinks(e) {
     // 一种自己包了 <div class="pg-tablewrap">，一种什么都没包 ——
     // 后者在窄屏上直接把版面撑破，这里给它补上容器。
     wrapBareTables(host);
+
+    // 站内视频卡：正文里写了 data-bvid 的，这里变成「点击才加载」
+    mountVideos(host);
 
     // 详情页没有三栏，目录得自己长出来（宽屏落右栏、窄屏落正文上方）。
     // 标题少于 4 个的直接不生成，省得小文章也挂个目录。
@@ -4429,6 +4496,7 @@ function interceptLinks(e) {
       insertPostToc: insertPostToc,
       buildPostTocHtml: buildPostTocHtml,
       bindToc: bindToc,
+      mountVideos: mountVideos,
     };
   }
 })();

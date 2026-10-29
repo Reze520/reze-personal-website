@@ -9777,3 +9777,80 @@ body.has-app .site-head.is-stuck {
   cursor: pointer;
 }
 .g-cmt-admin:hover { color: var(--ink); }
+
+/* ---------- 站内视频卡（正文里的 data-bvid） ----------
+   正文只写 <div data-bvid>，main.js 的 mountVideos 补上这道壳。
+   点一下才换成 iframe，所以首屏不为它付钱。 */
+.g-bv {
+  position: relative;
+  display: block;
+  width: 100%;
+  max-width: 660px;
+  aspect-ratio: 16 / 9;
+  margin: 24px auto;
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: 12px;
+  overflow: hidden;
+  cursor: pointer;
+  transition: border-color .18s ease, transform .18s ease;
+}
+.g-bv:hover {
+  border-color: var(--accent);
+  transform: translateY(-1px);
+}
+.g-bv:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+}
+.g-bv.is-playing {
+  cursor: default;
+  transform: none;
+  border-color: var(--card-border);
+}
+.g-bv-play {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 56px;
+  height: 56px;
+  margin: -28px 0 0 -28px;
+  border-radius: 50%;
+  background: var(--glass);
+  border: 1px solid var(--card-border);
+  transition: border-color .18s ease;
+}
+.g-bv-play::after {
+  content: "";
+  position: absolute;
+  left: 22px;
+  top: 17px;
+  width: 0;
+  height: 0;
+  border-left: 17px solid var(--accent);
+  border-top: 11px solid transparent;
+  border-bottom: 11px solid transparent;
+}
+.g-bv:hover .g-bv-play { border-color: var(--accent); }
+.g-bv-title {
+  position: absolute;
+  left: 16px;
+  right: 16px;
+  bottom: 13px;
+  font-size: .82rem;
+  line-height: 1.45;
+  color: var(--ink-3);
+  text-align: left;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.g-bv:hover .g-bv-title { color: var(--ink); }
+.g-bv-frame {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border: 0;
+}
