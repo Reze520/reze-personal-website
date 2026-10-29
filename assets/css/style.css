@@ -91,6 +91,8 @@
   --surface-3: rgba(255, 255, 255, 0.07);
   --surface-hover: rgba(30, 26, 44, 0.94);
   --header-bg: #0a1629;
+  --header-line: rgba(255, 255, 255, 0.08);
+  --header-shadow: 0 12px 32px rgba(0, 0, 0, 0.5);
   --surface-shadow: 0 14px 40px rgba(0, 0, 0, 0.45);
   --prose-ink: #ececf0;
   --prose-ink-2: rgba(236, 232, 246, 0.88);
@@ -122,6 +124,9 @@
   --shadow-hover: 0 4px 14px rgba(0, 0, 0, 0.36), 0 16px 36px rgba(0, 0, 0, 0.42);
   --card-bg: var(--panel);
   --card-border: 1px solid transparent;
+  /* deep-soft 的顶栏底：与 --bg 同族，只是略压暗一档，避免在浅紫底上冒出一块别的颜色 */
+  --header-line: rgba(235, 230, 245, 0.1);
+  --header-shadow: 0 12px 32px rgba(0, 0, 0, 0.52);
 }
 
 /* 字体与尺度（与皮肤无关） */
@@ -181,6 +186,9 @@
   --surface-3: rgba(0, 0, 0, 0.045);
   --surface-hover: #ffffff;
   --header-bg: #ffffff;
+  /* 顶栏收边色：吸顶后底边用它，不再拿 --line 直接画（浅色下 #e6e3dd 压在白底上是一条白线） */
+  --header-line: rgba(20, 16, 12, 0.1);
+  --header-shadow: 0 10px 28px rgba(46, 38, 70, 0.09);
   --surface-shadow: 0 14px 40px rgba(70, 60, 100, 0.14);
 
   /* 正文阅读链路的语义色 */
@@ -8998,4 +9006,627 @@ button,
   .g-prose code {
     font-weight: 400;
   }
+}
+
+
+/* ============================================================
+   31. 顶栏收边 + 深色玻璃底板（2026-10-29）
+   ------------------------------------------------------------
+   起因（用户 2026-10-29 两条反馈）：
+   1) 「划到主要内容导航栏下面有一条明显的白线」
+      浅色主题 --header-bg 是纯白 #ffffff，吸顶状态 .is-stuck 又把底边
+      border-bottom-color 设成 --line（#e6e3dd），于是白色顶栏下沿压着
+      渐变的页面背景，中间夹了一条 236 亮度的 1px 线。
+   2) 「改深色之后适配很差……不能有毛刺、粗糙的地方」
+      .app 的玻璃底 --glass-app 透光 44%，深色页面背后那张大图整片透进卡片，
+      卡片底色随背景明暗起伏，文字对比度不稳定，1px 描边又被 backdrop-filter
+      的边缘采样搅成毛边。
+
+   这里只做覆盖，不改上游规则（出问题整节删掉即可回退）。
+   ============================================================ */
+
+/* ---------- 31.1 顶栏：不再用 --line 画底边，改成主题自带的收边色 ---------- */
+.site-head {
+  border-bottom: 1px solid transparent;
+  box-shadow: none;
+  transition: border-color 0.35s var(--ease), box-shadow 0.35s var(--ease),
+    background-color 0.35s var(--ease);
+}
+
+.site-head.is-stuck,
+body.has-app .site-head.is-stuck {
+  /* 浅色下 --line 是米灰、深色下是近黑；两者压在本主题的实底上都会显出「一道线」。
+     改用 --header-line（同色系淡一档）+ 一层很浅的外投影，做「浮起来」而不是「画条边」。 */
+  border-bottom-color: var(--header-line);
+  box-shadow: var(--header-shadow);
+}
+
+/* 首屏透明态：既不要线也不要影子 */
+.site-head.is-over-hero,
+body.has-app .site-head.is-over-hero {
+  border-bottom-color: transparent;
+  box-shadow: none;
+}
+
+/* 深色主题的顶栏底跟页面同族，避免顶部一块突兀的海军蓝（只在最小皮肤下才保留深蓝） */
+:root[data-theme="dark"][data-skin="soft"] body.has-app .site-head,
+:root[data-theme="dark"][data-skin="soft"] body.has-app .site-head.is-stuck,
+:root[data-theme="dark"][data-skin="soft"] body.has-app .site-head.is-over-hero {
+  background: var(--bg-alt);
+}
+
+/* ---------- 31.2 深色玻璃卡片：把透光压下来，底色不再随背景起伏 ---------- */
+:root[data-theme="dark"] .app {
+  /* 0.56 的底透光 44%，背后那张大图整片透进来，卡片一会儿灰一会儿亮。
+     收到 0.86：还看得见背景的层次，但文字底已经稳定。 */
+  --glass-app: rgba(26, 22, 38, 0.86);
+}
+:root[data-theme="dark"][data-skin="soft"] .app {
+  /* deep-soft 本身底色更紫，稍微再实一点，让卡片和页面拉出层次 */
+  --glass-app: rgba(24, 19, 36, 0.88);
+}
+:root[data-theme="dark"] .post-app {
+  --glass-post: rgba(24, 20, 36, 0.9);
+}
+:root[data-theme="dark"][data-skin="soft"] .post-app {
+  --glass-post: rgba(22, 18, 34, 0.92);
+}
+
+/* ---------- 31.3 深色下卡片的描边与底噪 ---------- */
+:root[data-theme="dark"] .g-card,
+:root[data-theme="dark"] .g-post,
+:root[data-theme="dark"] .g-moment,
+:root[data-theme="dark"] .g-link,
+:root[data-theme="dark"] .g-article,
+:root[data-theme="dark"] .g-album figure {
+  /* 描边用固定比例的白，不跟 ink 走 —— 深色下 ink 本身就是白，混出来的颜色会偏亮偏脏 */
+  border-color: rgba(255, 255, 255, 0.09);
+  /* backdrop-filter 的边缘采样会把 1px 描边拉成脏边；这里把饱和度和模糊一并收住。
+     带 !important 是为了压过 L7135 那条 saturate(118%) —— 饱和度越高，边缘越容易出彩边。 */
+  backdrop-filter: blur(18px) saturate(104%) !important;
+  -webkit-backdrop-filter: blur(18px) saturate(104%) !important;
+}
+
+/* 悬停只提描边亮度，别动底色 —— 动底色会让整张卡「闪」一下 */
+:root[data-theme="dark"] .g-card:hover,
+:root[data-theme="dark"] .g-post:hover,
+:root[data-theme="dark"] .g-moment:hover,
+:root[data-theme="dark"] .g-link:hover {
+  border-color: rgba(255, 255, 255, 0.16);
+}
+
+/* ---------- 31.4 深色下正文所在的实底卡：彻底去掉透光，保证长时间阅读 ----------
+   L7135 有一条 `backdrop-filter: blur(11px) saturate(118%) !important`，
+   不带 !important 的 none 会被它压回去（脚本 31.4 项就是这么报出来的）。
+   所以这里必须同样带 !important 才能生效。 */
+:root[data-theme="dark"] .g-article {
+  background: color-mix(in srgb, var(--panel) 92%, var(--accent-glow));
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  /* 去掉磨砂后描边直接用固定比例白，避免半透明边被采样成毛边 */
+  border-color: rgba(255, 255, 255, 0.1);
+}
+
+/* ---------- 31.5 深色下侧栏小字：统一提一档亮度，避免「灰得看不清」 ---------- */
+:root[data-theme="dark"] .g-card .g-muted,
+:root[data-theme="dark"] .g-card .g-sub,
+:root[data-theme="dark"] .g-card .g-meta,
+:root[data-theme="dark"] .g-card small {
+  color: var(--g-ink-2);
+}
+
+/* ============================================================
+   32. 玻璃卡片的可读性收口（2026-10-29）
+   ------------------------------------------------------------
+   起因：用户截图（浅色主题，1440 宽）里背景插画是一张灰白的大图，
+   玻璃卡片透光后底色变成中灰（实测卡片区亮度 108–133，页面底色 57），
+   卡内小字与卡片底之间对比度掉到 2:1 上下，整体「看不清、发糊」。
+   侧栏播放器在浅色下反而比深色更糊 —— 播放键底色跟随 --panel，
+   浅色主题下 --panel 是深灰，压在深灰卡上只剩一团。
+
+   根因是同一个：卡片没有「自己的底色」，颜色由背后的插画决定。
+   于是透明度、模糊半径、背后图的明暗、系统缩放都会改变可读性，
+   这四者不受控，就永远适配不好。
+
+   做法：给每张玻璃卡片一张与主题一致的稳定底衬（--card-scrim），
+   卡片 = 底衬 + 一层很淡的透光（保留玻璃层次，但不再是主要来源）。
+     · 浅色：白底 0.80，插画只在卡片上留一道很浅的影子
+     · 深色：墨底 0.86，卡片固定比页面亮一档，边界始终成立
+   底衬用 ::before 铺在内容之下，不动元素自身的 background ——
+   悬停态、选中态、内联样式都还能正常改背景，不会被这层压住。
+   描边同时改成不透明色（半透明边被 backdrop-filter 采样会出毛刺）。
+   ============================================================ */
+
+.app,
+.post-app {
+  /* 卡片底衬：与主题同族、带一点点色相，不纯白不纯黑 */
+  --card-scrim: rgba(255, 255, 255, 0.82);
+  /* 卡片描边：完全不透明，避免被模糊采样拉出彩边 */
+  --card-edge: rgba(40, 30, 70, 0.13);
+  /* 卡内文字统一往上提一档，压在稳定底衬上足够 */
+  --g-text: var(--g-ink);
+  --g-text-2: var(--g-ink-2);
+  --g-text-3: color-mix(in srgb, var(--g-ink) 74%, transparent);
+}
+
+:root[data-theme="dark"] .app,
+:root[data-theme="dark"] .post-app {
+  /* 深色：墨紫底，比页面 --bg(#141020) 亮一档，卡片和页面始终分得开 */
+  --card-scrim: rgba(26, 23, 38, 0.9);
+  --card-edge: rgba(255, 255, 255, 0.11);
+  --g-text: var(--g-ink);
+  --g-text-2: var(--g-ink-2);
+  --g-text-3: color-mix(in srgb, var(--g-ink) 78%, transparent);
+}
+
+/* 底衬：所有玻璃卡共用一张，position 由卡片自己保证 */
+.g-card,
+.g-post,
+.g-posth,
+.g-moment,
+.g-link,
+.g-album figure,
+.g-article,
+.side-block,
+.profile,
+.g-tabs,
+.g-filters,
+.g-searchline {
+  position: relative;
+  isolation: isolate;
+}
+
+.g-card::before,
+.g-post::before,
+.g-posth::before,
+.g-moment::before,
+.g-link::before,
+.g-album figure::before,
+.g-article::before,
+.side-block::before,
+.profile::before,
+.g-tabs::before,
+.g-filters::before,
+.g-searchline::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  border-radius: inherit;
+  background: var(--card-scrim);
+  pointer-events: none;
+}
+
+/* 卡片本体只留一层很淡的透光，主要颜色交给底衬 */
+.g-card,
+.g-post,
+.g-posth,
+.g-moment,
+.g-link,
+.g-album figure,
+.g-article,
+.side-block,
+.profile,
+.g-tabs,
+.g-filters,
+.g-searchline {
+  background: color-mix(in srgb, var(--glass) 34%, transparent);
+  /* 1px 实色边。模糊半径收到 8px：半径越大，边缘采样越糊，越容易出毛刺 */
+  border-width: 1px;
+  border-style: solid;
+  border-color: var(--card-edge);
+}
+
+/* 模糊半径与饱和度一起收：110% 的饱和会把背后插画的彩边放大 */
+.g-card,
+.g-post,
+.g-posth,
+.g-moment,
+.g-link,
+.g-album figure,
+.g-article,
+.g-tabs,
+.g-filters,
+.g-searchline {
+  backdrop-filter: blur(8px) saturate(104%) !important;
+  -webkit-backdrop-filter: blur(8px) saturate(104%) !important;
+}
+
+/* 首屏签名卡与悬浮按钮不是玻璃卡，单独给稳定底，别在插画上发虚 */
+.splash-quote {
+  background: rgba(255, 255, 255, 0.78);
+  border: 1px solid rgba(40, 30, 70, 0.14);
+  color: var(--g-ink);
+}
+.splash-quote * {
+  color: inherit;
+}
+:root[data-theme="dark"] .splash-quote {
+  background: rgba(26, 23, 38, 0.82);
+  border-color: rgba(255, 255, 255, 0.12);
+  color: var(--g-ink);
+}
+
+.to-top,
+.music-btn {
+  background: var(--card-scrim);
+  border: 1px solid var(--card-edge);
+  color: var(--g-ink-2);
+  backdrop-filter: blur(8px) saturate(104%);
+  -webkit-backdrop-filter: blur(8px) saturate(104%);
+}
+.to-top:hover,
+.music-btn:hover {
+  color: var(--g-accent);
+}
+
+/* ---------- 32.2 播放器：浅色下原来比深色还糊 ----------
+   播放键底色跟的是 --panel：浅色主题里 --panel 是 #1a1c20（深灰），
+   压在浅灰卡上是一块死黑，图标又是写死的 #14111d，等于同色。
+   这里把播放键统一改成强调色 + 反色图标，四主题同一套逻辑；
+   进度轨道、音量轨道改用「墨混纸」，任何一种底下都能看出层次。 */
+.ply-ctrl .ply-play {
+  background: var(--g-accent);
+  color: var(--accent-ink) !important;
+  border: 1px solid color-mix(in srgb, var(--g-ink) 18%, transparent);
+  box-shadow: 0 8px 22px color-mix(in srgb, var(--g-accent) 30%, transparent);
+}
+/* 悬停：浅色下 --g-accent 就是墨黑，再往 #fff 混会把播放键洗成灰饼，
+   图标却仍是反色的米白 —— 悬停时反而看不见。改成往卡片底衬方向退一点点。 */
+.ply-ctrl .ply-play:hover {
+  background: color-mix(in srgb, var(--g-accent) 88%, var(--card-scrim));
+  color: var(--accent-ink) !important;
+  transform: scale(1.06);
+}
+:root[data-theme="dark"] .ply-ctrl .ply-play {
+  background: color-mix(in srgb, var(--accent-glow) 74%, #fff);
+  color: #16121f !important;
+  border-color: rgba(255, 255, 255, 0.5);
+}
+.ply-ctrl .ply-play svg {
+  stroke-width: 0;
+}
+/* 轨道：--g-fill 在浅色下 0.035、深色下 0.06，两次都是「几乎等于底色」。
+   改成墨色往纸色里混：浅色下是中灰、深色下是浅灰，两边都能看见。
+   关键是深浅两侧要分别定档 ——
+   浅色里墨黑压在米白上，12% 就足够当轨道（再深像一条黑杠）；
+   深色里墨色本身是浅的，混 12% 之后几乎等于底衬，轨道就消失了。 */
+.ply-bar {
+  height: 4px;
+  background: color-mix(in srgb, var(--g-ink) 20%, var(--card-scrim));
+  box-shadow: 0 0 0 1px color-mix(in srgb, var(--g-ink) 10%, transparent) inset;
+}
+:root[data-theme="dark"] .ply-bar {
+  background: color-mix(in srgb, var(--g-ink) 22%, var(--card-scrim));
+}
+.ply-bar i {
+  background: var(--g-accent);
+}
+.ply-bar i::after {
+  background: var(--g-accent);
+  border: 2px solid var(--card-scrim);
+  box-shadow: 0 2px 8px color-mix(in srgb, #000 28%, transparent);
+}
+
+.ply-vol input[type="range"] {
+  height: 4px;
+  background: color-mix(in srgb, var(--g-ink) 20%, var(--card-scrim));
+  box-shadow: 0 0 0 1px color-mix(in srgb, var(--g-ink) 10%, transparent) inset;
+}
+:root[data-theme="dark"] .ply-vol input[type="range"] {
+  background: color-mix(in srgb, var(--g-ink) 22%, var(--card-scrim));
+}
+.ply-vol input[type="range"]::-webkit-slider-thumb {
+  background: var(--g-accent);
+  border: 2px solid var(--card-scrim);
+  width: 12px;
+  height: 12px;
+}
+.ply-vol input[type="range"]::-moz-range-thumb {
+  background: var(--g-accent);
+  border: 2px solid var(--card-scrim);
+  width: 12px;
+  height: 12px;
+}
+
+/* 封面：原来 border 用的是 --glass-line（一条半透明简写），
+   再叠 40%/12% 的透明渐变，深色下整块糊成一团。
+   描边越亮不等于越有边 —— 关键是描边与它自己那张渐变之间要拉开档次。
+   浅色里强调色是墨黑，盘面取 46%/22%，是「浅灰唱片」；
+   深色里强调色是浅紫，盘面反过来取 62%/30%，是「压暗一档的紫唱片」。
+   两种情况描边都比盘面深两档，四个主题下都看得出这是一张唱片。 */
+.ply-cover {
+  border: 2px solid color-mix(in srgb, var(--g-accent) 92%, var(--card-scrim));
+  background: linear-gradient(
+    135deg,
+    color-mix(in srgb, var(--g-accent) 46%, var(--card-scrim)),
+    color-mix(in srgb, var(--g-accent) 22%, var(--card-scrim))
+  );
+  box-shadow: 0 6px 18px color-mix(in srgb, #000 22%, transparent);
+}
+:root[data-theme="dark"] .ply-cover {
+  background: linear-gradient(
+    135deg,
+    color-mix(in srgb, var(--g-accent) 54%, var(--card-scrim)),
+    color-mix(in srgb, var(--g-accent) 24%, var(--card-scrim))
+  );
+}
+.ply-cover .ph {
+  /* 盘面中心那个音符：盘面已是中灰/中紫，这里取反色，两边都有对比 */
+  color: color-mix(in srgb, #16121f 78%, var(--card-scrim));
+  font-size: 22px;
+}
+:root[data-theme="dark"] .ply-cover .ph {
+  /* 深色下盘面是 54% 的浅紫，近黑的音符压在中间只剩 1.0，等于没有 */
+  color: #f4f0ff;
+}
+
+/* 控制行小图标：浅色下原来是 --g-text-2（82% 墨），压在灰卡上偏虚 */
+.ply-ctrl button {
+  color: var(--g-text-2);
+}
+.ply-ctrl button:hover,
+.ply-ctrl button.on {
+  color: var(--g-accent);
+}
+.ply-vol button {
+  color: var(--g-ink-2);
+}
+.ply-vol button:hover {
+  color: var(--g-accent);
+}
+.ply-vol svg,
+.ply-ctrl svg {
+  stroke-width: 1.9;
+}
+.ply-eq i {
+  background: var(--g-accent);
+  opacity: 1;
+}
+
+/* 播放器副标题（歌手名）与进度时间：10.5–11.5px 压在灰底上最吃力 */
+.ply-info span,
+.ply-prog {
+  color: var(--g-text-3);
+  font-weight: 500;
+}
+
+/* ---------- 32.3 顶栏底边：彻底去掉那条线 ----------
+   吸顶后原来还给 border-bottom + 外投影，浅色下白顶栏压着渐变页面，
+   1px 边被渲染成一条近白的亮线。这里改成「无边框 + 极淡投影」，
+   靠投影分出层次，不靠画线。 */
+.site-head,
+.site-head.is-stuck,
+.site-head.is-over-hero,
+body.has-app .site-head,
+body.has-app .site-head.is-stuck,
+body.has-app .site-head.is-over-hero {
+  border-bottom-color: transparent !important;
+}
+
+.site-head.is-stuck,
+body.has-app .site-head.is-stuck {
+  box-shadow: 0 1px 0 color-mix(in srgb, var(--g-ink) 8%, transparent),
+    0 10px 26px color-mix(in srgb, #000 10%, transparent);
+}
+:root[data-theme="dark"] .site-head.is-stuck,
+:root[data-theme="dark"] body.has-app .site-head.is-stuck {
+  box-shadow: 0 1px 0 rgba(255, 255, 255, 0.06), 0 12px 30px rgba(0, 0, 0, 0.42);
+}
+
+/* ---------- 32.4 深色下的正文卡：底衬已是实色，这里只补层次 ---------- */
+:root[data-theme="dark"] .g-article {
+  background: color-mix(in srgb, var(--panel) 88%, var(--accent-glow));
+  border-color: var(--card-edge);
+}
+
+/* ---------- 32.5 小字统一加一点点字重 ----------
+   12px 以下的中文在 400/430 下会「灰掉」，不是颜色问题，是笔画太细。 */
+.g-feed li,
+.g-feed time,
+.g-bio,
+.g-muted,
+.g-sub,
+.g-meta,
+.g-cal-grid span,
+.g-cal-grid i,
+.g-cal-sub,
+.tl-desc,
+.tl-top,
+.g-card-head,
+.g-card-head .more,
+.ply-info span,
+.ply-prog,
+.ply-track .nm i,
+.g-site dl,
+.gz-tags a {
+  font-weight: 500;
+}
+.g-cal-sub,
+.ply-prog,
+.g-feed time {
+  font-weight: 520;
+}
+
+/* ---------- 32.6 日历今天那一格：强调色底上的字一律用反色，不再靠透明度 ---------- */
+.g-cal-grid b.today,
+.g-cal-grid b.today span,
+.g-cal-grid b.today i,
+.g-cal-grid b.today .g-cal-sub {
+  color: var(--accent-ink);
+}
+:root[data-theme="dark"] .g-cal-grid b.today,
+:root[data-theme="dark"] .g-cal-grid b.today span,
+:root[data-theme="dark"] .g-cal-grid b.today i,
+:root[data-theme="dark"] .g-cal-grid b.today .g-cal-sub {
+  color: var(--accent-ink);
+}
+
+/* ---------- 32.7 窄屏：卡片底衬再实一点，手机上没有余量给插画 ---------- */
+@media (max-width: 760px) {
+  .app,
+  .post-app {
+    --card-scrim: rgba(255, 255, 255, 0.9);
+  }
+  :root[data-theme="dark"] .app,
+  :root[data-theme="dark"] .post-app {
+    --card-scrim: rgba(26, 23, 38, 0.94);
+  }
+  .g-card,
+  .g-post,
+  .g-posth,
+  .g-moment,
+  .g-article {
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+  }
+}
+
+/* ---------- 32.8 打印：一律白底黑字 ---------- */
+@media print {
+  .g-card::before,
+  .g-post::before,
+  .g-posth::before,
+  .g-moment::before,
+  .g-article::before {
+    background: #fff;
+  }
+  .g-card,
+  .g-post,
+  .g-article {
+    backdrop-filter: none !important;
+    background: #fff;
+  }
+}
+
+/* ============================================================
+   第 33 节｜字更大、对比更实（2026-10-31）
+   ------------------------------------------------------------
+   两件事：
+   1) 正文 16.5px 对中文长文是「能用但不舒服」的度。中文方块字
+      没有西文的 x-height，同字号下墨迹面积明显更小；放到 700px
+      的阅读栏里，一眼扫过去行是灰的。抬到 17.5px，行高同步微调，
+      每行字数仍在 38–42 之间，不会把栏宽挤难看。
+   2) 次级文字的对比度整体偏松。实测（浅色卡底 255,255,255）：
+      --ink-3 #74747e 只有 4.62，压在玻璃卡上再掉一档；
+      侧栏的摘要、时间、站点信息全在这一档。逐档提色，四主题各算一遍。
+   ============================================================ */
+
+/* ---------- 33.1 正文字阶 ----------
+   16.5 → 17.5，行高 1.95 → 1.9（字大了，行距按比例收回来，
+   否则 700px 栏里一行会显得飘）。h2/h3 跟着抬，不然标题与正文的
+   落差被吃掉，节标题就不再是节标题。 */
+:root {
+  --prose-fs: 17.5px;
+  --prose-lh: 1.9;
+  --prose-h2: 21px;
+  --prose-h3: 18.5px;
+  --prose-quote-fs: 16.5px;
+  --prose-table-fs: 14.5px;
+  --prose-th-fs: 12.5px;
+  --prose-pre-fs: 13.5px;
+}
+
+/* ---------- 33.2 次级文字提一档 ----------
+   浅色 minimal：ink-2 6.52 → 7.74，ink-3 4.62 → 5.68。
+   深色 minimal：ink-2 7.37 → 9.13，ink-3 5.22 → 6.70。
+   两档都不再贴着 4.5 的及格线走——那根线是给纯正文的，
+   侧栏里 11–13px 的小字需要更多余量才「看着实」。 */
+:root {
+  --ink-2: #52525a;
+  --ink-3: #66666f;
+  /* 玻璃卡里的次级文字：原来 0.82 / 0.60 的墨色透明度，
+     0.60 那一档压在白底上只有 4.33 */
+  --g-ink-2: rgba(36, 29, 51, 0.88);
+  --g-ink-3: rgba(36, 29, 51, 0.7);
+}
+:root[data-theme="dark"] {
+  --ink-2: #b6bbc5;
+  --ink-3: #9aa0ac;
+  --g-ink-2: rgba(236, 232, 246, 0.84);
+  --g-ink-3: rgba(236, 232, 246, 0.68);
+}
+
+/* soft 皮肤两套底色都偏紫，单独给一档，免得紫底上小字发灰 */
+:root[data-skin="soft"] {
+  --ink-2: #574f68;
+  --ink-3: #665d7a;
+}
+:root[data-theme="dark"][data-skin="soft"] {
+  --ink-2: #b3aac6;
+  --ink-3: #9c94ae;
+}
+
+/* ---------- 33.3 正文段落：字大了，压一档字重反而更清楚 ----------
+   17.5px 下 450 的笔画会略肿；回到 430，配合 geometricPrecision，
+   笔画边界比原来 16.5px/450 干净。 */
+.g-prose,
+.g-prose p,
+.g-prose li,
+.g-prose blockquote,
+.g-prose td {
+  font-weight: 430;
+}
+.g-prose {
+  letter-spacing: 0.008em;
+}
+
+/* ---------- 33.4 段落间距跟着字号走 ----------
+   1.4em 在 17.5px 下是 24.5px，原来 16.5px 下是 23.1px ——
+   字大了但段距缩了，读起来会挤。定成绝对值，视觉段距不变。 */
+:root {
+  --prose-space: 25px;
+}
+
+/* ---------- 33.5 窄屏：正文比桌面再大一档会挤行宽 ----------
+   760px 以下栏宽本来就是整屏，17px 是手机上中文的舒适下限，
+   360px 一档回到 16.5，行高都留在 1.88 以上。 */
+@media (max-width: 760px) {
+  .g-prose {
+    font-size: 17px;
+    line-height: 1.88;
+  }
+  .g-prose h2 {
+    font-size: 19.5px;
+  }
+  .g-prose h3 {
+    font-size: 17.5px;
+  }
+  .g-prose figcaption,
+  .g-prose .wp-caption-text,
+  .g-prose .caption {
+    font-size: 13.5px;
+  }
+}
+@media (max-width: 360px) {
+  .g-prose {
+    font-size: 16.5px;
+  }
+  .g-prose h2 {
+    font-size: 18px;
+  }
+}
+
+/* ---------- 33.6 打印与「正文只看正文」 ----------
+   打印时字号回到纸面合适的 11pt，不受屏幕设置影响。 */
+@media print {
+  .g-prose {
+    font-size: 11pt;
+    line-height: 1.65;
+  }
+}
+
+/* ---------- 33.7 首段行高按字号还原 ----------
+   首段行高是 2.15 的倍率，字号变大之后行距绝对值跟着变大，
+   首段会显得比后面的段落松太多。收到 2.05。 */
+:root {
+  --prose-first-lh: 2.05;
+}
+
+/* ---------- 33.8 soft 皮肤下卡片元信息：写死的 #756c8a 只够 3.57 ----------
+   这条颜色写死在 L1527，浅色下 4.6 勉强及格，换成深色底就只剩 3.57。
+   改成跟 --ink-3 走，两种底都自动对。 */
+[data-skin="soft"] .card-meta,
+[data-skin="soft"] .post-meta {
+  color: var(--ink-3);
 }
