@@ -2168,7 +2168,7 @@ function aboutHtml() {
   return (
     '<article class="g-article">' +
     '<h1>关于我</h1>' +
-    '<div class="g-prose prose" style="padding-top:26px">' +
+    '<div class="g-prose prose">' +
     '<h2>我是谁</h2>' +
     '<p>我叫 <strong>reze</strong>。没有什么非做不可的事，也没有哪个领域算专精——什么都想试试。</p>' +
     '<p>不太擅长自我介绍。每次被要求“简单说说你自己”，我都会卡住。但如果让我讲一个最近在想的问题，我可以讲很久。</p>' +
