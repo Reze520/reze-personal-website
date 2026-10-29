@@ -2203,8 +2203,14 @@ function aboutHtml() {
   );
 }
 
-/* ---------- 文章目录（右栏，参照 Shirone 布局） ---------- */
+/* ---------- 文章目录 ----------
+   两处用到：
+   ① 首页 / 文章列表那种三栏布局 —— 目录插进右栏（原逻辑）。
+   ② 文章详情页（.post-app）—— 详情页不是三栏，目录只能自己长出来，
+      由 mountPost 之后的 insertPostToc 插进 .post-app 里。
+   两份目录共用 buildTocHtml / bindToc，靠选择器区分是哪一份。 */
 var _tocHandler = null;
+var _tocProgressHandler = null;
 
 // 目录跳转要避开吸顶的顶栏
 function tocOffset() {
@@ -2217,11 +2223,20 @@ function unbindToc() {
     window.removeEventListener("scroll", _tocHandler);
     _tocHandler = null;
   }
+  if (_tocProgressHandler) {
+    window.removeEventListener("scroll", _tocProgressHandler);
+    _tocProgressHandler = null;
+  }
 }
+
+/* 正文容器在两种页面上位置不同：
+   列表页是 <main id="app-main">，文章详情页是 <main class="post-app" id="post">。
+   目录、进度条这些逻辑两边都要用，统一走这一个选择器。 */
+var PROSE_SEL = "#app-main .g-prose, #post .g-prose";
 
 // 从正文的 h2 / h3 自动生成目录，并给标题补上锚点 id
 function buildTocHtml() {
-  var prose = document.querySelector("#app-main .g-prose");
+  var prose = document.querySelector(PROSE_SEL);
   if (!prose) return "";
   var hs = prose.querySelectorAll("h2, h3");
   if (!hs.length) return "";
@@ -2246,10 +2261,67 @@ function buildTocHtml() {
   );
 }
 
+/* 文章详情页自己那一份目录。
+   详情节不是三栏（.post-app 一层），右栏不存在，所以目录得长在正文旁边。
+   长文（>= 4 个标题）才有；结构上和右栏那份一样，多一条顶部细进度条。 */
+function buildPostTocHtml() {
+  var basic = buildTocHtml();
+  if (!basic) return "";
+  var count = document.querySelectorAll(PROSE_SEL + " h2, " + PROSE_SEL + " h3").length;
+  if (count < 4) return "";
+  return basic.replace(
+    'class="g-card g-toc"',
+    'class="g-card g-toc post-toc"'
+  ).replace(
+    '<nav class="toc">',
+    '<div class="toc-progress" aria-hidden="true"><i></i></div><nav class="toc">'
+  );
+}
+
+/* 把目录插进 .post-app：宽屏时 CSS 把它排到正文右侧（sticky），
+   窄屏时 order:-1 让它落在正文上方。两种都不需要 JS 判断屏宽。 */
+function insertPostToc(host) {
+  if (!host) host = $("#post");
+  if (!host) return;
+  var old = host.querySelector(".post-toc");
+  if (old) old.remove();
+  var html = buildPostTocHtml();
+  if (!html) return;
+  var tmp = document.createElement("div");
+  tmp.innerHTML = html;
+  var node = tmp.firstElementChild;
+  // 挂在文章卡后面，作为 grid 的第二列
+  var art = host.querySelector(".g-article");
+  if (art && art.parentNode === host) host.insertBefore(node, art.nextSibling);
+  else host.appendChild(node);
+  bindToc();
+}
+
+/* 目录本身也能滚（50 个条目的长文，一屏放不下）。
+   高亮跑到可视区外时，把目录自己滚一格 —— 但只在目录真的是滚动区时才动，
+   右栏那种一屏放得下的目录，scrollTop 一直是 0，这里什么都不做。 */
+function followToc(nav, current) {
+  if (!nav || !current) return;
+  if (nav.scrollHeight - nav.clientHeight < 24) return;
+  var nr = nav.getBoundingClientRect();
+  var ar = current.getBoundingClientRect();
+  var pad = 12;
+  if (ar.top < nr.top + pad) {
+    nav.scrollTop -= nr.top + pad - ar.top;
+  } else if (ar.bottom > nr.bottom - pad) {
+    nav.scrollTop += ar.bottom - (nr.bottom - pad);
+  }
+}
+
 function bindToc() {
   unbindToc();
-  var nav = document.querySelector("#app-right .g-toc .toc");
+  // 文章详情页有自己那份时就绑它，否则绑右栏那份
+  var nav =
+    document.querySelector("#post .post-toc .toc") ||
+    document.querySelector("#app-right .g-toc .toc");
   if (!nav) return;
+  // 目录卡本体（.g-card.g-toc），宽屏 sticky 的正是它
+  var card = nav.closest(".g-toc") || nav.parentNode;
   var links = Array.prototype.slice.call(nav.querySelectorAll("a[data-target]"));
   if (!links.length) return;
 
@@ -2275,12 +2347,36 @@ function bindToc() {
     links.forEach(function (a, i) {
       a.classList.toggle("on", i === idx);
     });
+    followToc(nav, links[idx]);
   };
   window.addEventListener("scroll", _tocHandler, { passive: true });
   _tocHandler();
+
+  /* 目录顶部那条细进度：按「正文已读比例」走，不是整页滚动比例
+     —— 整页比例里页脚、版权都算进去，读完正文时还差一截，看着别扭。 */
+  var prog = card.querySelector(".toc-progress i");
+  if (prog) {
+    var prose = document.querySelector(PROSE_SEL);
+    var track = prog.parentNode;
+    _tocProgressHandler = function () {
+      if (!prose || !track) return;
+      var r = prose.getBoundingClientRect();
+      var total = r.height - window.innerHeight * 0.6;
+      var done = tocOffset() - r.top;
+      var pct = total > 0 ? (done / total) * 100 : 100;
+      track.style.setProperty(
+        "--toc-progress",
+        Math.min(100, Math.max(0, pct)).toFixed(1)
+      );
+    };
+    window.addEventListener("scroll", _tocProgressHandler, { passive: true });
+    _tocProgressHandler();
+  }
 }
 
-// 只在文章页把目录插到右栏「动态」卡片下面
+// 只在文章页把目录插到右栏「动态」卡片下面。
+// 文章详情页（.post-app）没有右栏，那里的目录由 insertPostToc 自己长，
+// 所以这里遇到 post 时什么都不做 —— 两份目录同时存在会互相抢滚动高亮。
 function renderRightForPage(page) {
   var right = $("#app-right");
   if (!right) return;
@@ -3057,6 +3153,10 @@ function interceptLinks(e) {
     // 一种自己包了 <div class="pg-tablewrap">，一种什么都没包 ——
     // 后者在窄屏上直接把版面撑破，这里给它补上容器。
     wrapBareTables(host);
+
+    // 详情页没有三栏，目录得自己长出来（宽屏落右栏、窄屏落正文上方）。
+    // 标题少于 4 个的直接不生成，省得小文章也挂个目录。
+    insertPostToc(host);
 
     // 详情页也铺背景图（沿用当前选中的那张，不重置选择）
     var bgEl = $("#page-bg");
@@ -4131,5 +4231,17 @@ function interceptLinks(e) {
     } catch (e) {}
     window.__contentReady = true;
     afterContentReady();
+  }
+
+  /* 测试挂钩：只在带 ?__test=1 时挂出来，平时是空的。
+     自动测试要能直接调 mountPost / insertPostToc 验证目录注入，
+     否则 IIFE 里的函数外面一个都摸不到。（线上访问永远不带这个参数） */
+  if (/[?&]__test=1/.test(location.search)) {
+    window.__REZE_TEST__ = {
+      mountPost: mountPost,
+      insertPostToc: insertPostToc,
+      buildPostTocHtml: buildPostTocHtml,
+      bindToc: bindToc,
+    };
   }
 })();

@@ -1190,7 +1190,8 @@ button {
   font-family: var(--serif);
   font-size: 46px;
   line-height: 1;
-  color: color-mix(in srgb, var(--g-accent) 38%, transparent);
+  color: color-mix(in srgb, var(--g-accent) 46%, var(--prose-ink-3));
+  opacity: 0.85;
   pointer-events: none;
 }
 .prose blockquote.pg-quote p {
@@ -3397,7 +3398,7 @@ body.has-app .site-foot .brand .brand-mark {
   margin: 0.45em 0;
 }
 .g-prose li::marker {
-  color: color-mix(in srgb, var(--g-accent) 70%, transparent);
+  color: color-mix(in srgb, var(--g-accent) 70%, var(--prose-ink-3));
 }
 .g-prose hr {
   border: none;
@@ -7790,3 +7791,804 @@ button,
     border-color: var(--glass-line);
   }
 }
+
+/* ============================================================
+   29. 阅读页排版层（2026-10-29）
+   ------------------------------------------------------------
+   这一层全部追加在文件末尾，只做「覆盖」，不改上面任何一条既有规则。
+   理由：上面 1–28 节的规则是几个月一点点叠出来的，逐条改容易碰掉
+   别人的前提（10-29 那次 --glass 覆盖事故就是这么来的）。
+   追加在末尾的新规则只要优先级相同，后面的就赢，行为可预期。
+
+   目标三件事：
+   一、阅读栏做成真正的「印刷级」—— 拦宽、字阶、段落节奏、中文标点。
+   二、文章页从「单栏 820」变成「正文 + 目录」两栏（宽屏），窄屏回单栏。
+   三、正文里每个语法元素都有明确形态：引文、表格、代码、图注、
+       折叠块、列表、脚注。原来这些元素各写各的，视觉上不成体系。
+   ============================================================ */
+
+/* ---------- 29.1 排版令牌：一处改，全站文章跟着变 ---------- */
+:root {
+  /* 阅读栏宽度。中文一行 35–42 字最舒服，16.5px × 38 字 ≈ 640px，
+     加上两侧内边距与两栏布局留出的余量，正文容器定 720px。 */
+  --read-w: 720px;
+
+  /* 字阶：正文 16.5 / 行高 1.95 保持不变（原有基线，不动） */
+  --prose-first-lh: 2.15;   /* 首段行高略开，给首字下沉留呼吸 */
+
+  /* 新的语义色，全部由主题变量派生，不写死任何颜色 */
+  --prose-rule: color-mix(in srgb, var(--prose-ink) 14%, transparent);
+  --prose-tint: color-mix(in srgb, var(--prose-ink) 4%, transparent);
+  --prose-tint-2: color-mix(in srgb, var(--prose-ink) 7%, transparent);
+  --prose-key: color-mix(in srgb, var(--accent) 88%, var(--prose-ink));
+
+  /* 小字号标签（表格头、图注、折叠块标题）的统一灰阶 */
+  --prose-label: var(--prose-ink-3);
+}
+
+/* ---------- 29.2 中文排版的基础修正 ----------
+   text-spacing-trim：行首、行尾的全角标点把多余的空白收掉。
+   中文段落以「开头时，原来会凭空缩进半个字，用这条一次修好。
+   不支持的浏览器（Safari/FF）会忽略，视觉退回原样，不会更差。
+   text-autospace：中英文、中文与数字之间自动加 1/4 空格，
+   源码里不用再手打空格。代码块要关掉，不然等宽字体被撑开。 */
+.g-prose {
+  text-spacing-trim: trim-start;
+  text-autospace: normal;
+}
+.g-prose pre,
+.g-prose code,
+.g-prose kbd,
+.g-prose samp {
+  text-autospace: no-autospace;
+  text-spacing-trim: space-all;
+}
+
+/* ---------- 29.3 正文容器：拦宽 + 段落节奏 ---------- */
+.g-prose {
+  /* 一行最多 720px；容器更宽时（两栏布局）正文不会跟着拉长 */
+  max-width: var(--read-w);
+  font-feature-settings: "palt" 1;   /* 中文标点比例宽度，行更紧凑 */
+  font-kerning: normal;
+  hanging-punctuation: allow-end;    /* 仅 Safari 生效，不生效也无妨 */
+}
+
+/* 段间距：中文长文段间要靠气口，1.4em 偏紧，放到 1.55em */
+.g-prose > * + * {
+  margin-top: 1.55em;
+}
+
+/* 首段：不加首行缩进（单句段为主，缩进反而显得碎），
+   只把行高撑开一点，让第一口气落下来。 */
+.g-prose > p:first-child {
+  line-height: var(--prose-first-lh);
+}
+
+/* 段落不做两端对齐：中文两端对齐容易拉出「散字」的长缝 */
+.g-prose p {
+  text-align: left;
+  orphans: 3;
+  widows: 3;
+}
+
+/* ---------- 29.4 标题：h2 成「节」，h3 成「小目」 ----------
+   原来 h2 只有 20px 加粗，518 个 h2 全靠字号区分，读起来层级很弱。
+   现在给 h2 一个极细的引导线 + 一个低调的节序号位（不自动编号，
+   避免和正文里已有的「一、二、三」撞车 —— 只用装饰性短横）。 */
+.g-prose h2 {
+  position: relative;
+  font-size: var(--prose-h2);
+  font-weight: 650;
+  letter-spacing: -0.005em;
+  line-height: 1.5;
+  padding-top: 0;
+  scroll-margin-top: 96px;   /* 目录跳转不被吸顶顶栏挡住 */
+}
+
+/* h2 上方的短横：一节的开场标记。宽度很短，不抢标题。 */
+.g-prose h2::before {
+  content: "";
+  display: block;
+  width: 26px;
+  height: 2px;
+  margin-bottom: 0.62em;
+  border-radius: 2px;
+  background: color-mix(in srgb, var(--accent) 62%, transparent);
+}
+
+/* 第一个 h2 不要再画短横 —— 它紧跟元信息，上面已经有分隔线了 */
+.g-prose > h2:first-child::before {
+  display: none;
+}
+
+.g-prose h3 {
+  font-size: var(--prose-h3);
+  font-weight: 600;
+  color: var(--prose-ink);
+  scroll-margin-top: 96px;
+}
+
+/* h3 用颜色和一条左侧细线区分，而不是靠字号继续放大 */
+.g-prose h3 {
+  padding-left: 11px;
+  border-left: 2px solid color-mix(in srgb, var(--accent) 34%, transparent);
+}
+
+/* ---------- 29.5 引文：三种形态统一成一套 ----------
+   内容里 180 个 blockquote，写法有三种：
+   ① 裸 <blockquote><p>…</p></blockquote>
+   ② <blockquote class="pg-quote"> 带 cite
+   ③ 电影类皮肤改成居中「字幕」
+   现在给它们一套共同的骨架：左细线 + 极淡底色 + 衬线，靠 cite 区分署名。 */
+.g-prose blockquote {
+  position: relative;
+  margin: 2.2em 0;
+  padding: 18px 22px 18px 26px;
+  border: none;
+  border-left: 2px solid color-mix(in srgb, var(--accent) 52%, transparent);
+  border-radius: 0 10px 10px 0;
+  background: linear-gradient(
+    90deg,
+    color-mix(in srgb, var(--accent) 7%, transparent) 0%,
+    transparent 78%
+  );
+  color: var(--prose-ink-2);
+  font-family: var(--serif);
+  font-size: var(--prose-quote-fs);
+  line-height: 1.9;
+}
+
+/* 引文里的段落：段与段之间只留半行，别用正文的 1.55em */
+.g-prose blockquote p {
+  margin: 0;
+}
+.g-prose blockquote p + p {
+  margin-top: 0.9em;
+}
+
+/* 署名/出处（cite 或最后一段以 — 开头） */
+.g-prose blockquote cite {
+  display: block;
+  margin-top: 0.9em;
+  font-family: var(--sans);
+  font-style: normal;
+  font-size: 12px;
+  letter-spacing: 0.04em;
+  color: var(--prose-label);
+}
+
+/* pg-quote（已有类）：原来的 ::before 是个装饰引号，这里保留但改小、改淡。
+   淡到看不见就没意义了 —— 混入正文色保证深色下也有一口气（原来只用
+   accent 30%，深色底上对比只有 1.08，等于没有）。 */
+.g-prose blockquote.pg-quote::before {
+  content: "\201C";
+  position: absolute;
+  top: 6px;
+  left: 8px;
+  font-family: var(--serif);
+  font-size: 34px;
+  line-height: 1;
+  color: color-mix(in srgb, var(--accent) 52%, var(--prose-ink-3));
+  opacity: 0.85;
+  pointer-events: none;
+}
+
+/* ---------- 29.6 表格：改成「印刷表」而不是「网页表」 ----------
+   26 个表格里，7 篇有表。原来的表头是小号大写字母 + 下框线，
+   中文字用 letter-spacing 拉大字距，看着像表单。
+   现在：表头淡底 + 首列作为行名加重 + 行分隔线极淡 + 圆角外框。 */
+.g-prose .pg-tablewrap,
+.g-prose .g-tablewrap {
+  margin: 2em 0;
+  border: 1px solid var(--prose-rule);
+  border-radius: 12px;
+  background: color-mix(in srgb, var(--prose-ink) 2.5%, transparent);
+}
+
+.g-prose table {
+  font-size: var(--prose-table-fs);
+  margin: 0;
+}
+
+.g-prose th,
+.g-prose td {
+  padding: 11px 14px;
+  border-bottom: 1px solid
+    color-mix(in srgb, var(--prose-ink) 8%, transparent);
+  vertical-align: top;
+}
+
+.g-prose th {
+  color: var(--prose-ink-2);
+  font-size: var(--prose-th-fs);
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  text-transform: none;   /* 中文没有大小写，大写化会把数字撑开 */
+  background: var(--prose-tint);
+  white-space: nowrap;
+}
+
+/* 表头加一条略重的下框，跟数据行分开 */
+.g-prose thead th {
+  border-bottom: 1px solid
+    color-mix(in srgb, var(--prose-ink) 18%, transparent);
+}
+
+/* 首列加重：表格的第一列通常是行名（篇目、年份、指标） */
+.g-prose tbody td:first-child {
+  color: var(--prose-ink);
+  font-weight: 550;
+}
+
+/* 最后一行不要框线，免得和外框叠成两道 */
+.g-prose tbody tr:last-child td {
+  border-bottom: none;
+}
+
+/* 数字列对齐：表格里纯数字的格子用等宽数字，纵向能对齐 */
+.g-prose td {
+  font-variant-numeric: tabular-nums;
+}
+
+/* ---------- 29.7 代码：一行内联 + 代码块 ----------
+   内联 code 原来有底色没边框，浮在正文上像贴纸。
+   改成「细边框 + 极淡底色」，读起来是一枚签，不是一块疤。 */
+.g-prose code {
+  padding: 0.14em 0.42em;
+  border: 1px solid color-mix(in srgb, var(--prose-ink) 9%, transparent);
+  border-radius: 5px;
+  background: var(--prose-code-bg);
+  color: var(--prose-code-ink);
+  font-size: var(--prose-code-fs);
+  word-break: break-word;
+}
+
+/* 代码块：顶栏用三条小点做语言条位，下面才是代码 */
+.g-prose pre {
+  position: relative;
+  margin: 2.1em 0;
+  padding: 34px 20px 18px;
+  border: 1px solid var(--prose-pre-line);
+  border-radius: 12px;
+  background: var(--prose-pre-bg);
+  line-height: 1.78;
+}
+
+.g-prose pre::before {
+  content: "";
+  position: absolute;
+  top: 14px;
+  left: 18px;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: color-mix(in srgb, var(--prose-pre-ink) 26%, transparent);
+  box-shadow:
+    14px 0 0 color-mix(in srgb, var(--prose-pre-ink) 18%, transparent),
+    28px 0 0 color-mix(in srgb, var(--prose-pre-ink) 12%, transparent);
+}
+
+.g-prose pre code {
+  border: none;
+  background: none;
+  padding: 0;
+  font-size: var(--prose-pre-fs);
+  color: var(--prose-pre-ink);
+  word-break: normal;
+}
+
+/* ---------- 29.8 图片与图注 ----------
+   38 张图、52 个 figure。图注原来只在 pg-fig 上有样式，
+   裸 <figcaption> 完全没管。现在两者共用一套：小号、居中、字距略开。 */
+.g-prose figure {
+  margin: 2.3em 0;
+}
+
+.g-prose figure img {
+  border-radius: 10px;
+  border: 1px solid var(--prose-rule);
+  display: block;
+}
+
+.g-prose figcaption {
+  margin-top: 0.85em;
+  font-size: 12.5px;
+  line-height: 1.75;
+  color: var(--prose-label);
+  text-align: center;
+  letter-spacing: 0.01em;
+}
+
+/* ---------- 29.9 折叠块 details ----------
+   16 个 details，多数是长文附录。内容里有的写了内联边框（深色下很难看），
+   这里统一盖成主题色。样式优先级不够时靠 !important 压内联。 */
+.g-prose details {
+  margin: 2.2em 0;
+  padding: 0;
+  border: 1px solid var(--prose-rule) !important;
+  border-radius: 12px;
+  background: color-mix(in srgb, var(--prose-ink) 2%, transparent);
+  overflow: hidden;
+}
+
+.g-prose details summary {
+  padding: 14px 18px;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--prose-ink-2);
+  cursor: pointer;
+  list-style: none;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  transition: color 0.2s var(--ease), background 0.2s var(--ease);
+}
+.g-prose details summary::-webkit-details-marker {
+  display: none;
+}
+/* 展开箭头：用一条 CSS 画的三角，跟随展开状态旋转 */
+.g-prose details summary::before {
+  content: "";
+  flex: none;
+  width: 0;
+  height: 0;
+  border-left: 5px solid currentColor;
+  border-top: 4px solid transparent;
+  border-bottom: 4px solid transparent;
+  opacity: 0.55;
+  transition: transform 0.24s var(--ease);
+}
+.g-prose details[open] summary::before {
+  transform: rotate(90deg);
+}
+.g-prose details summary:hover {
+  color: var(--prose-ink);
+  background: var(--prose-tint);
+}
+
+/* 折叠块内部的容器（内容里写的是 <div style="padding:2px 0 6px">） */
+.g-prose details > div {
+  padding: 4px 18px 18px;
+}
+
+/* 折叠块里的第一块内容不要顶到标题 */
+.g-prose details[open] > div > *:first-child {
+  margin-top: 0;
+}
+
+/* ---------- 29.10 列表与分隔线 ---------- */
+.g-prose li {
+  margin: 0.5em 0;
+}
+.g-prose ul {
+  list-style: none;
+  padding-left: 1.15em;
+}
+/* 自定义标记：一枚小方块，比默认圆点更硬气 */
+.g-prose ul > li {
+  position: relative;
+  padding-left: 0.2em;
+}
+.g-prose ul > li::before {
+  content: "";
+  position: absolute;
+  left: -0.95em;
+  top: 0.82em;
+  width: 4px;
+  height: 4px;
+  border-radius: 1px;
+  background: color-mix(in srgb, var(--accent) 58%, transparent);
+}
+/* 嵌套列表退回默认圆点，免得全是小方块看不出层级 */
+.g-prose ul ul > li::before {
+  border-radius: 50%;
+  background: color-mix(in srgb, var(--prose-ink) 32%, transparent);
+}
+
+/* 分隔线：原来是一枚「—」，现在做成中间断口的细线，
+   断口处放一枚菱形，比一个破折号更像「翻页」 */
+.g-prose hr {
+  border: none;
+  height: 1px;
+  margin: 3.2em auto;
+  max-width: 220px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    var(--prose-rule) 32%,
+    transparent 46%,
+    transparent 54%,
+    var(--prose-rule) 68%,
+    transparent
+  );
+  position: relative;
+  overflow: visible;
+}
+.g-prose hr::before {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 5px;
+  height: 5px;
+  margin: -2.5px 0 0 -2.5px;
+  transform: rotate(45deg);
+  background: color-mix(in srgb, var(--accent) 62%, transparent);
+  letter-spacing: 0;
+  text-indent: 0;
+}
+
+/* ---------- 29.11 链接：下划线不压字，悬停从细到实 ---------- */
+.g-prose a {
+  color: var(--prose-key);
+  text-decoration: none;
+  border-bottom: 1px solid
+    color-mix(in srgb, var(--prose-key) 34%, transparent);
+  padding-bottom: 0.5px;
+  transition: border-color 0.2s var(--ease), background 0.2s var(--ease);
+}
+.g-prose a:hover {
+  border-bottom-color: var(--prose-key);
+  background: color-mix(in srgb, var(--prose-key) 8%, transparent);
+}
+
+/* 加粗：中文里 600 在部分字体上会糊，统一 600 并略提亮 */
+.g-prose strong {
+  font-weight: 600;
+  color: var(--prose-ink);
+}
+
+/* ============================================================
+   29.12 分类气质（覆盖 6 个皮肤，保持同一套骨架）
+   ------------------------------------------------------------
+   原来的皮肤只动了首字下沉和引文样式，差异太轻，等于没区分；
+   或者（电影）居中引文一放进来，长文读起来就在跳。
+   这里重写成「同一骨架 + 一处气质差异」，一处是指：
+   每个分类只改一个可感知的点，其余全部共用，保证不突兀。
+   ============================================================ */
+
+/* 读书 / 书评：杂志特稿 —— 首字下沉，节标题用衬线 */
+.g-prose.prose--reading > p:first-child::first-letter {
+  float: left;
+  font-family: var(--serif);
+  font-weight: 700;
+  font-size: 3.2em;
+  line-height: 0.9;
+  padding: 0.06em 0.12em 0 0;
+  color: color-mix(in srgb, var(--accent) 82%, var(--prose-ink));
+}
+.g-prose.prose--reading > p:first-child {
+  min-height: 2.6em;
+}
+.g-prose.prose--reading h2 {
+  font-family: var(--serif);
+  font-weight: 600;
+  letter-spacing: 0.01em;
+}
+
+/* 技术：代码优先 —— 正文略收紧，代码块加重边 */
+.g-prose.prose--tech {
+  --prose-space: 1.45em;
+}
+.g-prose.prose--tech pre {
+  border-left: 3px solid color-mix(in srgb, var(--accent) 70%, transparent);
+  border-radius: 4px 12px 12px 4px;
+}
+.g-prose.prose--tech h2 {
+  font-family: var(--sans);
+  letter-spacing: -0.01em;
+}
+
+/* 电影：字幕感 —— 引文居中、加大、去掉底色，改成上下细线 */
+.g-prose.prose--movie blockquote {
+  margin: 2.8em 0;
+  padding: 22px 4%;
+  text-align: center;
+  border-left: none;
+  border-top: 1px solid var(--prose-rule);
+  border-bottom: 1px solid var(--prose-rule);
+  border-radius: 0;
+  background: none;
+  font-style: normal;
+  font-size: calc(var(--prose-quote-fs) + 2.5px);
+  color: var(--prose-ink);
+  line-height: 1.85;
+}
+.g-prose.prose--movie blockquote.pg-quote::before {
+  display: none;
+}
+
+/* 文史 / 古诗：东方古风 —— 标题、引文、图注全走衬线，字距放开 */
+.g-prose.prose--history h2,
+.g-prose.prose--history h3,
+.g-prose.prose--history figcaption {
+  font-family: var(--serif);
+}
+.g-prose.prose--history h2 {
+  font-weight: 600;
+  letter-spacing: 0.06em;
+}
+.g-prose.prose--history h2::before {
+  width: 18px;
+  background: color-mix(in srgb, var(--prose-ink) 30%, transparent);
+}
+.g-prose.prose--history > p {
+  line-height: 2.02;
+}
+
+/* 日常：随笔感 —— 段间距略松，首段不用特殊处理 */
+.g-prose.prose--daily {
+  --prose-space: 1.7em;
+}
+
+/* 杂记：笔记感 —— 细号字重、行高收紧，像手账 */
+.g-prose.prose--notes {
+  --prose-space: 1.5em;
+}
+.g-prose.prose--notes > p {
+  line-height: 1.86;
+}
+
+/* ============================================================
+   29.13 文章页两栏：正文 + 目录
+   ------------------------------------------------------------
+   原来文章页是 max-width:820 的单栏，右栏目录只在 index.html 那种
+   三栏布局里才出现，文章页永远看不到它。这里给 .post-app 加一层
+   grid：正文列 + 目录列，目录 sticky。
+   窄屏（< 1120px）退回单栏，目录回到正文里（由 JS 决定位置）。
+   ============================================================ */
+.post-app {
+  max-width: 1120px;
+  padding: 84px 22px 44px;
+}
+
+@media (min-width: 1120px) {
+  .post-app {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 236px;
+    gap: 34px;
+    align-items: start;
+  }
+  .post-app > .g-article {
+    grid-column: 1;
+    min-width: 0;
+  }
+  /* 目录卡：跟着滚动，顶部让开吸顶栏 */
+  .post-app > .post-toc {
+    grid-column: 2;
+    position: sticky;
+    top: 84px;
+    max-height: calc(100vh - 110px);
+    overflow-y: auto;
+    scrollbar-width: thin;
+  }
+}
+
+/* 目录本体 */
+.post-toc .g-card-head {
+  padding: 14px 16px 10px;
+}
+.post-toc .toc {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  padding: 4px 8px 12px;
+}
+.post-toc .toc-link.lv2 {
+  font-weight: 500;
+}
+/* 章节序号：目录里每条前面一个很淡的两位数字，方便定位 */
+.post-toc .toc {
+  counter-reset: toc;
+}
+.post-toc .toc-link.lv2 {
+  counter-increment: toc;
+}
+.post-toc .toc-link.lv2::before {
+  content: counter(toc, decimal-leading-zero);
+  font-family: var(--mono);
+  font-size: 10px;
+  margin-right: 7px;
+  color: var(--g-text-3);
+  opacity: 0.7;
+}
+/* 当前所在章节：左侧实线 + 底色，前面数字提亮 */
+.post-toc .toc-link.on::before {
+  color: var(--g-accent);
+  opacity: 1;
+}
+
+/* 目录顶部的细进度：JS 给 --toc-progress 赋值（0–100） */
+.post-toc .toc-progress {
+  height: 2px;
+  margin: 0 16px 10px;
+  border-radius: 2px;
+  background: var(--g-line);
+  overflow: hidden;
+}
+.post-toc .toc-progress i {
+  display: block;
+  height: 100%;
+  width: calc(var(--toc-progress, 0) * 1%);
+  background: var(--g-accent);
+  transition: width 0.16s linear;
+}
+
+/* 窄屏：目录收进正文顶部，默认折叠 */
+@media (max-width: 1119px) {
+  .post-app > .post-toc {
+    order: -1;
+    margin-bottom: 18px;
+  }
+  .post-app > .post-toc .toc {
+    max-height: 42vh;
+    overflow-y: auto;
+  }
+}
+
+/* ============================================================
+   29.14 文章头：标题 / 元信息 / 封面的排版重置
+   ------------------------------------------------------------
+   标题原来 clamp(24,3.6vw,34)，长标题会挤成三行；改成按栏宽算，
+   并给标题一个「题签」气质：衬线、字距收紧、上下留白加大。
+   ============================================================ */
+.g-article {
+  padding: 46px 52px 44px;
+  border-radius: 20px;
+}
+
+.g-article h1 {
+  font-size: clamp(26px, 3.1vw, 36px);
+  line-height: 1.36;
+  letter-spacing: -0.02em;
+  font-weight: 650;
+  text-wrap: balance;   /* 长标题自动找平衡断行，不留孤字 */
+}
+
+/* 元信息：字距放开、分隔用中点而不是大间距 */
+.g-meta {
+  margin-top: 22px;
+  padding-bottom: 22px;
+  gap: 6px 14px;
+  font-size: 12px;
+  letter-spacing: 0.02em;
+  border-bottom: 1px solid var(--prose-rule);
+}
+
+/* 封面：原来是一张裸图，现在加圆角、细边、底部渐隐，接到正文 */
+.post-cover {
+  margin: 26px 0 4px;
+  border-radius: 14px;
+  overflow: hidden;
+  border: 1px solid var(--prose-rule);
+}
+.post-cover img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+/* 返回按钮：做成一枚小标签，不再是一行灰字 */
+.g-article .back {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px 6px 10px;
+  margin-bottom: 24px;
+  border: 1px solid var(--prose-rule);
+  border-radius: 999px;
+  font-size: 11.5px;
+  color: var(--g-text-3);
+  transition: color 0.22s var(--ease), border-color 0.22s var(--ease),
+    background 0.22s var(--ease);
+}
+.g-article .back:hover {
+  color: var(--g-accent);
+  border-color: color-mix(in srgb, var(--accent) 40%, transparent);
+  background: var(--g-fill);
+}
+
+/* ============================================================
+   29.15 阅读页脚：标签 / 上一篇下一篇 / 回到目录
+   ============================================================ */
+.g-article-foot {
+  max-width: var(--read-w);
+  margin-top: 46px;
+  padding-top: 26px;
+}
+
+/* 上一篇 / 下一篇：给「方向」一个视觉线索 —— 箭头所在的一侧加实线 */
+.g-nav a {
+  position: relative;
+  padding: 16px 18px;
+  border: 1px solid var(--prose-rule);
+  border-radius: 14px;
+  background: var(--g-fill);
+}
+.g-nav a:hover {
+  border-color: color-mix(in srgb, var(--accent) 38%, transparent);
+  background: var(--g-fill-3);
+}
+.g-nav a .k {
+  font-size: 10px;
+  letter-spacing: 0.16em;
+}
+
+/* ============================================================
+   29.16 移动端收口（<760px）
+   ============================================================ */
+@media (max-width: 760px) {
+  .g-article {
+    padding: 28px 20px 26px;
+    border-radius: 16px;
+  }
+  .post-app {
+    padding: 74px 14px 40px;
+  }
+  .g-prose {
+    max-width: 100%;
+  }
+  /* 代码块在窄屏上铺满边距，左右不留白 */
+  .g-prose pre {
+    margin-left: -20px;
+    margin-right: -20px;
+    border-radius: 0;
+    border-left: none;
+    border-right: none;
+    padding: 32px 16px 16px;
+  }
+  .g-prose details {
+    border-radius: 10px;
+  }
+  .g-prose .pg-tablewrap,
+  .g-prose .g-tablewrap {
+    border-radius: 10px;
+  }
+  .g-prose.prose--reading > p:first-child::first-letter {
+    font-size: 2.5em;
+  }
+  .g-prose.prose--movie blockquote {
+    padding: 18px 2%;
+  }
+  .g-prose h2::before {
+    width: 20px;
+    margin-bottom: 0.55em;
+  }
+}
+
+/* 极窄屏：连节标记线和目录序号都收掉，只留字 */
+@media (max-width: 420px) {
+  .post-toc .toc-link.lv2::before {
+    display: none;
+  }
+  .g-prose h3 {
+    padding-left: 9px;
+  }
+}
+
+/* 打印：去掉装饰，只留正文与标题 */
+@media print {
+  .post-toc,
+  .g-article-foot,
+  .read-progress,
+  .site-head,
+  .site-foot {
+    display: none !important;
+  }
+  .g-article {
+    box-shadow: none;
+    border: none;
+    padding: 0;
+  }
+  .g-prose h2::before,
+  .g-prose pre::before,
+  .g-prose hr::before {
+    display: none;
+  }
+  .g-prose a {
+    color: inherit;
+    border-bottom: none;
+  }
+}
+
+/* 关闭动效时不额外做任何事 —— 这一层里没有依赖动画才能看见的内容 */
