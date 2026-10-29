@@ -13,7 +13,7 @@
   --panel-2: #f7f5f1;
   --ink: #16161a;
   --ink-2: #5d5d66;
-  --ink-3: #96969f;
+  --ink-3: #74747e;
   --line: #e6e3dd;
   --line-2: #d2cec6;
   --glass: rgba(251, 250, 248, 0.84);
@@ -37,7 +37,7 @@
   --panel-2: #f7f4fd;
   --ink: #241d33;
   --ink-2: #514962;
-  --ink-3: #7c7391;
+  --ink-3: #665d7a;
   --line: #e9e3f6;
   --line-2: #d6cde9;
   --glass: rgba(243, 239, 252, 0.86);
@@ -61,7 +61,7 @@
   --panel-2: #202329;
   --ink: #eceded;
   --ink-2: #a3a8b2;
-  --ink-3: #6d7381;
+  --ink-3: #868c9a;
   --line: #272a30;
   --line-2: #363a43;
   --glass: rgba(16, 17, 20, 0.84);
@@ -71,6 +71,37 @@
   --shadow-hover: 0 10px 28px rgba(0, 0, 0, 0.4);
   --card-bg: transparent;
   --card-border: 1px solid var(--line);
+  /* 玻璃容器与正文语义色（深色反转：卡片深、字浅） */
+  --glass-app: rgba(26, 22, 38, 0.56);
+  --glass-post: rgba(24, 20, 36, 0.66);
+  --g-fill-2: rgba(255, 255, 255, 0.05);
+  --g-line: rgba(255, 255, 255, 0.08);
+  --g-line-2: rgba(255, 255, 255, 0.14);
+  /* 玻璃卡片内的文字与描边（深色：浅字 + 浅描边） */
+  --g-ink: rgba(236, 232, 246, 0.94);
+  --g-ink-2: rgba(236, 232, 246, 0.72);
+  --g-ink-3: rgba(236, 232, 246, 0.55);
+  --g-fill: rgba(255, 255, 255, 0.06);
+  --g-fill-3: rgba(255, 255, 255, 0.1);
+  --accent-glow: #b8a1f7;
+  --g-shadow-base: 0 8px 32px rgba(8, 6, 14, 0.35);
+  /* 表面色（深色）：浮层是深紫近实，卡片次之，悬停提亮 */
+  --surface: rgba(24, 20, 36, 0.96);
+  --surface-2: rgba(24, 20, 36, 0.78);
+  --surface-3: rgba(255, 255, 255, 0.07);
+  --surface-hover: rgba(30, 26, 44, 0.94);
+  --header-bg: #0a1629;
+  --surface-shadow: 0 14px 40px rgba(0, 0, 0, 0.45);
+  --prose-ink: #ececf0;
+  --prose-ink-2: rgba(236, 232, 246, 0.88);
+  --prose-ink-3: rgba(236, 232, 246, 0.66);
+  --prose-em: rgba(236, 232, 246, 0.95);
+  --prose-line: rgba(255, 255, 255, 0.09);
+  --prose-code-bg: rgba(0, 0, 0, 0.35);
+  --prose-code-ink: #d8ccff;
+  --prose-pre-bg: rgba(0, 0, 0, 0.38);
+  --prose-pre-ink: #cfc4ea;
+  --prose-pre-line: rgba(255, 255, 255, 0.07);
   color-scheme: dark;
 }
 
@@ -81,7 +112,7 @@
   --panel-2: #1f192b;
   --ink: #ebe6f5;
   --ink-2: #a79fb9;
-  --ink-3: #756d87;
+  --ink-3: #8e86a0;
   --line: #241e31;
   --line-2: #332b44;
   --glass: rgba(15, 12, 22, 0.86);
@@ -124,6 +155,45 @@
   --prose-table-fs: 14px;
   --prose-th-fs: 11.5px;
   --prose-list-pad: 1.4em;
+
+  /* ---- 玻璃容器与正文的语义色（2026-10-29 修复切浅色后正文隐身） ----
+     浅色主题默认值：卡片是浅色半透明，正文用深墨色。 */
+  --glass-app: rgba(255, 255, 255, 0.72);
+  --glass-post: rgba(255, 255, 255, 0.82);
+  --g-fill-2: rgba(0, 0, 0, 0.04);
+  --g-line: rgba(0, 0, 0, 0.09);
+  --g-line-2: rgba(0, 0, 0, 0.16);
+  /* 玻璃卡片内的文字与描边（浅色：深墨字 + 深描边） */
+  --g-ink: #241d33;
+  --g-ink-2: rgba(36, 29, 51, 0.82);
+  --g-ink-3: rgba(36, 29, 51, 0.6);
+  --g-fill: rgba(0, 0, 0, 0.035);
+  --g-fill-3: rgba(0, 0, 0, 0.06);
+  --accent-glow: var(--accent);
+  --g-shadow-base: 0 8px 32px rgba(70, 60, 100, 0.12);
+
+  /* ---- 表面色：浮层 / 实底卡片 / 悬停态 ----
+     以前这些位置写死深蓝或深紫（rgba(12,22,42,.96) 之类），
+     切成浅色主题后文字变成深墨色、底还是深色，于是整块看不见。
+     这里统一成三档语义表面，浅色下对应浅面。 */
+  --surface: rgba(255, 255, 255, 0.97);
+  --surface-2: rgba(255, 255, 255, 0.9);
+  --surface-3: rgba(0, 0, 0, 0.045);
+  --surface-hover: #ffffff;
+  --header-bg: #ffffff;
+  --surface-shadow: 0 14px 40px rgba(70, 60, 100, 0.14);
+
+  /* 正文阅读链路的语义色 */
+  --prose-ink: var(--ink);
+  --prose-ink-2: var(--ink-2);
+  --prose-ink-3: var(--ink-3);
+  --prose-em: var(--ink-2);
+  --prose-line: rgba(0, 0, 0, 0.1);
+  --prose-code-bg: rgba(0, 0, 0, 0.055);
+  --prose-code-ink: #6b4fa8;
+  --prose-pre-bg: rgba(0, 0, 0, 0.045);
+  --prose-pre-ink: #3f3a52;
+  --prose-pre-line: rgba(0, 0, 0, 0.1);
 }
 
 /* ---------- 2. 重置 ---------- */
@@ -226,7 +296,7 @@ button {
   color: #f6f1e7;
   display: grid;
   place-items: center;
-  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.09), 0 1px 3px rgba(0, 0, 0, 0.14);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.09), 0 1px 3px rgba(0, 0, 0, 0.171);
   transition: border-radius 0.4s var(--ease), transform 0.35s var(--ease);
   flex: none;
 }
@@ -324,7 +394,7 @@ button {
   z-index: 80;
   background: var(--panel);
   border: var(--card-border);
-  box-shadow: 0 10px 34px rgba(0, 0, 0, 0.12);
+  box-shadow: 0 10px 34px var(--glass-line);
   border-radius: var(--radius-lg);
   padding: 12px 16px;
   font-size: 12.5px;
@@ -1106,7 +1176,7 @@ button {
   border: 0;
   border-left: 3px solid rgba(184, 161, 247, 0.5);
   border-radius: 0 12px 12px 0;
-  background: rgba(255, 255, 255, 0.045);
+  background: var(--g-fill);
   font-family: var(--serif);
   font-size: 16.5px;
   line-height: 2;
@@ -1120,7 +1190,7 @@ button {
   font-family: var(--serif);
   font-size: 46px;
   line-height: 1;
-  color: rgba(184, 161, 247, 0.32);
+  color: color-mix(in srgb, var(--g-accent) 38%, transparent);
   pointer-events: none;
 }
 .prose blockquote.pg-quote p {
@@ -1167,8 +1237,8 @@ button {
   transition: border-color 0.25s var(--ease), color 0.25s var(--ease);
 }
 .prose ul.pg-refs li a:hover {
-  color: #fff;
-  border-bottom-color: rgba(255, 255, 255, 0.6);
+  color: var(--ink);
+  border-bottom-color: var(--glass-line);
 }
 .prose ul.pg-refs li .src {
   color: var(--g-text-3);
@@ -1389,15 +1459,15 @@ button {
    全部只作用于浅色柔和版，极简黑白版完全不受影响
    ------------------------------------------------ */
 [data-skin="soft"] .welcome {
-  background: linear-gradient(96deg, #eee7fb 0%, #f4eefd 52%, #faf7ff 100%);
-  border: 1px solid #e2d8f4;
-  color: #4b4160;
+  background: var(--g-fill-2);
+  border: 1px solid var(--g-line);
+  color: var(--g-ink-2);
 }
 
 /* 名字：不用实色块（边缘太硬），改成羽化渐变的淡紫高亮，
    像荧光笔划过下半截，两端自然淡出 */
 [data-skin="soft"] .welcome b {
-  color: #3b2d5c;
+  color: var(--g-ink);
   font-weight: 600;
   padding: 0 2px;
   background-image: linear-gradient(
@@ -1426,8 +1496,8 @@ button {
   color: #b85a80;
 }
 [data-skin="soft"] .quick a:nth-child(4) .ic {
-  background: #e6f2f6;
-  color: #4f92a4;
+  background: color-mix(in srgb, #2f7d91 12%, transparent);
+  color: color-mix(in srgb, #2f7d91 80%, var(--ink));
 }
 
 [data-skin="soft"] .tagcloud a {
@@ -1448,7 +1518,7 @@ button {
   color: #756c8a;
 }
 [data-skin="soft"] .card-meta svg {
-  color: #8f7fc0;
+  color: color-mix(in srgb, #7059ab 82%, var(--ink));
   opacity: 1;
 }
 [data-skin="soft"] .card-meta .cat,
@@ -1460,18 +1530,18 @@ button {
   color: currentColor;
 }
 [data-skin="soft"] .post-meta svg {
-  color: #8f7fc0;
+  color: color-mix(in srgb, #7059ab 82%, var(--ink));
   opacity: 1;
 }
 
 [data-skin="soft"] .pin {
   background: #c04a80;
-  color: #fff;
+  color: #ffffff;
   box-shadow: 0 2px 7px rgba(192, 74, 128, 0.32);
 }
 
 [data-skin="soft"] .avatar {
-  border: 3px solid #fff;
+  border: 3px solid var(--ink);
   box-shadow: 0 4px 14px rgba(94, 68, 150, 0.18);
 }
 [data-theme="dark"][data-skin="soft"] .avatar {
@@ -1509,7 +1579,7 @@ button {
   );
 }
 [data-theme="dark"][data-skin="soft"] .cover-ph span {
-  background: rgba(0, 0, 0, 0.4);
+  background: rgba(0, 0, 0, 0.488);
   color: hsl(var(--ph-h, 262), 48%, 74%);
 }
 
@@ -1784,7 +1854,7 @@ body::after {
   border-radius: 50%;
   overflow: hidden;
   border: 2px solid rgba(255, 255, 255, 0.85);
-  box-shadow: 0 10px 34px rgba(0, 0, 0, 0.35);
+  box-shadow: 0 10px 34px rgba(0, 0, 0, 0.427);
   background: rgba(255, 255, 255, 0.14);
   display: grid;
   place-items: center;
@@ -1816,7 +1886,7 @@ body::after {
   line-height: 1.28;
   letter-spacing: 0.04em;
   font-weight: 600;
-  text-shadow: 0 4px 34px rgba(0, 0, 0, 0.4);
+  text-shadow: 0 4px 34px rgba(0, 0, 0, 0.488);
 }
 
 .splash-quote {
@@ -2084,7 +2154,7 @@ body::after {
   gap: 16px;
   flex-wrap: wrap;
   font-size: 11px;
-  color: var(--ink-3);
+  color: var(--ink-2);
   background: var(--panel-2);
 }
 .search-hint kbd {
@@ -2228,15 +2298,17 @@ body::after {
 
 /* 玻璃质感变量，只作用于首页容器 */
 .app {
-  --glass: rgba(26, 22, 38, 0.56);
-  --glass-2: rgba(255, 255, 255, 0.05);
-  --glass-line: 1px solid rgba(255, 255, 255, 0.08);
-  --glass-line-2: rgba(255, 255, 255, 0.14);
-  --g-text: #f3f0fa;
-  --g-text-2: rgba(243, 240, 250, 0.88);
-  --g-text-3: rgba(243, 240, 250, 0.66);
-  --g-accent: #b8a1f7;
-  --g-shadow: 0 8px 32px rgba(8, 6, 14, 0.35);
+  /* 玻璃配色一律跟随 data-theme：浅色页用深字，深色页用浅字，
+     避免「切浅色后正文隐身」。--g-text 系只允许在这里和 .post-app 各定义一次。 */
+  --glass: var(--glass-app);
+  --glass-2: var(--g-fill-2);
+  --glass-line: 1px solid var(--g-line);
+  --glass-line-2: var(--g-line-2);
+  --g-text: var(--ink);
+  --g-text-2: var(--ink-2);
+  --g-text-3: var(--ink-3);
+  --g-accent: var(--accent-glow);
+  --g-shadow: var(--g-shadow-base);
 
   display: grid;
   grid-template-columns: 248px minmax(0, 1fr) 264px;
@@ -2317,7 +2389,7 @@ body::after {
 .g-avatar .ph {
   font-family: var(--serif);
   font-size: 58px;
-  color: rgba(255, 255, 255, 0.5);
+  color: var(--g-ink-2);
 }
 .g-avatar::after {
   content: "";
@@ -2357,7 +2429,7 @@ body::after {
   transition: all 0.25s var(--ease);
 }
 .g-social a:hover {
-  color: #fff;
+  color: var(--ink);
   background: rgba(184, 161, 247, 0.22);
   border-color: rgba(184, 161, 247, 0.4);
   transform: translateY(-2px);
@@ -2410,8 +2482,8 @@ body::after {
   background: linear-gradient(135deg, #7a5cb8, #3d2c66);
   display: grid;
   place-items: center;
-  color: rgba(255, 255, 255, 0.85);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  color: var(--g-ink);
+  box-shadow: 0 4px 12px var(--glass-line);
 }
 .g-player .cover svg {
   width: 15px;
@@ -2459,7 +2531,7 @@ body::after {
 .g-bar {
   height: 3px;
   border-radius: 3px;
-  background: rgba(255, 255, 255, 0.12);
+  background: var(--g-fill);
   overflow: hidden;
   cursor: pointer;
   margin-bottom: 8px;
@@ -2499,7 +2571,7 @@ body::after {
   transition: color 0.2s var(--ease);
 }
 .g-ctrl button:hover {
-  color: #fff;
+  color: var(--ink);
 }
 .g-ctrl button svg {
   width: 15px;
@@ -2509,12 +2581,12 @@ body::after {
   width: 38px;
   height: 38px;
   border-radius: 50%;
-  background: rgba(255, 255, 255, 0.94);
-  color: #1a1626;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.28);
+  background: var(--g-fill-2);
+  color: var(--ink);
+  box-shadow: 0 4px 16px var(--glass-line);
 }
 .g-ctrl .play:hover {
-  color: #1a1626;
+  color: var(--ink);
   transform: scale(1.06);
 }
 .g-ctrl .play svg {
@@ -2585,7 +2657,7 @@ body::after {
   transition: all 0.22s var(--ease);
 }
 .g-tag:hover {
-  color: #fff;
+  color: var(--ink);
   background: hsl(var(--tag-h, 262), 45%, 62%, 0.3);
 }
 
@@ -2640,8 +2712,8 @@ body::after {
   background: linear-gradient(
     180deg,
     rgba(184, 161, 247, 0.35),
-    rgba(255, 255, 255, 0.08) 40%,
-    rgba(255, 255, 255, 0.04)
+    var(--glass-line) 40%,
+    var(--glass-line)
   );
 }
 
@@ -2679,20 +2751,20 @@ body::after {
   height: 7px;
   border-radius: 50%;
   background: rgba(30, 26, 44, 0.9);
-  border: 1px solid rgba(255, 255, 255, 0.28);
+  border: 1px solid var(--glass-line);
 }
 
 .tl-body {
   display: block;
   /* 底色要够实：背景图上有月亮和花，卡片太透会把 12px 的说明文吃掉 */
-  background: rgba(17, 14, 25, 0.78);
+  background: var(--surface-2);
   border: var(--glass-line);
   border-radius: 12px;
   padding: 15px 18px;
   transition: all 0.3s var(--ease);
 }
 .tl-body:hover {
-  background: rgba(24, 20, 35, 0.88);
+  background: var(--surface-hover);
   border-color: rgba(184, 161, 247, 0.28);
   transform: translateX(3px);
 }
@@ -2702,7 +2774,7 @@ body::after {
   align-items: center;
   gap: 8px;
   font-size: 11px;
-  color: rgba(236, 232, 246, 0.55);
+  color: var(--g-ink-3);
   font-variant-numeric: tabular-nums;
   margin-bottom: 8px;
 }
@@ -2725,14 +2797,14 @@ body::after {
   transition: color 0.25s var(--ease);
 }
 .tl-body:hover .tl-title {
-  color: #fff;
+  color: var(--ink);
 }
 
 .tl-desc {
   margin: 8px 0 0;
   font-size: 12px;
   line-height: 1.75;
-  color: rgba(236, 232, 246, 0.8);
+  color: var(--g-ink-2);
 }
 /* 多条改动：一行一条，前面点一个小圆点，像更新记录 */
 .tl-list {
@@ -2797,8 +2869,8 @@ body::after {
 
 /* 右栏小日历：卡片底色加实，避免背景图透上来影响辨认 */
 .g-cal-card {
-  background: rgba(20, 17, 30, 0.9);
-  border-color: rgba(255, 255, 255, 0.09);
+  background: var(--surface-2);
+  border-color: var(--glass-line);
 }
 .g-cal-nav {
   display: flex;
@@ -2818,7 +2890,7 @@ body::after {
 }
 .g-cal-nav button:hover {
   color: var(--g-accent);
-  background: rgba(255, 255, 255, 0.07);
+  background: var(--g-fill);
 }
 .g-cal-nav .g-cal-today {
   font-size: 11px;
@@ -2878,17 +2950,18 @@ body::after {
   font-weight: 500;
 }
 .g-cal-grid b.mute {
-  color: rgba(236, 232, 246, 0.12);
+  color: var(--g-ink-3);
+  opacity: 0.45;
 }
 .g-cal-grid b.today {
   background: var(--g-accent);
 }
 .g-cal-grid b.today em {
-  color: #1a1626;
+  color: var(--accent-ink);
   font-weight: 600;
 }
 .g-cal-grid b.today .g-cal-sub {
-  color: rgba(26, 22, 38, 0.74);
+  color: color-mix(in srgb, var(--accent-ink) 74%, transparent);
   font-weight: 500;
 }
 .g-cal-grid b.has {
@@ -2899,13 +2972,13 @@ body::after {
   font-weight: 600;
 }
 .g-cal-grid b.has .g-cal-sub.is-fest {
-  color: #d6c8ff;
+  color: color-mix(in srgb, var(--g-accent) 72%, var(--g-ink));
 }
 .g-cal-grid b.today.has {
   background: var(--g-accent);
 }
 .g-cal-grid b.today.has em {
-  color: #1a1626;
+  color: var(--accent-ink);
 }
 
 .g-site {
@@ -2934,51 +3007,51 @@ body::after {
 /* ---------- 首页顶栏改为玻璃风 ---------- */
 body.has-app .site-head {
   background: rgba(20, 16, 30, 0.45);
-  border-bottom-color: rgba(255, 255, 255, 0.08);
+  border-bottom-color: var(--glass-line);
 }
 body.has-app .site-head .brand,
 body.has-app .site-head .nav a {
-  color: rgba(255, 255, 255, 0.82);
+  color: var(--g-ink);
 }
 body.has-app .site-head .nav a:hover,
 body.has-app .site-head .nav a[aria-current="page"] {
-  color: #fff;
+  color: var(--ink);
 }
 body.has-app .site-head .brand .brand-mark {
-  background: rgba(184, 161, 247, 0.9);
-  color: #1a1626;
+  background: var(--accent);
+  color: var(--accent-ink);
 }
 body.has-app .site-head .brand em {
-  color: rgba(255, 255, 255, 0.4);
+  color: var(--g-ink-3);
 }
 body.has-app .site-head .icon-btn {
-  color: rgba(255, 255, 255, 0.75);
-  border-color: rgba(255, 255, 255, 0.16);
+  color: var(--g-ink);
+  border-color: var(--glass-line);
 }
 body.has-app .site-head .icon-btn:hover {
-  color: #fff;
-  border-color: rgba(255, 255, 255, 0.4);
+  color: var(--ink);
+  border-color: var(--glass-line);
 }
 
 body.has-app .site-foot {
   background: transparent;
-  border-top-color: rgba(255, 255, 255, 0.08);
-  color: rgba(255, 255, 255, 0.5);
+  border-top-color: var(--glass-line);
+  color: var(--g-ink-2);
 }
 body.has-app .site-foot .brand,
 body.has-app .site-foot .foot-links a,
 body.has-app .site-foot .foot-left p,
 body.has-app .site-foot .icp,
 body.has-app .site-foot .icp a {
-  color: rgba(255, 255, 255, 0.45);
+  color: var(--g-ink-3);
 }
 body.has-app .site-foot .foot-links a:hover,
 body.has-app .site-foot .icp a:hover {
-  color: #fff;
+  color: var(--ink);
 }
 body.has-app .site-foot .brand .brand-mark {
-  background: rgba(184, 161, 247, 0.9);
-  color: #1a1626;
+  background: var(--accent);
+  color: var(--accent-ink);
 }
 
 /* ---------- 响应式 ---------- */
@@ -3051,19 +3124,19 @@ body.has-app .site-foot .brand .brand-mark {
   padding: 6px 14px;
   border-radius: 999px;
   border: 1px solid transparent;
-  background: rgba(255, 255, 255, 0.05);
+  background: var(--g-fill);
   color: var(--g-text-2);
   cursor: pointer;
   transition: all 0.24s var(--ease);
   white-space: nowrap;
 }
 .g-chip:hover {
-  color: #fff;
-  background: rgba(255, 255, 255, 0.1);
+  color: var(--ink);
+  background: var(--g-fill);
 }
 .g-chip[aria-pressed="true"] {
   background: var(--g-accent);
-  color: #1a1626;
+  color: var(--accent-ink);
   font-weight: 500;
 }
 .g-chip .count {
@@ -3092,7 +3165,7 @@ body.has-app .site-foot .brand .brand-mark {
     transform 0.3s var(--ease);
 }
 .g-post:hover {
-  background: rgba(255, 255, 255, 0.08);
+  background: var(--g-fill);
   border-color: rgba(184, 161, 247, 0.3);
   transform: translateY(-2px);
 }
@@ -3120,7 +3193,7 @@ body.has-app .site-foot .brand .brand-mark {
   padding: 1px 7px;
   border-radius: 999px;
   background: rgba(192, 74, 128, 0.85);
-  color: #fff;
+  color: var(--ink);
 }
 
 .g-post h2 {
@@ -3132,7 +3205,7 @@ body.has-app .site-foot .brand .brand-mark {
   transition: color 0.22s var(--ease);
 }
 .g-post:hover h2 {
-  color: #fff;
+  color: var(--ink);
 }
 
 .g-post .excerpt {
@@ -3165,19 +3238,19 @@ body.has-app .site-foot .brand .brand-mark {
   text-align: center;
   color: var(--g-text-3);
   font-size: 13px;
-  border: 1px dashed rgba(255, 255, 255, 0.14);
+  border: 1px dashed var(--glass-line);
   border-radius: 14px;
 }
 
 /* ---------- 15.y 文章详情页（玻璃版） ---------- */
 .post-app {
-  --glass: rgba(24, 20, 36, 0.66);
-  --glass-line: 1px solid rgba(255, 255, 255, 0.08);
-  --g-text: #f3f0fa;
-  --g-text-2: rgba(243, 240, 250, 0.88);
-  --g-text-3: rgba(243, 240, 250, 0.66);
-  --g-accent: #b8a1f7;
-  --g-shadow: 0 8px 32px rgba(8, 6, 14, 0.35);
+  --glass: var(--glass-post);
+  --glass-line: 1px solid var(--g-line);
+  --g-text: var(--ink);
+  --g-text-2: var(--ink-2);
+  --g-text-3: var(--ink-3);
+  --g-accent: var(--accent-glow);
+  --g-shadow: var(--g-shadow-base);
 
   max-width: 820px;
   margin: 0 auto;
@@ -3213,13 +3286,13 @@ body.has-app .site-foot .brand .brand-mark {
   line-height: 1.4;
   letter-spacing: -0.02em;
   font-weight: 600;
-  color: #fff;
+  color: var(--ink);
 }
 
 .g-meta {
   margin-top: 20px;
   padding-bottom: 24px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  border-bottom: 1px solid var(--glass-line);
   display: flex;
   flex-wrap: wrap;
   align-items: center;
@@ -3245,7 +3318,7 @@ body.has-app .site-foot .brand .brand-mark {
   padding-top: 34px;
   font-size: var(--prose-fs);
   line-height: var(--prose-lh);
-  color: rgba(236, 232, 246, 0.9);
+  color: var(--prose-ink);
 }
 .g-prose > * + * {
   margin-top: var(--prose-space);
@@ -3256,46 +3329,46 @@ body.has-app .site-foot .brand .brand-mark {
   font-size: var(--prose-h2);
   line-height: 1.5;
   font-weight: 600;
-  color: #fff;
+  color: var(--prose-ink);
 }
 .g-prose h3 {
   margin-top: var(--prose-h3-top);
   margin-bottom: var(--prose-h3-bot);
   font-size: var(--prose-h3);
   font-weight: 600;
-  color: #fff;
+  color: var(--prose-ink);
 }
 .g-prose p {
   margin: 0;
 }
 .g-prose a {
   color: var(--g-accent);
-  border-bottom: 1px solid rgba(184, 161, 247, 0.4);
+  border-bottom: 1px solid color-mix(in srgb, var(--g-accent) 40%, transparent);
 }
 .g-prose a:hover {
   border-bottom-color: var(--g-accent);
 }
 .g-prose strong {
-  color: #fff;
+  color: var(--prose-ink);
   font-weight: 600;
 }
 .g-prose em {
   font-family: var(--serif);
-  color: rgba(236, 232, 246, 0.95);
+  color: var(--prose-em);
 }
 .g-prose code {
   font-family: var(--mono);
   font-size: var(--prose-code-fs);
-  background: rgba(0, 0, 0, 0.35);
-  color: #d8ccff;
+  background: var(--prose-code-bg);
+  color: var(--prose-code-ink);
   padding: 0.16em 0.44em;
   border-radius: 4px;
 }
 .g-prose pre {
   margin: 1.9em 0;
   padding: 18px 20px;
-  background: rgba(0, 0, 0, 0.38);
-  border: 1px solid rgba(255, 255, 255, 0.07);
+  background: var(--prose-pre-bg);
+  border: 1px solid var(--prose-pre-line);
   border-radius: 10px;
   overflow-x: auto;
   font-size: var(--prose-pre-fs);
@@ -3304,13 +3377,13 @@ body.has-app .site-foot .brand .brand-mark {
 .g-prose pre code {
   background: none;
   padding: 0;
-  color: #cfc4ea;
+  color: var(--prose-pre-ink);
 }
 .g-prose blockquote {
   margin: 2em 0;
   padding: 4px 0 4px 22px;
-  border-left: 2px solid rgba(184, 161, 247, 0.45);
-  color: var(--g-text-2);
+  border-left: 2px solid color-mix(in srgb, var(--g-accent) 45%, transparent);
+  color: var(--prose-ink-2);
   font-family: var(--serif);
   font-size: var(--prose-quote-fs);
   line-height: 1.9;
@@ -3324,7 +3397,7 @@ body.has-app .site-foot .brand .brand-mark {
   margin: 0.45em 0;
 }
 .g-prose li::marker {
-  color: rgba(184, 161, 247, 0.7);
+  color: color-mix(in srgb, var(--g-accent) 70%, transparent);
 }
 .g-prose hr {
   border: none;
@@ -3335,7 +3408,7 @@ body.has-app .site-foot .brand .brand-mark {
   content: "—";
   display: block;
   text-align: center;
-  color: var(--g-text-3);
+  color: var(--prose-ink-3);
   font-size: 14px;
   letter-spacing: 0.5em;
   text-indent: 0.5em;
@@ -3360,10 +3433,10 @@ body.has-app .site-foot .brand .brand-mark {
 .g-prose td {
   text-align: left;
   padding: 10px 12px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.09);
+  border-bottom: 1px solid var(--prose-line);
 }
 .g-prose th {
-  color: var(--g-text-3);
+  color: var(--prose-ink-3);
   font-size: var(--prose-th-fs);
   letter-spacing: 0.05em;
   text-transform: uppercase;
@@ -3390,12 +3463,12 @@ body.has-app .site-foot .brand .brand-mark {
 
 /* 技术：代码优先 —— 代码块加深 + 左侧 accent 细线 */
 .g-prose.prose--tech pre {
-  background: rgba(0, 0, 0, 0.5);
+  background: var(--prose-pre-bg);
   border-left: 3px solid var(--g-accent);
   border-radius: 10px 12px 12px 10px;
 }
 .g-prose.prose--tech code {
-  background: rgba(0, 0, 0, 0.42);
+  background: var(--prose-code-bg);
 }
 
 /* 电影：影像叙事 —— 引文转为居中宽幅 pull quote（字幕感） */
@@ -3406,8 +3479,8 @@ body.has-app .site-foot .brand .brand-mark {
   text-align: center;
   font-style: italic;
   font-size: calc(var(--prose-quote-fs) + 3px);
-  border-top: 1px solid rgba(255, 255, 255, 0.16);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.16);
+  border-top: 1px solid var(--prose-line);
+  border-bottom: 1px solid var(--prose-line);
 }
 
 /* 文史 / 古诗：东方古风 —— 标题与引文用衬线 */
@@ -3435,7 +3508,7 @@ body.has-app .site-foot .brand .brand-mark {
 .g-article-foot {
   margin-top: 38px;
   padding-top: 24px;
-  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  border-top: 1px solid var(--prose-line);
 }
 .g-article-tags {
   display: flex;
@@ -3461,14 +3534,14 @@ body.has-app .site-foot .brand .brand-mark {
   gap: 12px;
 }
 .g-nav a {
-  background: rgba(255, 255, 255, 0.045);
+  background: var(--g-fill);
   border: var(--glass-line);
   border-radius: 12px;
   padding: 15px 17px;
   transition: all 0.28s var(--ease);
 }
 .g-nav a:hover {
-  background: rgba(255, 255, 255, 0.08);
+  background: var(--g-fill);
   border-color: rgba(184, 161, 247, 0.28);
 }
 .g-nav a.next {
@@ -3566,12 +3639,12 @@ body.has-app .site-foot .brand .brand-mark {
   font-family: inherit;
 }
 .g-tab:hover {
-  color: #fff;
-  background: rgba(255, 255, 255, 0.07);
+  color: var(--ink);
+  background: var(--g-fill);
 }
 .g-tab[aria-pressed="true"] {
-  background: rgba(255, 255, 255, 0.16);
-  color: #fff;
+  background: var(--g-fill);
+  color: var(--ink);
   font-weight: 500;
 }
 .g-tab .n {
@@ -3597,7 +3670,7 @@ body.has-app .site-foot .brand .brand-mark {
     transform 0.3s var(--ease);
 }
 .g-posth:hover {
-  background: rgba(255, 255, 255, 0.08);
+  background: var(--g-fill);
   border-color: rgba(184, 161, 247, 0.3);
   transform: translateY(-2px);
 }
@@ -3637,14 +3710,14 @@ body.has-app .site-foot .brand .brand-mark {
   transition: color 0.22s var(--ease);
 }
 .g-posth:hover h2 {
-  color: #fff;
+  color: var(--ink);
 }
 .g-posth .pin {
   font-size: 9.5px;
   padding: 1px 6px;
   border-radius: 999px;
   background: rgba(192, 74, 128, 0.85);
-  color: #fff;
+  color: var(--ink);
   flex: none;
 }
 
@@ -3713,7 +3786,7 @@ body.has-app .site-foot .brand .brand-mark {
   place-items: center;
   font-size: 11px;
   letter-spacing: 0.1em;
-  color: rgba(255, 255, 255, 0.55);
+  color: var(--g-ink-2);
 }
 
 /* 公告卡 */
@@ -3756,7 +3829,7 @@ body.has-app .site-foot .brand .brand-mark {
   padding: 2px 14px 14px;
 }
 .g-stat div {
-  background: rgba(255, 255, 255, 0.045);
+  background: var(--g-fill);
   border: var(--glass-line);
   border-radius: 9px;
   padding: 10px 12px;
@@ -3797,7 +3870,7 @@ body.has-app .site-foot .brand .brand-mark {
   display: flex;
   align-items: center;
   gap: 10px;
-  background: rgba(255, 255, 255, 0.06);
+  background: var(--g-fill);
   border: var(--glass-line);
   border-radius: 10px;
   padding: 10px 14px;
@@ -3842,7 +3915,7 @@ body.has-app .site-foot .brand .brand-mark {
   transition: background 0.3s var(--ease), border-color 0.3s var(--ease);
 }
 .g-moment:hover {
-  background: rgba(255, 255, 255, 0.07);
+  background: var(--g-fill);
   border-color: rgba(184, 161, 247, 0.24);
 }
 
@@ -3855,7 +3928,7 @@ body.has-app .site-foot .brand .brand-mark {
   display: grid;
   place-items: center;
   color: var(--g-accent);
-  border: 1px solid rgba(255, 255, 255, 0.12);
+  border: 1px solid var(--glass-line);
 }
 .g-moment .av img {
   width: 100%;
@@ -3945,7 +4018,7 @@ body.has-app .site-foot .brand .brand-mark {
   display: grid;
   place-items: center;
   background: linear-gradient(135deg, rgba(122, 92, 184, 0.35), rgba(50, 38, 82, 0.4));
-  color: rgba(255, 255, 255, 0.4);
+  color: var(--g-ink-3);
   font-size: 11px;
 }
 .g-album img {
@@ -3994,7 +4067,7 @@ body.has-app .site-foot .brand .brand-mark {
   color: var(--g-text-3);
   padding: 3px 9px;
   border-radius: 999px;
-  background: rgba(255, 255, 255, 0.06);
+  background: var(--g-fill);
 }
 
 .lk-wrap {
@@ -4015,8 +4088,8 @@ body.has-app .site-foot .brand .brand-mark {
   margin: 14px 0 0;
   padding: 8px;
   border-radius: 12px;
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  background: rgba(17, 14, 25, 0.86);
+  border: 1px solid var(--glass-line);
+  background: var(--surface);
   backdrop-filter: blur(14px);
   -webkit-backdrop-filter: blur(14px);
 }
@@ -4037,7 +4110,7 @@ body.has-app .site-foot .brand .brand-mark {
   align-items: center;
   gap: 5px;
   border: none;
-  background: rgba(255, 255, 255, 0.06);
+  background: var(--g-fill);
   color: var(--g-text-2);
   font-size: 12px;
   padding: 6px 11px;
@@ -4053,11 +4126,11 @@ body.has-app .site-foot .brand .brand-mark {
 }
 .lk-chip:hover {
   color: var(--g-text);
-  background: rgba(255, 255, 255, 0.1);
+  background: var(--g-fill);
 }
 .lk-chip.on {
   background: rgba(184, 161, 247, 0.22);
-  color: #fff;
+  color: var(--ink);
 }
 .lk-chip.on em {
   opacity: 0.75;
@@ -4071,19 +4144,19 @@ body.has-app .site-foot .brand .brand-mark {
   bottom: 92px;
   transform: translateX(-50%);
   z-index: 200;
-  border: 1px solid rgba(184, 161, 247, 0.45);
-  background: rgba(24, 20, 35, 0.94);
-  color: #fff;
+  border: 1px solid color-mix(in srgb, var(--g-accent) 45%, transparent);
+  background: var(--panel);
+  color: var(--ink);
   font-size: 12.5px;
   padding: 9px 18px;
   border-radius: 999px;
   cursor: pointer;
-  box-shadow: 0 8px 28px rgba(0, 0, 0, 0.4);
+  box-shadow: 0 8px 28px var(--glass-line);
   animation: tipIn 0.28s var(--ease);
 }
 .rebuild-tip:hover {
   border-color: var(--g-accent);
-  background: rgba(38, 31, 54, 0.96);
+  background: var(--panel-2);
 }
 @keyframes tipIn {
   from {
@@ -4121,7 +4194,7 @@ body.has-app .site-foot .brand .brand-mark {
   width: 100%;
   margin: 12px 0 0;
   padding: 8px;
-  border: 1px dashed rgba(255, 255, 255, 0.14);
+  border: 1px dashed var(--glass-line);
   border-radius: 9px;
   background: none;
   color: var(--g-text-2);
@@ -4148,10 +4221,10 @@ body.has-app .site-foot .brand .brand-mark {
   width: 100%;
   margin: 4px 0 8px;
   padding: 10px;
-  border: 1px dashed rgba(255, 255, 255, 0.14);
+  border: 1px dashed var(--glass-line);
   border-radius: 12px;
-  background: rgba(19, 16, 27, 0.6);
-  color: var(--g-text-2);
+  background: var(--g-fill);
+  color: var(--g-ink-2);
   font-size: 12.5px;
   cursor: pointer;
   transition: all 0.2s var(--ease);
@@ -4162,20 +4235,20 @@ body.has-app .site-foot .brand .brand-mark {
   opacity: 0.45;
 }
 .tl-more:hover {
-  color: var(--g-text);
-  border-color: rgba(184, 161, 247, 0.4);
-  background: rgba(184, 161, 247, 0.08);
+  color: var(--g-ink);
+  border-color: color-mix(in srgb, var(--g-accent) 40%, transparent);
+  background: var(--g-fill-2);
 }
 
 /* 每个分类一张玻璃卡片，压住背景图，字才看得清 */
 .lk-group {
   padding: 16px 18px 18px;
   /* 比默认玻璃更实一点，避免花背景透上来干扰阅读 */
-  background: rgba(21, 18, 30, 0.8);
-  border-color: rgba(255, 255, 255, 0.07);
+  background: var(--surface-2);
+  border-color: var(--glass-line);
 }
 .lk-head {
-  background: rgba(21, 18, 30, 0.8);
+  background: var(--surface-2);
 }
 
 .lk-cat {
@@ -4216,12 +4289,12 @@ body.has-app .site-foot .brand .brand-mark {
   gap: 11px;
   padding: 10px 12px;
   border-radius: 11px;
-  background: rgba(255, 255, 255, 0.045);
-  border: 1px solid rgba(255, 255, 255, 0.06);
+  background: var(--g-fill);
+  border: 1px solid var(--glass-line);
   transition: background 0.18s ease, border-color 0.18s ease, transform 0.18s ease;
 }
 .lk-item:hover {
-  background: rgba(255, 255, 255, 0.095);
+  background: var(--g-fill);
   border-color: rgba(184, 161, 247, 0.36);
   transform: translateY(-1px);
 }
@@ -4233,7 +4306,7 @@ body.has-app .site-foot .brand .brand-mark {
   display: grid;
   place-items: center;
   border-radius: 8px;
-  background: rgba(255, 255, 255, 0.07);
+  background: var(--g-fill);
   overflow: hidden;
 }
 .lk-ico img {
@@ -4311,7 +4384,7 @@ body.has-app .site-foot .brand .brand-mark {
   font-weight: 700;
   letter-spacing: -0.025em;
   line-height: 1.1;
-  text-shadow: 0 6px 46px rgba(0, 0, 0, 0.55);
+  text-shadow: 0 6px 46px rgba(0, 0, 0, 0.671);
 }
 
 /* 首屏那行会变换的文字 */
@@ -4321,7 +4394,7 @@ body.has-app .site-foot .brand .brand-mark {
   font-size: clamp(14px, 1.9vw, 18px);
   letter-spacing: 0.1em;
   color: rgba(255, 255, 255, 0.94);
-  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.6), 0 2px 16px rgba(0, 0, 0, 0.45);
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.732), 0 2px 16px rgba(0, 0, 0, 0.549);
 }
 .splash-typing span::after {
   content: "";
@@ -4388,7 +4461,7 @@ body.has-app .site-foot .brand .brand-mark {
 .app,
 .post-app {
   --glass: rgba(9, 23, 46, 0.66);
-  --glass-2: rgba(255, 255, 255, 0.06);
+  --glass-2: var(--glass-line);
   --g-accent: #a8c6f7;
 }
 
@@ -4416,7 +4489,7 @@ body.has-app .site-foot .brand .brand-mark {
 
 /* 顶栏用实一点的海军蓝，滚动时文字依然清楚 */
 body.has-app .site-head {
-  background: rgba(9, 22, 44, 0.78);
+  background: var(--header-bg);
 }
 
 /* 首屏那张签名卡改成半透明色块（不再磨砂） */
@@ -4437,14 +4510,14 @@ body.has-app .site-head {
 
 /* 标题在亮背景上要更沉一点 */
 .splash-title {
-  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.5), 0 8px 40px rgba(0, 0, 0, 0.45);
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.61), 0 8px 40px rgba(0, 0, 0, 0.549);
 }
 .splash-hi {
   color: rgba(255, 255, 255, 0.92);
-  text-shadow: 0 1px 10px rgba(0, 0, 0, 0.6);
+  text-shadow: 0 1px 10px rgba(0, 0, 0, 0.732);
 }
 .splash-quote p {
-  text-shadow: 0 1px 8px rgba(0, 0, 0, 0.4);
+  text-shadow: 0 1px 8px rgba(0, 0, 0, 0.488);
 }
 
 /* ============================================================
@@ -4475,7 +4548,7 @@ body.has-app .site-head.is-over-hero {
 }
 body.has-app .site-head.is-over-hero .nav a,
 body.has-app .site-head.is-over-hero .brand {
-  text-shadow: 0 1px 10px rgba(0, 0, 0, 0.65);
+  text-shadow: 0 1px 10px rgba(0, 0, 0, 0.793);
 }
 body.has-app .site-head.is-over-hero .brand .brand-mark {
   background: rgba(255, 255, 255, 0.2);
@@ -4504,24 +4577,24 @@ body.has-app .site-head.is-over-hero .brand .brand-mark {
 
 /* 文字阴影加强：亮背景上也能读清 */
 .splash-title {
-  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.7), 0 10px 52px rgba(0, 0, 0, 0.55);
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.854), 0 10px 52px rgba(0, 0, 0, 0.671);
 }
 .splash-hi {
   color: rgba(255, 255, 255, 0.95);
-  text-shadow: 0 1px 12px rgba(0, 0, 0, 0.8);
+  text-shadow: 0 1px 12px rgba(0, 0, 0, 0.976);
 }
 .splash-quote p {
-  text-shadow: 0 1px 12px rgba(0, 0, 0, 0.75);
+  text-shadow: 0 1px 12px rgba(0, 0, 0, 0.915);
 }
 .splash-quote span {
   color: rgba(255, 255, 255, 0.8);
-  text-shadow: 0 1px 10px rgba(0, 0, 0, 0.75);
+  text-shadow: 0 1px 10px rgba(0, 0, 0, 0.915);
 }
 .splash-avatar {
-  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.45);
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.549);
 }
 .splash-scroll {
-  text-shadow: 0 1px 10px rgba(0, 0, 0, 0.8);
+  text-shadow: 0 1px 10px rgba(0, 0, 0, 0.976);
   color: rgba(255, 255, 255, 0.85);
 }
 
@@ -4536,7 +4609,7 @@ body.has-app .site-head.is-over-hero .brand .brand-mark {
 body.has-app .site-head.is-over-hero .nav a,
 body.has-app .site-head.is-over-hero .brand,
 body.has-app .site-head.is-over-hero .brand em {
-  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.6), 0 2px 16px rgba(0, 0, 0, 0.45);
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.732), 0 2px 16px rgba(0, 0, 0, 0.549);
 }
 
 /* 导航文字提到纯白，别用半透明灰 */
@@ -4552,11 +4625,11 @@ body.has-app .site-head.is-over-hero .brand em {
   background: rgba(10, 18, 36, 0.4);
   border-width: 1.5px;
   border-color: rgba(255, 255, 255, 0.7);
-  box-shadow: 0 6px 26px rgba(0, 0, 0, 0.35);
+  box-shadow: 0 6px 26px rgba(0, 0, 0, 0.427);
 }
 .splash-avatar span {
   color: #fff;
-  text-shadow: 0 1px 5px rgba(0, 0, 0, 0.85);
+  text-shadow: 0 1px 5px rgba(0, 0, 0, 1);
 }
 
 /* 品牌小方块 */
@@ -4576,12 +4649,12 @@ body.has-app .site-head.is-over-hero .icon-btn {
 /* 大标题：去掉硬描边（描边会让字发脏），改用柔光让它浮起来 */
 .splash-title {
   -webkit-text-stroke: 0;
-  text-shadow: 0 2px 14px rgba(0, 0, 0, 0.5), 0 10px 50px rgba(0, 0, 0, 0.42);
+  text-shadow: 0 2px 14px rgba(0, 0, 0, 0.61), 0 10px 50px rgba(0, 0, 0, 0.512);
 }
 
 /* 社交按钮：细线在亮背景上也弱，加一圈浅阴影 */
 .splash-social a {
-  box-shadow: 0 1px 6px rgba(0, 0, 0, 0.45);
+  box-shadow: 0 1px 6px rgba(0, 0, 0, 0.549);
 }
 
 /* ============================================================
@@ -4610,10 +4683,10 @@ body.has-app .site-head.is-over-hero .icon-btn {
   flex: none;
 }
 .nav a:hover {
-  background: rgba(255, 255, 255, 0.09);
+  background: var(--g-fill);
 }
 .nav a[aria-current="page"] {
-  background: rgba(255, 255, 255, 0.13);
+  background: var(--g-fill);
   position: relative;
 }
 .nav a[aria-current="page"]::before {
@@ -4647,7 +4720,7 @@ body.has-app .site-head.is-over-hero .icon-btn {
   transition: background 0.24s var(--ease);
 }
 .nav-more > button:hover {
-  background: rgba(255, 255, 255, 0.09);
+  background: var(--g-fill);
 }
 .nav-more > button svg {
   width: 12px;
@@ -4664,9 +4737,9 @@ body.has-app .site-head.is-over-hero .icon-btn {
   min-width: 150px;
   padding: 6px;
   border-radius: 12px;
-  background: rgba(10, 22, 44, 0.94);
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  box-shadow: 0 14px 40px rgba(0, 0, 0, 0.42);
+  background: var(--surface);
+  border: 1px solid var(--glass-line);
+  box-shadow: 0 14px 40px var(--glass-line);
   display: none;
   flex-direction: column;
   gap: 2px;
@@ -4679,14 +4752,14 @@ body.has-app .site-head.is-over-hero .icon-btn {
   padding: 8px 12px;
   border-radius: 8px;
   font-size: 13px;
-  color: rgba(255, 255, 255, 0.82);
+  color: var(--g-ink);
   display: flex;
   align-items: center;
   gap: 8px;
 }
 .nav-drop a:hover {
-  background: rgba(255, 255, 255, 0.1);
-  color: #fff;
+  background: var(--g-fill);
+  color: var(--ink);
 }
 .nav-drop a svg {
   width: 13px;
@@ -4710,10 +4783,10 @@ body.has-app .site-head.is-over-hero .icon-btn {
   width: 300px;
   max-height: calc(100vh - 110px);
   overflow-y: auto;
-  background: rgba(12, 22, 42, 0.96);
-  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: var(--surface);
+  border: 1px solid var(--glass-line);
   border-radius: 16px;
-  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.5);
+  box-shadow: 0 24px 60px var(--glass-line);
   padding: 18px;
   animation: setIn 0.24s var(--ease) both;
 }
@@ -4727,11 +4800,11 @@ body.has-app .site-head.is-over-hero .icon-btn {
   margin: 0 0 4px;
   font-size: 14px;
   font-weight: 600;
-  color: #fff;
+  color: var(--ink);
 }
 .set-panel .sub {
   font-size: 11px;
-  color: rgba(255, 255, 255, 0.45);
+  color: var(--g-ink-3);
   margin-bottom: 16px;
 }
 .set-group {
@@ -4741,7 +4814,7 @@ body.has-app .site-head.is-over-hero .icon-btn {
   display: block;
   font-size: 11px;
   letter-spacing: 0.06em;
-  color: rgba(255, 255, 255, 0.5);
+  color: var(--g-ink-2);
   margin-bottom: 9px;
 }
 .hue-slider {
@@ -4768,9 +4841,9 @@ body.has-app .site-head.is-over-hero .icon-btn {
   width: 16px;
   height: 16px;
   border-radius: 50%;
-  background: #fff;
-  border: 2px solid rgba(0, 0, 0, 0.35);
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+  background: var(--panel);
+  border: 2px solid var(--glass-line);
+  box-shadow: 0 2px 8px var(--glass-line);
 }
 .preset-row {
   display: flex;
@@ -4789,7 +4862,7 @@ body.has-app .site-head.is-over-hero .icon-btn {
   transform: translateY(-2px);
 }
 .preset[aria-pressed="true"] {
-  border-color: #fff;
+  border-color: var(--ink);
 }
 .seg {
   display: flex;
@@ -4801,19 +4874,19 @@ body.has-app .site-head.is-over-hero .icon-btn {
   font-size: 12px;
   font-family: inherit;
   border-radius: 8px;
-  border: 1px solid rgba(255, 255, 255, 0.14);
-  background: rgba(255, 255, 255, 0.05);
-  color: rgba(255, 255, 255, 0.7);
+  border: 1px solid var(--glass-line);
+  background: var(--g-fill);
+  color: var(--g-ink);
   cursor: pointer;
   transition: all 0.22s var(--ease);
 }
 .seg button:hover {
-  background: rgba(255, 255, 255, 0.1);
-  color: #fff;
+  background: var(--g-fill);
+  color: var(--ink);
 }
 .seg button[aria-pressed="true"] {
-  background: rgba(168, 198, 247, 0.9);
-  color: #0b1728;
+  background: var(--accent);
+  color: var(--accent-ink);
   border-color: transparent;
   font-weight: 500;
 }
@@ -4922,7 +4995,7 @@ body.has-app .site-head.is-over-hero .icon-btn {
 /* 悬停状态：只做底色，不做位移 */
 .nav > a:hover,
 .nav-more-btn:hover {
-  background: rgba(255, 255, 255, 0.09);
+  background: var(--g-fill);
 }
 .nav > a:active,
 .nav-more-btn:active {
@@ -4972,10 +5045,10 @@ body.has-app .site-head.is-over-hero .icon-btn {
   right: 0;
   min-width: 138px;
   padding: 6px;
-  background: rgba(11, 20, 38, 0.94);
-  border: 1px solid rgba(255, 255, 255, 0.13);
+  background: var(--surface);
+  border: 1px solid var(--glass-line);
   border-radius: 11px;
-  box-shadow: 0 14px 36px rgba(0, 0, 0, 0.38);
+  box-shadow: 0 14px 36px var(--glass-line);
   opacity: 0;
   visibility: hidden;
   transform: translateY(-6px);
@@ -4993,7 +5066,7 @@ body.has-app .site-head.is-over-hero .icon-btn {
   padding: 8px 11px;
   border-radius: 7px;
   font-size: 12.5px;
-  color: rgba(255, 255, 255, 0.8);
+  color: var(--g-ink);
   transition: all 0.2s var(--ease);
 }
 
@@ -5014,8 +5087,8 @@ body.has-app .site-head.is-over-hero .icon-btn {
   }
 }
 .nav-more-menu a:hover {
-  background: rgba(255, 255, 255, 0.11);
-  color: #fff;
+  background: var(--g-fill);
+  color: var(--ink);
 }
 
 .head-tools {
@@ -5161,8 +5234,8 @@ body.has-app .site-head.is-over-hero .nav-more-btn:hover {
   display: grid;
   place-items: center;
   background: linear-gradient(135deg, #6a4fa8, #2f2450);
-  border: 2px solid rgba(255, 255, 255, 0.7);
-  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.36);
+  border: 2px solid var(--glass-line);
+  box-shadow: 0 6px 20px var(--glass-line);
 }
 .ply-cover img {
   width: 100%;
@@ -5171,7 +5244,7 @@ body.has-app .site-head.is-over-hero .nav-more-btn:hover {
 }
 .ply-cover .ph {
   font-size: 20px;
-  color: rgba(255, 255, 255, 0.8);
+  color: var(--g-ink);
 }
 .ply-cover.spinning {
   animation: discSpin 9s linear infinite;
@@ -5237,7 +5310,7 @@ body.has-app .site-head.is-over-hero .nav-more-btn:hover {
   appearance: none;
   height: 3px;
   border-radius: 3px;
-  background: rgba(255, 255, 255, 0.2);
+  background: var(--g-fill);
   outline: none;
   cursor: pointer;
 }
@@ -5246,15 +5319,15 @@ body.has-app .site-head.is-over-hero .nav-more-btn:hover {
   width: 10px;
   height: 10px;
   border-radius: 50%;
-  background: #fff;
-  box-shadow: 0 1px 5px rgba(0, 0, 0, 0.45);
+  background: var(--panel);
+  box-shadow: 0 1px 5px var(--glass-line);
 }
 .ply-vol input[type="range"]::-moz-range-thumb {
   width: 10px;
   height: 10px;
   border: none;
   border-radius: 50%;
-  background: #fff;
+  background: var(--panel);
 }
 
 /* 律动条：播放时跳动，暂停时收成几点 */
@@ -5313,7 +5386,7 @@ body.has-app .site-head.is-over-hero .nav-more-btn:hover {
   position: relative;
   height: 3px;
   border-radius: 3px;
-  background: rgba(255, 255, 255, 0.18);
+  background: var(--g-fill);
   cursor: pointer;
   touch-action: none;
   -webkit-user-select: none;
@@ -5341,7 +5414,7 @@ body.has-app .site-head.is-over-hero .nav-more-btn:hover {
   width: 0;
   height: 100%;
   border-radius: 3px;
-  background: #fff;
+  background: var(--panel);
   transition: width 0.15s linear;
 }
 .ply-bar i::after {
@@ -5353,9 +5426,9 @@ body.has-app .site-head.is-over-hero .nav-more-btn:hover {
   height: 12px;
   margin-right: -6px;
   border-radius: 50%;
-  background: #fff;
+  background: var(--panel);
   transform: translateY(-50%);
-  box-shadow: 0 2px 7px rgba(0, 0, 0, 0.5);
+  box-shadow: 0 2px 7px var(--glass-line);
 }
 
 /* 控制行：中间一颗白色大圆 */
@@ -5388,13 +5461,14 @@ body.has-app .site-head.is-over-hero .nav-more-btn:hover {
   padding: 0 2px;
   border-radius: 5px;
   background: var(--g-accent);
-  color: #1a1626;
+  color: var(--accent-ink);
   font-size: 7px;
   font-weight: 800;
   font-style: normal;
   line-height: 9px;
   text-align: center;
   pointer-events: none;
+  color: var(--accent-ink);
 }
 .ply-ctrl button[data-mode="one"] .ply-mode-badge {
   display: block;
@@ -5416,12 +5490,12 @@ body.has-app .site-head.is-over-hero .nav-more-btn:hover {
   height: 50px;
   flex: none;
   border-radius: 50%;
-  background: #fff;
+  background: var(--panel);
   color: #14111d !important;
-  box-shadow: 0 6px 22px rgba(0, 0, 0, 0.38);
+  box-shadow: 0 6px 22px var(--glass-line);
 }
 .ply-ctrl .ply-play:hover {
-  background: #fff;
+  background: var(--panel);
   color: #14111d !important;
   transform: scale(1.06);
 }
@@ -5448,11 +5522,11 @@ body.has-app .site-head.is-over-hero .nav-more-btn:hover {
 }
 .ply-list-btn:hover {
   color: var(--g-accent);
-  background: rgba(255, 255, 255, 0.07);
+  background: var(--g-fill);
 }
 .ply-list-btn.on {
   color: var(--g-accent);
-  background: rgba(255, 255, 255, 0.1);
+  background: var(--g-fill);
 }
 .ply-list-btn svg {
   width: 15px;
@@ -5474,7 +5548,7 @@ body.has-app .site-head.is-over-hero .nav-more-btn:hover {
   overscroll-behavior: contain;
   -webkit-overflow-scrolling: touch;
   scrollbar-width: thin;
-  scrollbar-color: rgba(255, 255, 255, 0.22) transparent;
+  scrollbar-color: var(--glass-line) transparent;
 }
 /* 列表自己的滚动条细一点，和卡片风格一致 */
 .ply-tracks::-webkit-scrollbar {
@@ -5484,11 +5558,11 @@ body.has-app .site-head.is-over-hero .nav-more-btn:hover {
   background: transparent;
 }
 .ply-tracks::-webkit-scrollbar-thumb {
-  background: rgba(255, 255, 255, 0.22);
+  background: var(--g-fill);
   border-radius: 4px;
 }
 .ply-tracks::-webkit-scrollbar-thumb:hover {
-  background: rgba(255, 255, 255, 0.34);
+  background: var(--g-fill-2);
 }
 .ply-track {
   display: flex;
@@ -5505,7 +5579,7 @@ body.has-app .site-head.is-over-hero .nav-more-btn:hover {
   transition: background 0.15s ease, color 0.15s ease;
 }
 .ply-track:hover {
-  background: rgba(255, 255, 255, 0.06);
+  background: var(--g-fill);
   color: var(--g-text);
 }
 .ply-track.on {
@@ -5535,7 +5609,7 @@ body.has-app .site-head.is-over-hero .nav-more-btn:hover {
   color: var(--g-text-3);
 }
 .ply-track.on .nm i {
-  color: rgba(184, 161, 247, 0.72);
+  color: color-mix(in srgb, var(--g-accent) 78%, var(--g-ink));
 }
 
 .ply-lyrics {
@@ -5563,15 +5637,16 @@ body.has-app .site-head.is-over-hero .nav-more-btn:hover {
   text-align: center;
   font-size: 12px;
   line-height: 1.7;
-  color: rgba(236, 232, 246, 0.3);
+  color: var(--g-ink-3);
+  opacity: 0.7;
   transition: color 0.35s var(--ease), font-size 0.35s var(--ease),
     text-shadow 0.35s var(--ease);
 }
 .ply-lyrics p.on {
-  color: #fff;
+  color: var(--ink);
   font-size: 13px;
   font-weight: 500;
-  text-shadow: 0 1px 14px rgba(0, 0, 0, 0.6);
+  text-shadow: 0 1px 14px var(--g-ink);
 }
 .ply-lyrics p.empty {
   padding: 22px 0;
@@ -5646,10 +5721,10 @@ body.has-app .site-head.is-over-hero .nav-more-btn:hover {
   width: 238px;
   padding: 15px 12px 10px;
   border-radius: 16px;
-  background: rgba(14, 12, 26, 0.93);
-  border: 1px solid rgba(255, 255, 255, 0.14);
-  box-shadow: 0 18px 52px rgba(0, 0, 0, 0.55);
-  color: #ece8f6;
+  background: var(--surface);
+  border: 1px solid var(--g-line-2);
+  box-shadow: 0 18px 52px rgba(0, 0, 0, 0.671);
+  color: var(--g-ink);
   touch-action: none; /* 拖动时不顺带滚动页面 */
   user-select: none;
   cursor: grab;
@@ -5672,7 +5747,7 @@ body.has-app .site-head.is-over-hero .nav-more-btn:hover {
 }
 .float-player.is-dragging {
   cursor: grabbing;
-  box-shadow: 0 24px 64px rgba(0, 0, 0, 0.6);
+  box-shadow: 0 24px 64px rgba(0, 0, 0, 0.732);
 }
 @keyframes fpIn {
   from {
@@ -5700,7 +5775,7 @@ body.has-app .site-head.is-over-hero .nav-more-btn:hover {
   display: grid;
   place-items: center;
   background: linear-gradient(135deg, #6a4fa8, #2f2450);
-  border: 1px solid rgba(255, 255, 255, 0.18);
+  border: 1px solid var(--glass-line);
 }
 .fp-cover img {
   width: 100%;
@@ -5717,7 +5792,7 @@ body.has-app .site-head.is-over-hero .nav-more-btn:hover {
 .fp-meta b {
   display: block;
   font-size: 12.5px;
-  color: #ece8f6;
+  color: var(--g-ink);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -5725,7 +5800,7 @@ body.has-app .site-head.is-over-hero .nav-more-btn:hover {
 .fp-meta span {
   display: block;
   font-size: 10.5px;
-  color: rgba(236, 232, 246, 0.45);
+  color: var(--g-ink-3);
   margin-top: 2px;
   white-space: nowrap;
   overflow: hidden;
@@ -5738,15 +5813,15 @@ body.has-app .site-head.is-over-hero .nav-more-btn:hover {
   border: none;
   border-radius: 50%;
   background: transparent;
-  color: rgba(236, 232, 246, 0.5);
+  color: var(--g-ink-3);
   cursor: pointer;
   display: grid;
   place-items: center;
   transition: all 0.2s var(--ease);
 }
 .fp-close:hover {
-  color: #fff;
-  background: rgba(255, 255, 255, 0.12);
+  color: var(--ink);
+  background: var(--g-fill);
 }
 .fp-close svg {
   width: 11px;
@@ -5760,10 +5835,10 @@ body.has-app .site-head.is-over-hero .nav-more-btn:hover {
   min-height: 38px;
   padding: 6px 9px;
   border-radius: 9px;
-  background: rgba(255, 255, 255, 0.05);
+  background: var(--g-fill);
   font-size: 11.5px;
   line-height: 1.45;
-  color: rgba(236, 232, 246, 0.62);
+  color: var(--g-ink-2);
   overflow: hidden;
 }
 .fp-lyric span {
@@ -5773,7 +5848,7 @@ body.has-app .site-head.is-over-hero .nav-more-btn:hover {
   overflow: hidden;
 }
 .fp-lyric.has-line {
-  color: #f3f0fa;
+  color: var(--g-ink);
 }
 .fp-lyric.has-line span {
   font-weight: 500;
@@ -5792,7 +5867,7 @@ body.has-app .site-head.is-over-hero .nav-more-btn:hover {
   border: none;
   border-radius: 50%;
   background: transparent;
-  color: rgba(236, 232, 246, 0.82);
+  color: var(--g-ink);
   cursor: pointer;
   display: grid;
   place-items: center;
@@ -5802,8 +5877,8 @@ body.has-app .site-head.is-over-hero .nav-more-btn:hover {
   display: block;
 }
 .fp-ctl button:hover {
-  background: rgba(255, 255, 255, 0.12);
-  color: #fff;
+  background: var(--g-fill);
+  color: var(--ink);
 }
 .fp-ctl svg {
   width: 15px;
@@ -5813,12 +5888,12 @@ body.has-app .site-head.is-over-hero .nav-more-btn:hover {
   width: 32px;
   height: 32px;
   margin: 0 3px;
-  background: #fff;
-  color: #14111d;
+  background: var(--panel);
+  color: var(--ink);
 }
 .fp-ctl .fp-play:hover {
-  background: #fff;
-  color: #14111d;
+  background: var(--panel);
+  color: var(--ink);
 }
 .fp-ctl .fp-play svg {
   width: 13px;
@@ -5828,7 +5903,7 @@ body.has-app .site-head.is-over-hero .nav-more-btn:hover {
   margin-left: auto;
 }
 .fp-ctl .fp-mode.is-on {
-  color: #c9a7ff;
+  color: var(--g-accent);
 }
 @media (max-width: 620px) {
   .float-player {
@@ -5849,9 +5924,9 @@ body.has-app .site-head.is-over-hero .nav-more-btn:hover {
   transform: translateX(-50%) translateY(3px);
   padding: 5px 9px;
   border-radius: 6px;
-  background: rgba(9, 16, 30, 0.95);
-  border: 1px solid rgba(255, 255, 255, 0.13);
-  color: #fff;
+  background: var(--panel);
+  border: 1px solid var(--line);
+  color: var(--ink);
   font-size: 11px;
   line-height: 1.4;
   white-space: nowrap;
@@ -5889,7 +5964,7 @@ body.has-app .site-head.is-over-hero .nav-more-btn:hover {
   border-radius: 999px;
   background: rgba(18, 14, 34, 0.66);
   border: 1px solid rgba(255, 255, 255, 0.14);
-  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.45);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.549);
   color: #f2eefb;
   font-size: 13.5px;
   line-height: 1.4;
@@ -6055,8 +6130,12 @@ body.has-app .site-head.is-over-hero .nav-more-btn:hover {
     display: none !important;
   }
   body {
-    background: #fff;
-    color: #000;
+    background: #ffffff !important;
+    color: #000000 !important;
+  }
+  * {
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
   }
   .reading,
   .prose {
@@ -6094,12 +6173,12 @@ body.has-app .site-head.is-over-hero .nav-more-btn:hover {
 }
 .toc-link:hover {
   color: var(--g-text);
-  background: rgba(255, 255, 255, 0.05);
+  background: var(--g-fill);
 }
 .toc-link.on {
-  color: #fff;
+  color: var(--ink);
   border-left-color: var(--g-accent);
-  background: rgba(255, 255, 255, 0.075);
+  background: var(--g-fill);
 }
 
 /* ============================================================
@@ -6202,6 +6281,25 @@ body {
   background-image: linear-gradient(160deg, #2b2440 0%, #1b1830 100%);
 }
 
+/* 浅色主题下背景层换成浅色兜底，否则切浅色其实还是深底 */
+:root:not([data-theme="dark"]) .page-bg {
+  background-color: var(--bg);
+  background-image: linear-gradient(160deg, #f7f4fe 0%, #efe9fa 100%);
+}
+:root:not([data-theme="dark"])[data-skin="minimal"] .page-bg {
+  background-color: var(--bg);
+  background-image: linear-gradient(160deg, #fdfcfa 0%, #f4f2ee 100%);
+}
+/* 浅色下压暗层反过来用极淡的提亮，保证插画不至于糊成一片深色 */
+:root:not([data-theme="dark"]) .page-bg::after {
+  background: linear-gradient(
+    170deg,
+    rgba(255, 255, 255, 0.34) 0%,
+    rgba(255, 255, 255, 0.12) 45%,
+    rgba(255, 255, 255, 0.4) 100%
+  );
+}
+
 /* 借鉴 fqzlr.top 的纹理思路：背景图上叠一层极淡噪点，提升质感（不照抄） */
 .page-bg::after {
   content: "";
@@ -6232,11 +6330,11 @@ body {
   border: 1px solid var(--line);
   border-radius: 10px;
   padding: 6px 7px;
-  background: rgba(255, 255, 255, 0.04);
+  background: var(--g-fill);
   cursor: default;
   transition: background 0.18s var(--ease), border-color 0.18s var(--ease);
 }
-.cal-cell[data-date]:hover { border-color: var(--g-accent); background: rgba(255, 255, 255, 0.08); }
+.cal-cell[data-date]:hover { border-color: var(--g-accent); background: var(--g-fill); }
 .cal-cell.cal-empty { background: transparent; border-color: transparent; }
 .cal-dow { min-height: 0; border: none; background: transparent; color: var(--g-text-3); font-size: 12px; text-align: center; }
 .cal-day { font-size: 14px; font-weight: 600; line-height: 1; }
@@ -6263,7 +6361,7 @@ body {
   cursor: pointer; font-size: 13px; transition: all 0.2s var(--ease);
 }
 .g-pager .pg-btn:hover { border-color: var(--g-accent); color: var(--g-accent); }
-.g-pager .pg-btn.on { background: var(--g-accent); border-color: var(--g-accent); color: #fff; }
+.g-pager .pg-btn.on { background: var(--g-accent); border-color: var(--g-accent); color: var(--accent-ink); }
 
 /* ============================================================
    19. 天气页：多城市切换
@@ -6290,8 +6388,8 @@ body {
   gap: 10px;
   padding: 8px;
   border-radius: 12px;
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  background: rgba(17, 14, 25, 0.88);
+  border: 1px solid var(--glass-line);
+  background: var(--surface);
   backdrop-filter: blur(14px);
   -webkit-backdrop-filter: blur(14px);
   box-shadow: 0 6px 22px rgba(8, 6, 14, 0.28);
@@ -6311,7 +6409,7 @@ body {
 .wx-chip {
   flex: none;
   border: none;
-  background: rgba(255, 255, 255, 0.06);
+  background: var(--g-fill);
   color: var(--g-text-2);
   font-family: inherit;
   font-size: 12.5px;
@@ -6322,12 +6420,12 @@ body {
   transition: background 0.2s var(--ease), color 0.2s var(--ease);
 }
 .wx-chip:hover {
-  background: rgba(255, 255, 255, 0.12);
+  background: var(--g-fill);
   color: var(--g-text);
 }
 .wx-chip.on {
   background: var(--g-accent);
-  color: #1a1428;
+  color: var(--accent-ink);
   font-weight: 600;
 }
 .wx-acts {
@@ -6353,8 +6451,8 @@ body {
   height: 30px;
   display: grid;
   place-items: center;
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid var(--glass-line);
+  background: var(--g-fill);
   border-radius: 8px;
   color: var(--g-text-2);
   cursor: pointer;
@@ -6386,9 +6484,9 @@ body {
   gap: 2px;
   padding: 10px 12px;
   border-radius: 12px;
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  background: rgba(26, 22, 38, 0.62);
-  color: var(--g-text);
+  border: 1px solid var(--glass-line);
+  background: var(--g-fill);
+  color: var(--g-ink);
   font-family: inherit;
   cursor: pointer;
   text-align: left;
@@ -6404,7 +6502,7 @@ body {
 }
 .wx-mini .n {
   font-size: 11.5px;
-  color: var(--g-text-2);
+  color: var(--g-ink-2);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -6435,7 +6533,7 @@ body {
   grid-template-columns: minmax(0, 1fr) minmax(0, 340px);
   gap: 18px;
   align-items: center;
-  background: rgba(24, 20, 36, 0.72);
+  background: var(--surface-2);
 }
 @media (max-width: 900px) {
   .wx-hero {
@@ -6513,8 +6611,8 @@ body {
   }
 }
 .wx-m {
-  background: rgba(255, 255, 255, 0.045);
-  border: 1px solid rgba(255, 255, 255, 0.07);
+  background: var(--g-fill);
+  border: 1px solid var(--glass-line);
   border-radius: 9px;
   padding: 8px 9px;
   min-width: 0;
@@ -6538,7 +6636,7 @@ body {
 
 /* ---------- 未来 24 小时 ---------- */
 .wx-hour {
-  background: rgba(24, 20, 36, 0.72);
+  background: var(--surface-2);
 }
 .wx-hstrip {
   display: flex;
@@ -6567,7 +6665,7 @@ body {
   transition: background 0.2s var(--ease);
 }
 .wx-hh:hover {
-  background: rgba(255, 255, 255, 0.05);
+  background: var(--g-fill);
 }
 .wx-hh.now {
   background: rgba(184, 161, 247, 0.14);
@@ -6594,14 +6692,14 @@ body {
 }
 .wx-hh .p {
   font-size: 10px;
-  color: #7fb3e8;
+  color: color-mix(in srgb, #4a8ed6 70%, var(--ink));
   font-variant-numeric: tabular-nums;
   min-height: 12px;
 }
 
 /* ---------- 未来 7 天 ---------- */
 .wx-week {
-  background: rgba(24, 20, 36, 0.72);
+  background: var(--surface-2);
 }
 .wx-days {
   padding: 0 16px 14px;
@@ -6620,7 +6718,7 @@ body {
   transition: background 0.2s var(--ease);
 }
 .wx-day:hover {
-  background: rgba(255, 255, 255, 0.045);
+  background: var(--g-fill);
 }
 .wx-day.today {
   background: rgba(184, 161, 247, 0.1);
@@ -6647,7 +6745,7 @@ body {
   text-overflow: ellipsis;
 }
 .wx-day .p {
-  color: #7fb3e8;
+  color: color-mix(in srgb, #4a8ed6 70%, var(--ink));
   font-size: 10.5px;
   text-align: right;
   font-variant-numeric: tabular-nums;
@@ -6669,7 +6767,7 @@ body {
   position: relative;
   height: 4px;
   border-radius: 3px;
-  background: rgba(255, 255, 255, 0.08);
+  background: var(--g-fill);
   overflow: hidden;
 }
 .wx-day .bar i {
@@ -6695,7 +6793,7 @@ body {
 /* ---------- 添加城市面板 ---------- */
 .wx-addpanel {
   display: none;
-  background: rgba(24, 20, 36, 0.86);
+  background: var(--surface-2);
 }
 .wx-addpanel.open {
   display: block;
@@ -6711,8 +6809,8 @@ body {
   padding: 0 11px;
   height: 38px;
   border-radius: 10px;
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid var(--glass-line);
+  background: var(--g-fill);
   transition: border-color 0.2s var(--ease);
 }
 .wx-search:focus-within {
@@ -6759,7 +6857,7 @@ body {
   gap: 10px;
   padding: 8px 10px;
   border-radius: 9px;
-  background: rgba(255, 255, 255, 0.035);
+  background: var(--g-fill);
   border: 1px solid transparent;
   font-size: 12.5px;
 }
@@ -6794,12 +6892,12 @@ body {
   transition: all 0.2s var(--ease);
 }
 .wx-del {
-  background: rgba(255, 255, 255, 0.07);
+  background: var(--g-fill);
   color: var(--g-text-3);
 }
 .wx-del:hover:not(:disabled) {
   background: rgba(232, 106, 122, 0.18);
-  color: #f08a97;
+  color: color-mix(in srgb, #d95666 80%, var(--ink));
 }
 .wx-addone {
   background: rgba(184, 161, 247, 0.16);
@@ -6807,7 +6905,7 @@ body {
 }
 .wx-addone:hover:not(:disabled) {
   background: var(--g-accent);
-  color: #1a1428;
+  color: var(--accent-ink);
 }
 .wx-del:disabled,
 .wx-addone:disabled {
@@ -6854,7 +6952,7 @@ body {
 }
 .wx-retry:hover {
   background: var(--g-accent);
-  color: #1a1428;
+  color: var(--accent-ink);
 }
 
 /* ---------- 轻提示 ---------- */
@@ -6866,11 +6964,11 @@ body {
   z-index: 999;
   padding: 9px 18px;
   border-radius: 999px;
-  background: rgba(20, 16, 30, 0.94);
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  color: #ece8f6;
+  background: var(--surface);
+  border: 1px solid var(--g-line-2);
+  color: var(--g-ink);
   font-size: 12.5px;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.488);
   animation: wxToast 0.24s var(--ease);
 }
 @keyframes wxToast {
@@ -6935,7 +7033,7 @@ body {
   gap: 5px;
   margin-top: 9px;
   padding-top: 9px;
-  border-top: 1px solid rgba(255, 255, 255, 0.07);
+  border-top: 1px solid var(--glass-line);
 }
 .wxm-dot {
   width: 22px;
@@ -6943,8 +7041,8 @@ body {
   display: grid;
   place-items: center;
   border-radius: 7px;
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid var(--glass-line);
+  background: var(--g-fill);
   color: var(--g-text-3);
   font-family: inherit;
   font-size: 10.5px;
@@ -6958,7 +7056,7 @@ body {
 .wxm-dot.on {
   background: var(--g-accent);
   border-color: var(--g-accent);
-  color: #1a1428;
+  color: var(--accent-ink);
   font-weight: 600;
 }
 .wxm-fail {
@@ -6972,22 +7070,22 @@ body {
 
 /* ---------- 天气图标配色 ---------- */
 .wx-c-sun {
-  color: #f5c451;
+  color: color-mix(in srgb, #f0a92b 58%, var(--ink));
 }
 .wx-c-moon {
-  color: #a9b8e8;
+  color: color-mix(in srgb, #7d94d6 62%, var(--ink));
 }
 .wx-c-cloud {
-  color: #b9c2d6;
+  color: color-mix(in srgb, #8a96ae 70%, var(--ink));
 }
 .wx-c-rain {
-  color: #7fb3e8;
+  color: color-mix(in srgb, #4a8ed6 70%, var(--ink));
 }
 .wx-c-snow {
-  color: #cfe3f5;
+  color: color-mix(in srgb, #7fa8cc 66%, var(--ink));
 }
 .wx-c-thunder {
-  color: #c9a0f0;
+  color: color-mix(in srgb, #9b6fd4 66%, var(--ink));
 }
 
 /* ============================================================
@@ -6999,7 +7097,7 @@ body {
 .app,
 .post-app {
   --glass: rgba(11, 23, 43, 0.48);
-  --glass-2: rgba(255, 255, 255, 0.06);
+  --glass-2: var(--glass-line);
   --g-accent: #a8c6f7;
 }
 
@@ -7030,20 +7128,20 @@ body {
 .g-posth,
 .g-moment,
 .g-article {
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.06), var(--g-shadow);
+  box-shadow: inset 0 1px 0 var(--glass-line), var(--g-shadow);
 }
 
 /* 悬停 / 选中：不变透明，稍微提亮一点，字仍然压得住 */
 .g-post:hover,
 .g-posth:hover,
 .g-moment:hover {
-  background: rgba(20, 38, 68, 0.62);
+  background: var(--surface-3);
   border-color: rgba(168, 198, 247, 0.3);
 }
 
 /* 顶栏不再走磨砂：实底，滚动时压在插画上也清楚（2026-10-28 按要求去掉毛玻璃） */
 body.has-app .site-head {
-  background: #0a1629;
+  background: var(--header-bg);
   backdrop-filter: none !important;
   -webkit-backdrop-filter: none !important;
 }
@@ -7120,7 +7218,7 @@ body.has-app .site-head.is-over-hero {
 }
 /* 滚动后给个实底，别让正文从顶栏底下透出来 */
 body.has-app .site-head.is-stuck {
-  background: #0a1629;
+  background: var(--header-bg);
 }
 
 /* ============================================================
@@ -7133,13 +7231,13 @@ body.has-app .site-head.is-stuck {
 /* 常态 / 滚动吸顶：与导航链接一致的半透明白 */
 body.has-app .site-head .nav-more-btn,
 .site-head .nav-more-btn {
-  color: rgba(255, 255, 255, 0.82);
+  color: var(--g-ink);
 }
 /* 浮在首屏（透明顶栏压着首屏插画）：纯白 + 同样的文字投影 */
 body.has-app .site-head.is-over-hero .nav-more-btn,
 .site-head.is-over-hero .nav-more-btn {
   color: #fff;
-  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.6), 0 2px 16px rgba(0, 0, 0, 0.45);
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.732), 0 2px 16px rgba(0, 0, 0, 0.549);
 }
 /* 悬停 / 键盘聚焦 / 菜单展开：提亮到纯白 */
 body.has-app .site-head .nav-more-btn:hover,
@@ -7148,7 +7246,7 @@ body.has-app .site-head .nav-more.open .nav-more-btn,
 .site-head .nav-more-btn:hover,
 .site-head .nav-more-btn:focus-visible,
 .site-head .nav-more.open .nav-more-btn {
-  color: #fff;
+  color: var(--ink);
 }
 
 /* 「更多」本身就有文字标签、点开还有菜单，那个悬浮提示只会压在菜单上面，去掉 */
@@ -7260,7 +7358,7 @@ body.has-app .site-head.is-over-hero .nav {
   .g-prose .g-tablewrap {
     position: relative;
     /* 右边压一层渐变，暗示还有内容 */
-    background-image: linear-gradient(to left, rgba(0, 0, 0, 0.28), rgba(0, 0, 0, 0) 26px);
+    background-image: linear-gradient(to left, var(--g-fill-2), var(--g-fill) 26px);
     background-repeat: no-repeat;
     background-attachment: local, scroll;
     background-position: right center;
@@ -7287,7 +7385,7 @@ body.has-app .site-head.is-over-hero .nav {
   width: 100%;
   height: auto;
   border-radius: 10px;
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  border: 1px solid var(--glass-line);
 }
 .g-prose figcaption {
   margin-top: 0.6em;
@@ -7325,9 +7423,9 @@ body.has-app .site-head.is-over-hero .nav {
 .g-prose details {
   margin: 1.4em 0;
   padding: 0;
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border: 1px solid var(--glass-line);
   border-radius: 10px;
-  background: rgba(0, 0, 0, 0.18);
+  background: var(--g-fill);
   overflow: hidden;
 }
 .g-prose summary {

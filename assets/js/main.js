@@ -3042,7 +3042,7 @@ function interceptLinks(e) {
       "</h1>" +
       meta +
       cover +
-      '<div class="g-prose prose' + (skin ? " prose--" + skin : "") + '">'
+      '<div class="g-prose prose' + (skin ? " prose--" + skin : "") + '">' +
       p.content +
       "</div>" +
       '<div class="g-article-foot">' +
