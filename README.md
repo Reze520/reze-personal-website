@@ -347,6 +347,51 @@ python -m http.server 8080
 
 ---
 
+## 五之二、手机上怎么看
+
+**在电脑上模拟手机**：Chrome / Edge 按 `F12` → 点左上角的手机图标 →
+在设备列表里选 iPhone 12 Pro 或 iPhone SE。
+或者直接在控制台执行下面这句，切到 375px 宽：
+
+```js
+document.querySelector('meta[name=viewport]')  // 确认 viewport 配好了
+```
+
+**几个关键宽度**（改 CSS 时对着看）：
+
+| 宽度 | 代表机型 | 这档会发生什么 |
+|---|---|---|
+| 320px | iPhone SE 一代 | 最窄的一档，正文收到 15.5px，横版卡片改成竖排 |
+| 375px | iPhone SE 二/三代 | 主流尺寸 |
+| 414px | iPhone 11 / XR | 顶栏导航藏「文章」，只留主页/动态/更多 |
+| 560px | 平板竖屏 | 设置面板和悬浮播放器改成贴着屏幕边 |
+| 620px | 大部分手机 | 正文排版收窄档开始生效 |
+| 760px | 平板横屏 | 顶栏藏「天气/相册/导航」，收进「更多」菜单 |
+
+**改正文样式要注意三件事**：
+
+1. 表格外面要包一个 `.pg-tablewrap`。渲染的时候会自动给没包的表格补上，
+   但自己写内容时最好还是带上 —— 那个壳负责横向滚动。
+2. 图片别写死宽度。写 `max-width: 100%` 就够，写死宽度（内容里有几张写了
+   `width="1520"`）在窄屏上会把版面撑破。
+3. 英文长词和链接会横向溢出。正文样式里已经加了 `overflow-wrap: break-word`，
+   但如果你在 `style.css` 里新写段落样式，记得别把它覆盖掉。
+
+**隐藏导航项用 `href`，别用 `:nth-child`**：
+
+```css
+/* 对 */
+@media (max-width: 760px) {
+  .nav > a[href="/weather"] { display: none; }
+}
+/* 错：以后往导航里加一项，藏的就不是预期那个了 */
+@media (max-width: 760px) {
+  .nav a:nth-child(n + 4) { display: none; }
+}
+```
+
+---
+
 ## 六、怎么上线
 
 走的是 git + Cloudflare Pages：没有服务器，不折腾备案，也不用自定义域名。
