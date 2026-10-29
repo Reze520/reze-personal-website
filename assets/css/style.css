@@ -2962,7 +2962,8 @@ body::after {
   font-weight: 600;
 }
 .g-cal-grid b.today .g-cal-sub {
-  color: color-mix(in srgb, var(--accent-ink) 74%, transparent);
+  /* 74% 的 accent-ink 压在强调色底上只剩 2.16 的对比度，农历字几乎读不出来 */
+  color: var(--accent-ink);
   font-weight: 500;
 }
 .g-cal-grid b.has {
@@ -7133,7 +7134,7 @@ body {
 .g-posth,
 .g-moment,
 .g-article {
-  box-shadow: inset 0 1px 0 var(--glass-line), var(--g-shadow);
+  box-shadow: var(--g-shadow);
 }
 
 /* 悬停 / 选中：不变透明，稍微提亮一点，字仍然压得住 */
@@ -8592,3 +8593,409 @@ button,
 }
 
 /* 关闭动效时不额外做任何事 —— 这一层里没有依赖动画才能看见的内容 */
+
+
+/* ============================================================
+   30. 可读性层（2026-10-30）
+   ------------------------------------------------------------
+   用户反馈三条：
+     一、字有点太小而且不清楚，可以粗一点
+     二、播放器那里变成一坨黑色了
+     三、卡片线框感觉有毛边
+
+   三条各有一个具体成因，都不是「换个颜色」能解决的：
+     一、全站小字过多（10px 出现 18 次、10.5px 25 次），中文在浏览器里
+         没有 hinting，细字重配小字号必然发灰发虚。
+     二、`--panel` 只在两处写死：浅色 #ffffff、深色 #1a1c20。
+         深色下播放按钮背景走 `var(--panel)` = #1a1c20，图标颜色写死
+         `#14111d` —— 两者亮度差不到 3%，于是按钮成了一坨黑。
+         进度条的填充色同样是 `var(--panel)`，轨道是 var(--g-fill)，
+         两个几乎同色，进度看不见。
+     三、`--glass-line` 变量里装的是「1px solid var(--g-line)」，这个
+         简写被元素的 border-color 单独覆盖时宽度和样式还在、颜色换了；
+         7130 行又给卡片加了 `inset 0 1px 0` 内描边，双层硬线叠在一起，
+         加上 backdrop-filter 的边缘采样，就成了毛边。
+
+   和 29 节一样，这一节全部追加在文件末尾，只做覆盖。
+   要回退：删掉本节全部内容即可。
+   ============================================================ */
+
+/* ---------- 30.1 字号令牌 ----------
+   小字整体抬一档：10 → 11，10.5 → 11.5，11 → 12，11.5 → 12.5，
+   12 → 12.5，12.5 → 13，13 → 13.5。一处改全站跟。 */
+:root {
+  --type-micro: 11px;     /* 原 10px：统计卡标签、日历星号、曲目序号 */
+  --type-xs: 11.5px;      /* 原 10.5px：标签 chip、时间、计数徽章 */
+  --type-xs2: 12px;       /* 原 11px：卡片头部、顶栏小字 */
+  --type-sm: 12.5px;      /* 原 11.5px：摘要、动态、站点信息 */
+  --type-sm2: 13px;       /* 原 12.5px：分类名、播放器标题 */
+  --type-base: 13.5px;    /* 原 13px：正文侧的小段落 */
+  --type-title: 16.5px;   /* 原 16px：文章卡标题 */
+  --type-title2: 15.5px;  /* 原 15px：横版卡标题 */
+}
+
+/* ---------- 30.2 正文：字号不动，只把笔画压实 ----------
+   16.5px 是长文舒服的度，动字号会连带改掉折行与栏宽。
+   但中文没有西文的 hinting，同字号下 400 比 450 明显发虚，
+   尤其在 Windows 上 ClearType 关掉时。 */
+.g-prose {
+  font-weight: 450;
+  letter-spacing: 0.012em;
+  text-rendering: geometricPrecision;
+}
+.g-prose p,
+.g-prose li,
+.g-prose blockquote,
+.g-prose td {
+  font-weight: 450;
+}
+.g-prose h2 {
+  font-weight: 620;
+}
+.g-prose h3 {
+  font-weight: 600;
+}
+
+/* ---------- 30.3 正文里的中小字放大一档 ----------
+   表格和图注在正文里有多处容器（pg-tablewrap / g-tablewrap / 裸 table /
+   figcaption / .caption），这里一起钉死，否则会被旧规则抢回去。 */
+.g-prose figcaption,
+.g-prose .wp-caption-text,
+.g-prose .caption,
+.g-prose figure.pg-fig figcaption {
+  font-size: 13px;
+  font-weight: 430;
+  letter-spacing: 0.01em;
+  line-height: 1.72;
+}
+.g-prose table,
+.g-prose .pg-tablewrap > table,
+.g-prose .g-tablewrap > table {
+  font-size: 14.5px;
+}
+/* 表头原来 11.5px，在一张 14.5px 的表里像脚注 */
+.g-prose thead th,
+.g-prose th {
+  font-size: 12.5px;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+}
+.g-prose pre {
+  font-size: 13.5px;
+}
+.g-prose code {
+  font-size: 0.9em;
+  font-weight: 500;
+}
+.g-prose pre code {
+  font-weight: 450;
+}
+.g-prose cite {
+  font-size: 0.95em;
+  font-weight: 430;
+}
+
+/* ---------- 30.4 播放器：那一坨黑色的真正成因 ----------
+   播放键改成强调色系，四个主题下都自洽：浅色用较深的紫，
+   深色用浅紫，图标反色。 */
+.ply-ctrl .ply-play {
+  background: var(--g-accent);
+  color: var(--accent-ink) !important;
+  box-shadow: 0 6px 20px color-mix(in srgb, var(--g-accent) 34%, transparent);
+}
+.ply-ctrl .ply-play:hover {
+  background: color-mix(in srgb, var(--g-accent) 88%, #fff);
+  color: var(--accent-ink) !important;
+  box-shadow: 0 8px 26px color-mix(in srgb, var(--g-accent) 44%, transparent);
+}
+/* 深色主题：--accent 是 #eceded（近白），拿它当底色没问题，
+   但图标必须是深色，不然倒过来还是一坨白。这里显式钉住。 */
+:root[data-theme="dark"] .ply-ctrl .ply-play {
+  background: color-mix(in srgb, var(--accent-glow) 72%, #fff);
+  color: #16121f !important;
+}
+
+/* 进度条：填充与轨道原来是两个几乎同色的暗色 */
+/* 轨道：16% 的墨色在深色卡上算下来只有 1.02 的对比度，等于没有轨道。
+   改成「墨色与纸色混」——浅色下变浅灰、深色下变中灰，四主题都不与底色融。 */
+.ply-bar {
+  height: 4px;
+  background: color-mix(in srgb, var(--g-ink) 46%, var(--surface));
+}
+.ply-bar i {
+  background: var(--g-accent);
+}
+.ply-bar i::after {
+  background: var(--g-accent);
+  border: 2px solid var(--surface);
+  box-shadow: 0 2px 8px color-mix(in srgb, #000 32%, transparent);
+}
+
+/* 音量滑块同理 */
+.ply-vol input[type="range"] {
+  height: 4px;
+  background: color-mix(in srgb, var(--g-ink) 46%, var(--surface));
+}
+.ply-vol input[type="range"]::-webkit-slider-thumb {
+  background: var(--g-accent);
+  border: 2px solid var(--surface);
+  width: 12px;
+  height: 12px;
+}
+.ply-vol input[type="range"]::-moz-range-thumb {
+  background: var(--g-accent);
+  border: 2px solid var(--surface);
+  width: 12px;
+  height: 12px;
+}
+
+/* 图标描边加粗：深色下 1.7 的细线会被抗锯齿吃掉 */
+.ply-vol svg,
+.ply-ctrl svg {
+  stroke-width: 2;
+}
+.ply-ctrl .ply-play svg {
+  stroke-width: 0;
+}
+
+/* 封面：原来是深紫渐变 + 玻璃描边，深色下与卡片融成一片 */
+.ply-cover {
+  /* 34% 的强调色在深色卡上跟自己那圈渐变只差 1.15，看着没边；提到 62% 才算一圈 */
+  border: 2px solid color-mix(in srgb, var(--g-accent) 62%, transparent);
+  background: linear-gradient(
+    135deg,
+    color-mix(in srgb, var(--g-accent) 40%, transparent),
+    color-mix(in srgb, var(--g-accent) 12%, transparent)
+  );
+  box-shadow: 0 6px 20px color-mix(in srgb, #000 26%, transparent);
+}
+.ply-cover .ph {
+  color: var(--g-accent);
+  font-size: 22px;
+}
+
+/* 音量的两个小按钮与律动条：深色下原来几乎看不见 */
+.ply-vol button {
+  color: color-mix(in srgb, var(--g-ink) 72%, transparent);
+}
+.ply-vol button:hover {
+  color: var(--g-ink);
+}
+.ply-eq i {
+  background: var(--g-accent);
+  opacity: 1;
+}
+
+/* ---------- 30.5 卡片毛边 ----------
+   边框改成 1px 实色并显式指定 style，去掉 7130 行那层 inset 内描边
+   （已在上游直接删掉），只保留外侧投影。 */
+.g-card,
+.g-post,
+.g-posth,
+.g-moment,
+.g-link,
+.g-album figure,
+.g-article {
+  border-width: 1px;
+  border-style: solid;
+  border-color: color-mix(in srgb, var(--g-ink) 13%, transparent);
+  box-shadow: var(--g-shadow);
+}
+/* 悬停时边框只微微提亮，不跳色 */
+.g-post:hover,
+.g-posth:hover,
+.g-moment:hover {
+  border-color: color-mix(in srgb, var(--g-accent) 34%, transparent);
+}
+/* 日历卡的 surface-2 底色比卡片还亮一点点，看着像贴了张纸，统一回卡片色 */
+.g-cal-card {
+  background: var(--glass);
+}
+
+/* ---------- 30.6 字重整体上抬 ----------
+   只动 weight，不动字号与行高，影响最小、收益最大。
+   中文小字在 400 下一律偏虚。 */
+.g-card-head,
+.g-card-head .t,
+.g-card-head .more,
+.g-cat,
+.g-cat .n,
+.g-tag,
+.g-feed li,
+.g-feed time,
+.g-site dl,
+.g-stats .n,
+.g-stats .k,
+.g-bio,
+.g-post .top,
+.g-post .pin,
+.g-post .chips span,
+.g-posth .meta,
+.g-posth .chips span,
+.tl-top,
+.tl-desc,
+.tl-chips span,
+.g-cal-title,
+.g-cal-grid span,
+.g-cal-grid em,
+.g-cal-sub,
+.ply-head,
+.ply-info span,
+.ply-prog,
+.ply-track .nm,
+.ply-track .nm i,
+.ply-lyrics p {
+  font-weight: 500;
+}
+/* 成段的小字：440 比 500 透气，比 400 实在 */
+.g-post .excerpt,
+.g-posth .excerpt,
+.g-bio,
+.g-feed li,
+.tl-desc {
+  font-weight: 440;
+  letter-spacing: 0.01em;
+}
+
+/* ---------- 30.7 字号抬档的具体落点 ---------- */
+.g-card-head {
+  font-size: var(--type-xs2);
+  letter-spacing: 0.03em;
+}
+.g-stats .k,
+.g-post .top,
+.g-post .pin,
+.g-cat .n,
+.g-tag,
+.g-posth .meta,
+.g-posth .chips span,
+.tl-chips span,
+.g-feed time,
+.g-cal-grid span,
+.g-cal-nav .g-cal-today,
+.timeline-head .count,
+.ply-prog,
+.ply-track .no,
+.ply-track .nm i {
+  font-size: var(--type-xs);
+}
+.g-bio,
+.g-feed li,
+.g-site dl,
+.timeline-head p,
+.g-cat-foot,
+.ply-info span {
+  font-size: var(--type-sm);
+}
+.g-cat,
+.ply-head,
+.g-cal-title,
+.timeline-head h1 {
+  font-size: var(--type-sm2);
+}
+.g-post .excerpt,
+.g-posth .excerpt,
+.tl-desc {
+  font-size: var(--type-base);
+}
+.g-post h2 {
+  font-size: var(--type-title);
+  letter-spacing: -0.005em;
+}
+.g-posth h2 {
+  font-size: var(--type-title2);
+}
+.tl-title,
+.g-name,
+.g-stats .n,
+.ply-info b {
+  font-size: 15px;
+}
+.ply-track .nm {
+  font-size: var(--type-sm);
+}
+.g-cal-grid b em {
+  font-size: var(--type-sm);
+}
+.g-cal-sub {
+  font-size: 10px;
+  letter-spacing: 0;
+}
+.g-post .chips span,
+.g-posth .chips span,
+.tl-chips span {
+  padding: 2px 8px;
+}
+
+/* ---------- 30.8 顶栏与导航 ---------- */
+.site-head .nav a,
+.site-head .brand em {
+  font-size: var(--type-sm);
+  font-weight: 500;
+}
+
+/* ---------- 30.9 深色主题再抬半档 ----------
+   深色底上浅字会「膨胀」，视觉字号显得更大；但细字重在深色下更虚
+   （笔画被抗锯齿吃掉）。所以深色下再抬一点字重。 */
+:root[data-theme="dark"] .g-prose {
+  font-weight: 460;
+}
+:root[data-theme="dark"] .g-prose p,
+:root[data-theme="dark"] .g-prose li,
+:root[data-theme="dark"] .g-prose td {
+  font-weight: 460;
+}
+:root[data-theme="dark"] .g-post .excerpt,
+:root[data-theme="dark"] .g-posth .excerpt,
+:root[data-theme="dark"] .g-bio,
+:root[data-theme="dark"] .g-feed li,
+:root[data-theme="dark"] .tl-desc {
+  font-weight: 460;
+}
+
+/* ---------- 30.10 移动端：正文被上游改成了 16px ----------
+   手机上 16px 也偏小，但再往上会挤窄行宽，所以只回到 16.5 并且
+   把行高从 1.82 拉回 1.9。360px 一档同理。 */
+@media (max-width: 760px) {
+  .g-prose {
+    font-size: 16.5px;
+    line-height: 1.9;
+  }
+  .g-prose h2 {
+    font-size: 18.5px;
+  }
+  .g-prose h3 {
+    font-size: 16.5px;
+  }
+  .g-prose pre {
+    font-size: 13px;
+  }
+  .g-prose figcaption,
+  .g-prose .wp-caption-text,
+  .g-prose .caption {
+    font-size: 12.5px;
+  }
+}
+@media (max-width: 360px) {
+  .g-prose {
+    font-size: 16px;
+  }
+  .g-prose h2 {
+    font-size: 17px;
+  }
+}
+
+/* ---------- 30.11 打印时回到干净的黑白 ---------- */
+@media print {
+  .g-prose,
+  .g-prose p,
+  .g-prose li,
+  .g-prose td {
+    font-weight: 400;
+    letter-spacing: 0;
+  }
+  .g-prose pre,
+  .g-prose code {
+    font-weight: 400;
+  }
+}
