@@ -1527,7 +1527,10 @@
       })
       .join("");
 
-    var tagsHtml = tagNames
+    var FIXED_TAGS = ["技术", "书单", "历史", "社会", "科幻", "外国文学", "余华", "乡土", "县城", "中文", "诗词", "吃", "爱情"];
+    var fixedMap = {};
+    FIXED_TAGS.forEach(function (ft) { if (tc[ft]) fixedMap[ft] = tc[ft]; });
+    var tagsHtml = Object.keys(fixedMap)
       .map(function (t) {
         return (
           '<a class="g-tag" href="/writing?tag=' + encodeURIComponent(t) +
@@ -2167,7 +2170,7 @@ function aboutHtml() {
     '<h1>关于我</h1>' +
     '<div class="g-prose prose" style="padding-top:26px">' +
     '<h2>我是谁</h2>' +
-    '<p>我叫 <strong>reze</strong>。没有什么非做不可的事，也没有哪个领域算专精——什么都想试试，什么都沾一点。</p>' +
+    '<p>我叫 <strong>reze</strong>。没有什么非做不可的事，也没有哪个领域算专精——什么都想试试。</p>' +
     '<p>不太擅长自我介绍。每次被要求“简单说说你自己”，我都会卡住。但如果让我讲一个最近在想的问题，我可以讲很久。</p>' +
     '<p>所以这个站大概也是这样：没有履历，没有头衔，只有一些具体的、我真的想过的内容。</p>' +
     '<h2>这个站在做什么</h2>' +
@@ -2353,11 +2356,11 @@ function syncListQuery(cat, tag, page) {
 
 /* ---------- 每个路由的标题与描述 ----------
    子页面（about.html、writing.html…）打开时会 location.replace 到
-   index.html#/xxx，浏览器标签就只剩首页那一句「RezeのBlog · 什么都沾一点」，
+   index.html#/xxx，浏览器标签就只剩首页那一句「RezeのBlog」，
    description / og 也全停在首页。收藏、分享、搜索结果里八个页面长得一模一样。
    这里按路由重写一遍，值和各静态页 <head> 里写的保持一致。 */
 var PAGE_META = {
-  home: ["RezeのBlog · 什么都沾一点", "RezeのBlog的个人博客，记录生活、兴趣和随手做的小东西。"],
+  home: ["RezeのBlog", "RezeのBlog的个人博客，记录生活、兴趣和随手做的小东西。"],
   writing: ["全部文章 · RezeのBlog", "RezeのBlog写过的全部文章，按分类和标签浏览。"],
   moments: ["动态 · RezeのBlog", "随手记下的碎片，想到什么写什么。"],
   album: ["相册 · RezeのBlog", "存下来的照片。"],
