@@ -10079,3 +10079,263 @@ body.has-app .site-head.is-stuck {
     display: none;
   }
 }
+
+/* ============================================================
+   31. 桌面右栏吸顶：滚到哪，目录跟到哪
+   ------------------------------------------------------------
+   右栏原来跟着页面一起流，长文目录一滚就出了视野。改成整列
+   sticky：卡头跟着走；内容比一屏高时右栏自己滚。
+   关键：内层 .toc 的限高必须放开，否则两层滚动条互相打架。
+   ============================================================ */
+@media (min-width: 1201px) {
+  .col-right {
+    position: sticky;
+    top: 84px;
+    align-self: start;
+    max-height: calc(100vh - 104px);
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    padding-right: 3px;
+    padding-bottom: 10px;
+    scrollbar-width: thin;
+    scrollbar-color: var(--g-line) transparent;
+  }
+  .col-right::-webkit-scrollbar {
+    width: 5px;
+  }
+  .col-right::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  .col-right::-webkit-scrollbar-thumb {
+    background: var(--g-line);
+    border-radius: 3px;
+  }
+  .col-right::-webkit-scrollbar-thumb:hover {
+    background: var(--g-text-3);
+  }
+  #app-right .g-toc {
+    overflow: visible;
+  }
+  #app-right .g-toc .toc {
+    max-height: none;
+    overflow: visible;
+    padding-right: 0;
+  }
+  #app-right .g-toc .toc-link {
+    padding-top: 8px;
+    padding-bottom: 8px;
+  }
+}
+
+/* ============================================================
+   32. 移动端阅读适配（第二轮）
+   ------------------------------------------------------------
+   上一轮解决了「不出框」，这一轮解决三件仍会坏事的小事：
+   横向溢出的长词与宽表、手指够不着的点击区、被顶栏吃掉的锚点。
+   ============================================================ */
+
+/* 32.1 横屏时 iOS 会自动放大字号，先按住 */
+html {
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+
+/* 32.2 锚点落位：点目录、点时间线跳过来，标题不许压在顶栏下面 */
+.g-prose h2,
+.g-prose h3,
+.g-prose h4,
+.tl-item,
+.tl-year {
+  scroll-margin-top: 84px;
+}
+
+/* 32.3 长串（URL、英文术语、代码）也得断行，中文之外没有天然断点 */
+.g-prose p,
+.g-prose li,
+.g-prose dd,
+.g-prose blockquote,
+.g-prose figcaption {
+  overflow-wrap: break-word;
+}
+.g-prose a {
+  overflow-wrap: anywhere;
+}
+
+/* 32.4 表格：让表按内容定宽，装不下才由容器滚。
+   原来窄屏写死 min-width:460px，两列的小表也被拉到 460，右边全是空。 */
+@media (max-width: 900px) {
+  .g-prose .g-tablewrap,
+  .g-prose .pg-tablewrap {
+    overflow-x: auto;
+  }
+  .g-prose .g-tablewrap > table,
+  .g-prose .pg-tablewrap > table {
+    width: max-content;
+    min-width: 100%;
+    max-width: none;
+  }
+}
+
+/* 32.5 浮动目录：手机上按手指的尺寸重排 */
+@media (max-width: 760px) {
+  .ftoc {
+    right: max(10px, env(safe-area-inset-right));
+    /* 贴到最底边：阅读时视线在正文中段，底边最不碍事 */
+    bottom: calc(14px + env(safe-area-inset-bottom));
+  }
+  .ftoc-btn {
+    width: 44px;
+    height: 44px;
+    /* 手机上它会压在正文边上，淡着放，手指按下去才变实 */
+    opacity: 0.5;
+    backdrop-filter: blur(10px) saturate(140%);
+    -webkit-backdrop-filter: blur(10px) saturate(140%);
+  }
+  .ftoc-btn:active {
+    opacity: 1;
+  }
+  .ftoc-panel {
+    width: min(84vw, 300px);
+    max-height: min(58dvh, 60vh);
+  }
+  .ftoc-head {
+    padding: 12px 12px 8px;
+  }
+  .ftoc-x {
+    padding: 4px 8px;
+    font-size: 20px;
+  }
+  .ftoc-link {
+    padding: 9px 10px;
+    font-size: 13px;
+  }
+  .ftoc-link.lv3 {
+    padding-left: 22px;
+    font-size: 12.5px;
+  }
+}
+
+/* 32.6 展开目录时铺一层透明点击层：点正文任何地方就收起，
+   不必去找那个 ×。只做点击，不做变暗，免得打断阅读。 */
+.ftoc-mask {
+  display: none;
+  position: fixed;
+  inset: 0;
+  z-index: 69;
+  background: transparent;
+}
+@media (max-width: 760px) {
+  .ftoc-mask.is-on {
+    display: block;
+  }
+}
+
+/* 32.7 触屏上 hover 会粘住：把悬停底色收掉，改成按下时给反馈 */
+@media (hover: none) {
+  .ftoc-link:not(.on):hover {
+    background: transparent;
+    color: var(--g-text-2);
+  }
+  .ftoc-link:active {
+    background: var(--g-fill-3);
+  }
+  .toc-link:not(.on):hover {
+    background: transparent;
+    color: var(--g-text-3);
+  }
+  .g-feed-a:hover {
+    background: transparent;
+  }
+  .g-feed-a:active {
+    background: var(--g-fill-3);
+  }
+}
+
+/* 32.8 手机上文章头与正文的一点点收口 */
+@media (max-width: 620px) {
+  .g-article h1 {
+    font-size: 22px;
+    line-height: 1.44;
+    letter-spacing: -0.01em;
+  }
+  .g-meta {
+    font-size: 11.5px;
+    gap: 5px 12px;
+  }
+  .g-prose {
+    font-size: clamp(16px, var(--prose-fs), 17px);
+    line-height: 1.86;
+  }
+  .g-prose h2 {
+    margin-top: 2em;
+  }
+  .g-prose summary {
+    min-height: 44px;
+    display: flex;
+    align-items: center;
+  }
+  /* 首字下沉在窄屏上会把第一行顶得高低不齐，手机上不要 */
+  .g-prose.prose--reading > p:first-of-type::first-letter,
+  .g-prose.prose--reading > p:first-child::first-letter,
+  .g-prose > p:first-child::first-letter {
+    float: none;
+    font-family: inherit;
+    font-weight: inherit;
+    font-size: inherit;
+    line-height: inherit;
+    color: inherit;
+    margin: 0;
+    padding: 0;
+  }
+}
+
+/* ============================================================
+   33. 手机上的列表页：先给文章，侧栏往后放
+   ------------------------------------------------------------
+   .col-left 在 DOM 里排在正文前面，手机上要滚过个人卡、诗笺、
+   播放器、分类、标签五张卡才看见第一篇文章。这里用 order 把
+   侧栏挪到正文之后，只在文章列表页生效（首页保留门面卡）。
+   ============================================================ */
+@media (max-width: 900px) {
+  .app > .col-main {
+    order: 1;
+  }
+  .app > .col-left {
+    order: 2;
+  }
+  .app > .col-right {
+    order: 3;
+  }
+  /* 侧栏挪到后面，个人卡不必再占一屏，收一收 */
+  .app .g-avatar {
+    height: 128px;
+  }
+  /* 首屏 splash 之后直接就是内容，别再多一层空白 */
+  .col-main {
+    margin-top: 0;
+  }
+}
+
+/* 手机上筛选条：条数一多就换成横向滑动，别把最后一个分类裁掉 */
+@media (max-width: 620px) {
+  .g-filters {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    overscroll-behavior-x: contain;
+    scrollbar-width: none;
+    padding: 11px 14px;
+  }
+  .g-filters::-webkit-scrollbar {
+    display: none;
+  }
+  .g-chip {
+    flex: 0 0 auto;
+  }
+}
+
+/* 时间轴的年份直接压在页面插画上，没有卡片底衬，字会糊进背景。
+   用页面底色做一圈光晕把字托出来，明暗主题都成立。 */
+.tl-year {
+  color: var(--ink);
+  text-shadow: 0 1px 3px var(--bg), 0 0 16px var(--bg), 0 0 6px var(--bg);
+}

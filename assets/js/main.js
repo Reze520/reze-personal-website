@@ -2297,6 +2297,8 @@ var _ftocHandlers = [];
 function destroyFloatToc() {
   var n = document.querySelector(".ftoc");
   if (n && n.parentNode) n.parentNode.removeChild(n);
+  var mk = document.querySelector(".ftoc-mask");
+  if (mk && mk.parentNode) mk.parentNode.removeChild(mk);
   _ftocHandlers.forEach(function (h) {
     window.removeEventListener(h[0], h[1]);
   });
@@ -2359,15 +2361,44 @@ function mountFloatToc() {
     window.addEventListener(ev, fn, opt || false);
     _ftocHandlers.push([ev, fn]);
   }
+  // 手机上展开时铺一层透明点击层，点正文任何地方就收起
+  var mask = document.createElement("div");
+  mask.className = "ftoc-mask";
+  document.body.appendChild(mask);
+
+  var panel = wrap.querySelector(".ftoc-panel");
+
+  // 拖过之后位置可能落在屏幕外（换设备、转屏），这里按展开状态夹回来
+  function clampPos() {
+    if (!wrap.style.left) return;
+    var open = wrap.getAttribute("data-open") === "1";
+    var w = open ? panel.offsetWidth || 246 : btn.offsetWidth || 46;
+    var h = open ? Math.min(panel.offsetHeight || 320, window.innerHeight * 0.62) : 46;
+    var l = parseFloat(wrap.style.left) || 0;
+    var t = parseFloat(wrap.style.top) || 0;
+    var maxL = Math.max(8, window.innerWidth - w - 10);
+    var maxT = Math.max(8, window.innerHeight - h - 12);
+    wrap.style.left = Math.min(maxL, Math.max(8, l)) + "px";
+    wrap.style.top = Math.min(maxT, Math.max(8, t)) + "px";
+  }
+
   function setOpen(v) {
     wrap.setAttribute("data-open", v ? "1" : "0");
     btn.setAttribute("aria-expanded", v ? "true" : "false");
+    mask.classList.toggle("is-on", !!v && window.innerWidth <= 760);
+    clampPos();
   }
   setOpen(false);
+  mask.addEventListener("click", function () {
+    setOpen(false);
+  });
 
   // 记忆上次拖到的位置
+  function posKey() {
+    return window.innerWidth <= 760 ? "ftoc-pos-m" : "ftoc-pos";
+  }
   try {
-    var saved = JSON.parse(localStorage.getItem("ftoc-pos") || "null");
+    var saved = JSON.parse(localStorage.getItem(posKey()) || "null");
     if (saved && saved.l) {
       wrap.style.left = saved.l;
       wrap.style.top = saved.t;
@@ -2416,11 +2447,13 @@ function mountFloatToc() {
     var dx = e.clientX - drag.x;
     var dy = e.clientY - drag.y;
     if (Math.abs(dx) + Math.abs(dy) > 3) drag.moved = true;
-    var maxL = window.innerWidth - 64;
-    var maxT = window.innerHeight - 64;
-    // 展开时面板从右往左长，左边界要留出面板宽度，别拖出屏幕
-    var minL = wrap.getAttribute("data-open") === "1" ? 254 : 8;
-    wrap.style.left = Math.max(minL, Math.min(maxL, drag.l + dx)) + "px";
+    // 展开时面板贴右缘向左长，能拖到的右界要整块面板都装得下
+    var open = wrap.getAttribute("data-open") === "1";
+    var w = open ? panel.offsetWidth || 246 : btn.offsetWidth || 46;
+    var h = open ? Math.min(panel.offsetHeight || 320, window.innerHeight * 0.62) : 46;
+    var maxL = Math.max(8, window.innerWidth - w - 10);
+    var maxT = Math.max(8, window.innerHeight - h - 12);
+    wrap.style.left = Math.max(8, Math.min(maxL, drag.l + dx)) + "px";
     wrap.style.top = Math.max(8, Math.min(maxT, drag.t + dy)) + "px";
   }
   function endDrag() {
@@ -2430,7 +2463,7 @@ function mountFloatToc() {
       wrap.setAttribute("data-drag", "1");
       try {
         localStorage.setItem(
-          "ftoc-pos",
+          posKey(),
           JSON.stringify({ l: wrap.style.left, t: wrap.style.top })
         );
       } catch (e) {}
@@ -2474,6 +2507,10 @@ function mountFloatToc() {
   }
   add("scroll", onScroll, { passive: true });
   add("resize", onScroll);
+  add("keydown", function (e) {
+    if (e.key === "Escape" || e.keyCode === 27) setOpen(false);
+  });
+  add("resize", clampPos);
   onScroll();
 }
 
