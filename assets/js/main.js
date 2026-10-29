@@ -1527,10 +1527,11 @@
       })
       .join("");
 
-    var FIXED_TAGS = ["技术", "书单", "历史", "社会", "科幻", "外国文学", "余华", "乡土", "县城", "中文", "诗词", "吃", "爱情"];
-    var fixedMap = {};
-    FIXED_TAGS.forEach(function (ft) { if (tc[ft]) fixedMap[ft] = tc[ft]; });
-    var tagsHtml = Object.keys(fixedMap)
+    // 首页标签云只放大类，不放人名与生活细目（余华、吃、爱情这类）。
+    // 分类是粗分，标签细分：大类名若同时也是一个分类名，点进来会落空，所以只放
+    // 「大类里确实有细分、且不属于同一名称分类」的那几个。
+    var FIXED_TAGS = ["技术", "文学", "历史", "社会", "科幻", "诗词", "乡土", "语言", "影像"];
+    var tagsHtml = FIXED_TAGS.filter(function (ft) { return tc[ft]; })
       .map(function (t) {
         return (
           '<a class="g-tag" href="/writing?tag=' + encodeURIComponent(t) +
