@@ -1,4 +1,4 @@
-# reze520.top 使用说明
+# RezeのBlog 使用说明
 
 这是我自己一点点搭起来的站，没用框架，也没引依赖，HTML、CSS、JS 全是手写的。没有构建步骤，没有第三方统计，双击 `index.html` 就能在本地看。
 
@@ -51,7 +51,7 @@
 | `email` | 邮箱，页脚「写信」和首页卡片用 |
 | `social` | 侧栏的社交按钮数组，见下 |
 | `avatar` | 头像路径，留空显示「蕾」字 |
-| `icp` | 备案号，下来后填进去，全站页脚自动生效 |
+| `icp` | 页脚右边那行小字。没备案，现在填的是「个人站点」；哪天真备案了换成备案号就行 |
 
 ### 社交按钮怎么改
 
@@ -390,12 +390,13 @@ python tools/bump_version.py 20261101a
 - `_headers`：给静态资源开长缓存（都带 `?v=` 号），补了几个安全头。
 - Cloudflare Pages 会把 `/xxx.html` **308 跳到 `/xxx`**（自动去后缀），
   所以 canonical / `og:url` / sitemap / RSS 里写的都是不带 `.html` 的最终地址，
-  免得每个地址都要多跳一次。站内链接还是 `.html`（会多一跳 308，但能用）；
-  哪天想统一，nav、页脚和 JS 里拼的链接要一起改，别只改一半。
+  免得每个地址都要多跳一次。站内链接 2026.10 也全换成了 `/writing` 这种干净路径，
+  老的 `/writing.html` 交给 308 兜底，照样打得开。
 
-> 自定义域名 `reze520.top` 目前 **DNS 解析不出来**（公共 DNS 返回 NXDOMAIN），
-> 站点实际只活在 `reze520.pages.dev`。所以 sitemap / feed / canonical 里写的都是 pages.dev，
-> 等域名恢复了要整站替换一次（`tools/gen_feeds.py` 顶部有 `ORIGIN` 常量）。
+> 站点就固定在 `https://reze520.pages.dev`。
+> `reze520.top` 是早几年注册的，没续费，已经退掉了，也不打算再捡回来 ——
+> 所以不存在「以后换域名要批量替换」这件事，sitemap / feed / canonical 里写的就是最终地址。
+> 站名里还留着 reze520，只当个叫惯了的称呼，不是还指着那个域名。
 
 ---
 

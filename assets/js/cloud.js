@@ -1,5 +1,5 @@
 /* ============================================================
-   reze520.top · 内容读取（Cloudflare Pages Functions 后端）
+   RezeのBlog · 内容读取（Cloudflare Pages Functions 后端）
    ------------------------------------------------------------
    loadCloudContent() 前台读取站点内容：GET /site-data/content
    云端有内容则返回 { site, posts }；云端为空或后端不可达时返回 null，

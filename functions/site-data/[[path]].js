@@ -1,5 +1,5 @@
 /* ============================================================
-   reze520.top · Cloudflare Pages Functions
+   RezeのBlog · Cloudflare Pages Functions
    ------------------------------------------------------------
    统一 API 路由（挂在 /api/* 下）：
      GET    /api/content       公开读：{ site, posts }

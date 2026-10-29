@@ -2,7 +2,7 @@
 window.SITE = {
   "name": "RezeのBlog",
   "en": "reze blog",
-  "domain": "reze520.top",
+  "domain": "reze520.pages.dev",
   "slogan": "漫漫长路锤炼身躯，幽幽魂灵雕琢心智。",
   "intro": "这里是我的自留地。生活、兴趣、随手做的小东西，还有那些没头没尾的想法，都放在这儿。没有推荐算法，也不会突然消失。",
   "email": "1806754672@qq.com",
@@ -31,7 +31,7 @@ window.SITE = {
   ],
   "startYear": 2020,
   "avatar": "assets/uploads/avatar.gif",
-  "icp": "待备案",
+  "icp": "个人站点",
   "bgm": "assets/audio/song.mp3",
   "song": {
     "title": "容易受伤的女人",

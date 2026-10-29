@@ -21,7 +21,7 @@
 <meta property="og:image:width" content="474">
 <meta property="og:image:height" content="474">
 <link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20viewBox%3D%270%200%2064%2064%27%3E%3Crect%20width%3D%2764%27%20height%3D%2764%27%20rx%3D%2715%27%20fill%3D%27%23241f33%27%2F%3E%3Cg%20transform%3D%27translate%286%2C6%29%20scale%282.1667%29%27%3E%3Cpath%20d%3D%27M21%2012.79A9%209%200%201%201%2011.21%203%207%207%200%200%200%2021%2012.79z%27%20fill%3D%27%23f6f1e7%27%2F%3E%3C%2Fg%3E%3C%2Fsvg%3E">
-<link rel="stylesheet" href="assets/css/style.css?v=20261101f">
+<link rel="stylesheet" href="assets/css/style.css?v=20261101g">
   <link rel="alternate" type="application/rss+xml" title="RezeのBlog" href="feed.xml">
 </head>
 <body class="has-app">
@@ -71,6 +71,13 @@
   <aside class="col col-left" id="app-left"></aside>
 
   <main class="col col-main" id="app-main"><article class="g-article g-changelog"><h1>更新日志</h1><div class="g-meta"><span>这个站怎么一点点长成现在这样。按时间倒着排。</span></div><div class="g-prose prose"><h2>2026.10</h2>
+<h3>域名不续了，站就留在 pages.dev</h3>
+<ul>
+<li><code>reze520.top</code> 到期没续，退掉了。以前总想着「哪天把解析修好」，说明文档里一直挂着「等域名恢复了要整站替换一次」；这次把这句话删了 —— 不打算再弄，站就固定在 <code>reze520.pages.dev</code>，sitemap / feed / canonical 里写的就是最终地址。</li>
+<li>站点数据里的 <code>domain</code> 从 <code>reze520.top</code> 改成 <code>reze520.pages.dev</code>，几个文件开头的标识也换成了站名。时间线里 2020 年那条「域名实名过了」没动 —— 那是当时真干过的事，留着才对。</li>
+<li>顺手发现页脚的「待备案」是假的。<code>data.override.js</code> 加载在 <code>data.js</code> 后面，里头的 <code>icp</code> 还是老值，把改好的「个人站点」又盖回去了；云端 D1 里也还是「待备案」。两边一起改掉。域名都没了，说「待备案」等于挂着个永远不会兑现的告示。</li>
+<li>更要紧的是：关于页那两个链接一直是坏的。「这个博客」和「会数数的猫」指向的地址里写着当年想用的英文 slug，可文章 id 早就换成 <code>post-2</code>、<code>post-7</code> 了，点进去是「没有找到这篇文章」。上一轮修死链只扫了 sitemap 和 RSS，正文里手写的链接漏在外面。两处都改成了真实 id。</li>
+</ul>
 <h3>内页地址换成了真路径</h3>
 <ul>
 <li>以前每个内页都是先跳一圈：点「文章」先到 <code>writing.html</code>，页面里一段脚本再把人送到 <code>index.html#/writing</code>。地址栏最后留下的是 <code>index.html#/writing</code> 这段，复制分享出去也是它，看着不像个正经网址。</li>
@@ -80,7 +87,7 @@
 <li>卡了半天的坑：<code>updateNavActive()</code> 原来用 <code>href.indexOf(want) &gt;= 0</code> 判断当前页，链接换成路径以后，首页那个 <code>/</code> 是任何地址的子串，于是每一页都把「主页」点亮。改成把 href 的路径段截出来整段比。</li>
 <li>第二个坑更要命：<code>currentPage()</code> 在没有 <code>data-page</code> 时靠 hash 兜底认首页。以前首页地址里挂着 <code>#/home</code> 认得出来，换成 <code>/</code> 之后解析成空串，「首页点分类 → 进文章」这一步的来源就记不下，返回按钮退化成「返回文章列表」，回不到原来那一栏。补上「根路径就是 home」才算完。</li>
 <li>验证：无头 Edge 本地跑一遍、线上再跑一遍，共 51 项 —— 点导航、切分类、进文章、点返回、直接打开深链、刷新、前进后退、老 hash 链接、导航高亮，全部通过，无页面报错。</li>
-<li>版本号一并推到 <code>20261101d</code>。</li>
+<li>版本号一并推到 <code>20261101c</code>。</li>
 </ul>
 <h3>往站里放了今年写下的三篇</h3>
 <ul>
@@ -95,7 +102,7 @@
 <h3>换掉那句签名，顺手给它配了个字体</h3>
 <ul>
 <li>原来那句「什么都沾一点，想到什么记什么」用了一年多，太像口头禅。换成「漫漫长路锤炼身躯，幽幽魂灵雕琢心智。」——对仗的句子，说的是两条线：身体和心智，都得慢慢磨。</li>
-<li>一处改、三处生效：<code>slogan</code>（侧栏个人卡、页脚）和 <code>splash.quote</code>（首屏那张签名卡）都指向同一句，首屏那句下面补了落款「— RezeのBlog」。之前 <code>quote</code> 一直是空的，签名卡压根不显示，这回才第一次露出来。</li>
+<li>一处改、三处生效：<code>slogan</code>（侧栏个人卡、页脚）和 <code>splash.quote</code>（首屏那张签名卡）都指向同一句，首屏那句下面补了落款「— 伤心公主」。之前 <code>quote</code> 一直是空的，签名卡压根不显示，这回才第一次露出来。</li>
 <li>字体换了楷体那一支（KaiTi / STKaiti / LXGW WenKai）。理由：楷书有起落，比宋体软，比黑体有人味，配这种对仗句刚好；而且站里正文、标题全是衬线，签名再换一种笔意才有区分。写成一条 <code>--motto</code> 变量，首屏和侧栏共用，免得两边长得不一样像抄来的。</li>
 <li>不换行的账：这句话 14 个字，首屏卡片原来只有 420px 宽，怎么都塞不进一行。于是把卡片放宽到 <code>min(760px, 92vw)</code>，字号做成 <code>clamp(15px, 2.6vw, 25px)</code> 随视口缩放。实测 1440 / 1280 / 1024 / 768 / 390 五个宽度，全部单行、无溢出、无横向滚动条。侧栏那行在 246px 的窄卡里也是单行。</li>
 <li>落款原本右对齐，改成居中；配一句一行之后右对齐会显得偏。</li>
@@ -316,9 +323,9 @@
   } catch (e) {}
 })();
 </script>
-<script defer src="assets/js/data.js?v=20261101f"></script>
-<script defer src="assets/js/cloud.js?v=20261101f"></script>
-<script defer src="assets/js/weather.js?v=20261101f"></script>
-<script defer src="assets/js/main.js?v=20261101f"></script>
+<script defer src="assets/js/data.js?v=20261101g"></script>
+<script defer src="assets/js/cloud.js?v=20261101g"></script>
+<script defer src="assets/js/weather.js?v=20261101g"></script>
+<script defer src="assets/js/main.js?v=20261101g"></script>
 </body>
 </html>
