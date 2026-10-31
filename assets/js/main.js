@@ -949,27 +949,13 @@
     var list = (SITE.moments || []).slice().sort(function (a, b) {
       return a.date < b.date ? 1 : -1;
     });
-    var tags = {};
-    list.forEach(function (m) {
-      (m.tags || []).forEach(function (t) {
-        tags[t] = (tags[t] || 0) + 1;
-      });
-    });
-    var chips = '<button class="g-tab" data-mtag="" aria-pressed="true">全部<span class="n">' +
-      list.length + "</span></button>";
-    Object.keys(tags).forEach(function (t) {
-      chips += '<button class="g-tab" data-mtag="' + esc(t) + '" aria-pressed="false">' +
-        esc(t) + '<span class="n">' + tags[t] + "</span></button>";
-    });
 
     return (
       '<div class="g-card" style="margin-bottom:14px">' +
       '<div class="g-card-head"><span class="t">' + ICONS.activity + "动态</span>" +
       '<span class="more">' + list.length + " 条</span></div>" +
       '<div class="g-searchline">' + ICONS.search +
-      '<input type="text" id="m-search" placeholder="搜搜看以前说过什么…" autocomplete="off"></div>' +
-      '<div style="padding:0 14px 14px"><div class="g-tabs" id="m-tabs" style="margin:0">' +
-      chips + "</div></div></div>" +
+      '<input type="text" id="m-search" placeholder="搜搜看以前说过什么…" autocomplete="off"></div></div>' +
       '<div class="g-moments" id="m-list"></div>'
     );
   }
@@ -987,11 +973,6 @@
           .join("") +
         "</div>"
       : "";
-    var footTags = (m.tags || [])
-      .map(function (t) {
-        return '<span style="--tag-h:' + tagHue(t) + '"># ' + esc(t) + "</span>";
-      })
-      .join("");
     return (
       '<div class="g-moment">' +
       '<div class="av">' + av + "</div>" +
@@ -1000,7 +981,6 @@
       esc(m.date) + "</span></div>" +
       '<div class="body">' + esc(m.text) + "</div>" +
       pics +
-      (footTags ? '<div class="foot">' + footTags + "</div>" : "") +
       "</div></div>"
     );
   }
