@@ -6178,9 +6178,13 @@ body.has-app .site-head.is-over-hero .nav-more-btn:hover {
   text-decoration: none;
   border-left: 2px solid transparent;
   border-radius: 0 7px 7px 0;
-  white-space: nowrap;
+  /* 长标题折行显示，不再单行省略号截断（十几字的章节名在 236px 里必然被切） */
+  white-space: normal;
+  overflow-wrap: anywhere;
   overflow: hidden;
-  text-overflow: ellipsis;
+  /* 关键：.toc 是 flex 列，容器一旦限高，子项会被 flex 收缩到比字还矮，
+     文字被 overflow:hidden 从下方切掉，只剩上半截。这里禁止收缩，只许滚。 */
+  flex: 0 0 auto;
   transition: color 0.22s var(--ease), background 0.22s var(--ease),
     border-color 0.22s var(--ease);
 }
@@ -8405,14 +8409,26 @@ button,
     grid-column: 1;
     min-width: 0;
   }
-  /* 目录卡：跟着滚动，顶部让开吸顶栏 */
+  /* 目录卡：跟着滚动，顶部让开吸顶栏。
+     卡是 flex 列：卡头固定，列表自己滚；overflow:hidden 收住圆角。
+     背景用实一档的 --surface，不再用 0.66 的玻璃色 —— 文章页卡片压在
+     背景照片上，太透时目录的小字直接糊在花叶里。 */
   .post-app > .post-toc {
     grid-column: 2;
     position: sticky;
     top: 84px;
     max-height: calc(100vh - 110px);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+  .post-app > .post-toc .toc {
+    flex: 1 1 auto;
+    min-height: 0;
     overflow-y: auto;
+    overscroll-behavior: contain;
     scrollbar-width: thin;
+    scrollbar-color: var(--g-line) transparent;
   }
   /* 没有目录的短文（标题不足 4 个）：两栏会空出一整列，收回单栏居中。
      这个 class 由 main.js 的 insertPostToc 挂上 / 摘掉。 */
@@ -8425,6 +8441,11 @@ button,
 }
 
 /* 目录本体 */
+.post-toc {
+  /* 文章页卡片统一是 0.66 的玻璃色，压在背景照片上字会糊；
+     目录是密密麻麻的小字，这里单独换成接近实底的表面色。 */
+  background: var(--surface);
+}
 .post-toc .g-card-head {
   padding: 14px 16px 10px;
 }
@@ -8474,15 +8495,24 @@ button,
   transition: width 0.16s linear;
 }
 
-/* 窄屏：目录收进正文顶部，默认折叠 */
+/* 窄屏：目录收进正文顶部，卡头固定、列表自己滚。
+   这里给卡本身也加上限高 —— 万一断点判断出错、窄屏还留着这份常驻目录，
+   也不会长成一根几屏高的长条。 */
 @media (max-width: 1119px) {
   .post-app > .post-toc {
     order: -1;
     margin-bottom: 18px;
+    max-height: 48vh;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
   }
   .post-app > .post-toc .toc {
-    max-height: 42vh;
+    flex: 1 1 auto;
+    min-height: 0;
+    max-height: none;
     overflow-y: auto;
+    overscroll-behavior: contain;
   }
 }
 
@@ -10051,6 +10081,7 @@ body.has-app .site-head.is-stuck {
   text-decoration: none;
   font-size: 12.5px;
   line-height: 1.5;
+  flex: 0 0 auto;
 }
 .ftoc-link.lv3 {
   padding-left: 20px;

@@ -2549,14 +2549,27 @@ function insertPostToc(host) {
   }
 }
 
-// 拖窗口跨过断点时切形态（宽屏↔窄屏），只在真的跨过去时重建
+// 拖窗口跨过断点时切形态（宽屏↔窄屏），只在真的跨过去时重建。
+// 除了断点，还要看 DOM 是不是那个形态：有些浏览器缩放 / 转屏时 matchMedia
+// 已经变了却不派发 resize，光比断点会留下「窄屏里挂着一份常驻目录」的错位态。
 function maybeRebuildToc() {
   if (!_tocHost || !_tocHost.isConnected) return;
+  var hs = document.querySelectorAll(PROSE_SEL + " h2, " + PROSE_SEL + " h3").length;
+  if (hs < 4) return; // 短文没有目录，不存在形态问题
   var wide = window.matchMedia("(min-width: 1120px)").matches;
-  if (wide === _tocWide) return;
+  var hasCard = !!_tocHost.querySelector(".post-toc");
+  var hasFloat = !!document.querySelector(".ftoc");
+  var ok = wide ? hasCard && !hasFloat : hasFloat && !hasCard;
+  if (wide === _tocWide && ok) return;
   insertPostToc(_tocHost);
 }
 window.addEventListener("resize", maybeRebuildToc, { passive: true });
+window.addEventListener("orientationchange", maybeRebuildToc, { passive: true });
+if (window.visualViewport) {
+  window.visualViewport.addEventListener("resize", maybeRebuildToc, {
+    passive: true,
+  });
+}
 
 /* 目录本身也能滚（50 个条目的长文，一屏放不下）。
    高亮跑到可视区外时，把目录自己滚一格 —— 但只在目录真的是滚动区时才动，
