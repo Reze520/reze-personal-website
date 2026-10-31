@@ -28,15 +28,25 @@ DRY=0
 
 cd "$REPO_DIR" || { echo "仓库目录不存在：$REPO_DIR"; exit 1; }
 
-echo "== 1/4 查 github.com 真实 IP（经代理 + 阿里 DoH）=="
+echo "== 1/4 查 github.com 真实 IP（阿里 DoH）=="
+# 先经代理查；代理没开（或端口变了）就直连 DoH 再试一次。
+# 直连 DoH 通、且能连上 GitHub 的 IP 的情况确实存在，这时整条链路不需要代理。
+PROXY_OK=1
 IP=$(curl -s --max-time 20 --proxy "$PROXY" -H "accept: application/dns-json" \
       "https://dns.alidns.com/resolve?name=github.com&type=A" \
       | grep -o '"data":"[0-9.]*"' | head -1 | cut -d'"' -f4)
 if [ -z "${IP:-}" ]; then
-  echo "查 IP 失败：代理 $PROXY 是否在跑？"
+  PROXY_OK=0
+  echo "   代理 $PROXY 不可用，改直连 DoH"
+  IP=$(curl -4 -s --max-time 20 --noproxy '*' -H "accept: application/dns-json" \
+        "https://dns.alidns.com/resolve?name=github.com&type=A" \
+        | grep -o '"data":"[0-9.]*"' | head -1 | cut -d'"' -f4)
+fi
+if [ -z "${IP:-}" ]; then
+  echo "查 IP 失败：代理没开、直连 DoH 也不通。"
   exit 1
 fi
-echo "   github.com -> $IP"
+echo "   github.com -> $IP（$([ "$PROXY_OK" = "1" ] && echo 经代理 || echo 直连)）"
 
 echo "== 2/4 从凭据管理器取 token =="
 TOKEN=$(printf "protocol=https\nhost=github.com\n\n" | git credential fill 2>/dev/null | sed -n 's/^password=//p')
@@ -52,12 +62,13 @@ export GIT_TERMINAL_PROMPT=0
 
 GITOPTS=(
   -c http.schannelCheckRevoke=false
-  -c "http.proxy=$PROXY"
   -c http.sslVerify=false
   -c credential.helper=
   -c "http.extraHeader=Host: github.com"
   -c "http.extraHeader=Authorization: Basic $AUTH"
 )
+# 只有走代理时才加 http.proxy；直连就把这条留着，否则会去连一个没开的端口
+[ "$PROXY_OK" = "1" ] && GITOPTS+=(-c "http.proxy=$PROXY")
 
 push_one () {
   local ref="$1" label="$2"
