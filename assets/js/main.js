@@ -3661,6 +3661,15 @@ function interceptLinks(e) {
     var CAT_SKIN = { "读书": "reading", "技术": "tech", "日常": "daily", "电影": "movie", "杂记": "notes", "文史": "history" };
     var skin = CAT_SKIN[p && p.cat] || "";
 
+    /* 首行缩进按篇开关。中文长文的老排法，全站默认不排；
+       这篇文章要排，就在正文最前面加一行 <div class="pg-indent"></div> 占位，
+       渲染时读出来、去掉占位、把类名挂到正文容器上。
+       之所以不直接写 <div class="g-prose prose pg-indent">，是因为正文容器
+       由这里统一生成（还要接类目 skin），文章里改不了它。 */
+    var indentHint = /^\s*<div class="pg-indent"><\/div>\s*/;
+    var wantIndent = indentHint.test(p.content || "");
+    var content = wantIndent ? (p.content || "").replace(indentHint, "") : p.content;
+
     host.innerHTML =
       '<article class="g-article">' +
       backLinkHtml() +
@@ -3669,8 +3678,8 @@ function interceptLinks(e) {
       "</h1>" +
       meta +
       cover +
-      '<div class="g-prose prose' + (skin ? " prose--" + skin : "") + '">' +
-      p.content +
+      '<div class="g-prose prose' + (skin ? " prose--" + skin : "") + (wantIndent ? " pg-indent" : "") + '">' +
+      content +
       "</div>" +
       '<div class="g-article-foot">' +
       '<div class="g-article-tags">' +
