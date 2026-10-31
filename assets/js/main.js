@@ -987,38 +987,23 @@
 
   function bindMoments(root) {
     var listEl = root.querySelector("#m-list");
-    var tabsEl = root.querySelector("#m-tabs");
     var searchEl = root.querySelector("#m-search");
     if (!listEl) return;
     var all = (SITE.moments || []).slice().sort(function (a, b) {
       return a.date < b.date ? 1 : -1;
     });
-    var curTag = "";
     var curQ = "";
 
     function paint() {
       var list = all.filter(function (m) {
-        var okTag = !curTag || (m.tags || []).indexOf(curTag) !== -1;
         var okQ = !curQ || (m.text || "").toLowerCase().indexOf(curQ) !== -1;
-        return okTag && okQ;
+        return okQ;
       });
       listEl.innerHTML = list.length
         ? list.map(momentMarkup).join("")
         : '<div class="g-empty">没有找到相关的动态</div>';
-      if (tabsEl) {
-        Array.prototype.forEach.call(tabsEl.querySelectorAll(".g-tab"), function (b) {
-          b.setAttribute("aria-pressed", String((b.getAttribute("data-mtag") || "") === curTag));
-        });
-      }
     }
 
-    if (tabsEl)
-      tabsEl.addEventListener("click", function (e) {
-        var b = e.target.closest(".g-tab");
-        if (!b) return;
-        curTag = b.getAttribute("data-mtag") || "";
-        paint();
-      });
     if (searchEl)
       searchEl.addEventListener("input", function () {
         curQ = searchEl.value.trim().toLowerCase();
