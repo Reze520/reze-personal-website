@@ -10345,3 +10345,26 @@ html {
   color: var(--ink);
   text-shadow: 0 1px 3px var(--bg), 0 0 16px var(--bg), 0 0 6px var(--bg);
 }
+
+/* ---------- 首行缩进（按篇开关）----------
+   中文长文的老排法：段落首行空两格，段与段之间不空行。全站没这么排，
+   只有标了 pg-indent 的文章才吃这套 —— 在正文第一行加上
+   <div class="g-prose prose pg-indent"> 就生效，不用改别的文章。
+
+   两条规则缺一不可：
+   1) 首行缩进两字（2em 跟着字号走，手机上自然变小）；
+   2) 段间距收回一档。缩进和空行同时上，等于把段落边界标了两遍，
+      读起来反而散。收回的是 .prose > * + * 那条统一间距，
+      所以 :where() 把权重压到 0，靠顺序覆盖，不让别处再打架。 */
+.pg-indent > p {
+  text-indent: 2em;
+}
+.pg-indent > p + p {
+  margin-top: calc(var(--prose-space) * 0.34);
+}
+/* 引子后面的第一段是正文起点，缩进照旧；但紧跟小标题的那一段
+   不该缩，视觉上它属于标题下面的「续」，不缩反而更清楚。 */
+.pg-indent > h2 + p,
+.pg-indent > h3 + p {
+  text-indent: 0;
+}
