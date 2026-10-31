@@ -2920,6 +2920,13 @@ function applyRoute() {
   // 否则从文章页后退会拿空 id 再渲染一次 post，显示「没有找到这篇文章」
   var page = r.page || "home";
   if (page === "index") page = "home";
+  // 文章详情走独立页面 /post（post.html）。若从老书签、外链落到首页文档里的
+  // post 路由，这里直接整页跳到 /post，让文章页始终是一套版式、一种状态，
+  // 避免「在首页栅格里被当成第三栏内容渲染」这种错位的版式。
+  if (page === "post") {
+    location.replace("/post" + (r.qs || ""));
+    return;
+  }
   // 老地址没带分类、但眼下停在某个分类上（点了返回）时，把分类补进 hash，
   // 这样刷新一下也还停在这一栏，不会掉回全部。
   // 另外：地址里的 ?cat= 也要留在 hash 里 —— 之前切到写作页会把 location.search 清掉，
@@ -3177,16 +3184,27 @@ function interceptLinks(e) {
   var u;
   try { u = new URL(href, location.href); } catch (_) { return; }
   if (u.origin !== location.origin) return;
+  // 文章页（post.html）是独立文档，没有 .app 容器：
+  // 这里不做 SPA 拦截，直接交给浏览器整页跳转。否则 pushState 改了地址栏、
+  // 页面却还停在文章页，必须刷新才回得去（「点主页还在文章页」那一类 bug 的根因）。
+  if (!document.querySelector(".app")) return;
   e.preventDefault();
   var file = u.pathname.split("/").pop().replace(/\.html$/, "") || "home";
   if (file === "index") file = "home";
   var app = document.querySelector(".app");
   var from = (app && app.getAttribute("data-page")) || "";
   var toPost = file === "post";
-  // 先定位来源（此刻还停在列表页），再记下来源列表。
-  // 目标文章的 id 从链接里取，不能等 hash 变过去——那时候页面已经不在列表上了。
-  if (toPost) markListSource(u.searchParams.get("id") || "");
-  var src = toPost ? null : readListSource();
+  // 文章详情页是独立页面 /post（post.html），排版和首页三栏不同。
+  // 从列表点进来一律整页跳过去，保证「点进去」和「刷新一遍」是同一个版式，
+  // 不再出现「先进来是第一种、刷新才是第二种」。
+  if (toPost) {
+    // 先记下来源列表（此刻还停在列表页），下一个页面用得上；
+    // id 从链接里取，不能等跳转之后读，那时页面已经不在列表上了。
+    markListSource(u.searchParams.get("id") || "");
+    location.href = routeToPath("#/" + file + (u.search || "")); // /post?id=xxx
+    return;
+  }
+  var src = readListSource();
   // 地址栏不用在这里补：goPage 会用 pushState 把整条地址一次写对，
   // 以前那种「先把文件名换成 post.html、再往 hash 里塞 #/post」的做法已经不需要了。
   goPage("#/" + file + (u.search || ""));
