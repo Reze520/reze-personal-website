@@ -10081,51 +10081,18 @@ body.has-app .site-head.is-stuck {
 }
 
 /* ============================================================
-   31. 桌面右栏吸顶：滚到哪，目录跟到哪
+   31. 桌面右栏：不吸顶，跟着页面一起滚
    ------------------------------------------------------------
-   右栏原来跟着页面一起流，长文目录一滚就出了视野。改成整列
-   sticky：卡头跟着走；内容比一屏高时右栏自己滚。
-   关键：内层 .toc 的限高必须放开，否则两层滚动条互相打架。
+   这里原来是把整列做成 sticky + max-height:100vh，本意是让长文
+   目录跟着滚。但它把右栏五张卡（动态/统计/天气/日历/站点信息）
+   一起塞进一屏高度里、整列内部滚动，卡片底部因此被截：统计卡的
+   标签与总字数、站点信息的版本号都在边缘被切掉。
+   而目录早就不再住在右栏了 —— 文章页（post.html）是独立两栏，
+   目录由正文旁的浮层 .ftoc（position:fixed）负责，本身就跟随；
+   列表页压根没有目录可跟。所以这里退回自然流：卡片多高就多高，
+   滚到哪算哪，不再挤压、不再截断。
    ============================================================ */
-@media (min-width: 1201px) {
-  .col-right {
-    position: sticky;
-    top: 84px;
-    align-self: start;
-    max-height: calc(100vh - 104px);
-    overflow-y: auto;
-    overscroll-behavior: contain;
-    padding-right: 3px;
-    padding-bottom: 10px;
-    scrollbar-width: thin;
-    scrollbar-color: var(--g-line) transparent;
-  }
-  .col-right::-webkit-scrollbar {
-    width: 5px;
-  }
-  .col-right::-webkit-scrollbar-track {
-    background: transparent;
-  }
-  .col-right::-webkit-scrollbar-thumb {
-    background: var(--g-line);
-    border-radius: 3px;
-  }
-  .col-right::-webkit-scrollbar-thumb:hover {
-    background: var(--g-text-3);
-  }
-  #app-right .g-toc {
-    overflow: visible;
-  }
-  #app-right .g-toc .toc {
-    max-height: none;
-    overflow: visible;
-    padding-right: 0;
-  }
-  #app-right .g-toc .toc-link {
-    padding-top: 8px;
-    padding-bottom: 8px;
-  }
-}
+
 
 /* ============================================================
    32. 移动端阅读适配（第二轮）
