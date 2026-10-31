@@ -8414,6 +8414,14 @@ button,
     overflow-y: auto;
     scrollbar-width: thin;
   }
+  /* 没有目录的短文（标题不足 4 个）：两栏会空出一整列，收回单栏居中。
+     这个 class 由 main.js 的 insertPostToc 挂上 / 摘掉。 */
+  .post-app.no-toc {
+    display: block;
+    max-width: 860px;
+    margin-left: auto;
+    margin-right: auto;
+  }
 }
 
 /* 目录本体 */

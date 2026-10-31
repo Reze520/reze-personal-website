@@ -2287,9 +2287,8 @@ function buildPostTocHtml() {
   );
 }
 
-/* 文章详情页的目录：浮在正文旁边，不再占一列。
-   原来那份目录跟着文章往下走，读到下半篇就滑出视野；长文动辄二十几节，
-   一屏放不下，回头找一节还得先滚回顶部。现在改成浮层：
+/* 窄屏的文章目录：浮在正文旁边。
+   宽屏有右侧那一列可以常驻（见 insertPostToc），窄屏没地方放，改成浮层：
    默认收成一个小圆标签（显示总节数），点开是一张能自己滚的列表，
    可以拖到顺手的地方，位置记在 localStorage 里。 */
 var _ftocHandlers = [];
@@ -2514,10 +2513,50 @@ function mountFloatToc() {
   onScroll();
 }
 
-/* 兼容旧调用点：详情页目录改由浮层负责 */
+/* 文章详情页的目录：
+   - 宽屏（>=1120px）：常驻正文右侧那一列，跟着滚动，当前节高亮。
+     .post-app 本来就是「正文 + 236px」的 grid，之前改成浮层后这一列空着，
+     正文被挤在左边、右边留一大块白，现在把目录放回去。
+   - 窄屏：仍然用浮层（侧面没地方放，浮层可拖、可收）。
+   两套互斥，切换断点时重建，不会同时出现两份目录。 */
+var _tocHost = null;
+var _tocWide = null;
+
 function insertPostToc(host) {
-  mountFloatToc();
+  _tocHost = host || document.querySelector("#post") || document.querySelector(".post-app");
+  var wide = window.matchMedia("(min-width: 1120px)").matches;
+  _tocWide = wide;
+
+  // 先清掉两边可能存在的旧目录
+  var old = _tocHost && _tocHost.querySelector(".post-toc");
+  if (old) old.remove();
+  destroyFloatToc();
+
+  if (!_tocHost) return;
+
+  if (wide) {
+    var html = buildPostTocHtml();
+    // 标题不足 4 个的文章没有目录，两栏会空出一整列，收回单栏居中
+    _tocHost.classList.toggle("no-toc", !html);
+    if (!html) return;
+    var tmp = document.createElement("div");
+    tmp.innerHTML = html;
+    _tocHost.appendChild(tmp.firstElementChild);
+    bindToc(); // 绑 #post .post-toc .toc
+  } else {
+    _tocHost.classList.remove("no-toc");
+    mountFloatToc();
+  }
 }
+
+// 拖窗口跨过断点时切形态（宽屏↔窄屏），只在真的跨过去时重建
+function maybeRebuildToc() {
+  if (!_tocHost || !_tocHost.isConnected) return;
+  var wide = window.matchMedia("(min-width: 1120px)").matches;
+  if (wide === _tocWide) return;
+  insertPostToc(_tocHost);
+}
+window.addEventListener("resize", maybeRebuildToc, { passive: true });
 
 /* 目录本身也能滚（50 个条目的长文，一屏放不下）。
    高亮跑到可视区外时，把目录自己滚一格 —— 但只在目录真的是滚动区时才动，
