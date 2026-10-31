@@ -5,16 +5,16 @@
        现在这一页直接自己渲染，地址就是 /writing，刷新也不用再多跳一次。 -->
   <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>关于我 · RezeのBlog</title>
-<meta name="description" content="关于RezeのBlog：一个什么都想试试的人，以及这个站在做什么。">
+<title>欢迎来到 reze 的小站 · RezeのBlog</title>
+<meta name="description" content="reze 的个人小站：2020 年起手写的纯静态博客，记录读书、技术、文史与日常，欢迎随便逛。">
 <meta name="author" content="RezeのBlog">
 <meta name="theme-color" content="#14111d">
-<meta property="og:title" content="关于我 · RezeのBlog">
+<meta property="og:title" content="欢迎来到 reze 的小站 · RezeのBlog">
 <meta property="og:type" content="profile">
 <meta property="og:url" content="https://reze520.pages.dev/about">
 <link rel="canonical" href="https://reze520.pages.dev/about">
 <meta property="og:site_name" content="RezeのBlog">
-<meta property="og:description" content="关于RezeのBlog：一个什么都想试试的人，以及这个站在做什么。">
+<meta property="og:description" content="reze 的个人小站：2020 年起手写的纯静态博客，记录读书、技术、文史与日常，欢迎随便逛。">
 <meta property="og:image" content="https://reze520.pages.dev/assets/uploads/cover.png">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:image" content="https://reze520.pages.dev/assets/uploads/cover.png">
@@ -51,7 +51,7 @@
           <a href="/weather" class="m-dupe">天气</a>
           <a href="/album" class="m-dupe">相册</a>
           <a href="/links" class="m-dupe">导航</a>
-          <a href="/about">关于我</a>
+          <a href="/about">关于</a>
           <a href="/timeline">时间线</a>
           <a href="/changelog">更新日志</a>
         </div>
@@ -72,41 +72,32 @@
 
   <main class="col col-main" id="app-main">
     <article class="g-article">
-      <h1>关于我</h1>
+      <h1>欢迎来到 reze 的小站</h1>
       <div class="g-prose prose">
-        <h2>我是谁</h2>
-        <p>我叫 <strong>reze</strong>。没有什么非做不可的事，也没有哪个领域算专精——什么都想试试。</p>
-        <p>不太擅长自我介绍。每次被要求"简单说说你自己"，我都会卡住。但如果让我讲一个最近在想的问题，我可以讲很久。</p>
-        <p>所以这个站大概也是这样：没有履历，没有头衔，只有一些具体的、我真的想过的内容。</p>
+        <p>这是我的个人网站，从 2020 年前后开始搭，断断续续写到现在。这里没有固定的主题，也没什么要达成的目标，就是我平时读书、做东西、琢磨事情时留下的痕迹——你随便逛，不需要顺着任何顺序。</p>
+        <p>我不太会写那种正经的“关于我”，把自己摊开来介绍总觉得别扭。所以与其介绍我，不如先说说这个站本身：它怎么来的、用什么搭的、现在长什么样。</p>
 
-        <h2>这个站在做什么</h2>
-        <p>它有三个用途：</p>
-        <ul>
-          <li><strong>存学到的东西</strong>——任何领域都行，用一遍会忘，写一遍才留得下</li>
-          <li><strong>存生活碎片</strong>——今天发生的事，过三个月就记不清了，但当时的想法值得留下</li>
-          <li><strong>存做过的东西</strong>——不管多小，做出来就该有个地方放着</li>
-        </ul>
-        <p>整个站是手写的 HTML、CSS 和原生 JavaScript，没有框架，没有第三方统计脚本。你在页面上的每一次点击，都不会被发到别人那里去。</p>
-        <blockquote>
-          <p>一个不需要向任何人解释的地方，是我想给自己留的东西。</p>
-        </blockquote>
+        <h2>这个站是怎么来的</h2>
+        <p>最开始只是一页白底黑字，因为想有个地方放自己写的东西。后来慢慢加功能、改样式，推倒重来过好几回，但每次都只是往上叠一层，哪一层出了问题就把那一层拆掉，从没想过要换成一套更复杂的系统。所以它能一直这么笨、也一直这么稳地活着。</p>
 
-        <h2 id="works">做过的东西</h2>
-        <ul>
-          <li><a href="/post?id=post-7">会数数的猫</a>：把专注时间变成猫的食粮。中途走开它会生气，坚持够久它能吃到一条鱼。</li>
-          <li><a href="/post?id=post-2">reze520.pages.dev</a>：就是你正在看的这个站。零依赖、纯静态，随便哪个浏览器都能打开。</li>
-          <li><a href="/writing">一些随手记</a>：排版、配色、动效上的小实验，散落在几篇文章里。</li>
-        </ul>
+        <h2>它用什么搭起来的</h2>
+        <p>整站是手写的 HTML、CSS 和原生 JavaScript，没有框架，没有构建工具，也没有数据库——就是一堆纯静态文件，挂在 Cloudflare Pages 上。改一个字、提交一下，几分钟就上线了。这种笨办法的好处是，哪怕再过十几年，它大概也还能打开，不依赖任何我已经忘了密码的服务。</p>
+
+        <h2>现在里面有什么</h2>
+        <p>目前攒了二百二十多篇，大致分成读书、技术、文史、日常、电影、杂记和类型文学这几类，分得不算严，常常写着写着就串到别的类里去了。除了文章，还有二十来条比文章短的“动态”、一百五十多个平时收着的链接，以及一个专门记这个站自己改动的“时间线”。</p>
+        <p>这个站也刻意少放了一些东西：没有推荐算法，首页按时间排，你看到什么取决于我写了什么，而不是你之前点过什么；没有第三方统计脚本，页面不会记你从哪儿来、看了多久；也没有那种逼人互动的评论区，想聊的话写信给我就好。</p>
+
+        <h2>随便看看</h2>
+        <p>如果不知道从哪开始，可以先翻翻最近的动态，或者点开那个把专注时间变成猫的食粮的小工具——中途走开它会生气，坚持够久它能吃到一条鱼。写得歪的地方肯定比写得漂亮的地方多，发现哪儿错了告诉我，我都会改。</p>
+        <p>总之，欢迎来玩。这里是我给自己留的一块地方，不向任何人解释，也希望来的人能待得舒服。邮箱、GitHub、哔哩哔哩和抖音都放在下面，聊任何有趣的事都行。</p>
 
         <h2>联系我</h2>
-        <p>写信比留言更可靠，我基本都会回。</p>
         <ul>
           <li>邮箱：<a href="mailto:1806754672@qq.com">1806754672@qq.com</a></li>
           <li>GitHub：<a href="https://github.com/Reze520" target="_blank" rel="noopener">github.com/Reze520</a></li>
           <li>哔哩哔哩：<a href="https://space.bilibili.com/234451938" target="_blank" rel="noopener">space.bilibili.com/234451938</a></li>
           <li>抖音：<a href="https://v.douyin.com/jY-UScBpfDE/" target="_blank" rel="noopener">v.douyin.com/jY-UScBpfDE</a></li>
         </ul>
-        <p>如果是聊任何有趣的事、或者想指出我哪篇文章写错了，都欢迎。指错的尤其欢迎。</p>
       </div>
     </article>
   </main>
