@@ -27,6 +27,8 @@
   --card-bg: transparent;
   --card-border: 1px solid var(--line);
   --serif-accent: var(--serif);
+  /* 亮度：全站白色提亮层的不透明度，外观设置里可调（0–0.40） */
+  --lite: 0.12;
   color-scheme: light;
 }
 
@@ -4784,6 +4786,27 @@ body.has-app .site-head.is-over-hero .icon-btn {
 }
 
 /* ---------- 设置面板 ---------- */
+/* ---------- 亮度层 ----------
+   全站铺一张纯白，靠 --lite 控制不透明度（0–0.40），外观设置里调。
+   只加白、不动布局，所以不会像 filter:brightness 那样把内部的
+   position:fixed 变成相对 html。pointer-events 关掉，不挡任何点击。
+   深色主题下这是把暗部整体提起来最省事的办法。 */
+html::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 800;
+  pointer-events: none;
+  background: #fff;
+  opacity: var(--lite);
+  transition: opacity 0.18s ease;
+}
+@media print {
+  html::after {
+    display: none;
+  }
+}
+
 .set-overlay {
   position: fixed;
   inset: 0;
@@ -4861,6 +4884,40 @@ body.has-app .site-head.is-over-hero .icon-btn {
   background: var(--panel);
   border: 2px solid var(--glass-line);
   box-shadow: 0 2px 8px var(--glass-line);
+}
+/* 亮度滑块：轨道从暗到亮，thumb 沿用主题色控件的那套 */
+.lite-slider {
+  width: 100%;
+  height: 6px;
+  border-radius: 4px;
+  -webkit-appearance: none;
+  appearance: none;
+  outline: none;
+  background: linear-gradient(90deg, #4a4756 0%, #8d8a99 45%, #f6f4fa 100%);
+  cursor: pointer;
+}
+.lite-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: var(--panel);
+  border: 2px solid var(--glass-line);
+  box-shadow: 0 2px 8px var(--glass-line);
+}
+.lite-slider::-moz-range-thumb {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: var(--panel);
+  border: 2px solid var(--glass-line);
+}
+.lite-val {
+  float: right;
+  font-size: 11px;
+  letter-spacing: 0;
+  color: var(--g-ink-3);
+  font-variant-numeric: tabular-nums;
 }
 .preset-row {
   display: flex;

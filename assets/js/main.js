@@ -6,6 +6,16 @@
 (function () {
   "use strict";
 
+  /* 亮度先落地：style.css 里 --lite 默认 0.12，用户调过的话这里第一时间覆盖，
+     免得等到打开设置面板才生效（那一下会亮/暗跳一次）。 */
+  try {
+    var _lite = localStorage.getItem("reze-lite");
+    if (_lite !== null) {
+      var _n = Math.max(0, Math.min(40, Number(_lite) || 0));
+      document.documentElement.style.setProperty("--lite", (_n / 100).toFixed(2));
+    }
+  } catch (e) {}
+
   var SITE = window.SITE || {};
   // 注意：POSTS 必须保持对 window.POSTS 数组的引用（不要 slice 复制），
   // 否则后台/云端的动态数据无法同步到这里的渲染。
@@ -3717,6 +3727,8 @@ function interceptLinks(e) {
       '<div class="set-panel">' +
       "<h3>外观设置</h3>" +
       '<p class="sub">改完立刻生效，会自动记住</p>' +
+      '<div class="set-group"><label>亮度<span class="lite-val" id="lite-val">+12%</span></label>' +
+      '<input type="range" class="lite-slider" id="lite" min="0" max="40" step="1" value="12"></div>' +
       '<div class="set-group"><label>主题色</label>' +
       '<input type="range" class="hue-slider" id="hue" min="0" max="360" step="1" value="215"></div>' +
       '<div class="set-group"><label>配色预设</label>' +
@@ -3740,6 +3752,21 @@ function interceptLinks(e) {
 
     var hue = overlay.querySelector("#hue");
     var root = document.documentElement;
+    var lite = overlay.querySelector("#lite");
+    var liteVal = overlay.querySelector("#lite-val");
+
+    /* ---------- 亮度 ----------
+       只改一个 CSS 变量，真正的白色提亮层在 style.css 的 html::after 上。
+       0–40 对应 --lite 0–0.40。为什么不用 filter:brightness：
+       那会给元素造一个包含块，页面里所有 position:fixed 的浮层
+       （目录、进度条、背景）全都会改成相对它定位，一开就散架。 */
+    function applyLite(v) {
+      var n = Math.max(0, Math.min(40, Math.round(Number(v) || 0)));
+      root.style.setProperty("--lite", (n / 100).toFixed(2));
+      if (liteVal) liteVal.textContent = "+" + n + "%";
+      if (lite) lite.value = n;
+      STORAGE.set("reze-lite", String(n));
+    }
 
     function applyHue(h) {
       var bright = "hsl(" + h + ", 72%, 76%)";
@@ -3773,11 +3800,19 @@ function interceptLinks(e) {
 
     var savedHue = STORAGE.get("reze-hue");
     applyHue(savedHue === null ? 215 : Number(savedHue));
+    var savedLite = STORAGE.get("reze-lite");
+    applyLite(savedLite === null ? 12 : Number(savedLite));
     syncSegs();
 
     hue.addEventListener("input", function () {
       applyHue(Number(hue.value));
     });
+
+    if (lite) {
+      lite.addEventListener("input", function () {
+        applyLite(lite.value);
+      });
+    }
 
     overlay.querySelector("#presets").addEventListener("click", function (e) {
       var b = e.target.closest(".preset");
