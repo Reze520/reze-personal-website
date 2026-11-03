@@ -1550,82 +1550,171 @@ window.POSTS = [
   },
   {
     id: "post-248",
-    title: "传送门与能量守恒：从 Portal 2、虫洞到诺特定理",
+    title: "传送门与能量守恒：从 Portal 2、虫洞到诺特定理与时间机器",
     date: "2026-11-03",
     updated: "2026-11-03",
     cat: "技术",
     tags: ["物理"],
     cover: "",
     pinned: false,
-    excerpt: "Portal 2 里「快的东西进去，快的东西出来」。如果现实有传送门，能不能造永动机、打破能量守恒？顺着虫洞、诺特定理与相对论时间机器，给一个认真的答案。",
-    content: `<p>《传送门2》里有个名场面：你从高处跌进蓝色传送门，下一秒从橙色门横着飞出去，落在对面够不着的台子上。游戏里那台冷嘲热讽的机器GLaDOS说了一句原话："Momentum, a function of mass and velocity, is conserved between portals. Speedy thing goes in, speedy thing comes out."——动量在门与门之间守恒，快的东西进去，快的东西出来。</p>
-<p>这句话勾出一个真问题：如果现实里真有这种门，能不能拿来造永动机？能不能让能量凭空多出来，打破那条从小念到大的能量守恒定律？这篇文章就顺着 Portal 2 这根线，把虫洞、诺特定理、相对论和时间机器串起来，给这个问题一个认真的答案。我的判断先放在这：传送门破不了能量守恒，在任何一个自洽的物理设定里都破不了——它能做的，是逼我们把"守恒"这件事想得更透。</p>
-<h2>先认门：Portal 2 的传送门是怎么回事</h2>
-<p>Portal 2 是 Valve 在 2011 年出的第一人称解谜游戏。主角手里那把"光圈科学手持传送门装置"（俗称传送门枪），能在白色平面上打出颜色不同的两扇门，两门互通：任何东西钻进一扇，瞬间从另一扇出来。Portal Wiki 里写得很清楚，门只能贴静止的白色平面，而且成对出现、双向通行。</p>
-<p>游戏的核心机制，正是 GLaDOS 那句嘲讽里的物理：穿过门时，速度大小不变，方向按门的朝向重排。你从高处落下，进门前竖直向下的速度，出门变成水平向前——于是你能"抛射"自己跨过深坑。这种玩法里，动量守恒、动能守恒都成立，变化的只是速度的方向。</p>
-<p>我的判断：作为一款游戏，Portal 2 罕见地尊重了动量守恒。它让你直觉地"看见"一条物理定律怎么运作，这是它最被低估的教学价值。</p>
-<h2>游戏里的"抛射"为什么成立</h2>
-<p>把那一下"飞出去"拆开看，全是中学物理。自由落体一段，重力做功把势能变成动能，落地前速度 v = √(2gh)，h 是落差。你带着这个速度钻进地板上的门，游戏保留速度大小，只把方向从"向下"掰成"向前"（因为出口门贴着墙，法线朝前）。动能 (½mv²) 没变，只是从竖直分量换成了水平分量。</p>
-<p>这步在真实物理里也站得住：一个无摩擦的管道把速度方向拐弯，动能当然不变。Portal 2 做对的地方，是它没有凭空给速度加码，只是把已经攒下的速度换了方向。</p>
-<p>我的判断：所以游戏里"从低处进门、高处出门再落回"这类无限套圈的花活，靠的不是物理，是程序规则和关卡设计的配合；真要把它当物理题做，得另算一笔总账。</p>
-<h2>能量守恒到底是什么来头</h2>
-<p>要问传送门能不能打破能量守恒，得先弄清"能量守恒"本身是什么。它常被讲成宇宙铁律，但其实它来自一个更底层的道理：1918 年，德国女数学家艾米·诺特（Emmy Noether）证明了"诺特定理"——每一种连续的对称性，都对应一个守恒量。空间平移对称对应动量守恒，空间旋转对称对应角动量守恒，而时间平移对称（物理定律不随时刻改变）对应能量守恒。</p>
-<p>科普中国那篇讲对称原理的文章说得很直白：诺特因此把"对称"和"守恒"焊在了一起。能量守恒不是天外飞来的规矩，而是"宇宙不在乎你什么时候做实验"这条事实的数学后果。人民日报一篇谈时间晶体的文章也点过同一句：时间平移对称性对应能量守恒。</p>
-<p>我的判断：这句话是整个问题的钥匙。既然能量守恒是"对称性的影子"，那它就不是无条件成立的——一旦对称性破了，对应的守恒量也就未必成立。后面会看到，这正是虫洞和时间机器让问题变复杂的地方。</p>
-<h2>传送门在物理上约等于虫洞</h2>
-<p>游戏里的门是平面、贴墙、连接同一空间两点的快捷通道。物理里和它最像的东西，是虫洞（wormhole）。虫洞的概念源头在 1935 年：爱因斯坦和助手内森·罗森（Nathan Rosen）在那篇《广义相对论里的粒子问题》里，把史瓦西解做坐标变换，得到两个渐近平直时空区域被一个"咽喉"连起来的结构，后来叫爱因斯坦-罗森桥（Einstein-Rosen bridge）。美国物理学会的那篇回顾说得很清楚：这原本是他们想统一引力和电磁场的一次失败尝试，却意外成了科幻里"时空隧道"的数学祖先。</p>
-<p>游戏门和真虫洞有个显眼的区别：游戏门是二维平面，虫洞在常见模型里是球面 throat。但本质一样——都是时空拓扑上的近道，把本来相隔很远的两点用一条短管接起来。Portal 2 的玩家社区也常把它当成"虫洞的玩具版"来聊。</p>
-<p>我的判断：把传送门想成"家门口的虫洞"，是进入真问题的正确入口。接下来要问的，不是它像不像，而是这种近道会不会让能量凭空漏出来。</p>
-<h2>虫洞能不能真穿过去</h2>
-<p>1935 年那个爱因斯坦-罗森桥，其实穿不过去。物理学家富勒（Fuller）和惠勒（Wheeler）后来证明，这种史瓦西虫洞会在你试图穿过之前就迅速掐断，快到连光子都过不去——桥在你过之前就塌了。所以它只是个数学结构，不是通道。</p>
-<p>真正"可穿越"的虫洞，要等到 1988 年。加州理工的基普·索恩（Kip Thorne，后来拿了 2017 年诺贝尔物理学奖）和学生迈克尔·莫里斯（Michael Morris）应科幻作家卡尔·萨根之请，认真算了怎么让虫洞能过人。他们的论文发在《美国物理学杂志》上，结论是：要撑开一个咽喉、且没有视界（否则进去就出不来），喉咙处的物质必须满足"径向张力大于质量-能量密度"——换句话说，得靠负能量密度的"奇异物质"撑着。光明网一篇科普把它讲得很通俗：撑开半径 1 厘米的虫洞要相当于一个地球质量的奇异物质，撑开 1 光年半径的则要超过银河系发光物质总质量一百倍。</p>
-<p>我的判断：可穿越虫洞在方程里是允许的，但代价是天文数字般的奇异物质——这东西在自然界极罕见，量子场论只给了一点"可能存在"的暗示。所以虫洞不是"能不能造"的工程题，是先"有没有料"的物料题。</p>
-<h2>核心问题：传送门能打破能量守恒吗</h2>
-<p>现在正面回答开头那个问题。先给结论：不能。无论是游戏里的门，还是物理里的虫洞，在任何一个自洽的设定里，都没法让能量凭空变多、也没法造出永动机。下面分两层讲为什么。</p>
-<p>第一层是"游戏门"层面。Portal 2 保留速度大小、只改方向，动能守恒，根本没创造能量。所谓"无限套圈"拿免费速度，靠的是关卡规则的漏洞，不是物理定律的让步。</p>
-<p>第二层是"真虫洞"层面，也是大家真正好奇的：把虫洞当成近道，会不会在引力场里白赚一笔能量？这一层要借用经典力学里一个老结论。</p>
-<h2>经典答案：保守场里没有免费午餐</h2>
-<p>一个静止的引力场是保守场。保守场的意思是，你顺着任意一条闭合回路走一圈，重力做的总功为零——数学上写成 ∮ g·dr = 0。普通情况下，你举高一个重物再把它放回原处，重力先帮你后拦你，净功是零；换成虫洞把两点"抄近道"连起来，只要整个时空是静止、不随时间变的，这条闭合回路的总功依然是零。</p>
-<p>所以那个经典的"永动机"想象——在高处放一个出口门、低处放一个入口门，让水流进低处门、从高处的门哗哗流出，永远有落差可榨——在自洽的几何里不成立。重力不会因为你接了一根近道管子，就多给你一倍能量；顺着回路算总账，该抵消的还是抵消。</p>
+    excerpt: "Portal 2 里「快的东西进去，快的东西出来」。如果现实有传送门，能不能造永动机、打破能量守恒？从动量、诺特定理、爱因斯坦场方程、莫里斯-索恩虫洞度规，到能量条件、时间机器、第二定律与全息原理，把公式和账本一条条摆开，给一个认真的答案。",
+    content: `<p>《传送门2》里有个名场面：你从高处跌进蓝色传送门，下一秒从橙色门横着飞出去，落在对面够不着的台子上。那台冷嘲热讽的机器GLaDOS丢下一句原话："Momentum, a function of mass and velocity, is conserved between portals. Speedy thing goes in, speedy thing comes out."——动量是质量和速度的函数，在门与门之间守恒；快的东西进去，快的东西出来。</p>
+<p>这句话勾出一个真问题：现实里要真有这种门，能不能拿来造永动机，让能量凭空多出来，把从小念到大的能量守恒定律撬开一道缝？这篇文章不急着给结论，先把这门手艺背后的东西一层层拆开——经典力学的功与能、诺特定理、爱因斯坦场方程、莫里斯-索恩虫洞度规、能量条件、时间机器与因果、热力学第二定律、量子信息与全息原理。公式会摆出来，定理会讲清来路，也会说清它们各自管到哪为止。</p>
+<p>我的判断先放这儿：传送门破不了能量守恒，在任何一个自洽的物理设定里都破不了。它能做的，是逼我们把"守恒"这两个字想得更透——透到能看见它的边界在哪。</p>
+<h2>先认门：Portal 2 的传送门装置</h2>
+<p>Portal 2 是 Valve 在 2011 年出的第一人称解谜游戏。主角手里那把"光圈科学手持传送门装置"，俗称传送门枪，能在白色平面上打出两扇颜色不同的门。门成对出现、双向通行，任何东西钻进一扇，瞬间从另一扇出来。Portal Wiki 写得很清楚：门只能贴静止的白色平面，不能贴金属、玻璃、脏污表面。</p>
+<p>游戏的核心机制，正是 GLaDOS 那句嘲讽里的物理：穿过门时，速度的<strong>大小</strong>不变，方向按出口门的朝向重排。你从高处落下，进门前是竖直向下的速度，出门被掰成水平向前，于是能把自己"抛"过深坑。</p>
+<p>我的判断：作为一款游戏，Portal 2 罕见地尊重了动量守恒。它让你用手而不是用公式，先摸了一遍守恒。</p>
+<h2>"抛射"背后的经典力学</h2>
+<p>把那一下"飞出去"拆开，全是中学课本里的东西。自由落体一段，重力做功，把重力势能换成动能。落差 h、重力加速度 g，落地前的速度由 v = √(2gh) 给出。这个式子来自动能定理：合外力做的功等于动能的变化量，而动能 K = ½mv²。</p>
+<p style="text-align:center;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:15px;line-height:1.9;margin:16px 0;letter-spacing:.01em;overflow-wrap:anywhere;word-break:break-word">v = √(2gh)　　　K = ½mv²　　　W = ∫ F·dr = ΔK</p>
+<p>你带着这个速度钻进地板上的门，游戏保留速度大小，只把方向从"向下"掰成"向前"，因为出口门贴着墙，法线朝前。动能 ½mv² 里只有 v 的大小，方向换了、大小没换，所以动能一分没变。</p>
+<p>这在真实物理里也站得住：一根无摩擦的弯管把速度方向拐个弯，动能当然不变。Portal 2 做对的地方，是它没有凭空给速度加码，只是把已经攒下的速度换了个朝向。</p>
+<p>我的判断：所以游戏里那些"从低处进门、高处出门再落回"的无限套圈花活，靠的不是物理，是程序规则和关卡设计的配合。真要把它当物理题做，得另算一笔总账——这笔账下一节就来算。</p>
+<h2>动量的参照系疑难</h2>
+<p>动量 p = mv 是个矢量，而且它依赖参照系。同一辆车，站在地上看是每小时六十公里，站在并行的另一辆车上看可能是零。伽利略变换把它写得很干脆：两个参照系相对速度为 u 时，v′ = v − u。</p>
+<p style="text-align:center;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:15px;line-height:1.9;margin:16px 0;letter-spacing:.01em;overflow-wrap:anywhere;word-break:break-word">p = mv　　　v′ = v − u</p>
+<p>这就是传送门叙事里第一个真正的坑。假设出口门装在一辆匀速行驶的车上，你从固定的入口门钻进去，出门时相对门的速度仍是原来的 v，可站在地面的人看，你的速度是 v + u——凭空多出一截 u。这看起来像是白赚了动能，永动机的影子第一次冒头。</p>
+<p>要拆这个局，得看门本身。门要维持匀速 u，就得有机构推着它走；你穿过门时速度从 v 变成 v + u，动量变了，这份动量差是门给的，反过来你就给门一个反作用力。门要顶住这个力继续匀速，推力就得做功，功等于力乘位移。算下来，你多拿到的那点动能，正好等于推动门所付出的功。账平了。</p>
+<p>换句话说，传送门不是一台"无中生有"的机器，它是一台能和物体交换动量的机器。你从它那儿拿到的每一分动能，背后都有一双手在付账。</p>
+<p>还有更深的一层。Portal 2 里门只能贴静止的白色平面，游戏其实偷偷替你选好了一个全局惯性系——墙不动，地面不动，于是"速度"有个统一的衡量基准。可真实的宇宙是广义相对论的宇宙，弯曲时空里没有全局惯性系。"跨门保持速度"这句话，在真实物理里连"在哪个点、沿哪条路径搬运这个速度矢量"都得先说清楚。这是游戏与真实物理之间最深的一道裂缝，也是后面所有麻烦的种子。</p>
+<p>我的判断：Portal 2 的物理之所以看着干净，是因为它把最难的那部分——参照系——悄悄藏进了"静止的墙"里。</p>
+<h2>能量守恒的来头：诺特定理</h2>
+<p>要问传送门能不能打破能量守恒，先得弄清能量守恒本身是什么来头。它常被讲成宇宙铁律，其实它来自一个更底层的道理。1918 年，德国女数学家艾米·诺特证明了诺特定理：每一种连续的对称性，都对应一个守恒量。</p>
+<p>这话的数学根子在最小作用量原理。一个物理系统走哪条路，由作用量 S = ∫L dt 取极值决定，δS = 0，L 是拉格朗日量。诺特发现，如果作用量在某个连续变换下不变，就存在一个随之守恒的流。时间平移不变，对应能量守恒；空间平移不变，对应动量守恒；空间旋转不变，对应角动量守恒；连电磁学里的电荷守恒，也来自一种叫 U(1) 规范对称的东西。</p>
+<p style="text-align:center;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:15px;line-height:1.9;margin:16px 0;letter-spacing:.01em;overflow-wrap:anywhere;word-break:break-word">∂μ T^μν = 0　　（能量-动量张量的散度为零）</p>
+<p>在广义相对论里，这句话要说得更小心。能量守恒要求时空存在一个"时间平移"的方向，数学上叫类时 Killing 矢量，记作 ξ。沿着这个方向搬运，量 E = −p·ξ 保持不变，这才叫能量守恒。没有这个矢量，就没有这个守恒量。</p>
+<p style="text-align:center;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:15px;line-height:1.9;margin:16px 0;letter-spacing:.01em;overflow-wrap:anywhere;word-break:break-word">E = −pμ ξ^μ</p>
+<p>科普中国那篇讲对称原理的文章把这个关系讲得很直白：诺特把"对称"和"守恒"焊在了一起。人民日报一篇谈时间晶体的文章也点过同一句——时间平移对称性对应能量守恒。</p>
+<p>我的判断：这句话是整个问题的钥匙。既然能量守恒是"对称性的影子"，那它就不是无条件的。对称一破，影子就散。后面会看到，虫洞和时间机器让问题变复杂的地方，恰恰在这里。</p>
+<h2>保守场与闭合回路</h2>
+<p>再往下走一步，要借经典力学里一个老结论：保守场里没有免费午餐。</p>
+<p>一个静止的引力场是保守场。保守场有两种等价说法：沿任意闭合回路走一圈，场力做的总功为零；或者，场力可以写成某个标量势的负梯度，F = −∇Φ。</p>
+<p style="text-align:center;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:15px;line-height:1.9;margin:16px 0;letter-spacing:.01em;overflow-wrap:anywhere;word-break:break-word">∮ g·dr = 0　　　F = −∇Φ</p>
+<p>你举高一个重物再放回原处，重力先拦你、后帮你，一拦一帮正好抵消，净功是零。这就是"保守"两个字的日常含义：走了多远都无所谓，只看起点和终点。</p>
+<p>现在把虫洞接进来。假设入口在低处、出口在高处，中间用一条近道连起来。只要整个时空是静止的、不随时间变，这条"低处—虫洞—高处—再落回低处"的闭合回路，重力做的总功依然是零。近道改变了你走的路，却没改变"势"这个标量场本身；绕一圈回到原点，势能当然回到原值。</p>
 <p>我的判断：虫洞没有改变"引力是保守力"这件事实，它只是把空间折了一下。折过的空间里，闭合回路的净功仍然是零。免费能量不存在。</p>
-<h2>那个著名"永动机"想法错在哪</h2>
-<p>直觉上的诱惑是这样的：让物体从 A 落到 B 攒下速度，B 门把物体送到更高的 C 点出来，于是每循环一次就白赚一段高度差的能量。这个想法在游戏里偶尔能玩出花活，但放到物理里有两道闸。</p>
-<p>一道闸在几何：出口速度的方向由出口门的法线决定，而你没法随意摆出一个"出门就比进门高、还能无限循环"的构型又不违反保守场的零功结论——账一合，高度差对应的势能，早就在别处被付过了。另一道闸在因果和物料：真要制造并维持一个能用的虫洞，得先有奇异物质撑着，而奇异物质本身就是负能量，它进不了"免费"的账本。</p>
+<h2>引力势、逃逸速度与史瓦西半径</h2>
+<p>要把保守场说得更具体，得把引力势写出来。牛顿引力里，质量 M 在距离 r 处产生的引力势是 Φ = −GM/r，G 是引力常数。物体要从这里逃到无穷远，需要的速度叫逃逸速度。</p>
+<p style="text-align:center;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:15px;line-height:1.9;margin:16px 0;letter-spacing:.01em;overflow-wrap:anywhere;word-break:break-word">Φ = −GM/r　　　v_esc = √(2GM/r)</p>
+<p>把逃逸速度设成光速 c，反解出 r = 2GM/c²，这就是史瓦西半径 r_s。太阳的史瓦西半径约三公里，地球约九毫米。半径缩到 r_s 以内，连光都逃不出去，那个边界就是事件视界。视界外一点五倍 r_s 处，还有一个光子球，光可以在那里绕圈。</p>
+<p style="text-align:center;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:15px;line-height:1.9;margin:16px 0;letter-spacing:.01em;overflow-wrap:anywhere;word-break:break-word">r_s = 2GM/c²</p>
+<p>引力还会让时间变慢。一个静止在半径 r 处的钟，走得比无穷远处的钟慢，两者的关系是下面这个式子。r 越接近 r_s，根号越接近零，钟越走越停。这个效应不是玄想，1959 年的庞德-雷布卡实验在地球引力场里就测到了，后来的原子钟实验把它测得更准。</p>
+<p style="text-align:center;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:15px;line-height:1.9;margin:16px 0;letter-spacing:.01em;overflow-wrap:anywhere;word-break:break-word">dτ = √(1 − r_s/r) dt</p>
+<p>我的判断：这几个式子是后面虫洞度规的零件。史瓦西解是最简单的黑洞解，也是最容易把人带进"虫洞就是黑洞"误区的解——两者差得远，下面会分。</p>
+<h2>爱因斯坦场方程</h2>
+<p>虫洞不是"挖"出来的，是爱因斯坦场方程的一个解。所以绕不开这条方程。</p>
+<p style="text-align:center;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:15px;line-height:1.9;margin:16px 0;letter-spacing:.01em;overflow-wrap:anywhere;word-break:break-word">Gμν + Λgμν = (8πG/c⁴) Tμν</p>
+<p>左边 Gμν 是爱因斯坦张量，描述时空怎么弯；右边 Tμν 是能量-动量张量，描述物质和能量怎么分布；Λ 是宇宙学常数。惠勒有一句话把这条方程讲绝了：物质告诉时空怎么弯，时空告诉物质怎么走。</p>
+<p>这条方程是十个耦合的非线性偏微分方程，解起来极难。史瓦西解、克尔解、弗里德曼解，都是它在特定对称下的解。虫洞度规也是——它不是把一块时空掏空，而是找到一种物质分布，让时空自然弯成两头通的样子。</p>
+<p>我的判断：场方程允许很多解，允许不等于存在。这是读一切"数学上可行"的说法时，必须自己补上的一句。</p>
+<h2>虫洞的数学：莫里斯-索恩度规</h2>
+<p>1988 年，加州理工的基普·索恩和学生迈克尔·莫里斯，应科幻作家卡尔·萨根之请，认真算了一种能让人穿过去的虫洞。他们给出的度规长这样：</p>
+<p style="text-align:center;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:15px;line-height:1.9;margin:16px 0;letter-spacing:.01em;overflow-wrap:anywhere;word-break:break-word">ds² = −e^{2Φ(r)} c² dt² + dr² / (1 − b(r)/r) + r² (dθ² + sin²θ dφ²)</p>
+<p>别被这串符号吓住，拆开看每一项都有话说。ds² 是时空里两点之间的"间隔"，广义相对论用它代替了距离。第一项里 Φ(r) 叫红移函数，管的是引力有多强、时间走得快还是慢；第二项里 b(r) 叫形状函数，管的是空间被弯成什么形状，分母 1 − b(r)/r 在 b(r) = r 的地方发散，那个地方就是虫洞的喉部，记作 r₀。第三项是球面的角向部分，和普通球坐标一样。</p>
+<p>要撑住一个能过人的喉部，还得满足一个条件：在喉部附近，空间要"向外张开"，数学上写成下面这个不等式，叫 flare-out 条件。这句话的物理含义是，喉部附近的物质得有一种反常的径向张力。</p>
+<p style="text-align:center;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:15px;line-height:1.9;margin:16px 0;letter-spacing:.01em;overflow-wrap:anywhere;word-break:break-word">b(r₀) = r₀　　　b′(r₀) < 1</p>
+<p>莫里斯和索恩算完发现，满足这个条件的物质，其径向张力必须大于它的能量密度。普通物质做不到这一点，只有"奇异物质"——能量密度为负的东西——才行。</p>
+<p>我的判断：虫洞不是"钻出来的洞"，是时空度规的一种解。这个区别很重要：解可以写出来，洞不一定存在。</p>
+<h2>能量条件：为什么虫洞要"负能量"</h2>
+<p>物理学家用"能量条件"来筛哪些物质分布是合理的。常见的有四条。零能量条件（NEC）要求对任意光线方向 k，张量缩并非负；弱能量条件（WEC）要求对任意观察者 u，能量密度非负，说白了就是"能量密度不能是负的"。强能量条件（SEC）和主导能量条件（DEC）更严，管的是引力会聚和能量流动的方向。</p>
+<p style="text-align:center;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:15px;line-height:1.9;margin:16px 0;letter-spacing:.01em;overflow-wrap:anywhere;word-break:break-word">Tμν u^μ u^ν ≥ 0　（弱能量条件）　　　Tμν k^μ k^ν ≥ 0　（零能量条件）</p>
+<p>普通物质、辐射，都满足这些条件。虫洞偏偏不满足。上一节那个"径向张力大于能量密度"，翻译成能量条件的语言，就是喉部附近零能量条件被违反：径向张力 τ 超过能量密度 ρc²，等价于张量缩并出现负值。</p>
+<p style="text-align:center;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:15px;line-height:1.9;margin:16px 0;letter-spacing:.01em;overflow-wrap:anywhere;word-break:break-word">τ > ρ c²　　（喉部径向张力超过能量密度，违反零能量条件）</p>
+<p>违反零能量条件的物质，就是"奇异物质"。它不是"很奇特的普通物质"，而是能量密度为负的东西。量子场论里确实有负能量的影子，但量子不等式（Ford 和 Roman 在 1990 年代系统地研究过）给它上了紧箍：负能量不能太大、不能持续太久，否则会跟量子力学的基本假设打架。</p>
+<p>我的判断：可穿越虫洞在方程里是允许的，代价是天文数字般的奇异物质。虫洞不是"能不能造"的工程题，是先"有没有料"的物料题。</p>
+<h2>核心问题：传送门能打破能量守恒吗</h2>
+<p>现在正面回答开头那个问题。结论：不能。无论是游戏里的门，还是物理里的虫洞，在任何一个自洽的设定里，都没法让能量凭空变多，也没法造出永动机。下面分两层讲。</p>
+<p>第一层是游戏门。Portal 2 保留速度大小、只改方向，动能守恒，根本没有创造能量。那些无限套圈拿免费速度的花活，靠的是关卡规则的漏洞，不是物理定律的让步。</p>
+<p>第二层是真虫洞，也是大家真正好奇的：把虫洞当近道，会不会在引力场里白赚一笔？这一层要用第五节那个"保守场闭合回路零功"的结论来堵。</p>
+<p>我的判断：两层堵的是同一个口子——局部看着像白赚，全局一算账，一分没多。</p>
+<h2>那个著名"永动机"错在哪</h2>
+<p>直觉上的诱惑是这样的：让水从低处 A 流到更低处 B，攒下速度；B 处放一扇入口门，把水送到高处的 C 点出口；水从 C 再往低处流，又攒速度，又进门……每循环一次就白赚一段高度差。</p>
+<p>这个想法有两道闸。第一道在几何：出口速度的方向由出口门的法线决定，你没法摆出一个"出门就比进门高、还能无限循环"的构型，又不违反保守场的零功结论。一合账，高度差对应的势能，早就在别处被付过了——水在虫洞里"上升"那一段，要么由虫洞两侧的引力势差买单，要么由撑开虫洞的奇异物质买单。</p>
+<p>第二道闸在物料：真要造一个能用的虫洞，得先有奇异物质撑着，而奇异物质本身就是负能量。它一进场，账本上就先记了一笔负数，根本进不了"免费"那一栏。</p>
 <p>我的判断：所谓"传送门永动机"，是把局部看到的速度变化，误当成了全局的能量增量。局部看门很神，全局算总账，能量一分没多。</p>
-<h2>虫洞时间机器：唯一可能"套利"的缝隙</h2>
-<p>不过物理学里确实有一条缝，让虫洞显得能"凭空"搬能量——那就是把它变成时间机器。1988 年，莫里斯、索恩和乌尔维·尤特塞弗（Ulvi Yurtsever）在同一波研究里指出：如果一个先进文明能造并维持一个可穿越虫洞，只要让其中一个洞口以接近光速运动一阵再回来（或者把它放进更强的引力场），两个洞口之间就会出现时间差。</p>
-<p>科普中国那篇谈时间旅行的文章讲得很清楚：因为洞口之间的外部空间距离没变、虫洞自身长度也没变，但运动带来时间膨胀，两个口经历的"时间"就不一样了。这时沿着虫洞走，可能回到过去或跳到未来——形成闭合类时曲线（CTC）。一旦有了时间差，你确实能在"时间偏移"里做文章：比如在一口投入质量，它从另一口在更早或更晚的时刻出来。</p>
+<h2>可穿越虫洞要多少奇异物质</h2>
+<p>把物料这笔账算具体一点。光明网那篇科普引过索恩等人的估算：撑开一个半径一厘米的虫洞，需要的奇异物质质量相当于一个地球；撑开半径一光年的虫洞，需要的量超过银河系发光物质总质量的一百倍。</p>
+<p>这还只是"撑开"，没算"维持"。虫洞要稳定存在，喉部得一直被负能量顶着，否则瞬间塌掉。而我们在自然界见到的负能量，只有卡西米尔效应那种极微弱的形态——两块靠得很近的导体板之间，真空能会变成负值，量级小到要用最精密的实验才测得出来。</p>
+<p>我的判断：从卡西米尔的负能量到撑开一厘米虫洞所需的负能量，中间差着几十个数量级。这不是"再努力一点"能填的坑，是"换一套物理"才可能填的坑。</p>
+<h2>虫洞时间机器</h2>
+<p>不过物理学里确实有一条缝，让虫洞显得能"凭空"搬东西——把它变成时间机器。</p>
+<p>1988 年，莫里斯、索恩和乌尔维·尤特塞弗在同一波研究里指出：如果一个先进文明能造并维持一个可穿越虫洞，只要让其中一个洞口以接近光速运动一阵再回来，或者把它放进更强的引力场里，两个洞口之间就会出现时间差。</p>
+<p>原因在狭义相对论的时间膨胀。运动的钟走得慢，慢多少由洛伦兹因子决定，两个口的固有时差就是这个式子里 Δt 与 Δτ 的关系。v 越接近 c，γ 越大，时间差越夸张。引力场里也一样，前面那个 dτ 的式子就是引力时间膨胀的写法。</p>
+<p style="text-align:center;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:15px;line-height:1.9;margin:16px 0;letter-spacing:.01em;overflow-wrap:anywhere;word-break:break-word">Δt = γ Δτ　　　γ = 1 / √(1 − v²/c²)</p>
+<p>两个洞口的外部距离没变，虫洞自身的长度也没变，可两个口经历的"时间"不一样了。这时沿着虫洞走，就可能回到过去或跳到未来，形成闭合类时曲线，英文缩写 CTC。一旦有了时间差，你确实能在"时间偏移"里做文章：在一口投入质量，它从另一口在更早或更晚的时刻出来。</p>
 <p>我的判断：这是传送门叙事里唯一接近"打破守恒"的情形。但注意，它靠的不是门本身，而是你先让一个洞口相对另一个动了真格——这一步要付相对论级别的代价。</p>
-<h2>即便能套利，也不是无中生有</h2>
-<p>把上面的缝再压一下：就算你能让质量从一个口"提前"或"推迟"出来，这不叫能量守恒被打破，叫你巧妙地利用了相对论里"同时性可以相对"这件事。而制造这个时间差本身要花钱——把一口虫洞加速到近光速，消耗的动能是实打实的；撑开喉咙的奇异物质，负能量密度也是账面的一部分。</p>
-<p>更麻烦的是因果。一旦虫洞变成时间机器，任何微小的量子涨落都可能沿着闭合回路一遍遍和自己叠加，自激放大，理论上瞬间把机器自己撕碎。索恩等人也意识到这点。霍金 1992 年干脆提出"时序保护猜想"：自然定律不让时间机器真的造出来。所以这条缝，物理上既没被证明能开，也没被证明一定焊死，但它在"免费能量"上给的额度，远没有科幻里写得那么慷慨。</p>
-<p>我的判断：虫洞时间机器顶多算"把相对论的时间差兑现"，而兑现之前你已经为制造时间差付过钱。它不违反守恒，只是把账本从空间挪到了时间。</p>
-<h2>更狠的一层：能量守恒自己也有边界</h2>
-<p>顺着诺特定理再往前推一步，会发现一个反直觉的事实：能量守恒本身，并不是在所有时空里都成立。诺特说能量守恒来自时间平移对称——物理定律不随时刻变。可在我们真实的宇宙里，时空在膨胀、在弯曲，整体没有一个"处处一样"的时间平移对称。宇宙学里因此没有全局的能量守恒（托尔曼等人早就指出这一点），只有局部的能量-动量守恒。</p>
-<p>Portal 2 那种门，假设它处在平坦的闵可夫斯基时空里，能量在局部严格守恒。真虫洞处在广义相对论里，局部的 ∇·T = 0（能量动量张量散度为零）依然成立，洞口的奇异物质就计入那个 T 里。所以"能量守恒"不是被传送门打破，而是它本来就有适用前提：得有个稳稳的时间平移对称，或者至少有个局部能算账的区域。</p>
+<h2>因果、祖父悖论与时序保护</h2>
+<p>时间机器一出现，因果就危险了。最著名的诘难是祖父悖论：你回到过去，阻止你祖父遇见你祖母，那你怎么会出生？</p>
+<p>物理学家给了几种逃法。一种是诺维科夫自洽原则：宇宙只允许自洽的历史，你能回到过去，但你做的每件事恰好就是历史本来的样子，悖论被"自洽"掉了。另一种是多世界解读：你回到的是另一个分支，改的是别人的祖父。两种说法都还没有实验裁决。</p>
+<p>霍金 1992 年干脆提出时序保护猜想：自然定律不允许时间机器真的造出来。他的理由很物理——真空里的量子涨落会沿着闭合类时曲线一遍遍绕回来，和自己叠加，越叠越强，在时间机器形成的最后关头把能量密度顶到无穷大，机器自己把自己烧穿。</p>
+<p>这个论证不是铁板一块。1991 年金（Sung-Won Kim）和索恩算过一些具体模型，发现真空极化不一定总在柯西视界上发散，某些构型下它可能是有限的，时间机器也许能撑住。于是这条缝既没被证明能开，也没被证明一定焊死。</p>
+<p>我的判断：时序保护猜想是目前最有力的直觉，但不是定理。科学在这块是开放的，开放不等于什么都能信。</p>
+<h2>能量守恒自己也有边界</h2>
+<p>顺着诺特定理再往前推一步，会撞上一个反直觉的事实：能量守恒本身，并不是在所有时空里都成立。</p>
+<p>诺特说能量守恒来自时间平移对称——物理定律不随时刻变。可在我们真实的宇宙里，时空在膨胀、在弯曲，整体没有一个"处处一样"的时间平移对称。膨胀的宇宙用弗里德曼-勒梅特-罗伯逊-沃尔克度规描述，这个度规里根本没有类时 Killing 矢量。没有那个矢量，就没有那个守恒量。</p>
+<p>后果是实打实的：宇宙学红移。一个光子在膨胀的宇宙里走，波长被拉长，能量变小。这些能量去哪了？没有去哪，它就是没了——全局意义上，光子的能量不守恒。托尔曼早在 1930 年代就指出过这一点。不过局部的能量-动量守恒依然成立，只是"全局总能量"这个概念，在膨胀宇宙里没有良好定义。</p>
+<p style="text-align:center;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:15px;line-height:1.9;margin:16px 0;letter-spacing:.01em;overflow-wrap:anywhere;word-break:break-word">∇μ T^μν = 0　　（局部成立，全局未必）</p>
+<p>Portal 2 那种门，假设它处在平坦的闵可夫斯基时空里，能量在局部严格守恒。真虫洞处在广义相对论里，局部的散度为零依然成立，洞口的奇异物质就计入那个张量里。</p>
 <p>我的判断：真正该被打破的迷信，不是能量守恒，而是"能量守恒是放之宇宙皆准的天条"。它是特定对称下的结论，传送门只是把这条边界摆到了眼前。</p>
-<h2>ER=EPR：虫洞和纠缠可能是一回事</h2>
-<p>虫洞的故事在近年又接上了量子信息。2013 年，马尔达西纳（Juan Maldacena）和苏斯金德（Leonard Susskind）提出一个猜想，叫 ER=EPR：爱因斯坦-罗森桥（虫洞）和量子纠缠（EPR 对）本质上是同一件事的两面——纠缠得越深，对应的虫洞越粗。</p>
-<p>这个想法已经从纯猜想走向实验桌面。科普中国报道过，2019 年哈佛的丹尼尔·贾弗里斯（Daniel Jafferis）等人在量子计算机上模拟出了"全息虫洞"——当然那不是宇宙里真挖了一条时空隧道，而是用量子比特复现了虫洞的一些性质。这类研究把虫洞从科幻桥段，拉进了量子引力这个前沿。</p>
+<h2>热力学第二定律：就算能量守得住，熵呢</h2>
+<p>到这儿有人会换个方向问：就算能量守得住，传送门能不能拿来干点别的？比如当麦克斯韦妖，把快分子和慢分子分开，一边热一边冷，造出温差来发电？</p>
+<p>麦克斯韦 1867 年提过这个思想实验：一个极小的妖守在小孔边，看见快分子就开孔放过去，看见慢分子就关上，久而久之两边温差拉开，似乎能白做功。西拉德 1929 年把它简化成一个单分子引擎，算出了每次循环能榨出的功。</p>
+<p>这个妖被信息论收拾了。兰道尔 1961 年证明：擦除一比特信息，至少要耗散一份和温度成正比的能量，比例常数是玻尔兹曼常数乘温度再乘二的自然对数，也就是下面这个不等式。妖要判断"这个分子是快是慢"，就得记一比特信息；记满了要擦，擦就得付这份能量。付完一算，妖赚的功正好被擦除的代价抵掉，第二定律毫发无损。</p>
+<p style="text-align:center;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:15px;line-height:1.9;margin:16px 0;letter-spacing:.01em;overflow-wrap:anywhere;word-break:break-word">E ≥ k_B T ln 2　　（兰道尔极限）</p>
+<p>传送门能不能绕过这道账？不能。门不替你做"分辨快慢"这件事，它只是把东西从一个口搬到另一个口，不产生信息，也不减少熵。你要拿它当妖，分辨那一步的账还是得自己付。</p>
+<p>我的判断：就算门不破坏能量守恒，它也破坏不了第二定律。能量和熵是两道独立的闸，门一扇都撬不开。</p>
+<h2>信息、幺正性与不可克隆</h2>
+<p>再往深里走一层，还有一道闸，叫信息。</p>
+<p>量子力学的演化是幺正的，幺正演化不丢信息——给定现在，原则上能倒推过去。这条性质和能量守恒一样，是量子力学的骨架。</p>
+<p>传送门如果"复制"一个物体，就撞上不可克隆定理：1982 年，沃特斯和祖雷克、迪克斯分别证明，任意未知量子态不能被精确复制。如果传送门"销毁"原来的物体再从另一头重建，就撞上信息守恒：销毁意味着信息丢失，而幺正演化不允许信息凭空消失。</p>
+<p>黑洞把这个问题推到了极致。霍金 1974 年算出发射霍金辐射，温度由一个只依赖黑洞质量的式子给出：质量越小，温度越高。可霍金辐射看起来是纯热的，不带出落入黑洞的信息，于是"黑洞蒸发后信息去哪了"成了信息悖论。后来佩奇提出佩奇曲线，认为信息会先增后减地还回来；2012 年 AMPS 又提出"火墙"诘难，说要是信息真能还回来，视界处就得有一堵高能火墙，那又和广义相对论的等效原理打架。这场争论到今天还没收尾。</p>
+<p style="text-align:center;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:15px;line-height:1.9;margin:16px 0;letter-spacing:.01em;overflow-wrap:anywhere;word-break:break-word">T_H = ℏc³ / (8πGM k_B)</p>
+<p>我的判断：传送门的合法性不只在能量，还在信息。一扇真门，得同时过能量守恒、第二定律、幺正性这三关。</p>
+<h2>ER=EPR 与全息原理</h2>
+<p>虫洞的故事在近年又接上了量子信息，而且接得很深。</p>
+<p>2013 年，马尔达西纳和苏斯金德提出一个猜想，叫 ER=EPR：爱因斯坦-罗森桥（ER）和量子纠缠（EPR 对）本质上是同一件事的两面。两个黑洞纠缠得越深，它们之间的虫洞就越粗。</p>
+<p>这个猜想背后是全息原理和 AdS/CFT 对偶。1997 年马尔达西纳提出 AdS/CFT：一个反德西特空间里的引力理论，等价于它边界上的一个共形场论。引力在"体内"，量子场论在"边界"，两边是同一套物理的两种写法。</p>
+<p>在这个框架里，纠缠熵有个漂亮的几何公式，叫 Ryu-Takayanagi 公式：边界上一块区域的纠缠熵，等于体内对应极小曲面的面积除以四倍牛顿常数。</p>
+<p style="text-align:center;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:15px;line-height:1.9;margin:16px 0;letter-spacing:.01em;overflow-wrap:anywhere;word-break:break-word">S_A = Area(γ_A) / (4 G_N)</p>
+<p>顺着这条路，2016 年高（Ping Gao）、贾弗里斯和沃尔（Aron Wall）提出一种"可穿越虫洞"：在 AdS/CFT 里，给两个边界之间加一个耦合，再配上负能量，虫洞就能让信号穿过去，而且不违反因果。2022 年，贾弗里斯的团队在谷歌的量子计算机上模拟了这个过程——不是真挖了一条时空隧道，而是用量子比特复现了虫洞的一些性质。</p>
 <p>我的判断：ER=EPR 未必明天就能造传送门，但它说明虫洞已经不是纯科幻词汇，而是连接广义相对论和量子力学的一根真绳子。</p>
-<h2>离我们到底有多远</h2>
-<p>把浪漫收一收，看现实距离。可穿越虫洞需要量级惊人的奇异物质，而我们在自然界见过的负能量，只以卡西米尔效应那种极微弱的形式存在——1948 年卡西米尔预言、1997 年拉莫罗实验证实的两块靠得很近的导体板之间，真空能变成负值。这点负能量撑不起一个能过人的虫洞。</p>
-<p>所以"传送门永动机"在当前物理里，既不被允许（守恒和因果两道闸都在），也无从制造（物料差得太多）。它是一道好题，不是一张可用的设计图。</p>
-<p>我的判断：门可以想，料造不出；题能算清，机造不成。这是今天最诚实的结论。</p>
+<h2>卡西米尔效应与负能量的现实</h2>
+<p>前面反复说"负能量"，它在现实里到底长什么样？最实在的例子是卡西米尔效应。</p>
+<p>1948 年，荷兰物理学家卡西米尔预言：两块平行导体板靠得极近时，板间的真空涨落模式被挤掉一部分，板外的模式更多，于是板外压力大于板内，两板被推向彼此。单位面积上的力，按下面这个式子走，d 是板间距，ℏ 是约化普朗克常数。</p>
+<p style="text-align:center;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:15px;line-height:1.9;margin:16px 0;letter-spacing:.01em;overflow-wrap:anywhere;word-break:break-word">P = −π²ℏc / (240 d⁴)</p>
+<p>1997 年，拉莫罗用扭摆做了精密测量，证实了这个效应。板间的真空能确实是负的——这就是自然界里最确凿的"负能量"样本。</p>
+<p>问题是量级。d 在微米级时，这个压力小到只有大气压的十亿分之几。要撑开一个能过人的虫洞，需要的负能量比这大几十个数量级，而且得稳定地维持在喉部。量子不等式还规定，负能量越强，能维持的时间越短。</p>
+<p>我的判断：自然界确实有负能量，但离撑开一扇门差着几十个数量级。这个差距不是工程问题，是物理问题。</p>
+<h2>近道家族：曲速与克拉斯尼科夫管</h2>
+<p>传送门不是孤例。物理学里有一整个"把空间折一下、抄近道"的家族，成员都盯着同一件事：用几何绕开光速限制或距离限制。</p>
+<p>1994 年，墨西哥物理学家阿尔库比埃雷提出曲速驱动：让飞船待在一个"曲速泡"里，泡前方的空间收缩、后方的空间膨胀，泡本身以超光速移动，而飞船在泡内是静止的，局部没超光速。这个度规写成下面这样，v_s 是泡的速度，f 是一个形状函数。</p>
+<p style="text-align:center;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:15px;line-height:1.9;margin:16px 0;letter-spacing:.01em;overflow-wrap:anywhere;word-break:break-word">ds² = −c²dt² + (dx − v_s f(r_s) dt)² + dy² + dz²</p>
+<p>麻烦在于，要让空间这样收缩膨胀，泡壁处需要负能量密度——又是奇异物质。后来纳塔里奥等人做了改进，把所需负能量的总量压低了，但压不到零。</p>
+<p>1995 年，克拉斯尼科夫提出"克拉斯尼科夫管"：先用一艘近光速飞船沿航线飞一遍，把沿途的空间"铺"成一条管，之后在管里走就能抄近道。管壁同样需要负能量，而且如果摆得好，还能拼出闭合类时曲线，变成时间机器。</p>
+<p>我的判断：曲速、克拉斯尼科夫管、虫洞，本质是同一件事的不同包装——都想用时空几何换距离，代价都是奇异物质。传送门只是这个家族里最亲民的一张卡通脸。</p>
+<h2>量子隐形传态不是传送门</h2>
+<p>说到"传"，很多人会想到量子隐形传态。名字像，物理完全不同，这里得掰开。</p>
+<p>1993 年，贝内特等人提出量子隐形传态的方案；1997 年，几个小组先后在实验上实现。它的做法是：先让一对粒子处于纠缠态，把待传的量子态和其中一个粒子做联合测量，把测量结果通过经典信道告诉对方，对方据此对自己的粒子做幺正操作，就能复现原来的量子态。</p>
+<p>注意两点。第一，传的是"态"，不是物质——原来的粒子还在原地，被传的是它携带的量子信息。第二，必须有经典信道，而经典信道不能超光速，所以整个过程不能超光速。这两点，都和科幻里的"传送门"相反。</p>
+<p>我的判断：量子隐形传态恰恰证明了"传"是有代价的——它得先有纠缠，再有经典通信，一步都省不掉。传送门要真有，也逃不掉类似的账。</p>
 <h2>游戏做对和做错的地方</h2>
-<p>回头比一下 Portal 2 和真物理，能看清它哪步踩在了地上。做对的：动量跨门守恒、速度大小保留只改方向、靠落差攒速度再释放——这些都是实打实的经典力学。做错的：没有坠落伤害（真摔下来该有事）、可以利用无限落体 tricks 反复刷速度（真实介质有耗散，速度不会凭空循环增长）、门只贴白墙（真实虫洞不挑墙面）。</p>
-<p>正因为这些"错"都收在游戏规则里，玩家才既能爽玩、又能无意间练到一条真定律。Portal 2 因而成了少有的、把动量守恒做成核心玩法的游戏。</p>
-<p>我的判断：它的物理不是全对，但方向对——它让你用手而不是用公式，先摸一遍守恒。</p>
+<p>回头比一下 Portal 2 和真物理，能看清它哪步踩在地上。</p>
+<p>做对的：动量跨门守恒、速度大小保留只改方向、靠落差攒速度再释放。这些是实打实的经典力学，游戏甚至让你用身体记住了 v = √(2gh)。</p>
+<p>做错的：没有坠落伤害，真摔下来该有事；可以利用无限落体反复刷速度，真实介质有空气阻力，速度不会凭空循环增长；门只贴白墙，真实虫洞不挑墙面；最要命的是，门不施反作用力——按第三节的账，物体穿门改变动量，门本该被反推，游戏里门纹丝不动。</p>
+<p>我的判断：它的物理不是全对，但方向对——它让你用手而不是用公式，先摸了一遍守恒。</p>
 <h2>普通人为什么该关心</h2>
-<p>这套绕来绕去的物理，和日常有关系。市面上常年有"磁动机""净水发电""永恒电池"之类的永动机骗局，它们的共同套路，就是声称找到了某个"特殊结构"让能量白生。传送门悖论给了一把尺：凡是要靠一个空间近道、一个特殊拓扑来无中生有能量的，先问一句——它的闭合回路净功是不是零？账能不能合？合不上，就是骗局。</p>
+<p>这套绕来绕去的物理，和日常有关系。</p>
+<p>市面上常年有"磁动机""净水发电""永恒电池"之类的永动机骗局，它们的共同套路，是声称找到了某个"特殊结构"让能量白生。传送门悖论给了一把尺：凡是要靠一个空间近道、一个特殊拓扑来无中生有能量的，先问一句——它的闭合回路净功是不是零？账能不能合？合不上，就是骗局。</p>
 <p>另一层关系在认知：能量守恒不是教条，是对称性的签名。理解传送门为什么破不了它，比背下"能量不会凭空产生"更有用，因为你知道这条规律从哪来、到哪止。</p>
 <p>我的判断：关心传送门悖论，本质是练一种免疫力——对一切"免费用能"叙事的免疫力。</p>
 <h2>边界：不神话，也不封死</h2>
-<p>话说到这，得划清两条线。一条是不把虫洞浪漫化成旅游通道：它能写进方程，不等于能买票上车；需要的奇异物质、面临的因果悖论，都是实打实的拦路石。另一条是不给伪科学留位置：凡是声称"打破物理定律"的传送门式发明，在没有给出完整账面之前，都该先打问号。</p>
-<p>同时也得诚实：奇异物质是否大量存在、时序保护猜想是否真成立，今天都还没定论。科学在这两块是开放的，不是已经封口。开放，不等于什么都能信。</p>
+<p>话说到这，得划清两条线。</p>
+<p>一条是不把虫洞浪漫化成旅游通道：它能写进方程，不等于能买票上车；需要的奇异物质、面临的因果悖论，都是实打实的拦路石。另一条是不给伪科学留位置：凡声称"打破物理定律"的传送门式发明，在没有给出完整账面之前，都该先打问号。</p>
+<p>同时也得诚实：奇异物质是否大量存在、时序保护猜想是否真成立、ER=EPR 是否成立，今天都还没定论。科学在这几块是开放的，不是已经封口。开放，不等于什么都能信。</p>
 <p>我的判断：对未知保持开放，对"免费能量"保持怀疑，这两件事不矛盾。</p>
 <h2>写在后面的话</h2>
-<p>绕回开头那句 GLaDOS 的嘲讽。Portal 2 里，快的东西进去，快的东西出来——动量守得住，能量也守得住。把它升级成真虫洞，你会撞上奇异物质、撞上时间机器、撞上因果，最后发现：能"套利"的缝隙，要么要你先付相对论级别的代价，要么被自然自己焊死。</p>
+<p>绕回开头那句 GLaDOS 的嘲讽。Portal 2 里，快的东西进去，快的东西出来——动量守得住，能量也守得住。把它升级成真虫洞，你会撞上奇异物质、撞上时间机器、撞上因果、撞上第二定律和幺正性，最后发现：能"套利"的缝隙，要么要你先付相对论级别的代价，要么被自然自己焊死。</p>
 <p>传送门破不了能量守恒。它能做的，是换一个角度，让我们看清守恒不是束缚，是宇宙对称性的签名；而真正"破格"的，从来不是那扇门，是提出这个问题、并把账一笔笔算清的人。</p>
 <p>我的判断：门是假的，物理是真的；而真物理最漂亮的地方，恰恰是它连"近道"都提前算好了——你绕不过去。</p>
 <figure style="margin:22px 0">
@@ -1637,6 +1726,10 @@ window.POSTS = [
 <figcaption>世界上最伟大的游戏之一！《传送门》究竟讲述了什么故事（硬的小软）</figcaption>
 </figure>
 <figure style="margin:22px 0">
+<div role="button" tabindex="0" data-bvid="BV1GkJCzVEQj" style="position:relative;padding-bottom:56.25%;height:0;overflow:hidden;border-radius:10px;background:#15151a;cursor:pointer" onclick="var f=document.createElement(&#39;iframe&#39;);f.src=&#39;https://player.bilibili.com/player.html?bvid=BV1GkJCzVEQj&amp;page=1&amp;high_quality=1&amp;danmaku=0&amp;autoplay=0&#39;;f.allowFullscreen=true;f.setAttribute(&#39;scrolling&#39;,&#39;no&#39;);f.setAttribute(&#39;frameborder&#39;,&#39;0&#39;);f.style.cssText=&#39;position:absolute;top:0;left:0;width:100%;height:100%;border:0&#39;;this.innerHTML=&#39;&#39;;this.appendChild(f);this.style.background=&#39;#000&#39;;this.style.cursor=&#39;default&#39;;this.onclick=null"><div style="position:absolute;top:0;left:0;right:0;bottom:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;pointer-events:none"><span style="width:54px;height:54px;border-radius:50%;border:1.5px solid rgba(255,255,255,.5);display:flex;align-items:center;justify-content:center;color:#fff;font-size:18px;padding-left:4px;box-sizing:border-box">&#9654;</span><span style="color:rgba(255,255,255,.62);font-size:12.5px;letter-spacing:.08em">点击播放</span></div></div>
+<figcaption>一个很简单的实验，彻底改写了物理学！从诺特定理到时间平移对称，为什么会动摇能量守恒定律？（科学认识论）</figcaption>
+</figure>
+<figure style="margin:22px 0">
 <div role="button" tabindex="0" data-bvid="BV1o3411t7sB" style="position:relative;padding-bottom:56.25%;height:0;overflow:hidden;border-radius:10px;background:#15151a;cursor:pointer" onclick="var f=document.createElement(&#39;iframe&#39;);f.src=&#39;https://player.bilibili.com/player.html?bvid=BV1o3411t7sB&amp;page=1&amp;high_quality=1&amp;danmaku=0&amp;autoplay=0&#39;;f.allowFullscreen=true;f.setAttribute(&#39;scrolling&#39;,&#39;no&#39;);f.setAttribute(&#39;frameborder&#39;,&#39;0&#39;);f.style.cssText=&#39;position:absolute;top:0;left:0;width:100%;height:100%;border:0&#39;;this.innerHTML=&#39;&#39;;this.appendChild(f);this.style.background=&#39;#000&#39;;this.style.cursor=&#39;default&#39;;this.onclick=null"><div style="position:absolute;top:0;left:0;right:0;bottom:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;pointer-events:none"><span style="width:54px;height:54px;border-radius:50%;border:1.5px solid rgba(255,255,255,.5);display:flex;align-items:center;justify-content:center;color:#fff;font-size:18px;padding-left:4px;box-sizing:border-box">&#9654;</span><span style="color:rgba(255,255,255,.62);font-size:12.5px;letter-spacing:.08em">点击播放</span></div></div>
 <figcaption>虫洞可以自然存在吗？如何制造一个可穿行的虫洞（科学透镜）</figcaption>
 </figure>
@@ -1645,11 +1738,15 @@ window.POSTS = [
 <figcaption>爱因斯坦：「虫洞是我算出来的，但我不信」看懂虫洞等于了解时空（上知天文）</figcaption>
 </figure>
 <figure style="margin:22px 0">
+<div role="button" tabindex="0" data-bvid="BV1rFXMY8ELP" style="position:relative;padding-bottom:56.25%;height:0;overflow:hidden;border-radius:10px;background:#15151a;cursor:pointer" onclick="var f=document.createElement(&#39;iframe&#39;);f.src=&#39;https://player.bilibili.com/player.html?bvid=BV1rFXMY8ELP&amp;page=1&amp;high_quality=1&amp;danmaku=0&amp;autoplay=0&#39;;f.allowFullscreen=true;f.setAttribute(&#39;scrolling&#39;,&#39;no&#39;);f.setAttribute(&#39;frameborder&#39;,&#39;0&#39;);f.style.cssText=&#39;position:absolute;top:0;left:0;width:100%;height:100%;border:0&#39;;this.innerHTML=&#39;&#39;;this.appendChild(f);this.style.background=&#39;#000&#39;;this.style.cursor=&#39;default&#39;;this.onclick=null"><div style="position:absolute;top:0;left:0;right:0;bottom:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;pointer-events:none"><span style="width:54px;height:54px;border-radius:50%;border:1.5px solid rgba(255,255,255,.5);display:flex;align-items:center;justify-content:center;color:#fff;font-size:18px;padding-left:4px;box-sizing:border-box">&#9654;</span><span style="color:rgba(255,255,255,.62);font-size:12.5px;letter-spacing:.08em">点击播放</span></div></div>
+<figcaption>一口气听完负质量/曲速引擎/虫洞/卡西米尔效应是种怎样的体验（科学小神牛）</figcaption>
+</figure>
+<figure style="margin:22px 0">
 <div role="button" tabindex="0" data-bvid="BV1WCG96dEvj" style="position:relative;padding-bottom:56.25%;height:0;overflow:hidden;border-radius:10px;background:#15151a;cursor:pointer" onclick="var f=document.createElement(&#39;iframe&#39;);f.src=&#39;https://player.bilibili.com/player.html?bvid=BV1WCG96dEvj&amp;page=1&amp;high_quality=1&amp;danmaku=0&amp;autoplay=0&#39;;f.allowFullscreen=true;f.setAttribute(&#39;scrolling&#39;,&#39;no&#39;);f.setAttribute(&#39;frameborder&#39;,&#39;0&#39;);f.style.cssText=&#39;position:absolute;top:0;left:0;width:100%;height:100%;border:0&#39;;this.innerHTML=&#39;&#39;;this.appendChild(f);this.style.background=&#39;#000&#39;;this.style.cursor=&#39;default&#39;;this.onclick=null"><div style="position:absolute;top:0;left:0;right:0;bottom:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;pointer-events:none"><span style="width:54px;height:54px;border-radius:50%;border:1.5px solid rgba(255,255,255,.5);display:flex;align-items:center;justify-content:center;color:#fff;font-size:18px;padding-left:4px;box-sizing:border-box">&#9654;</span><span style="color:rgba(255,255,255,.62);font-size:12.5px;letter-spacing:.08em">点击播放</span></div></div>
 <figcaption>相隔百亿光年也能瞬间感应？ER=EPR 揭示宇宙终极秘密（自说自话的总裁）</figcaption>
 </figure>
 <h2>参考</h2>
-<ul class="pg-refs"><li><a href="https://theportalwiki.com/wiki/Portals" target="_blank" rel="noopener">Portals（GLaDOS 原话："Momentum... conserved between portals. Speedy thing goes in, speedy thing comes out"）</a><span class="src"> · 游戏资料 / Portal Wiki</span></li><li><a href="https://fbrowser.org/wikipedia/wiki/Portal_2" target="_blank" rel="noopener">傳送門2（自由落体的向下动量穿越后转为向前直线动量，速率不变；Valve 2011）</a><span class="src"> · 维基百科（镜像）</span></li><li><a href="http://mp.weixin.qq.com/s?__biz=MzA5OTY2OTYyOA==&mid=2650220309&idx=1&sn=19abf96274f4e360f9843d4239683e28&chksm=8935dc8e82a20ba55289c2beb04a54594e2b27ef0a0d7c93d7da3e83b8b929f0166399eded46#rd" target="_blank" rel="noopener">本期游戏分享：《传送门2》（核心机制传送门枪，物理深度挖掘动量守恒）</a><span class="src"> · 微信 / 百视通云电竞</span></li><li><a href="https://physics.aps.org/story/v15/st11" target="_blank" rel="noopener">The Birth of Wormholes（爱因斯坦-罗森 1935 虫洞起源；Einstein & Rosen, Phys. Rev. 48, 73）</a><span class="src"> · 美国物理学会</span></li><li><a href="https://doi.org/10.1103/PhysRev.48.73" target="_blank" rel="noopener">Einstein, A. & Rosen, N. (1935) The Particle Problem in the General Theory of Relativity. Phys. Rev. 48, 73</a><span class="src"> · 论文 / DOI</span></li><li><a href="https://www.osti.gov/biblio/5435651" target="_blank" rel="noopener">Morris, M. S. & Thorne, K. S. (1988) Wormholes in spacetime and their use for interstellar travel. Am. J. Phys. 56, 395</a><span class="src"> · 论文 / 美国能源部</span></li><li><a href="https://doi.org/10.1119/1.15620" target="_blank" rel="noopener">Morris & Thorne (1988) 同上文（可穿越虫洞需奇异物质撑开咽喉、违反能量条件）</a><span class="src"> · 论文 / DOI</span></li><li><a href="https://www.kepuchina.cn/more/201607/t20160727_13663.shtml" target="_blank" rel="noopener">时间旅行是科学？还是幻想？（Morris-Thorne-Yurtsever 1988 虫洞时间机器、弱能量条件、霍金时序保护猜想）</a><span class="src"> · 科普中国</span></li><li><a href="https://kepuchina.cn/public/new/201904/t20190417_1041887.shtml" target="_blank" rel="noopener">当黑洞遇上量子纠缠：掉入黑洞也能逃生（Jafferis 2019 负能量撑虫洞、爱因斯坦-罗森桥）</a><span class="src"> · 科普中国</span></li><li><a href="https://www.gmw.cn/02sz/2009-10/01/content_1045497.htm" target="_blank" rel="noopener">宇宙中的时空隧道（索恩与莫里斯 1988 可穿越虫洞需"异常物质"、张力与半径平方成反比）</a><span class="src"> · 光明网</span></li><li><a href="https://www.kepuchina.cn/article/articleinfo?business_type=100&ar_id=292738" target="_blank" rel="noopener">对称原理（诺特 1918：时间平移对称→能量守恒，空间平移→动量，旋转→角动量）</a><span class="src"> · 科普中国</span></li><li><a href="https://www.peopleapp.com/rmharticle/30043436401" target="_blank" rel="noopener">时间晶体，直到世界尽头的浪漫（诺特：时间平移对称对应能量守恒；时间晶体未违反能量守恒）</a><span class="src"> · 人民日报人民号</span></li><li><a href="https://www.163.com/dy/article/KKEI2A9V0511C4OP.html" target="_blank" rel="noopener">能量守恒，其实不是宇宙铁律（中科院物理所：诺特定理；膨胀弯曲时空里能量不守恒）</a><span class="src"> · 网易 / 中科院物理所</span></li><li><a href="http://mp.weixin.qq.com/s?__biz=MzAwNTA5NTYxOA==&mid=403312068&idx=1&sn=5196ca15963d8c0ee80ad3ed351f26e2&chksm=071a415831ca46d2cd6fbcd9084c5cf4fddf1bfb2502bb7c1bf58d1d6895b8f9a09da21627e2#rd" target="_blank" rel="noopener">一本正经话科幻（萨根《接触》→索恩虫洞理论史；史瓦西1916、弗拉姆1916、爱因斯坦-罗森1935）</a><span class="src"> · 微信 / 江晓原</span></li><li><a href="http://mp.weixin.qq.com/s?__biz=MzI1OTExNzkzNw==&mid=2650462571&idx=3&sn=33a7a4621c3046a90cb03111dcdaf243&chksm=f273bf75c5043663a7c35119baa7d855010a6c6c01a355f52d90326dd9a60a7a2d33a676c845#rd" target="_blank" rel="noopener">基普·索恩的虫洞时间机器（两口相对运动/引力差造时间差；祖父悖论；平行宇宙解）</a><span class="src"> · 微信 / 中科院半导体所</span></li><li><a href="https://doi.org/10.1103/PhysRevLett.61.1446" target="_blank" rel="noopener">Morris, Thorne & Yurtsever (1988) Wormholes, Time Machines, and the Weak Energy Condition. PRL 61, 1446</a><span class="src"> · 论文 / DOI</span></li><li><a href="https://inspirehep.net/literature/269471" target="_blank" rel="noopener">Morris & Thorne (1988) Wormholes in spacetime…（2741 次引用，教学用可穿越虫洞解）</a><span class="src"> · INSPIRE-HEP</span></li></ul>`
+<ul class="pg-refs"><li><a href="https://theportalwiki.com/wiki/Portals" target="_blank" rel="noopener">Portals（GLaDOS 原话："Momentum... conserved between portals. Speedy thing goes in, speedy thing comes out"）</a><span class="src"> · 游戏资料 / Portal Wiki</span></li><li><a href="https://fbrowser.org/wikipedia/wiki/Portal_2" target="_blank" rel="noopener">傳送門2（自由落体的向下动量穿越后转为向前直线动量，速率不变；Valve 2011）</a><span class="src"> · 维基百科（镜像）</span></li><li><a href="http://mp.weixin.qq.com/s?__biz=MzA5OTY2OTYyOA==&mid=2650220309&idx=1&sn=19abf96274f4e360f9843d4239683e28&chksm=8935dc8e82a20ba55289c2beb04a54594e2b27ef0a0d7c93d7da3e83b8b929f0166399eded46#rd" target="_blank" rel="noopener">本期游戏分享：《传送门2》（核心机制传送门枪，物理深度挖掘动量守恒）</a><span class="src"> · 微信 / 百视通云电竞</span></li><li><a href="https://arxiv.org/abs/physics/0503066" target="_blank" rel="noopener">Noether, E. (1918) Invariant Variation Problems（诺特定理：连续对称对应守恒量，时间平移对应能量守恒）</a><span class="src"> · 论文英译 / arXiv</span></li><li><a href="https://www.kepuchina.cn/article/articleinfo?business_type=100&ar_id=292738" target="_blank" rel="noopener">对称原理（诺特 1918：时间平移对称→能量守恒，空间平移→动量，旋转→角动量）</a><span class="src"> · 科普中国</span></li><li><a href="https://www.peopleapp.com/rmharticle/30043436401" target="_blank" rel="noopener">时间晶体，直到世界尽头的浪漫（诺特：时间平移对称对应能量守恒；时间晶体未违反能量守恒）</a><span class="src"> · 人民日报人民号</span></li><li><a href="https://physics.aps.org/story/v15/st11" target="_blank" rel="noopener">The Birth of Wormholes（爱因斯坦-罗森 1935 虫洞起源；Einstein & Rosen, Phys. Rev. 48, 73）</a><span class="src"> · 美国物理学会</span></li><li><a href="https://doi.org/10.1103/PhysRev.48.73" target="_blank" rel="noopener">Einstein, A. & Rosen, N. (1935) The Particle Problem in the General Theory of Relativity. Phys. Rev. 48, 73</a><span class="src"> · 论文 / DOI</span></li><li><a href="https://www.osti.gov/biblio/5435651" target="_blank" rel="noopener">Morris, M. S. & Thorne, K. S. (1988) Wormholes in spacetime and their use for interstellar travel. Am. J. Phys. 56, 395</a><span class="src"> · 论文 / 美国能源部</span></li><li><a href="https://doi.org/10.1119/1.15620" target="_blank" rel="noopener">Morris & Thorne (1988) 同上文（可穿越虫洞度规、形状函数与红移函数、需奇异物质撑开喉部）</a><span class="src"> · 论文 / DOI</span></li><li><a href="https://www.gmw.cn/02sz/2009-10/01/content_1045497.htm" target="_blank" rel="noopener">宇宙中的时空隧道（索恩与莫里斯 1988 可穿越虫洞需"异常物质"、半径一厘米需地球质量量级）</a><span class="src"> · 光明网</span></li><li><a href="https://arxiv.org/abs/gr-qc/9410043" target="_blank" rel="noopener">Ford, L. H. & Roman, T. A. (1995) Averaged Energy Conditions and Quantum Inequalities（量子不等式限制负能量的量与持续时间）</a><span class="src"> · 论文 / arXiv</span></li><li><a href="https://doi.org/10.1103/PhysRevLett.61.1446" target="_blank" rel="noopener">Morris, Thorne & Yurtsever (1988) Wormholes, Time Machines, and the Weak Energy Condition. PRL 61, 1446</a><span class="src"> · 论文 / DOI</span></li><li><a href="https://www.kepuchina.cn/more/201607/t20160727_13663.shtml" target="_blank" rel="noopener">时间旅行是科学？还是幻想？（Morris-Thorne-Yurtsever 1988 虫洞时间机器、弱能量条件、霍金时序保护猜想）</a><span class="src"> · 科普中国</span></li><li><a href="https://doi.org/10.1103/PhysRevD.46.603" target="_blank" rel="noopener">Hawking, S. W. (1992) Chronology protection conjecture. Phys. Rev. D 46, 603</a><span class="src"> · 论文 / DOI</span></li><li><a href="http://mp.weixin.qq.com/s?__biz=MzI1OTExNzkzNw==&mid=2650462571&idx=3&sn=33a7a4621c3046a90cb03111dcdaf243&chksm=f273bf75c5043663a7c35119baa7d855010a6c6c01a355f52d90326dd9a60a7a2d33a676c845#rd" target="_blank" rel="noopener">基普·索恩的虫洞时间机器（两口相对运动/引力差造时间差；祖父悖论；平行宇宙解）</a><span class="src"> · 微信 / 中科院半导体所</span></li><li><a href="https://www.163.com/dy/article/KKEI2A9V0511C4OP.html" target="_blank" rel="noopener">能量守恒，其实不是宇宙铁律（中科院物理所：诺特定理；膨胀弯曲时空里能量不守恒）</a><span class="src"> · 网易 / 中科院物理所</span></li><li><a href="https://doi.org/10.1007/BF02084158" target="_blank" rel="noopener">Bennett, C. H. (1982) The thermodynamics of computation—a review（兰道尔原理：擦除一比特至少耗散 k_B T ln2）</a><span class="src"> · 论文 / DOI</span></li><li><a href="https://doi.org/10.1103/PhysRevD.7.2333" target="_blank" rel="noopener">Bekenstein, J. D. (1973) Black holes and entropy. Phys. Rev. D 7, 2333</a><span class="src"> · 论文 / DOI</span></li><li><a href="https://doi.org/10.1038/248030a0" target="_blank" rel="noopener">Hawking, S. W. (1974) Black hole explosions? Nature 248, 30（霍金辐射温度 T_H = ℏc³/8πGMk_B）</a><span class="src"> · 论文 / DOI</span></li><li><a href="https://arxiv.org/abs/1207.3123" target="_blank" rel="noopener">Almheiri, Marolf, Polchinski & Sully (2012) Black holes: complementarity or firewalls?（AMPS 火墙诘难）</a><span class="src"> · 论文 / arXiv</span></li><li><a href="https://arxiv.org/abs/hep-th/9711200" target="_blank" rel="noopener">Maldacena, J. (1997) The large N limit of superconformal field theories and supergravity（AdS/CFT 对偶）</a><span class="src"> · 论文 / arXiv</span></li><li><a href="https://arxiv.org/abs/hep-th/0603001" target="_blank" rel="noopener">Ryu, S. & Takayanagi, T. (2006) Holographic derivation of entanglement entropy（S_A = Area/4G_N）</a><span class="src"> · 论文 / arXiv</span></li><li><a href="https://arxiv.org/abs/1608.05687" target="_blank" rel="noopener">Gao, Jafferis & Wall (2016) Traversable wormholes via a double trace deformation</a><span class="src"> · 论文 / arXiv</span></li><li><a href="https://kepuchina.cn/public/new/201904/t20190417_1041887.shtml" target="_blank" rel="noopener">当黑洞遇上量子纠缠：掉入黑洞也能逃生（ER=EPR、可穿越虫洞与负能量撑开喉部）</a><span class="src"> · 科普中国</span></li><li><a href="https://doi.org/10.1103/PhysRevLett.78.5" target="_blank" rel="noopener">Lamoreaux, R. L. (1997) Demonstration of the Casimir force in the 0.6 to 6 μm range. PRL 78, 5</a><span class="src"> · 论文 / DOI</span></li><li><a href="https://arxiv.org/abs/gr-qc/0009013" target="_blank" rel="noopener">Alcubierre, M. (1994) The warp drive: hyper-fast travel within general relativity（曲速泡度规，需负能量密度）</a><span class="src"> · 论文 / arXiv</span></li><li><a href="https://arxiv.org/abs/gr-qc/9511068" target="_blank" rel="noopener">Krasnikov, S. (1995) Hyperfast travel in general relativity（克拉斯尼科夫管，可拼出闭合类时曲线）</a><span class="src"> · 论文 / arXiv</span></li><li><a href="https://doi.org/10.1103/PhysRevLett.70.1895" target="_blank" rel="noopener">Bennett et al. (1993) Teleporting an unknown quantum state via dual classical and EPR channels. PRL 70, 1895</a><span class="src"> · 论文 / DOI</span></li></ul>`
   },
   {
     id: "post-242",
