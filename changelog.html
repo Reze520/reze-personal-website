@@ -21,7 +21,7 @@
 <meta property="og:image:width" content="474">
 <meta property="og:image:height" content="474">
 <link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20viewBox%3D%270%200%2064%2064%27%3E%3Crect%20width%3D%2764%27%20height%3D%2764%27%20rx%3D%2715%27%20fill%3D%27%23241f33%27%2F%3E%3Cg%20transform%3D%27translate%286%2C6%29%20scale%282.1667%29%27%3E%3Cpath%20d%3D%27M21%2012.79A9%209%200%201%201%2011.21%203%207%207%200%200%200%2021%2012.79z%27%20fill%3D%27%23f6f1e7%27%2F%3E%3C%2Fg%3E%3C%2Fsvg%3E">
-<link rel="stylesheet" href="assets/css/style.css?v=20261103p">
+<link rel="stylesheet" href="assets/css/style.css?v=20261103q">
   <link rel="alternate" type="application/rss+xml" title="RezeのBlog" href="feed.xml">
 </head>
 <body class="has-app">
@@ -51,7 +51,7 @@
           <a href="/weather" class="m-dupe">天气</a>
           <a href="/album" class="m-dupe">相册</a>
           <a href="/links" class="m-dupe">导航</a>
-          <a href="/about">关于我</a>
+          <a href="/about">关于</a>
           <a href="/timeline">时间线</a>
           <a href="/changelog">更新日志</a>
         </div>
@@ -71,6 +71,13 @@
   <aside class="col col-left" id="app-left"></aside>
 
   <main class="col col-main" id="app-main"><article class="g-article g-changelog"><h1>更新日志</h1><div class="g-meta"><span>这个站怎么一点点长成现在这样。按时间倒着排。</span></div><div class="g-prose prose"><h2>2026.11</h2>
+<h3>浅色不再靠加白，卡片可以自己选</h3>
+<p>起因是一句话：浅色太亮了，要的是字突出，不是把整页提亮，卡片一块块白得突兀。</p>
+<p>先把白数了一遍，它是三层叠出来的。卡片底衬是 0.82 的白，卡片本体再叠一层 34% 的玻璃，最上面还有 html::after 那层 12% 的白幕——这层是压在字上面的。三层一起白，字反而被压淡；想让卡片从背景里分出来，只能再加白。所以「调亮度」这个做法从一开始就是往反方向走。</p>
+<p>改法是先安静背景，再让卡片后退。背景上加一层纸面纱（<code>--veil-alpha</code>），插画退成纹理，不再直接当底色；卡片只留一个颜色来源 <code>rgba(--card-tint, --card-alpha)</code>，基色用纸白 255,253,248 而不是纯白；卡片和页面的分界交给一条 10% 墨的细线，影子只剩几乎看不见的一层。浅色下 <code>--lite</code> 直接归零——白幕叠在字上只会降对比。</p>
+<p>设置面板里加了四个开关：卡片材质（纯色／半透明／毛玻璃）、卡片浓度、卡片颜色（纸白／纯白／暖米／冷灰）、背景弱化。材质按钮会顺手把浓度设成该材质的默认值，不然从纯色切到半透明看不出区别，会以为按钮坏了。深浅两套基色写在 CSS 的 <code>data-tint</code> 属性里，切主题自动跟，不需要在切换事件里再补一刀。</p>
+<p>踩了一个坑：一开始把 <code>--card-scrim</code> 这个变量本身改成 <code>rgba(var(--card-tint), var(--card-alpha))</code>，页面看着全对，但 <code>player_contrast.js</code> 一行都算不出来，全报「取不到背景」——嵌套的 var 它解析不了。改成覆盖 <code>::before</code> 的 <code>background</code>，变量保持字面值，审计恢复正常。顺手记一句：审计脚本算不出来的颜色，等于没测。</p>
+<p>验证：六个脚本里只剩两项既有失败（<code>.post-toc</code> 高度断言、<code>.g-cmt-del:hover</code> 对比 3.24），与改动前逐条一致；浅色、深色、纯色、半透明各截了一张对照图，390 宽的窄屏也过了一遍。</p>
 <h3>新文章：《缩写过剩的时代》</h3>
 <p>一封粉丝写给宋丹丹的信，六句话里有六个拼音缩写，她念到「yyds」读成「丫丫ds」，词条当晚上了热搜第一。这件事好笑的地方在于它不该发生：写信的和收信的都是中文母语者，中间隔了一层谁也说不清的加密。这篇就是拆这层加密从哪来、谁在加密、对谁有利、代价落在谁头上。</p>
 <ul>
@@ -417,9 +424,9 @@
   } catch (e) {}
 })();
 </script>
-<script defer src="assets/js/data.js?v=20261103p"></script>
-<script defer src="assets/js/cloud.js?v=20261103p"></script>
-<script defer src="assets/js/weather.js?v=20261103p"></script>
-<script defer src="assets/js/main.js?v=20261103p"></script>
+<script defer src="assets/js/data.js?v=20261103q"></script>
+<script defer src="assets/js/cloud.js?v=20261103q"></script>
+<script defer src="assets/js/weather.js?v=20261103q"></script>
+<script defer src="assets/js/main.js?v=20261103q"></script>
 </body>
 </html>

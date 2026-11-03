@@ -10425,3 +10425,244 @@ html {
 .pg-indent > h3 + p {
   text-indent: 0;
 }
+
+/* ============================================================
+   34. 阅读层次：纸面 · 背景弱化 · 卡片材质（2026-11-03）
+   ------------------------------------------------------------
+   起因是一句话：「浅色太亮了。我要的是字突出，不是把整页提亮；
+   卡片一块块白得突兀。」
+
+   诊断：浅色的白是三层叠出来的 ——
+     ① 卡片底衬 --card-scrim: rgba(255,255,255,.82)（32 节）
+     ② 卡片本体再叠一层 color-mix(--glass 34%)（32 节尾部）
+     ③ html::after 上那层白幕（--lite 0.12），它压在字上面
+   组合结果：底衬越白，卡片越要纯白才分得出来；分出来之后，
+   整块白压在一片彩照上，字和卡片的对比全靠「白 vs 灰」撑着。
+   背景一换照片，这套就塌。加亮度只是把三层一起推得更白。
+
+   改法（顺序不能反，先安静背景，卡片才敢往后退）：
+     ④ 背景换成一层「纸面纱」：--veil-color + --veil-alpha（可调）。
+        插画退成纹理，不再直接当底色用。
+     ⑤ 卡片只留一个颜色来源 rgba(--card-tint, --card-alpha)。
+        基色是纸白 255,253,248，不是纯白 —— 纯白压在暖纸面上最刺眼。
+     ⑥ 分界改由一条 10% 墨的实线承担，影子只留几乎看不见的一层。
+     ⑦ 浅色下 --lite 归零：白幕叠在字上只会降对比，不提可读性。
+   三个材质开关只改一件事：--card-filter 有没有模糊 + 默认浓度。
+   ============================================================ */
+
+/* ---------- 34.1 令牌 ---------- */
+:root {
+  /* 卡片基色，RGB 三元组，给 rgba() 拼 alpha 用 */
+  --card-tint: 255, 253, 248;
+  /* 卡片不透明度 0–1，设置面板里可调 */
+  --card-alpha: 0.78;
+  /* 卡片材质：none = 纯色 / 半透明；blur(...) = 毛玻璃 */
+  --card-filter: blur(14px) saturate(108%);
+  /* 卡片描边：一条实色细线 */
+  --card-line: rgba(52, 44, 32, 0.1);
+  /* 背景纸面纱 */
+  --veil-color: 232, 228, 220;
+  --veil-alpha: 0.62;
+  /* 卡片影子：只负责「浮起一点」，不负责分界 */
+  --card-shadow: 0 1px 2px rgba(48, 40, 28, 0.04), 0 12px 30px rgba(48, 40, 28, 0.05);
+}
+
+:root[data-theme="dark"] {
+  --card-tint: 30, 27, 40;
+  --card-alpha: 0.74;
+  --card-line: rgba(255, 255, 255, 0.1);
+  --veil-color: 12, 10, 18;
+  --veil-alpha: 0.62;
+  --card-shadow: 0 1px 2px rgba(0, 0, 0, 0.2), 0 18px 44px rgba(0, 0, 0, 0.24);
+}
+
+/* 浅色不再铺白幕。深色保留：深色下提亮是把暗部抬起来，确实有用。 */
+:root:not([data-theme="dark"]) {
+  --lite: 0;
+}
+
+/* ---------- 34.2 背景弱化 ----------
+   一张固定层，纸面色 + 可调不透明度。放在 .page-bg 的 ::before 上，
+   与原来的噪点 ::after 分开，互不覆盖（那个 ::after 还兼着压暗/提亮渐变）。 */
+.page-bg::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: rgb(var(--veil-color));
+  opacity: var(--veil-alpha);
+  transition: opacity 0.3s var(--ease);
+}
+
+/* ---------- 34.3 卡片：一个颜色来源 ----------
+   32 节那张底衬（::before 上的 --card-scrim）从此就是卡片本身：
+   颜色与浓度都换成新的两个变量，卡片本体的 background 让出去，
+   避免「白底衬 + 白本体」两层白再叠一次。
+
+   注意改的是 ::before 的 background，不是把 --card-scrim 这个变量
+   换成 rgba(var(...), var(...)) —— 后者会让 --card-scrim 变成不可
+   解析的嵌套值，审计脚本（player_contrast / contrast_audit）一行都
+   算不出来，以前踩过这个坑。 */
+.g-card::before,
+.g-post::before,
+.g-posth::before,
+.g-moment::before,
+.g-link::before,
+.g-album figure::before,
+.g-article::before,
+.side-block::before,
+.profile::before,
+.g-tabs::before,
+.g-filters::before,
+.g-searchline::before {
+  background: rgba(var(--card-tint), var(--card-alpha));
+}
+
+.g-card,
+.g-post,
+.g-posth,
+.g-moment,
+.g-link,
+.g-album figure,
+.g-article,
+.side-block,
+.profile,
+.g-tabs,
+.g-filters,
+.g-searchline {
+  background: transparent !important;
+  border-color: var(--card-line);
+  box-shadow: var(--card-shadow);
+  backdrop-filter: var(--card-filter) !important;
+  -webkit-backdrop-filter: var(--card-filter) !important;
+}
+
+/* 悬停：抬一点点影子就够，别再加深底色（底色一深，白块感又回来） */
+.g-post:hover,
+.g-posth:hover {
+  border-color: color-mix(in srgb, var(--g-ink) 16%, transparent);
+}
+
+/* 纯色模式下模糊退场，卡片就是一块纸 */
+:root[data-mat="solid"] .g-card,
+:root[data-mat="solid"] .g-post,
+:root[data-mat="solid"] .g-posth,
+:root[data-mat="solid"] .g-moment,
+:root[data-mat="solid"] .g-link,
+:root[data-mat="solid"] .g-article,
+:root[data-mat="solid"] .side-block,
+:root[data-mat="solid"] .profile,
+:root[data-mat="solid"] .g-tabs,
+:root[data-mat="solid"] .g-filters,
+:root[data-mat="solid"] .g-searchline {
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  box-shadow: none;
+}
+
+/* ---------- 34.4 字压得住 ----------
+   卡片退下去之后，文字靠三件事立住：字重 450（30 节已有）、
+   墨色比原来略深一点、正文与卡片之间不再隔着一层白幕。 */
+:root:not([data-theme="dark"]) {
+  --prose-ink: #14141a;
+  --g-ink: rgba(20, 20, 26, 0.95);
+  --g-ink-2: rgba(20, 20, 26, 0.72);
+  --g-ink-3: rgba(20, 20, 26, 0.58);
+}
+
+/* 卡片内的分隔线跟着描边走，不再是一条独立的白线 */
+.g-posth,
+.g-article {
+  --prose-line: color-mix(in srgb, var(--g-ink) 12%, transparent);
+}
+
+/* ---------- 34.5 移动端 ----------
+   小屏没有左右栏，卡片是满宽的，透明度可以再高一点，不然字会漂。 */
+@media (max-width: 760px) {
+  :root {
+    --card-alpha: 0.84;
+    --card-filter: blur(10px) saturate(104%);
+  }
+  :root[data-theme="dark"] {
+    --card-alpha: 0.86;
+  }
+  .g-card,
+  .g-post,
+  .g-posth,
+  .g-moment,
+  .g-link,
+  .g-article,
+  .side-block,
+  .profile,
+  .g-tabs,
+  .g-filters,
+  .g-searchline {
+    box-shadow: none;
+  }
+}
+
+/* ---------- 34.6 卡片基色：四种，深浅各一套 ----------
+   走 data-tint 属性而不是行内变量，切深浅色时颜色自动跟着换，
+   不需要 JS 在主题切换事件里再补一刀。 */
+:root[data-tint="white"] {
+  --card-tint: 255, 255, 255;
+}
+:root[data-tint="warm"] {
+  --card-tint: 252, 246, 234;
+}
+:root[data-tint="cool"] {
+  --card-tint: 246, 249, 252;
+}
+:root[data-theme="dark"][data-tint="white"] {
+  --card-tint: 38, 35, 48;
+}
+:root[data-theme="dark"][data-tint="warm"] {
+  --card-tint: 34, 29, 34;
+}
+:root[data-theme="dark"][data-tint="cool"] {
+  --card-tint: 26, 30, 38;
+}
+
+/* 设置面板里的颜色块：浅色卡片上用内描边勾出来，不然纯白按钮看不见 */
+.preset.tint {
+  box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.14);
+}
+
+/* 设置面板里的通用滑块（卡片浓度 / 背景弱化），轨道是中性灰 */
+.set-slider {
+  width: 100%;
+  height: 6px;
+  border-radius: 4px;
+  -webkit-appearance: none;
+  appearance: none;
+  outline: none;
+  background: linear-gradient(
+    90deg,
+    color-mix(in srgb, var(--g-ink) 22%, transparent) 0%,
+    color-mix(in srgb, var(--g-ink) 46%, transparent) 100%
+  );
+  cursor: pointer;
+}
+.set-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: var(--panel);
+  border: 2px solid color-mix(in srgb, var(--g-ink) 28%, transparent);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.16);
+}
+.set-slider::-moz-range-thumb {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: var(--panel);
+  border: 2px solid color-mix(in srgb, var(--g-ink) 28%, transparent);
+}
+.set-val {
+  float: right;
+  font-size: 11px;
+  letter-spacing: 0;
+  color: var(--g-ink-3);
+  font-variant-numeric: tabular-nums;
+}

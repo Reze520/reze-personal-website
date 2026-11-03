@@ -9,10 +9,45 @@
   /* 亮度先落地：style.css 里 --lite 默认 0.12，用户调过的话这里第一时间覆盖，
      免得等到打开设置面板才生效（那一下会亮/暗跳一次）。 */
   try {
+    var _root0 = document.documentElement;
+    var _dark0 = _root0.getAttribute("data-theme") === "dark";
     var _lite = localStorage.getItem("reze-lite");
-    if (_lite !== null) {
+    /* 浅色下不铺白幕：那层白压在字上面，越提字越淡（34 节已把默认值归零）。
+       "12" 是旧版本的浅色默认值，读到了也当没设过。 */
+    if (_lite === null || (!_dark0 && _lite === "12")) {
+      if (!_dark0) _root0.style.setProperty("--lite", "0");
+    } else {
       var _n = Math.max(0, Math.min(40, Number(_lite) || 0));
-      document.documentElement.style.setProperty("--lite", (_n / 100).toFixed(2));
+      _root0.style.setProperty("--lite", (_n / 100).toFixed(2));
+    }
+  } catch (e) {}
+
+  /* 卡片材质 / 浓度 / 颜色 / 背景弱化：同样先落地，避免进页面先闪一片纯白卡片。
+     材质与颜色走 data-mat / data-tint（深浅两套值写在 CSS 里，切主题自动跟），
+     浓度与背景弱化是连续量，走行内变量。 */
+  try {
+    var _root1 = document.documentElement;
+    var _FILTERS = {
+      solid: "none",
+      translucent: "none",
+      frost: "blur(14px) saturate(108%)",
+    };
+    var _mat = localStorage.getItem("reze-card-mat");
+    if (_mat && Object.prototype.hasOwnProperty.call(_FILTERS, _mat)) {
+      _root1.setAttribute("data-mat", _mat);
+      _root1.style.setProperty("--card-filter", _FILTERS[_mat]);
+    }
+    var _tint = localStorage.getItem("reze-card-tint");
+    if (_tint) _root1.setAttribute("data-tint", _tint);
+    var _ca = localStorage.getItem("reze-card-alpha");
+    if (_ca !== null) {
+      var _can = Math.max(0, Math.min(100, Number(_ca) || 0));
+      _root1.style.setProperty("--card-alpha", (_can / 100).toFixed(2));
+    }
+    var _ve = localStorage.getItem("reze-veil");
+    if (_ve !== null) {
+      var _ven = Math.max(0, Math.min(100, Number(_ve) || 0));
+      _root1.style.setProperty("--veil-alpha", (_ven / 100).toFixed(2));
     }
   } catch (e) {}
 
@@ -3744,6 +3779,22 @@ function interceptLinks(e) {
       '<div class="set-group"><label>皮肤</label>' +
       '<div class="seg" id="skin-seg">' +
       '<button data-skin="soft">淡紫</button><button data-skin="minimal">极简</button></div></div>' +
+      '<div class="set-group"><label>卡片材质</label>' +
+      '<div class="seg" id="mat-seg">' +
+      '<button data-mat="solid">纯色</button>' +
+      '<button data-mat="translucent">半透明</button>' +
+      '<button data-mat="frost">毛玻璃</button></div></div>' +
+      '<div class="set-group"><label>卡片浓度<span class="set-val" id="card-val">66%</span></label>' +
+      '<input type="range" class="set-slider" id="card-alpha" min="0" max="100" step="1" value="66"></div>' +
+      '<div class="set-group"><label>卡片颜色</label>' +
+      '<div class="preset-row" id="tint-row">' +
+      '<button class="preset tint" data-tint="paper" style="background:#fffdf8" title="纸白"></button>' +
+      '<button class="preset tint" data-tint="white" style="background:#ffffff" title="纯白"></button>' +
+      '<button class="preset tint" data-tint="warm" style="background:#fcf6ea" title="暖米"></button>' +
+      '<button class="preset tint" data-tint="cool" style="background:#f6f9fc" title="冷灰"></button>' +
+      "</div></div>" +
+      '<div class="set-group"><label>背景弱化<span class="set-val" id="veil-val">50%</span></label>' +
+      '<input type="range" class="set-slider" id="veil" min="0" max="100" step="1" value="50"></div>' +
       '<div class="set-group"><label>背景图</label>' +
       '<div class="bg-row" id="bg-row"></div>' +
       "</div>" +
@@ -3801,7 +3852,121 @@ function interceptLinks(e) {
     var savedHue = STORAGE.get("reze-hue");
     applyHue(savedHue === null ? 215 : Number(savedHue));
     var savedLite = STORAGE.get("reze-lite");
-    applyLite(savedLite === null ? 12 : Number(savedLite));
+    if (savedLite === null || (root.getAttribute("data-theme") !== "dark" && savedLite === "12")) {
+      savedLite = "0";
+    }
+    applyLite(Number(savedLite));
+
+    /* ---------- 卡片材质 / 浓度 / 颜色 / 背景弱化 ----------
+       四个开关共用 34 节那组变量：
+         --card-filter 决定有没有模糊（纯色、半透明都是 none）
+         --card-alpha  决定透多少
+         data-tint     决定基色（深浅两套值写在 CSS 里）
+         --veil-alpha  决定背景插画退到多淡
+       材质按钮会顺手把浓度设成该材质的默认值 —— 否则从纯色切到
+       半透明看不出区别，用户会以为按钮坏了。 */
+    var MAT = {
+      solid: { filter: "none", alpha: 100 },
+      translucent: { filter: "none", alpha: 60 },
+      frost: { filter: "blur(14px) saturate(108%)", alpha: 78 },
+    };
+    var TINTS = ["paper", "white", "warm", "cool"];
+    var cardAlphaEl = overlay.querySelector("#card-alpha");
+    var cardVal = overlay.querySelector("#card-val");
+    var veilEl = overlay.querySelector("#veil");
+    var veilVal = overlay.querySelector("#veil-val");
+    var tintRow = overlay.querySelector("#tint-row");
+
+    function applyMat(key, keepAlpha) {
+      if (!MAT[key]) key = "frost";
+      root.setAttribute("data-mat", key);
+      root.style.setProperty("--card-filter", MAT[key].filter);
+      if (!keepAlpha) applyCardAlpha(MAT[key].alpha);
+      Array.prototype.forEach.call(overlay.querySelectorAll("#mat-seg button"), function (b) {
+        b.setAttribute("aria-pressed", String(b.getAttribute("data-mat") === key));
+      });
+      STORAGE.set("reze-card-mat", key);
+    }
+
+    function applyCardAlpha(v) {
+      var n = Math.max(0, Math.min(100, Math.round(Number(v) || 0)));
+      root.style.setProperty("--card-alpha", (n / 100).toFixed(2));
+      if (cardVal) cardVal.textContent = n + "%";
+      if (cardAlphaEl) cardAlphaEl.value = n;
+      STORAGE.set("reze-card-alpha", String(n));
+    }
+
+    function applyTint(key) {
+      if (TINTS.indexOf(key) === -1) key = "paper";
+      root.setAttribute("data-tint", key);
+      if (tintRow) {
+        Array.prototype.forEach.call(tintRow.querySelectorAll(".preset"), function (b) {
+          b.setAttribute("aria-pressed", String(b.getAttribute("data-tint") === key));
+        });
+      }
+      STORAGE.set("reze-card-tint", key);
+    }
+
+    function applyVeil(v) {
+      var n = Math.max(0, Math.min(100, Math.round(Number(v) || 0)));
+      root.style.setProperty("--veil-alpha", (n / 100).toFixed(2));
+      if (veilVal) veilVal.textContent = n + "%";
+      if (veilEl) veilEl.value = n;
+      STORAGE.set("reze-veil", String(n));
+    }
+
+    /* 面板上的读数以「当前真正生效的值」为准：行内变量优先于 CSS 默认值，
+       所以先把两者都读出来，滑块才不会一打开就跳一下。 */
+    function readNum(name, fallback) {
+      var inline = root.style.getPropertyValue(name);
+      var v = inline || "";
+      if (!v) {
+        try {
+          v = getComputedStyle(root).getPropertyValue(name);
+        } catch (e) {
+          v = "";
+        }
+      }
+      var n = Number(String(v).trim());
+      return isFinite(n) ? n : fallback;
+    }
+
+    /* 初始化只「读」不「写」：没动过设置就不往行内塞值，
+       否则行内值会盖掉 CSS 里按断点给的默认值（手机上卡片该更实一点）。 */
+    function paintMat(key) {
+      if (!MAT[key]) key = "frost";
+      root.setAttribute("data-mat", key);
+      Array.prototype.forEach.call(overlay.querySelectorAll("#mat-seg button"), function (b) {
+        b.setAttribute("aria-pressed", String(b.getAttribute("data-mat") === key));
+      });
+    }
+
+    var savedMat = STORAGE.get("reze-card-mat");
+    if (savedMat && MAT[savedMat]) {
+      applyMat(savedMat, true);
+    } else {
+      paintMat("frost");
+    }
+
+    var savedAlpha = STORAGE.get("reze-card-alpha");
+    if (savedAlpha !== null) {
+      applyCardAlpha(Number(savedAlpha));
+    } else {
+      var curAlpha = Math.round(readNum("--card-alpha", 0.78) * 100);
+      if (cardVal) cardVal.textContent = curAlpha + "%";
+      if (cardAlphaEl) cardAlphaEl.value = curAlpha;
+    }
+
+    applyTint(root.getAttribute("data-tint") || "paper");
+
+    var savedVeil = STORAGE.get("reze-veil");
+    if (savedVeil !== null) {
+      applyVeil(Number(savedVeil));
+    } else {
+      var curVeil = Math.round(readNum("--veil-alpha", 0.62) * 100);
+      if (veilVal) veilVal.textContent = curVeil + "%";
+      if (veilEl) veilEl.value = curVeil;
+    }
     syncSegs();
 
     hue.addEventListener("input", function () {
@@ -3820,11 +3985,41 @@ function interceptLinks(e) {
       applyHue(Number(b.getAttribute("data-h")));
     });
 
+    overlay.querySelector("#mat-seg").addEventListener("click", function (e) {
+      var b = e.target.closest("button");
+      if (!b) return;
+      applyMat(b.getAttribute("data-mat"));
+    });
+
+    if (cardAlphaEl) {
+      cardAlphaEl.addEventListener("input", function () {
+        applyCardAlpha(cardAlphaEl.value);
+      });
+    }
+
+    if (veilEl) {
+      veilEl.addEventListener("input", function () {
+        applyVeil(veilEl.value);
+      });
+    }
+
+    if (tintRow) {
+      tintRow.addEventListener("click", function (e) {
+        var b = e.target.closest(".preset");
+        if (!b) return;
+        applyTint(b.getAttribute("data-tint"));
+      });
+    }
+
     overlay.querySelector("#mode-seg").addEventListener("click", function (e) {
       var b = e.target.closest("button");
       if (!b) return;
       root.setAttribute("data-theme", b.getAttribute("data-mode"));
       STORAGE.set("reze-theme", b.getAttribute("data-mode"));
+      /* 用户没手动调过亮度时，跟着主题取默认值：深色抬一档，浅色保持 0 */
+      if (STORAGE.get("reze-lite") === null) {
+        applyLite(root.getAttribute("data-theme") === "dark" ? 12 : 0);
+      }
       syncSegs();
     });
 
