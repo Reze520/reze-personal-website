@@ -6479,6 +6479,29 @@ body {
 }
 .g-pager .pg-btn:hover { border-color: var(--g-accent); color: var(--g-accent); }
 .g-pager .pg-btn.on { background: var(--g-accent); border-color: var(--g-accent); color: var(--accent-ink); }
+.g-pager .pg-btn.disabled,
+.g-pager .pg-btn[disabled] { opacity: 0.35; cursor: default; pointer-events: none; }
+.g-pager .pg-btn.pg-prev,
+.g-pager .pg-btn.pg-next { font-size: 17px; line-height: 1; padding: 0 12px; }
+.g-pager .pg-ellipsis { color: var(--g-text-2); align-self: center; padding: 0 2px; user-select: none; }
+.g-pager .pg-jump { display: inline-flex; align-items: center; gap: 6px; margin-left: 6px; }
+.g-pager .pg-input {
+  width: 56px; height: 36px; padding: 0 8px; box-sizing: border-box;
+  border-radius: 10px; border: 1px solid var(--line);
+  background: transparent; color: var(--g-text);
+  font-size: 13px; text-align: center; transition: border-color 0.2s var(--ease);
+  -moz-appearance: textfield;
+}
+.g-pager .pg-input::-webkit-outer-spin-button,
+.g-pager .pg-input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+.g-pager .pg-input:focus { outline: none; border-color: var(--g-accent); }
+.g-pager .pg-go {
+  height: 36px; padding: 0 12px; border-radius: 10px;
+  border: 1px solid var(--g-accent); background: transparent;
+  color: var(--g-accent); cursor: pointer; font-size: 13px;
+  transition: all 0.2s var(--ease);
+}
+.g-pager .pg-go:hover { background: var(--g-accent); color: var(--accent-ink); }
 
 /* ============================================================
    19. 天气页：多城市切换

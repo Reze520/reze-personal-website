@@ -1196,6 +1196,79 @@
     );
   }
 
+  // 列表分页条：左右箭头 + 首尾各 5 页 + 中间省略号 + 跳转输入框
+  function pagerNums(pages, page) {
+    var cur = page + 1; // 1-based 当前页
+    if (pages <= 11) {
+      var a = [];
+      for (var i = 1; i <= pages; i++) a.push(i);
+      return a;
+    }
+    var leftEnd = 5, rightStart = pages - 4, out = [], lastNum = 0;
+    function sep() { if (out.length && out[out.length - 1] !== "…") out.push("…"); }
+    for (var i = 1; i <= leftEnd; i++) { out.push(i); lastNum = i; }
+    var mid = [];
+    if (cur > leftEnd && cur < rightStart) mid = [cur - 1, cur, cur + 1];
+    if (mid.length) {
+      if (mid[0] > lastNum + 1) sep();
+      mid.forEach(function (n) { if (n > lastNum) { out.push(n); lastNum = n; } });
+      if (rightStart > lastNum + 1) sep();
+    } else if (rightStart > lastNum + 1) {
+      sep();
+    }
+    for (var j = rightStart; j <= pages; j++) { if (j > lastNum) { out.push(j); lastNum = j; } }
+    return out;
+  }
+
+  function buildPager(pages, page) {
+    if (pages <= 1) return "";
+    var h = '<div class="g-pager">';
+    var prev = page <= 0;
+    var next = page >= pages - 1;
+    h += '<button class="pg-btn pg-prev' + (prev ? " disabled" : "") + '" data-p="' + (page - 1) +
+      '"' + (prev ? " disabled aria-disabled=\"true\"" : "") + ' aria-label="上一页">‹</button>';
+    pagerNums(pages, page).forEach(function (n) {
+      if (n === "…") {
+        h += '<span class="pg-ellipsis" aria-hidden="true">…</span>';
+      } else {
+        h += '<button class="pg-btn' + (n - 1 === page ? " on" : "") + '" data-p="' + (n - 1) + '">' + n + "</button>";
+      }
+    });
+    h += '<button class="pg-btn pg-next' + (next ? " disabled" : "") + '" data-p="' + (page + 1) +
+      '"' + (next ? " disabled aria-disabled=\"true\"" : "") + ' aria-label="下一页">›</button>';
+    h += '<span class="pg-jump"><input class="pg-input" type="number" min="1" max="' + pages +
+      '" placeholder="跳至" aria-label="跳转到页码"><button class="pg-go" type="button">跳转</button></span>';
+    return h + "</div>";
+  }
+
+  function bindPagerActions(listEl, pages, c, t, apply) {
+    listEl.querySelectorAll(".pg-btn").forEach(function (b) {
+      b.onclick = function () {
+        if (b.classList.contains("disabled")) return;
+        var p = Number(b.getAttribute("data-p"));
+        apply(c, t, p);
+        syncListQuery(c, t, String(p));
+        try { listEl.scrollIntoView({ behavior: "smooth", block: "start" }); } catch (err) {}
+      };
+    });
+    var jinput = listEl.querySelector(".pg-input");
+    var jbtn = listEl.querySelector(".pg-go");
+    if (jinput && jbtn) {
+      var go = function () {
+        var v = parseInt(jinput.value, 10);
+        if (!v || v < 1) v = 1;
+        if (v > pages) v = pages;
+        apply(c, t, v - 1);
+        syncListQuery(c, t, String(v - 1));
+        try { listEl.scrollIntoView({ behavior: "smooth", block: "start" }); } catch (err) {}
+      };
+      jbtn.onclick = go;
+      jinput.addEventListener("keydown", function (e) {
+        if (e.key === "Enter") { e.preventDefault(); go(); }
+      });
+    }
+  }
+
   function bindPostTabs(root, params0) {    var listEl = root.querySelector("#g-list");
     var barEl = root.querySelector("#g-tabs");
     if (!listEl || !barEl) return;
@@ -1204,15 +1277,6 @@
     var startCat = params.get("cat") || "全部";
     var startTag = params.get("tag") || "";
     var PER = 12; // 每页篇数
-
-    function pagerHtml(pages, page) {
-      if (pages <= 1) return "";
-      var h = '<div class="g-pager">';
-      for (var i = 0; i < pages; i++) {
-        h += '<button class="pg-btn' + (i === page ? " on" : "") + '" data-p="' + i + '">' + (i + 1) + "</button>";
-      }
-      return h + "</div>";
-    }
 
     function apply(c, t, page) {
       page = page || 0;
@@ -1226,17 +1290,11 @@
       var slice = list.slice(page * PER, page * PER + PER);
       listEl.innerHTML = (slice.length
         ? slice.map(glassPostH).join("")
-        : '<div class="g-empty">这里还没有文章</div>') + pagerHtml(pages, page);
+        : '<div class="g-empty">这里还没有文章</div>') + buildPager(pages, page);
       Array.prototype.forEach.call(barEl.querySelectorAll(".g-tab[data-cat]"), function (b) {
         b.setAttribute("aria-pressed", String(!t && b.getAttribute("data-cat") === c));
       });
-      listEl.querySelectorAll(".pg-btn").forEach(function (b) {
-        b.onclick = function () {
-          apply(c, t, Number(b.getAttribute("data-p")));
-          syncListQuery(c, t, b.getAttribute("data-p"));
-          try { listEl.scrollIntoView({ behavior: "smooth", block: "start" }); } catch (err) {}
-        };
-      });
+      bindPagerActions(listEl, pages, c, t, apply);
     }
 
     barEl.addEventListener("click", function (e) {
@@ -1302,15 +1360,6 @@
     var startCat = params.get("cat") || "全部";
     var startTag = params.get("tag") || "";
 
-    function pagerHtml(pages, page) {
-      if (pages <= 1) return "";
-      var h = '<div class="g-pager">';
-      for (var i = 0; i < pages; i++) {
-        h += '<button class="pg-btn' + (i === page ? " on" : "") + '" data-p="' + i + '">' + (i + 1) + "</button>";
-      }
-      return h + "</div>";
-    }
-
     function apply(c, t, page) {
       page = page || 0;
       var list = orderedPosts().filter(function (p) {
@@ -1323,17 +1372,11 @@
       var slice = list.slice(page * PER, page * PER + PER);
       listEl.innerHTML = (slice.length
         ? slice.map(glassPostMarkup).join("")
-        : '<div class="g-empty">这里还没有文章</div>') + pagerHtml(pages, page);
+        : '<div class="g-empty">这里还没有文章</div>') + buildPager(pages, page);
       Array.prototype.forEach.call(barEl.querySelectorAll(".g-chip"), function (b) {
         b.setAttribute("aria-pressed", String(!t && b.getAttribute("data-cat") === c));
       });
-      listEl.querySelectorAll(".pg-btn").forEach(function (b) {
-        b.onclick = function () {
-          apply(c, t, Number(b.getAttribute("data-p")));
-          syncListQuery(c, t, b.getAttribute("data-p"));
-          try { listEl.scrollIntoView({ behavior: "smooth", block: "start" }); } catch (err) {}
-        };
-      });
+      bindPagerActions(listEl, pages, c, t, apply);
     }
 
     barEl.addEventListener("click", function (e) {
