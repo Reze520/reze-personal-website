@@ -41,8 +41,10 @@
     if (_tint) _root1.setAttribute("data-tint", _tint);
     var _ca = localStorage.getItem("reze-card-alpha");
     if (_ca !== null) {
-      var _can = Math.max(0, Math.min(100, Number(_ca) || 0));
+      // 70 是可读下限：再低卡片就等于没底，背景图的高光会直接压住正文
+      var _can = Math.max(70, Math.min(100, Number(_ca) || 0));
       _root1.style.setProperty("--card-alpha", (_can / 100).toFixed(2));
+      if (_can !== Number(_ca)) localStorage.setItem("reze-card-alpha", String(_can));
     }
     var _ve = localStorage.getItem("reze-veil");
     if (_ve !== null) {
@@ -4107,8 +4109,8 @@ function interceptLinks(e) {
       '<button data-mat="solid">纯色</button>' +
       '<button data-mat="translucent">半透明</button>' +
       '<button data-mat="frost">毛玻璃</button></div></div>' +
-      '<div class="set-group"><label>卡片浓度<span class="set-val" id="card-val">66%</span></label>' +
-      '<input type="range" class="set-slider" id="card-alpha" min="0" max="100" step="1" value="66"></div>' +
+      '<div class="set-group"><label>卡片浓度<span class="set-val" id="card-val">74%</span></label>' +
+      '<input type="range" class="set-slider" id="card-alpha" min="70" max="100" step="1" value="74"></div>' +
       '<div class="set-group"><label>卡片颜色</label>' +
       '<div class="preset-row" id="tint-row">' +
       '<button class="preset tint" data-tint="paper" style="background:#fffdf8" title="纸白"></button>' +
@@ -4190,7 +4192,7 @@ function interceptLinks(e) {
        半透明看不出区别，用户会以为按钮坏了。 */
     var MAT = {
       solid: { filter: "none", alpha: 100 },
-      translucent: { filter: "none", alpha: 60 },
+      translucent: { filter: "none", alpha: 72 },
       frost: { filter: "blur(14px) saturate(108%)", alpha: 78 },
     };
     var TINTS = ["paper", "white", "warm", "cool"];
@@ -4212,7 +4214,8 @@ function interceptLinks(e) {
     }
 
     function applyCardAlpha(v) {
-      var n = Math.max(0, Math.min(100, Math.round(Number(v) || 0)));
+      // 下限 70：卡片浓度低于这个值，全屏背景图的亮部会直接透到文字上
+      var n = Math.max(70, Math.min(100, Math.round(Number(v) || 0)));
       root.style.setProperty("--card-alpha", (n / 100).toFixed(2));
       if (cardVal) cardVal.textContent = n + "%";
       if (cardAlphaEl) cardAlphaEl.value = n;

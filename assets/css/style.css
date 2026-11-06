@@ -905,13 +905,15 @@ button {
 .card.no-cover > a { grid-template-columns: 1fr; }
 .g-posth.no-cover { grid-template-columns: 1fr; }
 
-/* 无封面文字卡 / 文章页的极简分类色细节：仅细线、小标，不进入阅读区 */
+/* 无封面文字卡 / 文章页的极简分类色细节：仅细线、小标，不进入阅读区。
+   注意这里必须用 ::after —— 卡片的深色底衬（--card-scrim）占着 ::before，
+   两套规则抢同一个伪元素时选择器更重的会把底衬顶掉，卡片就变成全透明。 */
 .card.no-cover,
 .g-posth.no-cover {
   position: relative;
 }
-.card.no-cover::before,
-.g-posth.no-cover::before {
+.card.no-cover::after,
+.g-posth.no-cover::after {
   content: "";
   position: absolute;
   top: 18px;
@@ -934,8 +936,8 @@ button {
   border-radius: 3px;
   background: hsl(var(--cat-h, 262) 52% 56% / 0.55);
 }
-[data-theme="dark"] .card.no-cover::before,
-[data-theme="dark"] .g-posth.no-cover::before {
+[data-theme="dark"] .card.no-cover::after,
+[data-theme="dark"] .g-posth.no-cover::after {
   background: hsl(var(--cat-h, 262) 50% 66% / 0.6);
 }
 [data-theme="dark"] .g-article.no-cover h1::after {
