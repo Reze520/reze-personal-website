@@ -6469,41 +6469,77 @@ body {
   .cal-sub { display: none; }
 }
 
-/* 文章列表分页 */
-.g-pager { display: flex; gap: 8px; justify-content: center; margin: 26px 0 8px; }
+/* 文章列表分页：实底容器 + 高对比按钮，不再压在花纹背景上隐形 */
+.g-pager {
+  display: flex; flex-wrap: wrap; align-items: center; justify-content: center;
+  gap: 6px; width: fit-content; max-width: 100%;
+  margin: 26px auto 8px; padding: 10px 14px;
+  border: 1px solid var(--line-2); border-radius: 16px;
+  background: var(--panel); box-shadow: var(--shadow);
+}
 .g-pager .pg-btn {
   min-width: 36px; height: 36px; padding: 0 10px;
-  border-radius: 10px; border: 1px solid var(--line);
-  background: transparent; color: var(--g-text-2);
-  cursor: pointer; font-size: 13px; transition: all 0.2s var(--ease);
+  border-radius: 10px; border: 1px solid var(--line-2);
+  background: var(--panel-2); color: var(--ink);
+  cursor: pointer; font-size: 14px; font-weight: 600;
+  transition: all 0.2s var(--ease);
 }
-.g-pager .pg-btn:hover { border-color: var(--g-accent); color: var(--g-accent); }
-.g-pager .pg-btn.on { background: var(--g-accent); border-color: var(--g-accent); color: var(--accent-ink); }
+.g-pager .pg-btn:hover:not(.disabled):not(.on):not(.pg-gap) {
+  border-color: var(--g-accent); color: var(--g-accent);
+  background: color-mix(in srgb, var(--g-accent) 12%, var(--panel));
+}
+.g-pager .pg-btn.on {
+  background: var(--g-accent); border-color: var(--g-accent);
+  color: var(--accent-ink); font-weight: 700;
+  box-shadow: 0 2px 10px color-mix(in srgb, var(--g-accent) 40%, transparent);
+}
 .g-pager .pg-btn.disabled,
-.g-pager .pg-btn[disabled] { opacity: 0.35; cursor: default; pointer-events: none; }
+.g-pager .pg-btn[disabled] { opacity: 0.45; cursor: default; pointer-events: none; }
 .g-pager .pg-btn.pg-prev,
 .g-pager .pg-btn.pg-next,
 .g-pager .pg-btn.pg-first,
-.g-pager .pg-btn.pg-last { font-size: 17px; line-height: 1; padding: 0 12px; }
-.g-pager .pg-ellipsis { color: var(--g-text-2); align-self: center; padding: 0 2px; user-select: none; }
-.g-pager .pg-jump { display: inline-flex; align-items: center; gap: 6px; margin-left: 6px; }
-.g-pager .pg-input {
-  width: 56px; height: 36px; padding: 0 8px; box-sizing: border-box;
-  border-radius: 10px; border: 1px solid var(--line);
-  background: transparent; color: var(--g-text);
-  font-size: 13px; text-align: center; transition: border-color 0.2s var(--ease);
-  -moz-appearance: textfield;
+.g-pager .pg-btn.pg-last { font-size: 18px; font-weight: 700; line-height: 1; padding: 0 12px; }
+/* 省略号可点：跳到被略去那段的中点 */
+.g-pager .pg-btn.pg-gap {
+  min-width: 26px; padding: 0 4px; letter-spacing: 1px;
+  border-color: transparent; background: transparent;
+  color: var(--ink-3); font-weight: 400;
 }
+.g-pager .pg-btn.pg-gap:hover { color: var(--g-accent); background: transparent; }
+.g-pager .pg-ellipsis { color: var(--ink-3); align-self: center; padding: 0 2px; user-select: none; }
+.g-pager .pg-jump {
+  display: inline-flex; align-items: center; gap: 6px;
+  margin-left: 8px; padding-left: 12px; border-left: 1px solid var(--line-2);
+}
+.g-pager .pg-input {
+  width: 62px; height: 36px; padding: 0 8px; box-sizing: border-box;
+  border-radius: 10px; border: 1px solid var(--line-2);
+  background: var(--panel-2); color: var(--ink);
+  font-size: 14px; font-weight: 600; text-align: center;
+  transition: border-color 0.2s var(--ease); -moz-appearance: textfield;
+}
+.g-pager .pg-input::placeholder { color: var(--ink-3); opacity: 1; font-weight: 400; }
 .g-pager .pg-input::-webkit-outer-spin-button,
 .g-pager .pg-input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
 .g-pager .pg-input:focus { outline: none; border-color: var(--g-accent); }
 .g-pager .pg-go {
-  height: 36px; padding: 0 12px; border-radius: 10px;
-  border: 1px solid var(--g-accent); background: transparent;
-  color: var(--g-accent); cursor: pointer; font-size: 13px;
+  height: 36px; padding: 0 14px; border-radius: 10px;
+  border: 1px solid var(--g-accent);
+  background: color-mix(in srgb, var(--g-accent) 12%, var(--panel));
+  color: var(--g-accent); cursor: pointer; font-size: 14px; font-weight: 600;
   transition: all 0.2s var(--ease);
 }
 .g-pager .pg-go:hover { background: var(--g-accent); color: var(--accent-ink); }
+
+@media (max-width: 720px) {
+  .g-pager { gap: 5px; padding: 9px 10px; }
+  .g-pager .pg-btn { min-width: 32px; height: 34px; padding: 0 8px; font-size: 13px; }
+  .g-pager .pg-btn.pg-prev,
+  .g-pager .pg-btn.pg-next,
+  .g-pager .pg-btn.pg-first,
+  .g-pager .pg-btn.pg-last { padding: 0 9px; font-size: 17px; }
+  .g-pager .pg-input, .g-pager .pg-go { height: 34px; }
+}
 
 /* ============================================================
    19. 天气页：多城市切换

@@ -1196,7 +1196,9 @@
     );
   }
 
-  // 列表分页条：左右箭头 + 首尾各 5 页 + 中间省略号 + 跳转输入框
+  // 列表分页条：左右箭头 + 首尾各 5 页 + 当前页前后各 2 页 + 可点省略号 + 跳页框
+  // 三段窗口重叠就合并。旧版在第 5 页会输出「1 2 3 4 5 … 21」这种断层，
+  // 第 6、7 页既看不见也点不到，只能一页页按下一页，等于卡在开头。
   function pagerNums(pages, page) {
     var cur = page + 1; // 1-based 当前页
     if (pages <= 11) {
@@ -1204,19 +1206,26 @@
       for (var i = 1; i <= pages; i++) a.push(i);
       return a;
     }
-    var leftEnd = 5, rightStart = pages - 4, out = [], lastNum = 0;
-    function sep() { if (out.length && out[out.length - 1] !== "…") out.push("…"); }
-    for (var i = 1; i <= leftEnd; i++) { out.push(i); lastNum = i; }
-    var mid = [];
-    if (cur > leftEnd && cur < rightStart) mid = [cur - 1, cur, cur + 1];
-    if (mid.length) {
-      if (mid[0] > lastNum + 1) sep();
-      mid.forEach(function (n) { if (n > lastNum) { out.push(n); lastNum = n; } });
-      if (rightStart > lastNum + 1) sep();
-    } else if (rightStart > lastNum + 1) {
-      sep();
-    }
-    for (var j = rightStart; j <= pages; j++) { if (j > lastNum) { out.push(j); lastNum = j; } }
+    var ranges = [
+      [1, Math.min(5, pages)],
+      [Math.max(1, cur - 2), Math.min(pages, cur + 2)],
+      [Math.max(1, pages - 4), pages]
+    ];
+    ranges.sort(function (x, y) { return x[0] - y[0]; });
+    var merged = [];
+    ranges.forEach(function (r) {
+      var last = merged[merged.length - 1];
+      if (!last || r[0] > last[1] + 1) merged.push([r[0], r[1]]);
+      else if (r[1] > last[1]) last[1] = r[1];
+    });
+    var out = [];
+    merged.forEach(function (r, idx) {
+      if (idx && r[0] > merged[idx - 1][1] + 1) {
+        // 省略号本身可点：跳到被略去那段的中点，省得一页页挪
+        out.push({ gap: Math.floor((merged[idx - 1][1] + r[0]) / 2) });
+      }
+      for (var i = r[0]; i <= r[1]; i++) out.push(i);
+    });
     return out;
   }
 
@@ -1232,8 +1241,10 @@
     h += '<button class="pg-btn pg-prev' + (prev ? " disabled" : "") + '" data-p="' + (page - 1) +
       '"' + (prev ? " disabled aria-disabled=\"true\"" : "") + ' aria-label="上一页">‹</button>';
     pagerNums(pages, page).forEach(function (n) {
-      if (n === "…") {
-        h += '<span class="pg-ellipsis" aria-hidden="true">…</span>';
+      if (typeof n === "object") {
+        var dest = Math.max(0, Math.min(pages - 1, n.gap - 1));
+        h += '<button class="pg-btn pg-gap" data-p="' + dest +
+          '" title="跳到第 ' + n.gap + ' 页" aria-label="跳到第 ' + n.gap + ' 页">…</button>';
       } else {
         h += '<button class="pg-btn' + (n - 1 === page ? " on" : "") + '" data-p="' + (n - 1) + '">' + n + "</button>";
       }
