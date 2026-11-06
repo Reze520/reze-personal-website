@@ -25,7 +25,7 @@ def main():
     changed, total = [], 0
     for f in sorted(glob.glob(os.path.join(ROOT, "*.html"))):
         s = io.open(f, encoding="utf-8").read()
-        t, n = re.subn(r"(assets/(?:css|js)/[A-Za-z0-9_.]+)\?v=[0-9a-z]+", r"\1?v=" + new, s)
+        t, n = re.subn(r"(assets/(?:css|js)/[A-Za-z0-9_.-]+)\?v=[0-9a-z]+", r"\1?v=" + new, s)
         if n and t != s:
             io.open(f, "w", encoding="utf-8", newline="").write(t)
             changed.append((os.path.basename(f), n))

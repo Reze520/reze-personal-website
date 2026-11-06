@@ -1317,6 +1317,26 @@
     apply(startCat, startTag, 0);
   }
 
+  /* 列表页顶部那一行：多少篇、跨几年、多少字。数字现算，不写死。 */
+  function listScaleText() {
+    var n = POSTS.length;
+    var y0 = "", y1 = "";
+    var total = 0;
+    POSTS.forEach(function (p) {
+      var y = String(p.date || "").slice(0, 4);
+      if (y) {
+        if (!y0 || y < y0) y0 = y;
+        if (!y1 || y > y1) y1 = y;
+      }
+      total += wordCount(p);
+    });
+    var span = y0 && y1 ? (y0 === y1 ? y0 : y0 + " 至 " + y1) : "";
+    var wan = total ? Math.round(total / 10000) : 0;
+    return "<b>" + n + "</b> 篇" +
+      (span ? " · " + span : "") +
+      (wan ? " · " + wan + " 万字" : "");
+  }
+
   function writingMainHtml() {
     var counts = catCounts();
     var chips =
@@ -1328,7 +1348,8 @@
         '<button class="g-chip" data-cat="' + esc(c) + '" aria-pressed="false">' + esc(c) +
         '<span class="count">' + counts[c] + "</span></button>";
     });
-    return '<div class="g-filters" id="g-filters">' + chips + "</div>" +
+    return '<p class="g-scale">' + listScaleText() + "</p>" +
+      '<div class="g-filters" id="g-filters">' + chips + "</div>" +
       '<div class="g-list" id="g-list"></div>';
   }
 
@@ -4127,12 +4148,8 @@ function interceptLinks(e) {
       '<div class="g-mail-cta"><a href="mailto:1806754672@qq.com">写信：1806754672@qq.com</a></div>' +
       "</article>";
 
-    // 正文里的图统一补上懒加载与异步解码：老文章里的 <img> 都没有这两个属性，
-    // 一篇长文一进来就把几十张大图全拉下来。
-    Array.prototype.forEach.call(host.querySelectorAll(".g-prose img"), function (img) {
-      if (!img.getAttribute("loading")) img.setAttribute("loading", "lazy");
-      img.setAttribute("decoding", "async");
-    });
+    // 正文里的图统一补懒加载、异步解码与原始宽高
+    applyImgSize(host);
 
     // 手机上表格必须能横向滚。内容里的表格有两种写法：
     // 一种自己包了 <div class="pg-tablewrap">，一种什么都没包 ——
@@ -4666,6 +4683,31 @@ function interceptLinks(e) {
     step();
   }
 
+  /* ---------- 正文图片 ----------
+     老文章里的 <img> 只有 src：既没有 loading，也没有宽高。
+     一篇长文进来会把几十张图一起拉下来；图回来之前浏览器不知道它多高，
+     滚动到一半图加载完，下面的字被推走。尺寸表由 tools/gen_img_size.py
+     从 assets/uploads 量出来，新加图之后重跑一次。 */
+  var IMG_SIZE = window.IMG_SIZE || {};
+  function applyImgSize(root) {
+    Array.prototype.forEach.call((root || document).querySelectorAll("img"), function (img) {
+      if (!img.getAttribute("loading")) img.setAttribute("loading", "lazy");
+      img.setAttribute("decoding", "async");
+      if (img.getAttribute("width") && img.getAttribute("height")) return;
+      var raw = img.getAttribute("src") || "";
+      var key = raw
+        .replace(/^https?:\/\/[^/]+\//, "")
+        .replace(/^\//, "")
+        .split("?")[0]
+        .split("#")[0];
+      var box = IMG_SIZE[key];
+      if (box && box[0] > 0 && box[1] > 0) {
+        img.setAttribute("width", box[0]);
+        img.setAttribute("height", box[1]);
+      }
+    });
+  }
+
   /* ---------- 首屏欢迎页 ---------- */
   function mountSplash() {
     var splash = $("#splash");
@@ -4714,6 +4756,22 @@ function interceptLinks(e) {
       av.innerHTML = SITE.avatar
         ? '<img src="' + esc(SITE.avatar) + '" alt="' + esc(SITE.name) + '">'
         : "<span>" + esc((SITE.name || "蕾").charAt(0)) + "</span>";
+    }
+
+    /* 最新一篇：整行可点。按日期取，置顶的不算——置顶是排在前面的，
+       不是刚写的。 */
+    var latest = $("#splash-latest");
+    if (latest) {
+      var byDate = (POSTS || []).slice().sort(function (a, b) {
+        return String(b.date || "").localeCompare(String(a.date || ""));
+      });
+      var last = byDate[0];
+      if (last) {
+        latest.href = postHref(last);
+        latest.querySelector(".t").textContent = last.title || "";
+        latest.querySelector(".d").textContent = fmtDate(last.date);
+        latest.hidden = false;
+      }
     }
 
     var scrollText = splash.querySelector(".splash-scroll span");

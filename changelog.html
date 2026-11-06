@@ -20,7 +20,7 @@
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20viewBox%3D%270%200%2064%2064%27%3E%3Crect%20width%3D%2764%27%20height%3D%2764%27%20rx%3D%2715%27%20fill%3D%27%23241f33%27%2F%3E%3Cg%20transform%3D%27translate%286%2C6%29%20scale%282.1667%29%27%3E%3Cpath%20d%3D%27M21%2012.79A9%209%200%201%201%2011.21%203%207%207%200%200%200%2021%2012.79z%27%20fill%3D%27%23f6f1e7%27%2F%3E%3C%2Fg%3E%3C%2Fsvg%3E">
-<link rel="stylesheet" href="assets/css/style.css?v=20261107n">
+<link rel="stylesheet" href="assets/css/style.css?v=20261107o">
   <link rel="alternate" type="application/rss+xml" title="RezeのBlog" href="feed.xml">
 </head>
 <body class="has-app">
@@ -73,7 +73,7 @@
 <header class="cl-head">
 <h1>更新日志</h1>
 <div class="cl-facts">
-<span><b>45</b> 条记录</span>
+<span><b>47</b> 条记录</span>
 <span><b>6</b> 个时间节点</span>
 <span>跨度 2020.07 — 2026.11</span>
 </div>
@@ -82,7 +82,7 @@
 <button type="button" class="cl-btn" data-cl-all="0">全部收起</button>
 </div>
 <nav class="cl-nav" aria-label="按时间跳转">
-<a href="#cl-202611">2026.11<i>16 条</i></a>
+<a href="#cl-202611">2026.11<i>18 条</i></a>
 <a href="#cl-202610">2026.10<i>10 条</i></a>
 <a href="#cl-202604">2026.04<i>6 条</i></a>
 <a href="#cl-202506">2025.06<i>1 条</i></a>
@@ -91,9 +91,25 @@
 </nav>
 </header>
 <section class="cl-month" id="cl-202611">
-<h2>2026 年 11 月<span class="cl-count">16 条</span></h2>
+<h2>2026 年 11 月<span class="cl-count">18 条</span></h2>
 <ol class="cl-list">
 <li class="cl-item"><details open>
+<summary><span class="cl-kind" data-k="界面">界面</span><span class="cl-t">首屏补「最新一篇」入口，列表补尺度行，卡片标题抬到 21px</span><span class="cl-n">3 项</span></summary>
+<div class="cl-body"><ul>
+<li>首屏原来整屏是照片加站名，下面没有入口。补一行「最新」胶囊：按日期取最近一篇（置顶的算排前，不算刚写），写标题与日期，整行可点，窄屏收掉标签只留标题。</li>
+<li>列表页顶部补一行尺度：<code>330 篇 · 2020 至 2026 · 123 万字</code>。数字现算（篇数、最早与最晚年份、总字数），不写死。</li>
+<li>卡片标题 18 → 21px（列表卡 16.5 → 19px），标题与摘要的字号比从 1.3 拉到 1.55；窄屏回落到 18／17px。</li>
+</ul></div>
+</details></li>
+<li class="cl-item"><details>
+<summary><span class="cl-kind" data-k="基建">基建</span><span class="cl-t">正文图片补原始宽高，图加载完不再把文字推走</span><span class="cl-n">3 项</span></summary>
+<div class="cl-body"><ul>
+<li>330 篇里有 31 篇带本地配图，<code>&lt;img&gt;</code> 只有 <code>src</code>。图下载完浏览器才知道它多高，滚到一半版面往下跳。</li>
+<li>新增 <code>tools/gen_img_size.py</code>：用 ffprobe 量 <code>assets/uploads</code> 下 115 张图的尺寸，写 <code>assets/js/img-size.js</code>（前端渲染完补属性）与 <code>functions/_img-size.js</code>（直出时写进 HTML）。新增图片后重跑一次。</li>
+<li>前端 <code>applyImgSize()</code> 统一补 <code>loading</code>、<code>decoding</code> 与 <code>width/height</code>；直出那段的 <code>&lt;img&gt;</code> 在服务端就带好宽高，首帧就有占位。</li>
+</ul></div>
+</details></li>
+<li class="cl-item"><details>
 <summary><span class="cl-kind" data-k="基建">基建</span><span class="cl-t">文章改路径地址 /p/post-263，旧地址 301 过去</span><span class="cl-n">4 项</span></summary>
 <div class="cl-body"><ul>
 <li>原来是 <code>/post?id=post-263</code>，带问号，分享卡片和搜索引擎都不太把它当一篇独立文章。现在每篇一条路径地址，<code>functions/p/[[slug]].js</code> 读静态 <code>post.html</code> 当壳，把 title、description、og、canonical 与 BlogPosting 换成这一篇的，正文照旧直出。查不到文章时返回 404 页并带上 404 状态码，不让搜索引擎当成软 404。</li>
@@ -531,10 +547,10 @@
   } catch (e) {}
 })();
 </script>
-<script defer src="assets/js/data.meta.js?v=20261107n"></script>
-<script defer src="assets/js/cloud.js?v=20261107n"></script>
-<script defer src="assets/js/weather.js?v=20261107n"></script>
-<script defer src="assets/js/main.js?v=20261107n"></script>
+<script defer src="assets/js/data.meta.js?v=20261107o"></script>
+<script defer src="assets/js/cloud.js?v=20261107o"></script>
+<script defer src="assets/js/weather.js?v=20261107o"></script>
+<script defer src="assets/js/main.js?v=20261107o"></script>
 <script>
 /* 更新日志的一键展开／收起。details 自己就能点，这段只管批量开关。 */
 document.addEventListener("click", function (e) {

@@ -11,6 +11,8 @@
    任何一步失败都退回旧地址，不让读者卡在空白页。
    ============================================================ */
 
+import IMG_SIZE from "../_img-size.js";
+
 const ORIGIN = "https://reze520.pages.dev";
 const BOT = /bot|crawler|spider|slurp|preview|facebookexternalhit|twitterbot|telegrambot|whatsapp|slackbot|discordbot|linkedinbot|weibo|baidu|sogou|360spider|yisou|bytespider|curl|wget|python-requests/i;
 
@@ -144,7 +146,18 @@ export async function onRequest(context) {
   let ssrDone = false;
   if (bodyRaw) {
     const words = plain(bodyRaw).length;
-    const body = bodyRaw.replace(/<img\s/gi, function () { return '<img loading="lazy" decoding="async" '; });
+    /* 图片补宽高：直出这一段是浏览器最先拿到的 HTML，属性写在这里，
+       图还没下载就已经占住位置，滚动不会跳。尺寸表由 tools/gen_img_size.py 生成。 */
+    const body = bodyRaw.replace(/<img\s[^>]*>/gi, function (tag) {
+      if (/\bwidth=/i.test(tag)) return tag;
+      const m = /\bsrc="([^"]+)"/i.exec(tag);
+      const key = m
+        ? m[1].replace(/^https?:\/\/[^/]+\//, "").replace(/^\//, "").split("?")[0].split("#")[0]
+        : "";
+      const box = IMG_SIZE[key];
+      const size = box ? ' width="' + box[0] + '" height="' + box[1] + '"' : "";
+      return tag.replace(/^<img\s/i, '<img loading="lazy" decoding="async"' + size + " ");
+    });
     const ssr =
       '<article class="g-article no-cover" data-ssr="1">' +
       '<a class="back" href="/writing">← 返回文章列表</a>' +
