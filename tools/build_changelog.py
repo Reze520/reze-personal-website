@@ -94,7 +94,6 @@ def render(months):
     a('<article class="g-article g-changelog">')
     a('<header class="cl-head">')
     a("<h1>更新日志</h1>")
-    a('<p class="cl-sub">按时间倒序排，一次改动一条，只记站点本身的技术改动，文章不进来。标题行扫一遍就知道改了什么，点开看细节。</p>')
     a('<div class="cl-facts">')
     a("<span><b>%d</b> 条记录</span>" % total)
     a("<span><b>%d</b> 个时间节点</span>" % len(months))
