@@ -3050,7 +3050,7 @@ body.has-app .site-head .icon-btn:hover {
 }
 
 body.has-app .site-foot {
-  background: transparent;
+  background: linear-gradient(180deg, rgba(18, 14, 26, 0) 0%, rgba(18, 14, 26, 0.55) 42%, rgba(18, 14, 26, 0.82) 100%);
   border-top-color: var(--glass-line);
   color: var(--g-ink-2);
 }
@@ -3059,7 +3059,7 @@ body.has-app .site-foot .foot-links a,
 body.has-app .site-foot .foot-left p,
 body.has-app .site-foot .icp,
 body.has-app .site-foot .icp a {
-  color: var(--g-ink-3);
+  color: var(--g-ink-2);
 }
 body.has-app .site-foot .foot-links a:hover,
 body.has-app .site-foot .icp a:hover {
