@@ -817,7 +817,7 @@
       .slice(0, 4)
       .map(function (p) {
         return (
-          '<li><a href="/post?id=' +
+          '<li><a href="/p/' +
           encodeURIComponent(p.id) +
           '">' +
           esc(p.title) +
@@ -903,7 +903,7 @@
       '<article class="card' + (p.cover ? "" : " no-cover") + ' reveal" data-cat="' +
       esc(p.cat) +
       '" style="--cat-h:' + catHue(p.cat) + '">' +
-      '<a href="/post?id=' +
+      '<a href="/p/' +
       encodeURIComponent(p.id) +
       '">' +
       '<div class="card-body">' +
@@ -982,7 +982,7 @@
       })
       .join("");
     return (
-      '<a class="g-posth' + (p.cover ? "" : " no-cover") + '" href="/post?id=' + encodeURIComponent(p.id) + '" style="--cat-h:' + catHue(p.cat) + '">' +
+      '<a class="g-posth' + (p.cover ? "" : " no-cover") + '" href="/p/' + encodeURIComponent(p.id) + '" style="--cat-h:' + catHue(p.cat) + '">' +
       '<div class="info">' +
       '<div class="ttl"><span class="mark">' + ICONS.doc + "</span>" +
       "<h2>" + esc(p.title) + "</h2>" +
@@ -1339,7 +1339,7 @@
       })
       .join("");
     return (
-      '<a class="g-post" href="/post?id=' + encodeURIComponent(p.id) + '">' +
+      '<a class="g-post" href="/p/' + encodeURIComponent(p.id) + '">' +
       '<div class="top"><span>' + fmtDate(p.date) + "</span>" +
       '<span class="dot"></span><span class="cat">' + esc(p.cat) + "</span>" +
       (p.pinned ? '<span class="pin">置顶</span>' : "") +
@@ -1711,7 +1711,7 @@
       .slice(0, 4)
       .map(function (p) {
         return (
-          '<li><a class="g-feed-a" href="/post?id=' +
+          '<li><a class="g-feed-a" href="/p/' +
           encodeURIComponent(p.id) + '">' +
           "<time>" + fmtDate(p.date) + "</time>" +
           "<span>" + esc((p.excerpt || "").slice(0, 42)) + "…</span></a></li>"
@@ -2824,6 +2824,26 @@ var PAGE_META = {
 };
 var SITE_ORIGIN = "https://reze520.pages.dev";
 
+/* 文章地址。原来是 /post?id=post-263，带问号，分享和收录都吃亏；
+   现在每篇一条路径 /p/post-263。旧地址由 functions/_middleware.js 301 过来，
+   站内一律用这个函数生成，不要再手拼。 */
+function postHref(p) {
+  var id = p && typeof p === "object" ? p.id : p;
+  return "/p/" + encodeURIComponent(id == null ? "" : String(id));
+}
+
+/* 地址里的百分号编码不一定是合法的，坏输入不能把整页崩掉。 */
+function safeDecode(s) {
+  try { return decodeURIComponent(s); } catch (e) { return String(s || ""); }
+}
+
+/* 从地址里取文章 id：新地址在路径里，老地址在查询串里。 */
+function postIdFromUrl() {
+  var m = /^\/p\/([^\/]+)\/?$/.exec(location.pathname || "");
+  if (m) return safeDecode(m[1]);
+  return new URLSearchParams(location.search || "").get("id") || "";
+}
+
 function setMetaTag(attr, key, val) {
   var sel = attr === "name" ? 'meta[name="' + key + '"]' : 'meta[property="' + key + '"]';
   var el = document.head.querySelector(sel);
@@ -2854,7 +2874,7 @@ function syncMeta(page, params) {
         .replace(/\s+/g, " ")
         .trim()
         .slice(0, 110);
-      url = SITE_ORIGIN + "/post?id=" + encodeURIComponent(p.id);
+      url = SITE_ORIGIN + "/p/" + encodeURIComponent(p.id);
       type = "article";
     } else {
       title = "没有找到这篇文章 · " + SITE.name;
@@ -2974,10 +2994,13 @@ function updateNavActive(page) {
   });
 }
 
-/* 路由从地址里读。现在内页是 /writing、/post?id=xx 这种干净地址
+/* 路由从地址里读。现在内页是 /writing、/p/post-263 这种干净地址
    （直接敲 /writing.html 也不是不行，Cloudflare 会 308 到 /writing，这里两种都认）。
    以前所有内页都往 /index.html#/writing 跳，老书签和老外链不能废，所以 hash 继续兜底。 */
 function parseHash() {
+  // 文章页是路径地址 /p/post-263，最后一段是文章 id 而不是页面名
+  var pm = /^\/p\/([^\/]+)\/?$/.exec(location.pathname || "");
+  if (pm) return { page: "post", qs: "?id=" + encodeURIComponent(safeDecode(pm[1])) };
   var seg = (location.pathname || "/")
     .replace(/\/+$/, "")
     .split("/")
@@ -3005,7 +3028,8 @@ function applyRoute() {
   // post 路由，这里直接整页跳到 /post，让文章页始终是一套版式、一种状态，
   // 避免「在首页栅格里被当成第三栏内容渲染」这种错位的版式。
   if (page === "post") {
-    location.replace("/post" + (r.qs || ""));
+    var pid0 = new URLSearchParams(r.qs || "").get("id");
+    location.replace(pid0 ? postHref(pid0) : "/writing");
     return;
   }
   // 静态文档没有渲染分支，落到这里只会被渲染成首页卡片流；整页跳过去。
@@ -3234,6 +3258,10 @@ function routeToPath(hash) {
   var page = (qi < 0 ? p : p.slice(0, qi)).toLowerCase();
   var qs = qi < 0 ? "" : p.slice(qi);
   if (!page || page === "index" || page === "home") return "/" + qs;
+  if (page === "post") {
+    var pid = new URLSearchParams(qs).get("id");
+    if (pid) return postHref(pid);
+  }
   return "/" + page + qs;
 }
 
@@ -3281,6 +3309,14 @@ function interceptLinks(e) {
   // 当前这页本身是静态文档（正文编译在 HTML 里）：站内跳转一律整页走，
   // 否则只是地址栏换了个字，内容还停在原来的页面上。
   if (document.querySelector(".app[data-static]")) return;
+  // 文章页的新地址 /p/<id>：路径最后一段是文章 id，不是页面名，得先认出来。
+  // 文章页是独立文档，一律整页跳；跳之前记下来源列表，返回时用得上。
+  var pm = /^\/p\/([^\/]+)\/?$/.exec(u.pathname);
+  if (pm) {
+    markListSource(safeDecode(pm[1]));
+    location.href = u.pathname + (u.search || "");
+    return;
+  }
   var file = u.pathname.split("/").pop().replace(/\.html$/, "") || "home";
   if (file === "index") file = "home";
   // 目标页是静态文档，同理整页跳。以前在首页点「更新日志」就漏在这里：
@@ -3297,7 +3333,7 @@ function interceptLinks(e) {
     // 先记下来源列表（此刻还停在列表页），下一个页面用得上；
     // id 从链接里取，不能等跳转之后读，那时页面已经不在列表上了。
     markListSource(u.searchParams.get("id") || "");
-    location.href = routeToPath("#/" + file + (u.search || "")); // /post?id=xxx
+    location.href = routeToPath("#/" + file + (u.search || "")); // /p/xxx
     return;
   }
   var src = readListSource();
@@ -3846,7 +3882,7 @@ function interceptLinks(e) {
     return out;
   }
   function relatedItemHtml(r) {
-    return '<a href="/post?id=' + encodeURIComponent(r.post.id) + '">' +
+    return '<a href="/p/' + encodeURIComponent(r.post.id) + '">' +
       '<span class="rl-t">' + esc(r.post.title) + "</span>" +
       '<span class="rl-r">' + esc(r.reason) + "</span></a>";
   }
@@ -3878,7 +3914,7 @@ function interceptLinks(e) {
       '<button type="button" data-rec-more="1">换一组</button></div>' +
       '<p class="g-rec-from">从「' + esc(d.base.title) + "」延伸出去</p>" +
       '<div class="g-rec-list">' + d.list.map(function (r) {
-        return '<a href="/post?id=' + encodeURIComponent(r.post.id) + '">' +
+        return '<a href="/p/' + encodeURIComponent(r.post.id) + '">' +
           "<span>" + esc(r.post.title) + "</span><em>" + esc(r.reason) + "</em></a>";
       }).join("") + "</div></section>";
   }
@@ -3910,7 +3946,7 @@ function interceptLinks(e) {
   function mountPost(host, id) {
     if (!host) host = $("#post");
     if (!host) return;
-    if (id === undefined) id = new URLSearchParams(location.search).get("id");
+    if (id === undefined) id = postIdFromUrl();
     var p = postById(id);
 
     if (!p) {
@@ -4021,7 +4057,7 @@ function interceptLinks(e) {
     var navItems = [];
     if (prev) {
       navItems.push(
-        '<a href="/post?id=' +
+        '<a href="/p/' +
           encodeURIComponent(prev.id) +
           '"><span class="k">← 上一篇</span><span class="t">' +
           esc(prev.title) +
@@ -4030,7 +4066,7 @@ function interceptLinks(e) {
     }
     if (next) {
       navItems.push(
-        '<a class="next" href="/post?id=' +
+        '<a class="next" href="/p/' +
           encodeURIComponent(next.id) +
           '"><span class="k">下一篇 →</span><span class="t">' +
           esc(next.title) +
@@ -4974,7 +5010,7 @@ function interceptLinks(e) {
           return (
             '<a class="search-item" data-i="' +
             i +
-            '" href="/post?id=' +
+            '" href="/p/' +
             encodeURIComponent(p.id) +
             '">' +
             "<h4>" +

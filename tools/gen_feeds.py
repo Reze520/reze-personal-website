@@ -67,7 +67,7 @@ def main(path):
                    % (ORIGIN, path_, freq, pri))
     for p in posts:
         d = parse_date(p.get("updated") or p.get("date"))
-        loc = "%s/post?id=%s" % (ORIGIN, quote(str(p["id"])))
+        loc = "%s/p/%s" % (ORIGIN, quote(str(p["id"])))
         out.append("  <url><loc>%s</loc>%s<changefreq>yearly</changefreq><priority>0.8</priority></url>"
                    % (esc(loc), "<lastmod>%s</lastmod>" % d.strftime("%Y-%m-%d") if d else ""))
     out.append("</urlset>")
@@ -91,7 +91,7 @@ def main(path):
         d = parse_date(p.get("updated") or p.get("date"))
         if not d:
             continue
-        link = "%s/post?id=%s" % (ORIGIN, quote(str(p["id"])))
+        link = "%s/p/%s" % (ORIGIN, quote(str(p["id"])))
         body = strip_html(p.get("excerpt") or p.get("content"))[:300]
         pub = d.strftime("%a, %d %b %Y 00:00:00 +0800")
         # 分类和标签会重名（比如 cat=技术、tags 里又写一遍「技术」），
