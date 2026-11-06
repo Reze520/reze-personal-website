@@ -14,13 +14,13 @@
 <link rel="canonical" href="https://reze520.pages.dev/changelog">
 <meta property="og:site_name" content="RezeのBlog">
 <meta property="og:description" content="这个站的技术改动记录：界面、功能、修复、基建，一条一次改动，按时间倒序。">
-<meta property="og:image" content="https://reze520.pages.dev/assets/uploads/cover.png">
+<meta property="og:image" content="https://reze520.pages.dev/assets/uploads/share.jpg">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image" content="https://reze520.pages.dev/assets/uploads/cover.png">
-<meta property="og:image:width" content="474">
-<meta property="og:image:height" content="474">
+<meta name="twitter:image" content="https://reze520.pages.dev/assets/uploads/share.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
 <link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20viewBox%3D%270%200%2064%2064%27%3E%3Crect%20width%3D%2764%27%20height%3D%2764%27%20rx%3D%2715%27%20fill%3D%27%23241f33%27%2F%3E%3Cg%20transform%3D%27translate%286%2C6%29%20scale%282.1667%29%27%3E%3Cpath%20d%3D%27M21%2012.79A9%209%200%201%201%2011.21%203%207%207%200%200%200%2021%2012.79z%27%20fill%3D%27%23f6f1e7%27%2F%3E%3C%2Fg%3E%3C%2Fsvg%3E">
-<link rel="stylesheet" href="assets/css/style.css?v=20261107j">
+<link rel="stylesheet" href="assets/css/style.css?v=20261107k">
   <link rel="alternate" type="application/rss+xml" title="RezeのBlog" href="feed.xml">
 </head>
 <body class="has-app">
@@ -73,7 +73,7 @@
 <header class="cl-head">
 <h1>更新日志</h1>
 <div class="cl-facts">
-<span><b>40</b> 条记录</span>
+<span><b>44</b> 条记录</span>
 <span><b>6</b> 个时间节点</span>
 <span>跨度 2020.07 — 2026.11</span>
 </div>
@@ -82,7 +82,7 @@
 <button type="button" class="cl-btn" data-cl-all="0">全部收起</button>
 </div>
 <nav class="cl-nav" aria-label="按时间跳转">
-<a href="#cl-202611">2026.11<i>11 条</i></a>
+<a href="#cl-202611">2026.11<i>15 条</i></a>
 <a href="#cl-202610">2026.10<i>10 条</i></a>
 <a href="#cl-202604">2026.04<i>6 条</i></a>
 <a href="#cl-202506">2025.06<i>1 条</i></a>
@@ -91,9 +91,37 @@
 </nav>
 </header>
 <section class="cl-month" id="cl-202611">
-<h2>2026 年 11 月<span class="cl-count">11 条</span></h2>
+<h2>2026 年 11 月<span class="cl-count">15 条</span></h2>
 <ol class="cl-list">
 <li class="cl-item"><details open>
+<summary><span class="cl-kind" data-k="修复">修复</span><span class="cl-t">正文段落一直贴着，段间留白从来没生效过</span><span class="cl-n">2 项</span></summary>
+<div class="cl-body"><ul>
+<li><code>.g-prose &gt; * + * { margin-top: var(--prose-space) }</code> 这条从写下来起就没起作用：<code>.g-prose p { margin: 0 }</code> 是「一个类 + 一个标签」，比它重一级，把段落的 margin 全抹平了。结果整站长文都是一坨字，行距 1.95 也救不回来。</li>
+<li>补一条 <code>.g-prose &gt; p + p { margin-top: 1.3em }</code>；顺带把首段字号、图片圆角与说明行、文末联系入口一起调了，小标题左侧加了 01／02 的等宽序号（窄屏收掉）。</li>
+</ul></div>
+</details></li>
+<li class="cl-item"><details>
+<summary><span class="cl-kind" data-k="界面">界面</span><span class="cl-t">文章页正文改服务端直出，慢网下不再先空两秒</span><span class="cl-n">2 项</span></summary>
+<div class="cl-body"><ul>
+<li><code>functions/_middleware.js</code> 原来只给爬虫塞一份正文，真人得等前端拉 <code>/site-data/post?id=</code> 再画。现在正文直接写进 <code>#post</code>（带 <code>data-ssr-id</code>），前端按这个标记判断：正文没取回来就先留着这段，取回来再原地重绘。</li>
+<li>直出的 <code>&lt;img&gt;</code> 统一补 <code>loading="lazy" decoding="async"</code>，长文里几十张图不再一起排队；<code>BOT</code> 那段重复插入的逻辑改成只在直出失败时才走。</li>
+</ul></div>
+</details></li>
+<li class="cl-item"><details>
+<summary><span class="cl-kind" data-k="界面">界面</span><span class="cl-t">首屏骨架、分享图与分页条</span><span class="cl-n">3 项</span></summary>
+<div class="cl-body"><ul>
+<li>首页与文章列表的 <code>#app-main</code> 原来是空的，脚本画上去之前是一块白。现在放四行骨架（<code>.sk-*</code>，120ms 微光），<code>renderMain()</code> 一执行就被替换掉，<code>prefers-reduced-motion</code> 下不动。</li>
+<li>全站 <code>og:image</code> 换成新做的 1200×630 分享图（<code>assets/uploads/share.jpg</code>，47KB，由一张 HTML 卡片在无头浏览器里渲出来），<code>og:image:width/height</code> 同步改；文章页没有封面时的兜底图也跟着换。</li>
+<li>分页条右侧「共 N 页」原来是 12px 淡字，压在背景图上读不清，改成实底胶囊（<code>--panel</code> 底 + <code>--line</code> 边），窄屏不再隐藏。</li>
+</ul></div>
+</details></li>
+<li class="cl-item"><details>
+<summary><span class="cl-kind" data-k="界面">界面</span><span class="cl-t">去掉「接着读」下面那句算法说明</span><span class="cl-n">1 项</span></summary>
+<div class="cl-body"><ul>
+<li>正文末尾那行「按文章内容算的相近程度，不记你点过什么」删了；同类解释性小字一并清掉，文末联系入口也从一句招呼收成一行邮箱。</li>
+</ul></div>
+</details></li>
+<li class="cl-item"><details>
 <summary><span class="cl-kind" data-k="界面">界面</span><span class="cl-t">404 页补上最近更新、分类入口与随机一篇</span><span class="cl-n">3 项</span></summary>
 <div class="cl-body"><ul>
 <li>原来只有一句说明加两个按钮，一屏之内没有可点的东西。现在补三块：最近更新五条（标题、日期、分类）、按分类入口（带篇数）、随机一篇。数据直接读 <code>data.meta.js</code> 的 <code>window.POSTS</code>，不额外发请求，脚本不到四十行。</li>
@@ -494,10 +522,10 @@
   } catch (e) {}
 })();
 </script>
-<script defer src="assets/js/data.meta.js?v=20261107j"></script>
-<script defer src="assets/js/cloud.js?v=20261107j"></script>
-<script defer src="assets/js/weather.js?v=20261107j"></script>
-<script defer src="assets/js/main.js?v=20261107j"></script>
+<script defer src="assets/js/data.meta.js?v=20261107k"></script>
+<script defer src="assets/js/cloud.js?v=20261107k"></script>
+<script defer src="assets/js/weather.js?v=20261107k"></script>
+<script defer src="assets/js/main.js?v=20261107k"></script>
 <script>
 /* 更新日志的一键展开／收起。details 自己就能点，这段只管批量开关。 */
 document.addEventListener("click", function (e) {

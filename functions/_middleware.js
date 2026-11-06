@@ -79,7 +79,7 @@ export async function onRequest(context) {
   const pageUrl = ORIGIN + "/post?id=" + encodeURIComponent(id);
   const image = row.cover
     ? (row.cover.indexOf("http") === 0 ? row.cover : ORIGIN + "/" + row.cover.replace(/^\//, ""))
-    : ORIGIN + "/assets/uploads/cover.png";
+    : ORIGIN + "/assets/uploads/share.jpg";
 
   html = html.replace(/<title>[\s\S]*?<\/title>/i, "<title>" + esc(title) + " · " + esc(name) + "</title>");
   html = setMeta(html, "description", desc, false);
@@ -112,7 +112,35 @@ export async function onRequest(context) {
   html = html.replace("</head>",
     '  <script type="application/ld+json">' + ldJson + "</script>\n</head>");
 
-  if (BOT.test(request.headers.get("user-agent") || "")) {
+  /* 正文直出。原来只有爬虫能拿到这一段，真人得等前端拉 /site-data/post 再画，
+     慢网下标题下面要空一两秒。现在直接写进 #post：前端拿到数据后照旧重绘，
+     数据没回来之前先让这段待着（main.js 里按 data-ssr-id 判断）。
+     自带 loading="lazy"，正文里的几十张图不再一起排队。 */
+  const bodyRaw = String(row.content || "");
+  let ssrDone = false;
+  if (bodyRaw) {
+    const words = plain(bodyRaw).length;
+    const body = bodyRaw.replace(/<img\s/gi, function (m) { return '<img loading="lazy" decoding="async" '; });
+    const ssr =
+      '<article class="g-article no-cover" data-ssr="1">' +
+      '<a class="back" href="/writing">← 返回文章列表</a>' +
+      "<h1>" + esc(title) + "</h1>" +
+      '<div class="g-meta">' +
+      "<span>" + esc(String(row.date || "").replace(/-/g, ".")) + "</span>" +
+      (row.cat ? '<span class="cat">' + esc(row.cat) + "</span>" : "") +
+      "<span>" + words + " 字</span>" +
+      "</div>" +
+      '<div class="g-prose prose">' + body + "</div>" +
+      "</article>";
+    const mainTag = /<main class="post-app" id="post"><\/main>/;
+    if (mainTag.test(html)) {
+      html = html.replace(mainTag,
+        '<main class="post-app" id="post" data-ssr-id="' + esc(id) + '">' + ssr + "</main>");
+      ssrDone = true;
+    }
+  }
+
+  if (!ssrDone && BOT.test(request.headers.get("user-agent") || "")) {
     const preview =
       '<div id="prerender-post"><h1>' + esc(title) + "</h1>" +
       '<p class="prerender-meta">' + esc(row.date || "") + (row.cat ? " · " + esc(row.cat) : "") + "</p>" +

@@ -3857,7 +3857,6 @@ function interceptLinks(e) {
       '<div class="g-related-hd"><h3>接着读</h3>' +
       '<button type="button" data-rel-more="1">换一批</button></div>' +
       '<div class="g-related-list">' + pickRelated(all, seed || 0, 3).map(relatedItemHtml).join("") + "</div>" +
-      '<p class="g-related-note">按文章内容算的相近程度，不记你点过什么</p>' +
       "</section>";
   }
 
@@ -3950,6 +3949,24 @@ function interceptLinks(e) {
       return;
     }
 
+    /* 首屏那份正文是服务端直出的（middleware 塞进 #post，带 data-ssr-id）。
+       正文还没取回来之前先留着它——否则刚能读的字会被空壳盖掉，白闪一下。 */
+    if (!p.content && host.getAttribute("data-ssr-id") === String(p.id)) {
+      if (!p._bodyLoading) {
+        p._bodyLoading = true;
+        fetchPostBody(p.id).then(function (body) {
+          p._bodyLoading = false;
+          if (!body) return;
+          p.content = body;
+          p.words = plain(body).length;
+          var ys = window.scrollY;
+          mountPost(host, p.id);
+          if (ys > 0) instantScrollTo(ys);
+        });
+      }
+      return;
+    }
+
     /* 首屏只装了元数据，正文按需取这一篇。取回来后原地重画，滚动位置不动。 */
     if (!p.content && !p._bodyLoading) {
       p._bodyLoading = true;
@@ -3966,6 +3983,7 @@ function interceptLinks(e) {
 
     // 记下这一次画的是哪一版，云端数据回来后好判断要不要重画
     host.removeAttribute("data-post-pending");
+    host.removeAttribute("data-ssr-id");
     host.setAttribute("data-post-id", p.id);
     host.setAttribute("data-post-sig", String((p.content || "").length));
 
@@ -4070,8 +4088,15 @@ function interceptLinks(e) {
       nav +
       "</div>" +
       relatedBlockHtml(p, 0) +
-      '<div class="g-mail-cta">有话想说，或只是想说说话？<a href="mailto:1806754672@qq.com">写信给我 →</a></div>' +
+      '<div class="g-mail-cta"><a href="mailto:1806754672@qq.com">写信：1806754672@qq.com</a></div>' +
       "</article>";
+
+    // 正文里的图统一补上懒加载与异步解码：老文章里的 <img> 都没有这两个属性，
+    // 一篇长文一进来就把几十张大图全拉下来。
+    Array.prototype.forEach.call(host.querySelectorAll(".g-prose img"), function (img) {
+      if (!img.getAttribute("loading")) img.setAttribute("loading", "lazy");
+      img.setAttribute("decoding", "async");
+    });
 
     // 手机上表格必须能横向滚。内容里的表格有两种写法：
     // 一种自己包了 <div class="pg-tablewrap">，一种什么都没包 ——
