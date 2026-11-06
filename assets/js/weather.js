@@ -353,14 +353,14 @@
       return (
         '<div class="wx-hero g-card"><div class="wx-fail">' +
         "<b>没取到天气数据</b><p>" + esc(state.error) +
-        "——可能是网络被拦了，也可能是一次查的城市太多。</p>" +
-        '<button class="wx-retry" id="wx-retry" type="button">再试一次</button></div></div>'
+        "</p>" +
+        '<button class="wx-retry" id="wx-retry" type="button">重试</button></div></div>'
       );
     }
     if (!d || !d.current) {
       return (
         '<div class="wx-hero g-card"><div class="wx-fail"><b>正在获取天气…</b>' +
-        "<p>第一次进来要等一两秒。</p></div></div>"
+        "</div></div>"
       );
     }
     var cur = d.current;
@@ -521,7 +521,7 @@
   function resultsHtml() {
     if (!state.results.length) {
       return '<li class="wx-tip">' +
-        (state.searching ? "正在搜索…" : "输入地名搜一下，比如「成都」「昆明」「中国香港」") +
+        (state.searching ? "正在搜索…" : "地名，如成都、昆明") +
         "</li>";
     }
     return state.results
@@ -829,7 +829,7 @@
     if (!city) return "";
     var d = dataOf(city);
     if (state.error) {
-      return '<div class="wxm-fail">天气没取到，<a href="weather.html">去天气页看看</a></div>';
+      return '<div class="wxm-fail">天气未获取 · <a href="weather.html">天气</a></div>';
     }
     if (!d || !d.current) return '<div class="wxm-fail">正在获取…</div>';
     var cur = d.current;

@@ -1197,7 +1197,7 @@
 
     return (
       '<div class="g-card lk-head">' +
-      "<div><h1>导航</h1><p>常用的一些站点，按用途分了类</p></div>" +
+      "<div><h1>导航</h1><p>常用站点，按用途分类。</p></div>" +
       '<span class="count">' + items.length + " 个</span></div>" +
       '<div class="lk-bar">' + chips + "</div>" +
       '<div class="lk-wrap">' + groups + "</div>"
@@ -1515,7 +1515,7 @@
     scheduleLunar();
   }
 
-  /* ---------- 诗笺：点一下换一句 ----------
+  /* ---------- 诗笺：点击换一首 ----------
      原来每次进页面随机抽一条，抽到哪首全靠运气，想换也没办法。
      现在固定成一组，点卡片就往下顺一条，淡出淡入接上。 */
   var _poemBank = null, _poemSig = "", _poemIdx = 0;
@@ -1549,7 +1549,7 @@
     return (
       '<div class="g-card"><div class="g-card-head"><span class="t">' + ICONS.info + "诗笺</span></div>" +
       '<div class="g-notice' + (canSwap ? " gn-swap" : "") + '"' +
-      (canSwap ? ' role="button" tabindex="0" title="点一下换一句"' : "") +
+      (canSwap ? ' role="button" tabindex="0" title="换一首"' : "") +
       '><div class="gn-body">' + poemInner(bank[_poemIdx]) + "</div></div></div>"
     );
   }
@@ -2051,7 +2051,7 @@
           var ct2 = trackAt(playerIdx);
           nlText.textContent = ct2.title
             ? ct2.title + (ct2.artist ? " · " + ct2.artist : "")
-            : "纯音乐，请欣赏";
+            : "纯音乐";
           nowBar.classList.remove("has-line");
         }
       }
@@ -2267,21 +2267,15 @@ function timelineMainHtml() {
 function aboutHtml() {
   return (
     '<article class="g-article">' +
-    '<h1>欢迎来到 reze 的小站</h1>' +
+    '<h1>关于这个站</h1>' +
     '<div class="g-prose prose">' +
-    '<p>这是我的个人网站，从 2020 年前后开始搭，断断续续写到现在。这里没有固定的主题，也没什么要达成的目标，就是我平时读书、做东西、琢磨事情时留下的痕迹——你随便逛，不需要顺着任何顺序。</p>' +
-    '<p>我不太会写那种正经的“关于我”，把自己摊开来介绍总觉得别扭。所以与其介绍我，不如先说说这个站本身：它怎么来的、用什么搭的、现在长什么样。</p>' +
-    '<h2>这个站是怎么来的</h2>' +
-    '<p>最开始只是一页白底黑字，因为想有个地方放自己写的东西。后来慢慢加功能、改样式，推倒重来过好几回，但每次都只是往上叠一层，哪一层出了问题就把那一层拆掉，从没想过要换成一套更复杂的系统。所以它能一直这么笨、也一直这么稳地活着。</p>' +
-    '<h2>它用什么搭起来的</h2>' +
-    '<p>整站是手写的 HTML、CSS 和原生 JavaScript，没有框架，没有构建工具，也没有数据库——就是一堆纯静态文件，挂在 Cloudflare Pages 上。改一个字、提交一下，几分钟就上线了。这种笨办法的好处是，哪怕再过十几年，它大概也还能打开，不依赖任何我已经忘了密码的服务。</p>' +
-    '<h2>现在里面有什么</h2>' +
-    '<p>目前攒了二百二十多篇，大致分成读书、技术、文史、日常、电影、杂记和类型文学这几类，分得不算严，常常写着写着就串到别的类里去了。除了文章，还有二十来条比文章短的“动态”、一百五十多个平时收着的链接，以及一个专门记这个站自己改动的“时间线”。</p>' +
-    '<p>这个站也刻意少放了一些东西：首页按时间排，你看到什么取决于我写了什么；推荐只按文章内容算相似度，不记你点过什么、不给你画像；没有第三方统计脚本，页面不会记你从哪儿来、看了多久；也没有那种逼人互动的评论区，想聊的话写信给我就好。</p>' +
-    '<h2>随便看看</h2>' +
-    '<p>如果不知道从哪开始，可以先翻翻最近的动态，或者按分类随便点开一篇。写得歪的地方肯定比写得漂亮的地方多，发现哪儿错了告诉我，我都会改。</p>' +
-    '<p>总之，欢迎来玩。这里是我给自己留的一块地方，不向任何人解释，也希望来的人能待得舒服。邮箱、GitHub、哔哩哔哩和抖音都放在下面，聊任何有趣的事都行。</p>' +
-    '<h2>联系我</h2>' +
+    '<p>这个站从 2020 年前后开始搭，中间推倒重来过几次。现在这一版是手写的 HTML、CSS 和原生 JavaScript，没有框架、没有构建工具，也没有打包流程，一堆静态文件挂在 Cloudflare Pages 上。</p>' +
+    '<p>内容存在 Cloudflare D1，前台读构建时生成的静态元数据，后台通过接口读写；接口取不到时用仓库里的一份副本兜底。</p>' +
+    '<h2>里面有什么</h2>' +
+    '<p>目前三百三十篇，约一百二十三万字，分在读书、技术、日常、杂记、文史、电影、类型文学七类。另有动态、相册、导航三块，导航收了一百七十多个站点。</p>' +
+    '<h2>没做的部分</h2>' +
+    '<p>没有第三方统计脚本，页面不记录来源、停留时长和点击路径；推荐只按正文的相似度算，不建立用户画像；评论区长期空置，已经收起。</p>' +
+    '<h2>联系</h2>' +
     '<ul>' +
     '<li>邮箱：<a href="mailto:1806754672@qq.com">1806754672@qq.com</a></li>' +
     '<li>GitHub：<a href="https://github.com/Reze520" target="_blank" rel="noopener">github.com/Reze520</a></li>' +
@@ -2818,14 +2812,14 @@ function syncListQuery(cat, tag, page) {
    description / og 也全停在首页。收藏、分享、搜索结果里八个页面长得一模一样。
    这里按路由重写一遍，值和各静态页 <head> 里写的保持一致。 */
 var PAGE_META = {
-  home: ["RezeのBlog", "RezeのBlog的个人博客，记录生活、兴趣和随手做的小东西。"],
+  home: ["RezeのBlog", "RezeのBlog的个人博客。读书、技术、文史与日常的记录。"],
   writing: ["全部文章 · RezeのBlog", "RezeのBlog写过的全部文章，按分类和标签浏览。"],
-  moments: ["动态 · RezeのBlog", "随手记下的碎片，想到什么写什么。"],
-  album: ["相册 · RezeのBlog", "存下来的照片。"],
+  moments: ["动态 · RezeのBlog", "碎片式的短记录。"],
+  album: ["相册 · RezeのBlog", "照片存档。"],
   links: ["导航 · RezeのBlog", "常去的地方。"],
-  weather: ["天气 · RezeのBlog", "几个城市放在一起看，点一下就能换。"],
-  timeline: ["时间线 · RezeのBlog", "这个站的重大改动记录。"],
-  about: ["关于我 · RezeのBlog", "关于RezeのBlog：一个什么都想试试的人，以及这个站在做什么。"],
+  weather: ["天气 · RezeのBlog", "几个城市的天气并列。"],
+  timeline: ["时间线 · RezeのBlog", "这个站的技术改动记录。"],
+  about: ["关于我 · RezeのBlog", "关于本站：缘起、搭建方式与联系方式。"],
   post: ["文章 · RezeのBlog", "RezeのBlog的个人博客。"]
 };
 var SITE_ORIGIN = "https://reze520.pages.dev";
@@ -2864,7 +2858,7 @@ function syncMeta(page, params) {
       type = "article";
     } else {
       title = "没有找到这篇文章 · " + SITE.name;
-      desc = "这篇文章可能被移动或改名了，可以去文章列表里重新找找。";
+      desc = "文章可能已被移动或改名。";
     }
   } else if (page === "about") {
     type = "profile";
@@ -3200,7 +3194,7 @@ function showRebuildTip() {
   var b = document.createElement("button");
   b.id = "rebuild-tip";
   b.className = "rebuild-tip";
-  b.textContent = "站点已更新，点这里刷新";
+  b.textContent = "站点已更新，刷新查看";
   b.addEventListener("click", function () {
     location.reload();
   });
@@ -3640,7 +3634,7 @@ function interceptLinks(e) {
       e.preventDefault();
       var name = nameI.value.trim();
       var text = ta.value.trim();
-      if (!text) { status.textContent = "写点内容再发吧"; return; }
+      if (!text) { status.textContent = "内容为空"; return; }
       status.textContent = "发送中…";
       btn.disabled = true;
       fetch("/site-data/comments", {
@@ -3726,7 +3720,7 @@ function interceptLinks(e) {
       .catch(function () {
         list.innerHTML = "";
         var st = sec.querySelector(".g-cmt-status");
-        if (st) st.textContent = "留言没读出来，刷新一下试试";
+        if (st) st.textContent = "留言加载失败";
       });
   }
 
@@ -3930,9 +3924,9 @@ function interceptLinks(e) {
         host.innerHTML =
           '<article class="g-article">' +
           backLinkHtml() +
-          "<h1>正在读取这一篇</h1>" +
-          '<div class="g-meta"><span>内容正在取回</span></div>' +
-          '<div class="g-prose prose"><p>稍等一会儿。如果一直停在这里，刷新一次通常就好。</p></div>' +
+          "<h1>正在加载</h1>" +
+          '<div class="g-meta"><span>正在取回正文</span></div>' +
+          '<div class="g-prose prose"></div>' +
           "</article>";
         return;
       }
@@ -3944,14 +3938,14 @@ function interceptLinks(e) {
         ? '<article class="g-article">' +
           backLinkHtml() +
           "<h1>暂时读不到这一篇</h1>" +
-          '<div class="g-meta"><span>网络没接上，或者服务器在忙</span></div>' +
-          '<div class="g-prose prose"><p>刷新一次试试。如果一直这样，可以先去<a href="/writing">文章列表</a>。</p></div>' +
+          '<div class="g-meta"><span>请求未成功</span></div>' +
+          '<div class="g-prose prose"><p>正文没有取回来。<a href="/writing">文章列表</a></p></div>' +
           "</article>"
         : '<article class="g-article">' +
           backLinkHtml() +
           "<h1>没有找到这篇文章</h1>" +
-          '<div class="g-meta"><span>它可能被移动或改名了</span></div>' +
-          '<div class="g-prose prose"><p>你可以从<a href="/writing">文章列表</a>里重新找找。</p></div>' +
+          '<div class="g-meta"><span>文章可能已被移动或改名</span></div>' +
+          '<div class="g-prose prose"><p><a href="/writing">文章列表</a></p></div>' +
           "</article>";
       return;
     }
@@ -4536,7 +4530,7 @@ function interceptLinks(e) {
     });
   }
 
-  /* ---------- 首屏的滚动文字（打字机，点一下换一句） ----------
+  /* ---------- 首屏的滚动文字（打字机，点击换一句） ----------
      原来只能等它自己打完、删光、再随机换下一句，想看另一句只能等。
      现在点一下就切到下一句：先淡出上移，换完从下面浮上来，再继续打字。
      自动循环保留，只是换句的顺序从随机改成了按次序，点击才接得上。 */
@@ -4601,7 +4595,7 @@ function interceptLinks(e) {
 
     var hit = el.parentNode || el;
     hit.style.cursor = "pointer";
-    if (!hit.getAttribute("title")) hit.setAttribute("title", "点一下换一句");
+    if (!hit.getAttribute("title")) hit.setAttribute("title", "换一句");
     hit.onclick = function (e) {
       if (e && e.preventDefault) e.preventDefault();
       jump();
@@ -4640,7 +4634,7 @@ function interceptLinks(e) {
     if (typingEl && lineList.length) startTyping(typingEl, lineList);
 
     var title = $("#splash-title");
-    if (title) title.textContent = cfg.title || "欢迎来到我的小窝";
+    if (title) title.textContent = cfg.title || (window.SITE && window.SITE.name) || "RezeのBlog";
 
     var quote = $("#splash-quote");
     if (quote) {
@@ -4819,7 +4813,7 @@ function interceptLinks(e) {
 
     audioOnDead = function () {
       showToast(
-        "音乐加载失败：CDN 和本站都取不到音频，多半是网络问题。稍后再点一下重试。"
+        "音频加载失败。"
       );
     };
 
@@ -5277,7 +5271,7 @@ function interceptLinks(e) {
     window.addEventListener("hashchange", applyRoute);
     window.addEventListener("popstate", applyRoute);
     document.addEventListener("click", interceptLinks);
-    // 诗笺：点一下换一句。事件托管，左栏每次重渲染都不用重新绑
+    // 诗笺：点击换一首。事件托管，左栏每次重渲染都不用重新绑
     document.addEventListener("click", function (e) {
       var t = e.target;
       if (t && t.closest && t.closest(".g-notice.gn-swap")) swapPoem();

@@ -83,7 +83,7 @@
 <div class="gate" id="gate">
   <div class="box">
     <h1>内容管理后台</h1>
-    <p id="gate-sub">输入管理员口令进入。<br>口令在 Cloudflare 的环境变量 ADMIN_PASS 里设置。</p>
+    <p id="gate-sub">管理员口令。<br>对应 Cloudflare 环境变量 ADMIN_PASS。</p>
     <input type="password" id="pass" placeholder="管理员口令" autocomplete="current-password">
     <button class="btn primary big" id="login-btn">进入</button>
     <div class="err" id="gate-err"></div>
@@ -118,19 +118,19 @@
 
     <section id="tab-moments">
       <div class="bar"><h2>动态 · 说说</h2><button class="btn primary" id="btn-new-moment">+ 发一条</button></div>
-      <p class="hint">图片填路径（多张用英文逗号分隔），留空就是纯文字。</p>
+      <p class="hint">图片路径，多张用英文逗号分隔；留空为纯文字。</p>
       <div id="moment-list"></div>
     </section>
 
     <section id="tab-album">
       <div class="bar"><h2>相册</h2><button class="btn primary" id="btn-new-album">+ 添加照片</button></div>
-      <p class="hint">照片用「图床外链」：把图片上传到免费图床（如 imgse.com / sm.ms）拿到图片链接，粘贴到「图片链接」里即可，无需绑卡。保存后相册页实时显示。</p>
+      <p class="hint">照片用外链，填图片地址。相册页读取同一份数据。</p>
       <div id="album-list"></div>
     </section>
 
     <section id="tab-cats">
       <div class="bar"><h2>分类标签管理</h2></div>
-      <p class="hint">文章分类和相册分类可以在这里统一增删；标签会从文章里自动累积，删除某标签会从对应文章中移除。</p>
+      <p class="hint">分类在此增删；标签从文章累积，删除标签会同时从相关文章移除。</p>
       <div class="card"><div class="r"><span class="title">文章分类</span><input id="cat-new-input" placeholder="新分类名" style="flex:1;padding:8px 10px;border:1px solid var(--line);border-radius:8px"><button class="btn primary" id="btn-add-cat">添加</button></div><div id="cat-list" style="margin-top:10px"></div></div>
       <div class="card"><div class="r"><span class="title">相册分类</span><input id="albumcat-new-input" placeholder="新相册分类名" style="flex:1;padding:8px 10px;border:1px solid var(--line);border-radius:8px"><button class="btn primary" id="btn-add-albumcat">添加</button></div><div id="albumcat-list" style="margin-top:10px"></div></div>
       <div class="card"><div class="r"><span class="title">全部标签</span></div><div id="alltags-list" style="margin-top:10px"></div></div>
@@ -138,13 +138,13 @@
 
     <section id="tab-calendar">
       <div class="bar"><h2>日历记事</h2><button class="btn primary" id="btn-new-event">+ 添加记事</button></div>
-      <p class="hint">在某一天标记一件事或写段备忘，前台日历上那天会亮起小点，点日期可查看。</p>
+      <p class="hint">按日记录，前台日历对应日期显示标记。</p>
       <div id="event-list"></div>
     </section>
 
     <section id="tab-settings">
       <div class="bar"><h2>站点设置</h2></div>
-      <p class="hint">改完点底部「保存设置」。背景图每行一条；社交每行「名称 | 图标 | 链接」；导航每行「名称 | 链接 | 描述 | 图标」。（头像 / 背景 / 封面等图片请先放到 assets/uploads/ 目录，再填路径。）</p>
+      <p class="hint">底部「保存设置」提交。背景图每行一条；社交每行「名称 | 图标 | 链接」；导航每行「名称 | 链接 | 描述 | 图标」。（头像 / 背景 / 封面等图片请先放到 assets/uploads/ 目录，再填路径。）</p>
       <div id="settings-form"></div>
       <div class="bar"><button class="btn primary" id="btn-save-settings">保存设置</button></div>
     </section>
@@ -223,8 +223,8 @@
 
 <div class="toast" id="toast"></div>
 
-<script src="assets/js/data.js?v=20261107h"></script>
-<script src="assets/js/cloud.js?v=20261107h"></script>
+<script src="assets/js/data.js?v=20261107i"></script>
+<script src="assets/js/cloud.js?v=20261107i"></script>
 <script>
 (function () {
   var state = { site: {}, posts: [], events: [] };
