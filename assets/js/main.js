@@ -57,13 +57,23 @@
   var POSTS = window.POSTS || [];
 
   // 原地更新 SITE/POSTS（保持引用不变，页面所有渲染自动看到新数据）
-  function applyDataOver(site, posts) {
+  // keepContent：云端给的是轻量元数据（不带正文）时，别把已经取回的单篇正文冲掉
+  function applyDataOver(site, posts, keepContent) {
     try {
       if (site && typeof site === "object") {
         for (var k in window.SITE) { if (!(k in site)) delete window.SITE[k]; }
         for (var k2 in site) window.SITE[k2] = site[k2];
       }
       if (Array.isArray(posts)) {
+        if (keepContent) {
+          var oldBody = {};
+          window.POSTS.forEach(function (p) {
+            if (p && p.id && p.content) oldBody[p.id] = p.content;
+          });
+          posts.forEach(function (p) {
+            if (p && !p.content && oldBody[p.id]) p.content = oldBody[p.id];
+          });
+        }
         window.POSTS.length = 0;
         posts.forEach(function (p) { window.POSTS.push(p); });
       }
@@ -669,7 +679,19 @@
     return (d.textContent || "").replace(/\s+/g, "");
   }
   function wordCount(post) {
+    // 首屏只有元数据，字数是云端预先算好的；正文到手后按正文实算
+    if (post.words !== undefined && !post.content) return post.words;
     return plain(post.content).length;
+  }
+
+  /* 按需取单篇正文。cloud.js 负责请求，取不到时由它退到本地兜底文件。 */
+  function fetchPostBody(id) {
+    if (typeof window.loadCloudPost === "function") {
+      return window.loadCloudPost(id)
+        .then(function (p) { return p && typeof p.content === "string" ? p.content : ""; })
+        .catch(function () { return ""; });
+    }
+    return Promise.resolve("");
   }
 
   // 从正文里截一段，尽量包含命中的词
@@ -959,7 +981,8 @@
         '<button class="g-tab" data-cat="' + esc(c) + '" aria-pressed="false">' + esc(c) +
         '<span class="n">' + counts[c] + "</span></button>";
     });
-    return '<div class="g-tabs" id="g-tabs">' + tabs + "</div>" +
+    return recStripHtml() +
+      '<div class="g-tabs" id="g-tabs">' + tabs + "</div>" +
       '<div class="g-list" id="g-list"></div>';
   }
 
@@ -2228,7 +2251,7 @@ function aboutHtml() {
     '<p>整站是手写的 HTML、CSS 和原生 JavaScript，没有框架，没有构建工具，也没有数据库——就是一堆纯静态文件，挂在 Cloudflare Pages 上。改一个字、提交一下，几分钟就上线了。这种笨办法的好处是，哪怕再过十几年，它大概也还能打开，不依赖任何我已经忘了密码的服务。</p>' +
     '<h2>现在里面有什么</h2>' +
     '<p>目前攒了二百二十多篇，大致分成读书、技术、文史、日常、电影、杂记和类型文学这几类，分得不算严，常常写着写着就串到别的类里去了。除了文章，还有二十来条比文章短的“动态”、一百五十多个平时收着的链接，以及一个专门记这个站自己改动的“时间线”。</p>' +
-    '<p>这个站也刻意少放了一些东西：没有推荐算法，首页按时间排，你看到什么取决于我写了什么，而不是你之前点过什么；没有第三方统计脚本，页面不会记你从哪儿来、看了多久；也没有那种逼人互动的评论区，想聊的话写信给我就好。</p>' +
+    '<p>这个站也刻意少放了一些东西：首页按时间排，你看到什么取决于我写了什么；推荐只按文章内容算相似度，不记你点过什么、不给你画像；没有第三方统计脚本，页面不会记你从哪儿来、看了多久；也没有那种逼人互动的评论区，想聊的话写信给我就好。</p>' +
     '<h2>随便看看</h2>' +
     '<p>如果不知道从哪开始，可以先翻翻最近的动态，或者按分类随便点开一篇。写得歪的地方肯定比写得漂亮的地方多，发现哪儿错了告诉我，我都会改。</p>' +
     '<p>总之，欢迎来玩。这里是我给自己留的一块地方，不向任何人解释，也希望来的人能待得舒服。邮箱、GitHub、哔哩哔哩和抖音都放在下面，聊任何有趣的事都行。</p>' +
@@ -3666,6 +3689,190 @@ function interceptLinks(e) {
       });
   }
 
+  /* ---------- 相关阅读：按内容算，不记行为 ----------
+     首屏只装元数据，所以用标题/摘要/标签/分类的汉字二元组做 TF-IDF，
+     再叠加标签重合、同分类、年份接近。全程本地算，不上传、不画像、不记点击。 */
+  var _relCache = { sig: "", inv: null, docs: null };
+  /* 字面二元组只会认「同一个词」，认不出「算力」和「工人」在谈同一件事。
+     这几组主题词把相近的话题归到一起，至少命中两个词才算数。 */
+  var TOPICS = [
+    { n: "机器与劳动", w: ["人工智能", "大模型", "算力", "机器", "算法", "工人", "劳动", "就业", "失业", "自动化", "岗位", "替代", "生产", "效率", "普通人", "优化", "技术性失业", "消费"] },
+    { n: "制度与门槛", w: ["社保", "税", "政策", "制度", "补贴", "低保", "工伤", "罚款", "规定", "资格", "门槛", "休假", "退休", "监管", "认定", "申领"] },
+    { n: "词与日常", w: ["内耗", "班味", "搭子", "松弛", "独处", "童年", "缘分", "情绪", "焦虑", "免税", "快剪", "语音", "演唱会", "黄金", "体验", "悦己"] },
+    { n: "文史与诗", w: ["诗", "唐诗", "宋词", "鲁迅", "陶渊明", "白居易", "典故", "文言", "古籍", "史记", "文学", "朱光潜"] },
+    { n: "书与电影", w: ["小说", "读书", "电影", "导演", "镜头", "角色", "叙事", "影评", "书评", "类型文学"] },
+    { n: "数学与技术", w: ["数学", "几何", "证明", "停机问题", "代码", "程序", "模型", "公式", "数据", "曲线", "圆度"] }
+  ];
+  function topicsOf(p) {
+    var s = (p.title + " " + (p.excerpt || "") + " " + (p.tags || []).join(" ") + " " + (p.cat || "")).toLowerCase();
+    var out = [];
+    TOPICS.forEach(function (t, i) {
+      var hit = 0;
+      t.w.forEach(function (w) { if (s.indexOf(w.toLowerCase()) !== -1) hit++; });
+      if (hit >= 2) out.push(i);
+    });
+    return out;
+  }
+  function hanGrams(s) {
+    s = String(s || "").replace(/[^\u4e00-\u9fffA-Za-z0-9]/g, "");
+    var a = [];
+    for (var i = 0; i < s.length - 1; i++) a.push(s.substr(i, 2));
+    return a;
+  }
+  function relSignature() {
+    var last = "";
+    for (var i = 0; i < POSTS.length; i++) {
+      var u = POSTS[i].updated || POSTS[i].date || "";
+      if (u > last) last = u;
+    }
+    return POSTS.length + "|" + last;
+  }
+  function buildRelIndex() {
+    var sig = relSignature();
+    if (_relCache.sig === sig && _relCache.inv) return _relCache;
+    var docs = POSTS.map(function (p) {
+      var txt = p.title + " " + p.title + " " + (p.excerpt || "") + " " +
+        (p.tags || []).join(" ") + " " + (p.cat || "");
+      var g = hanGrams(txt), tf = {};
+      g.forEach(function (t) { tf[t] = (tf[t] || 0) + 1; });
+      return { p: p, tf: tf, topics: topicsOf(p) };
+    });
+    var df = {};
+    docs.forEach(function (d) {
+      Object.keys(d.tf).forEach(function (t) { df[t] = (df[t] || 0) + 1; });
+    });
+    var N = docs.length || 1, inv = {};
+    docs.forEach(function (d, i) {
+      var norm = 0, w = {};
+      Object.keys(d.tf).forEach(function (t) {
+        var v = (1 + Math.log(d.tf[t])) * Math.log(1 + N / (1 + (df[t] || 0)));
+        w[t] = v;
+        norm += v * v;
+      });
+      norm = Math.sqrt(norm) || 1;
+      var nw = {};
+      Object.keys(w).forEach(function (t) {
+        nw[t] = w[t] / norm;
+        (inv[t] || (inv[t] = [])).push({ i: i, w: nw[t] });
+      });
+      /* 自向量也要归一化：否则点积被放大 norm 倍，摘要长的老文会压过新文 */
+      d.w = nw;
+    });
+    _relCache = { sig: sig, inv: inv, docs: docs };
+    return _relCache;
+  }
+  function relatedPosts(p, limit) {
+    if (!p) return [];
+    var C = buildRelIndex(), self = -1;
+    for (var i = 0; i < C.docs.length; i++) {
+      if (C.docs[i].p.id === p.id) { self = i; break; }
+    }
+    if (self < 0) return [];
+    var scores = {}, tags = p.tags || [], w = C.docs[self].w;
+    Object.keys(w).forEach(function (t) {
+      (C.inv[t] || []).forEach(function (e) {
+        if (e.i === self) return;
+        scores[e.i] = (scores[e.i] || 0) + w[t] * e.w;
+      });
+    });
+    var pYear = parseInt((p.date || "0").slice(0, 4), 10) || 0;
+    var selfTopics = C.docs[self].topics || [];
+    C.docs.forEach(function (d, i) {
+      if (i === self) return;
+      var s = scores[i] || 0;
+      var common = (d.p.tags || []).filter(function (t) { return tags.indexOf(t) !== -1; });
+      var shared = (d.topics || []).filter(function (t) { return selfTopics.indexOf(t) !== -1; });
+      if (common.length) s += 0.32 * common.length;
+      if (shared.length) s += 0.22 * shared.length;
+      if (d.p.cat && d.p.cat === p.cat) s += 0.05;
+      var dy = Math.abs((parseInt((d.p.date || "0").slice(0, 4), 10) || 0) - pYear);
+      if (dy <= 1) s += 0.02;
+      if (d.p.pinned) s += 0.01;
+      scores[i] = s;
+    });
+    return Object.keys(scores).map(function (k) {
+      var i = Number(k), d = C.docs[i];
+      var common = (d.p.tags || []).filter(function (t) { return tags.indexOf(t) !== -1; });
+      var shared = (d.topics || []).filter(function (t) { return selfTopics.indexOf(t) !== -1; });
+      var reason = common.length
+        ? "同标签 · " + common[0]
+        : (shared.length ? "都在谈「" + TOPICS[shared[0]].n + "」"
+          : (d.p.cat && d.p.cat === p.cat ? "同在「" + d.p.cat + "」" : "话题相近"));
+      return { post: d.p, score: scores[i], reason: reason };
+    }).filter(function (x) { return x.score > 0.012; })
+      .sort(function (a, b) { return b.score - a.score; })
+      .slice(0, limit || 12);
+  }
+  function pickRelated(all, seed, n) {
+    if (all.length <= n) return all;
+    if (!seed) return all.slice(0, n);
+    var out = [], start = (seed * n) % all.length;
+    for (var i = 0; i < n; i++) out.push(all[(start + i) % all.length]);
+    return out;
+  }
+  function relatedItemHtml(r) {
+    return '<a href="/post?id=' + encodeURIComponent(r.post.id) + '">' +
+      '<span class="rl-t">' + esc(r.post.title) + "</span>" +
+      '<span class="rl-r">' + esc(r.reason) + "</span></a>";
+  }
+  function relatedBlockHtml(p, seed) {
+    var all = relatedPosts(p, 12);
+    if (!all.length) return "";
+    return '<section class="g-related" data-rel-id="' + esc(p.id) + '" data-rel-seed="' + (seed || 0) + '">' +
+      '<div class="g-related-hd"><h3>接着读</h3>' +
+      '<button type="button" data-rel-more="1">换一批</button></div>' +
+      '<div class="g-related-list">' + pickRelated(all, seed || 0, 3).map(relatedItemHtml).join("") + "</div>" +
+      '<p class="g-related-note">按文章内容算的相近程度，不记你点过什么</p>' +
+      "</section>";
+  }
+
+  /* 首页「今日一组」：挑一篇种子，把与它最相近的三篇摆在一起。 */
+  var _recSeed = 0;
+  function dailyPick() {
+    var day = Number(new Date().toISOString().slice(0, 10).replace(/-/g, "")) || 1;
+    var pool = POSTS.filter(function (p) { return p.excerpt && !p.pinned; });
+    if (!pool.length) pool = POSTS.slice();
+    if (!pool.length) return { base: null, list: [] };
+    var base = pool[(day + _recSeed * 7) % pool.length];
+    return { base: base, list: pickRelated(relatedPosts(base, 12), _recSeed, 3) };
+  }
+  function recStripHtml() {
+    var d = dailyPick();
+    if (!d.base || !d.list.length) return "";
+    return '<section class="g-rec-strip">' +
+      '<div class="g-rec-hd"><span>今日一组</span>' +
+      '<button type="button" data-rec-more="1">换一组</button></div>' +
+      '<p class="g-rec-from">从「' + esc(d.base.title) + "」延伸出去</p>" +
+      '<div class="g-rec-list">' + d.list.map(function (r) {
+        return '<a href="/post?id=' + encodeURIComponent(r.post.id) + '">' +
+          "<span>" + esc(r.post.title) + "</span><em>" + esc(r.reason) + "</em></a>";
+      }).join("") + "</div></section>";
+  }
+
+  /* 换一批 / 换一组：整页委托，重画后不用重新绑事件 */
+  document.addEventListener("click", function (e) {
+    if (!e.target || !e.target.closest) return;
+    var relBtn = e.target.closest("[data-rel-more]");
+    if (relBtn) {
+      var box = relBtn.closest(".g-related");
+      if (!box) return;
+      var id = box.getAttribute("data-rel-id");
+      var seed = Number(box.getAttribute("data-rel-seed") || 0) + 1;
+      var list = box.querySelector(".g-related-list");
+      var p = postById(id);
+      if (list && p) {
+        list.innerHTML = pickRelated(relatedPosts(p, 12), seed, 3).map(relatedItemHtml).join("");
+        box.setAttribute("data-rel-seed", String(seed));
+      }
+      return;
+    }
+    if (e.target.closest("[data-rec-more]")) {
+      _recSeed++;
+      var strip = document.querySelector(".g-rec-strip");
+      if (strip) strip.outerHTML = recStripHtml();
+    }
+  });
+
   function mountPost(host, id) {
     if (!host) host = $("#post");
     if (!host) return;
@@ -3706,6 +3913,20 @@ function interceptLinks(e) {
           '<div class="g-prose prose"><p>你可以从<a href="/writing">文章列表</a>里重新找找。</p></div>' +
           "</article>";
       return;
+    }
+
+    /* 首屏只装了元数据，正文按需取这一篇。取回来后原地重画，滚动位置不动。 */
+    if (!p.content && !p._bodyLoading) {
+      p._bodyLoading = true;
+      fetchPostBody(p.id).then(function (body) {
+        p._bodyLoading = false;
+        if (!body) return;
+        p.content = body;
+        p.words = plain(body).length;
+        var y = window.scrollY;
+        mountPost(host, p.id);
+        if (y > 0) instantScrollTo(y);
+      });
     }
 
     // 记下这一次画的是哪一版，云端数据回来后好判断要不要重画
@@ -3794,6 +4015,7 @@ function interceptLinks(e) {
     var indentHint = /^\s*<div class="pg-indent"><\/div>\s*/;
     var wantIndent = indentHint.test(p.content || "");
     var content = wantIndent ? (p.content || "").replace(indentHint, "") : p.content;
+    if (!content) content = '<p class="pg-loading">正文正在取回…</p>';
 
     host.innerHTML =
       '<article class="g-article">' +
@@ -3812,6 +4034,7 @@ function interceptLinks(e) {
       "</div>" +
       nav +
       "</div>" +
+      relatedBlockHtml(p, 0) +
       "</article>";
 
     // 手机上表格必须能横向滚。内容里的表格有两种写法：
@@ -4611,19 +4834,23 @@ function interceptLinks(e) {
     trigger.innerHTML = ICONS.search;
     tools.insertBefore(trigger, tools.firstChild);
 
-    // 建一次索引，把正文转成纯文本；之后每次搜索只是字符串查找
-    var index = orderedPosts().map(function (p) {
-      var body = plain(p.content);
-      return {
-        post: p,
-        titleLow: p.title.toLowerCase(),
-        tagsLow: (p.tags || []).join(" ").toLowerCase(),
-        haystack: (
-          p.title + " " + p.excerpt + " " + (p.tags || []).join(" ") + " " + p.cat + " " + body
-        ).toLowerCase(),
-        body: body,
-      };
-    });
+    // 索引先只拿元数据（标题/摘要/标签/分类），正文等用户真的要搜再补
+    var index = [];
+    function buildIndex() {
+      index = orderedPosts().map(function (p) {
+        var body = plain(p.content);
+        return {
+          post: p,
+          titleLow: p.title.toLowerCase(),
+          tagsLow: (p.tags || []).join(" ").toLowerCase(),
+          haystack: (
+            p.title + " " + p.excerpt + " " + (p.tags || []).join(" ") + " " + p.cat + " " + body
+          ).toLowerCase(),
+          body: body || p.excerpt || ""
+        };
+      });
+    }
+    buildIndex();
 
     var overlay = document.createElement("div");
     overlay.className = "search-overlay";
@@ -4657,6 +4884,7 @@ function interceptLinks(e) {
     }
 
     function openPanel() {
+      ensureFullIndex();
       overlay.classList.add("open");
       document.body.style.overflow = "hidden";
       if (!input.value) showRecent();
@@ -4683,7 +4911,7 @@ function interceptLinks(e) {
       results.innerHTML = list
         .map(function (item, i) {
           var p = item.post;
-          var snip = snippet(item.body, terms, 70);
+          var snip = snippet(item.body || item.post.excerpt || "", terms, 70);
           return (
             '<a class="search-item" data-i="' +
             i +
@@ -4702,6 +4930,20 @@ function interceptLinks(e) {
           );
         })
         .join("");
+    }
+
+    /* 首屏只有元数据，全文索引等用户第一次打开搜索框再补一次；
+       拉的过程中仍能用标题/摘要搜，补完后重画当前结果。 */
+    var _fullAsked = false;
+    function ensureFullIndex() {
+      if (_fullAsked || typeof window.loadCloudContent !== "function") return;
+      _fullAsked = true;
+      window.loadCloudContent({ light: false }).then(function (c) {
+        if (!c || !Array.isArray(c.posts) || !c.posts.length) return;
+        applyDataOver(null, c.posts, true);
+        buildIndex();
+        if (input.value.trim()) doSearch();
+      }).catch(function () {});
     }
 
     function doSearch() {
@@ -5067,7 +5309,7 @@ function interceptLinks(e) {
     // 等它回来再渲染，刷新文章页会先白屏，网络一抖还会把刚发的文章判成「没有找到」。
     var cached = readContentCache();
     if (cached) {
-      applyDataOver(cached.site, cached.posts);
+      applyDataOver(cached.site, cached.posts, true);
       if (Array.isArray(cached.events)) window.CAL_EVENTS = cached.events;
     }
     boot();
@@ -5076,9 +5318,9 @@ function interceptLinks(e) {
     // 再向云端要一次：拿到以后原地更新，必要时把当前这一页补画一遍
     try {
       if (typeof window.loadCloudContent === "function") {
-        var c = await window.loadCloudContent();
+        var c = await window.loadCloudContent({ light: true });
         if (c && c.site && Object.keys(c.site).length) {
-          applyDataOver(c.site, Array.isArray(c.posts) ? c.posts : null);
+          applyDataOver(c.site, Array.isArray(c.posts) ? c.posts : null, true);
           if (Array.isArray(c.events)) window.CAL_EVENTS = c.events;
           writeContentCache(c);
           window.__contentGot = true;
@@ -5099,6 +5341,8 @@ function interceptLinks(e) {
       buildPostTocHtml: buildPostTocHtml,
       bindToc: bindToc,
       mountVideos: mountVideos,
+      relatedPosts: relatedPosts,
+      recStripHtml: recStripHtml,
     };
   }
 })();

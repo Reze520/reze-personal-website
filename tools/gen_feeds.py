@@ -87,7 +87,7 @@ def main(path):
     desc = strip_html(site.get("desc") or site.get("intro") or "RezeのBlog的个人博客。")
 
     items = []
-    for p in posts[:30]:
+    for p in posts[:60]:
         d = parse_date(p.get("date"))
         if not d:
             continue
@@ -119,7 +119,7 @@ def main(path):
 
     print("posts: %d" % len(posts))
     print("sitemap: %d 条（%d 静态 + %d 文章）" % (len(STATIC_PAGES) + len(posts), len(STATIC_PAGES), len(posts)))
-    print("feed: %d 条，最新 %s" % (min(len(posts), 30), latest.date()))
+    print("feed: %d 条，最新 %s" % (min(len(posts), 60), latest.date()))
 
 
 if __name__ == "__main__":

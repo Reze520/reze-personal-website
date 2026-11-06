@@ -14,11 +14,49 @@
 
 const JSON_HEADERS = { "Content-Type": "application/json; charset=utf-8" };
 
-function json(data, status) {
-  return new Response(JSON.stringify(data), { status: status || 200, headers: JSON_HEADERS });
+function json(data, status, extra) {
+  return new Response(JSON.stringify(data), {
+    status: status || 200,
+    headers: { ...JSON_HEADERS, ...(extra || {}) }
+  });
 }
 
+/* 列表页不需要一百万字的正文。light=1 时只给元数据，另附预计算字数，
+   正文走 /post?id= 单篇取。这样首屏从 1.7MB 降到几十 KB。 */
+function stripTags(s) {
+  return String(s || "")
+    .replace(/<[^>]*>/g, "")
+    .replace(/&[a-z#0-9]+;/gi, " ")
+    .replace(/\s+/g, "");
+}
+
+function metaOnly(r) {
+  const p = mapPost(r);
+  const body = stripTags(p.content);
+  p.words = body.length;
+  p.hasContent = body.length > 0;
+  delete p.content;
+  return p;
+}
+
+/* 弱 ETag：篇数 + 最新 updated + site 体积。内容一改就换值，浏览器可 304。 */
+function etagOf(rows, site, light) {
+  let last = "";
+  for (const r of rows) {
+    const t = r.updated || r.date || "";
+    if (t > last) last = t;
+  }
+  const raw = rows.length + "|" + last + "|" + JSON.stringify(site || {}).length + "|" + (light ? "l" : "f");
+  let h = 2166136261;
+  for (let i = 0; i < raw.length; i++) { h ^= raw.charCodeAt(i); h = Math.imul(h, 16777619); }
+  return 'W/"' + (h >>> 0).toString(16) + "-" + rows.length + '"';
+}
+
+const CACHE_PUBLIC = "public, max-age=60, stale-while-revalidate=600";
+
+let _schemaReady = false;
 async function initSchema(env) {
+  if (_schemaReady) return;
   await env.DB.prepare(
     `CREATE TABLE IF NOT EXISTS posts (
       id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -48,6 +86,7 @@ async function initSchema(env) {
       created_at TEXT DEFAULT (datetime('now'))
     )`
   ).run();
+  _schemaReady = true;
 }
 
 function authorized(request, env) {
@@ -84,14 +123,36 @@ export async function onRequest(context) {
     return json({ error: "数据库未就绪：" + e.message }, 500);
   }
 
-  // 公开读内容
+  // 公开读内容：?light=1 只给元数据（列表/首页用），默认仍给完整正文（后台与全文索引用）
   if (method === "GET" && seg.length === 1 && seg[0] === "content") {
+    const url = new URL(request.url);
+    const light = url.searchParams.get("light") === "1";
     const s = await env.DB.prepare("SELECT v FROM settings WHERE k='site'").first();
     let site = {};
     if (s) { try { site = JSON.parse(s.v); } catch (e) { site = {}; } }
-    const rows = await env.DB.prepare("SELECT * FROM posts ORDER BY pinned DESC, created_at DESC, id DESC").all();
-    const evs = await env.DB.prepare("SELECT * FROM events ORDER BY date ASC, id ASC").all();
-    return json({ site: site, posts: (rows.results || []).map(mapPost), events: (evs.results || []) });
+    const rows = (await env.DB.prepare("SELECT * FROM posts ORDER BY pinned DESC, created_at DESC, id DESC").all()).results || [];
+    const evs = (await env.DB.prepare("SELECT * FROM events ORDER BY date ASC, id ASC").all()).results || [];
+    const tag = etagOf(rows, site, light);
+    const cacheHead = { ETag: tag, "Cache-Control": CACHE_PUBLIC };
+    if (request.headers.get("If-None-Match") === tag) {
+      return new Response(null, { status: 304, headers: cacheHead });
+    }
+    return json({ site: site, posts: rows.map(light ? metaOnly : mapPost), events: evs }, 200, cacheHead);
+  }
+
+  // 公开读单篇正文：文章页按需取，不用把 330 篇全搬过来
+  if (method === "GET" && seg.length === 1 && seg[0] === "post") {
+    const id = new URL(request.url).searchParams.get("id") || "";
+    let r = await env.DB.prepare("SELECT * FROM posts WHERE slug=? LIMIT 1").bind(id).first();
+    const m = /^post-(\d+)$/.exec(id);
+    if (!r && m) r = await env.DB.prepare("SELECT * FROM posts WHERE id=? LIMIT 1").bind(Number(m[1])).first();
+    if (!r) return json({ error: "not found" }, 404);
+    const tag = etagOf([r], {}, false);
+    const cacheHead = { ETag: tag, "Cache-Control": "public, max-age=300" };
+    if (request.headers.get("If-None-Match") === tag) {
+      return new Response(null, { status: 304, headers: cacheHead });
+    }
+    return json({ post: mapPost(r) }, 200, cacheHead);
   }
 
   // 登录
