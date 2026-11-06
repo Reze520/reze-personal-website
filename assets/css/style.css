@@ -923,6 +923,67 @@ button {
   text-transform: uppercase;
 }
 
+/* 无封面占位题图：基于文章 id 的确定性渐变（coverHue），不再留空白 */
+.cover.ph,
+.post-cover.ph,
+.thumb.ph {
+  display: grid;
+  place-items: center;
+  background-image: linear-gradient(
+    135deg,
+    hsl(var(--ph-h, 262), 56%, 58%),
+    hsl(calc(var(--ph-h, 262) + 32), 50%, 42%)
+  );
+  border: 0;
+}
+[data-theme="dark"] .cover.ph,
+[data-theme="dark"] .post-cover.ph,
+[data-theme="dark"] .thumb.ph {
+  background-image: linear-gradient(
+    135deg,
+    hsl(var(--ph-h, 262), 30%, 24%),
+    hsl(calc(var(--ph-h, 262) + 32), 26%, 18%)
+  );
+}
+.cover.ph .ph-cat,
+.post-cover.ph .ph-cat,
+.thumb.ph .ph-cat {
+  font-family: var(--serif);
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  color: #fff;
+  opacity: 0.94;
+  text-shadow: 0 1px 6px rgba(0, 0, 0, 0.25);
+}
+[data-theme="dark"] .cover.ph .ph-cat,
+[data-theme="dark"] .post-cover.ph .ph-cat,
+[data-theme="dark"] .thumb.ph .ph-cat {
+  color: hsl(var(--ph-h, 262), 65%, 84%);
+  text-shadow: none;
+}
+
+/* 收起留言区后的文末邮箱入口 */
+.g-mail-cta {
+  margin: 30px 0 4px;
+  padding: 16px 20px;
+  border: 1px solid var(--glass-line);
+  border-radius: var(--radius-lg);
+  background: var(--panel-2);
+  font-size: 13.5px;
+  color: var(--g-ink-2);
+  text-align: center;
+}
+.g-mail-cta a {
+  color: var(--g-accent);
+  font-weight: 600;
+  margin-left: 6px;
+  text-decoration: none;
+}
+.g-mail-cta a:hover {
+  text-decoration: underline;
+}
+
 /* 空状态 */
 .empty {
   text-align: center;

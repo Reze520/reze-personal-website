@@ -903,9 +903,9 @@
 
   /* ---------- 卡片 ---------- */
   function cardMarkup(p, i) {
-    var cover = p.cover
+    var coverInner = p.cover
       ? '<img src="' + esc(p.cover) + '" alt="' + esc(p.title) + '" loading="lazy">'
-      : ""; // 无封面时不渲染占位块
+      : '<span class="ph-cat">' + esc(p.cat || "随笔") + "</span>";
 
     var pin = p.pinned ? '<span class="pin">置顶</span>' : "";
 
@@ -944,9 +944,7 @@
       " 字</span>" +
       "</div>" +
       "</div>" +
-      (cover
-        ? '<div class="cover" style="--ph-h:' + coverHue(p.id, i) + '">' + cover + "</div>"
-        : "") +
+      '<div class="cover' + (p.cover ? "" : " ph") + '" style="--ph-h:' + coverHue(p.id, i) + '">' + coverInner + "</div>" +
       "</a>" +
       "</article>"
     );
@@ -989,7 +987,7 @@
   function glassPostH(p) {
     var thumb = p.cover
       ? '<img src="' + esc(p.cover) + '" alt="" loading="lazy">'
-      : ""; // 无封面时不渲染占位块
+      : '<span class="ph-cat">' + esc(p.cat || "随笔") + "</span>";
     var chips = (p.tags || [])
       .slice(0, 5)
       .map(function (t) {
@@ -1007,7 +1005,7 @@
       '<div class="meta"><span>' + ICONS.cal + fmtDate(p.date) + "</span>" +
       "<span>" + ICONS.doc + wordCount(p).toLocaleString() + " 字</span></div>" +
       "</div>" +
-      (thumb ? '<div class="thumb">' + thumb + "</div>" : "") +
+      '<div class="thumb' + (p.cover ? "" : " ph") + '">' + thumb + "</div>" +
       "</a>"
     );
   }
@@ -3960,7 +3958,7 @@ function interceptLinks(e) {
 
     var cover = p.cover
       ? '<div class="post-cover"><img src="' + esc(p.cover) + '" alt="' + esc(p.title) + '"></div>'
-      : "";
+      : '<div class="post-cover ph"><span class="ph-cat">' + esc(p.cat || "随笔") + "</span></div>";
 
     var idx = orderedPosts().indexOf(p);
     var prev = orderedPosts()[idx + 1];
@@ -4035,6 +4033,7 @@ function interceptLinks(e) {
       nav +
       "</div>" +
       relatedBlockHtml(p, 0) +
+      '<div class="g-mail-cta">有话想说，或只是想说说话？<a href="mailto:1806754672@qq.com">写信给我 →</a></div>' +
       "</article>";
 
     // 手机上表格必须能横向滚。内容里的表格有两种写法：
@@ -4069,8 +4068,8 @@ function interceptLinks(e) {
       onScroll();
     }
 
-    // 文章底部挂上读者留言区
-    mountComments(host, p.id);
+    // 文章底部留言区已收起（长期 0 条，改用页脚 / 关于页的邮箱入口）
+    // mountComments(host, p.id);
   }
 
   /* ---------- 顶栏「更多」下拉 ---------- */
