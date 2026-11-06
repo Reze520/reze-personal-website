@@ -923,44 +923,70 @@ button {
   text-transform: uppercase;
 }
 
-/* 无封面占位题图：基于文章 id 的确定性渐变（coverHue），不再留空白 */
+/* 无封面占位题图：精致字纹封面（按 id 确定性色相），不再是廉价占位块 */
 .cover.ph,
 .post-cover.ph,
 .thumb.ph {
+  position: relative;
   display: grid;
   place-items: center;
-  background-image: linear-gradient(
-    135deg,
-    hsl(var(--ph-h, 262), 56%, 58%),
-    hsl(calc(var(--ph-h, 262) + 32), 50%, 42%)
-  );
+  overflow: hidden;
+  background-image:
+    radial-gradient(130% 130% at 82% -10%, hsla(var(--ph-h, 262), 64%, 66%, 0.55), transparent 58%),
+    linear-gradient(150deg, hsl(var(--ph-h, 262), 50%, 55%), hsl(calc(var(--ph-h, 262) + 34), 44%, 38%));
   border: 0;
+}
+.cover.ph::after,
+.post-cover.ph::after,
+.thumb.ph::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(118deg, rgba(255, 255, 255, 0.18), transparent 42%),
+    repeating-linear-gradient(135deg, rgba(255, 255, 255, 0.05) 0 2px, transparent 2px 9px);
+  mix-blend-mode: screen;
+  pointer-events: none;
 }
 [data-theme="dark"] .cover.ph,
 [data-theme="dark"] .post-cover.ph,
 [data-theme="dark"] .thumb.ph {
-  background-image: linear-gradient(
-    135deg,
-    hsl(var(--ph-h, 262), 30%, 24%),
-    hsl(calc(var(--ph-h, 262) + 32), 26%, 18%)
-  );
+  background-image:
+    radial-gradient(130% 130% at 82% -10%, hsla(var(--ph-h, 262), 48%, 42%, 0.6), transparent 58%),
+    linear-gradient(150deg, hsl(var(--ph-h, 262), 32%, 30%), hsl(calc(var(--ph-h, 262) + 34), 28%, 19%));
+}
+.cover.ph .ph-glyph,
+.post-cover.ph .ph-glyph,
+.thumb.ph .ph-glyph {
+  font-family: var(--serif);
+  font-size: clamp(34px, 5.6vw, 48px);
+  font-weight: 600;
+  line-height: 1;
+  color: #fff;
+  opacity: 0.94;
+  text-shadow: 0 2px 12px rgba(0, 0, 0, 0.3);
+  z-index: 1;
 }
 .cover.ph .ph-cat,
 .post-cover.ph .ph-cat,
 .thumb.ph .ph-cat {
-  font-family: var(--serif);
-  font-size: 14px;
-  font-weight: 600;
-  letter-spacing: 0.12em;
-  color: #fff;
-  opacity: 0.94;
-  text-shadow: 0 1px 6px rgba(0, 0, 0, 0.25);
+  position: absolute;
+  left: 9px;
+  bottom: 8px;
+  z-index: 1;
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  color: rgba(255, 255, 255, 0.92);
+  background: rgba(0, 0, 0, 0.24);
+  padding: 3px 9px;
+  border-radius: 999px;
 }
 [data-theme="dark"] .cover.ph .ph-cat,
 [data-theme="dark"] .post-cover.ph .ph-cat,
 [data-theme="dark"] .thumb.ph .ph-cat {
-  color: hsl(var(--ph-h, 262), 65%, 84%);
-  text-shadow: none;
+  color: hsl(var(--ph-h, 262), 72%, 86%);
+  background: rgba(0, 0, 0, 0.3);
 }
 
 /* 收起留言区后的文末邮箱入口 */
@@ -3861,9 +3887,6 @@ body.has-app .site-foot .brand .brand-mark {
   inset: 0;
   display: grid;
   place-items: center;
-  font-size: 11px;
-  letter-spacing: 0.1em;
-  color: var(--g-ink-2);
 }
 
 /* 公告卡 */

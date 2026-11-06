@@ -668,6 +668,13 @@
     return 240 + ((i || 0) * 23 + (hashOf(str) % 7)) % 100;
   }
 
+  // 无封面时的精致字纹封面：标题首字作大字纹 + 左下角分类小标签
+  function phInner(p) {
+    var g = (p.title || "?").charAt(0);
+    return '<span class="ph-glyph">' + esc(g) + "</span>" +
+      '<span class="ph-cat">' + esc(p.cat || "随笔") + "</span>";
+  }
+
   // 分类固定配色，同类文章视觉上成组
   var CAT_HUE = { 技术: 252, 生活: 198, 作品: 306 };
   function catHue(name) {
@@ -905,7 +912,7 @@
   function cardMarkup(p, i) {
     var coverInner = p.cover
       ? '<img src="' + esc(p.cover) + '" alt="' + esc(p.title) + '" loading="lazy">'
-      : '<span class="ph-cat">' + esc(p.cat || "随笔") + "</span>";
+      : phInner(p);
 
     var pin = p.pinned ? '<span class="pin">置顶</span>' : "";
 
@@ -987,7 +994,7 @@
   function glassPostH(p) {
     var thumb = p.cover
       ? '<img src="' + esc(p.cover) + '" alt="" loading="lazy">'
-      : '<span class="ph-cat">' + esc(p.cat || "随笔") + "</span>";
+      : phInner(p);
     var chips = (p.tags || [])
       .slice(0, 5)
       .map(function (t) {
@@ -3958,7 +3965,7 @@ function interceptLinks(e) {
 
     var cover = p.cover
       ? '<div class="post-cover"><img src="' + esc(p.cover) + '" alt="' + esc(p.title) + '"></div>'
-      : '<div class="post-cover ph"><span class="ph-cat">' + esc(p.cat || "随笔") + "</span></div>";
+      : '<div class="post-cover ph">' + phInner(p) + "</div>";
 
     var idx = orderedPosts().indexOf(p);
     var prev = orderedPosts()[idx + 1];
