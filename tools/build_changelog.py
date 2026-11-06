@@ -11,7 +11,7 @@
     ### 界面 | 改了什么            三个井号 + 类型 | 陈述句标题
     - 一条一条写清楚               列表就是这一版的细节
 
-类型目前有五个：界面 / 功能 / 修复 / 内容 / 基建。编译时会做成左侧带色条的
+类型目前有四个：界面 / 功能 / 修复 / 基建，只记站点本身的技术改动。编译时会做成左侧带色条的
 小徽标（样式在 style.css 的 .cl-kind[data-k=...]），四个字改成八个字也认得，
 只是颜色会退回默认那条线。
 
@@ -94,7 +94,7 @@ def render(months):
     a('<article class="g-article g-changelog">')
     a('<header class="cl-head">')
     a("<h1>更新日志</h1>")
-    a('<p class="cl-sub">按时间倒序排，一次改动一条。标题行扫一遍就知道改了什么，点开看细节。</p>')
+    a('<p class="cl-sub">按时间倒序排，一次改动一条，只记站点本身的技术改动，文章不进来。标题行扫一遍就知道改了什么，点开看细节。</p>')
     a('<div class="cl-facts">')
     a("<span><b>%d</b> 条记录</span>" % total)
     a("<span><b>%d</b> 个时间节点</span>" % len(months))
@@ -162,7 +162,7 @@ def main():
 
     # 2) 改标题与元信息
     title = "更新日志 · RezeのBlog"
-    desc = "这个站的改动记录：界面、功能、修复、内容、基建，一条一次改动，按时间倒序。"
+    desc = "这个站的技术改动记录：界面、功能、修复、基建，一条一次改动，按时间倒序。"
     tpl = re.sub(r"<title>[^<]*</title>", "<title>%s</title>" % title, tpl, count=1)
     tpl = re.sub(r'<meta name="description" content="[^"]*"',
                  '<meta name="description" content="%s"' % desc, tpl, count=1)
