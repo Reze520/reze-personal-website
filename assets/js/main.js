@@ -661,20 +661,6 @@
   function hueOf(str) {
     return HUE_POOL[hashOf(str) % HUE_POOL.length];
   }
-  // 封面是渐变大色块，只在紫蓝区里取。
-  // 光靠 hash 会让相邻两张卡撞成同一个颜色，所以让列表位置主导，
-  // hash 只做 0–6 度的微调，保证相邻两张至少差 17 度。
-  function coverHue(str, i) {
-    return 240 + ((i || 0) * 23 + (hashOf(str) % 7)) % 100;
-  }
-
-  // 无封面时的精致字纹封面：标题首字作大字纹 + 左下角分类小标签
-  function phInner(p) {
-    var g = (p.title || "?").charAt(0);
-    return '<span class="ph-glyph">' + esc(g) + "</span>" +
-      '<span class="ph-cat">' + esc(p.cat || "随笔") + "</span>";
-  }
-
   // 分类固定配色，同类文章视觉上成组
   var CAT_HUE = { 技术: 252, 生活: 198, 作品: 306 };
   function catHue(name) {
@@ -910,14 +896,10 @@
 
   /* ---------- 卡片 ---------- */
   function cardMarkup(p, i) {
-    var coverInner = p.cover
-      ? '<img src="' + esc(p.cover) + '" alt="' + esc(p.title) + '" loading="lazy">'
-      : phInner(p);
-
     var pin = p.pinned ? '<span class="pin">置顶</span>' : "";
 
     return (
-      '<article class="card reveal" data-cat="' +
+      '<article class="card' + (p.cover ? "" : " no-cover") + ' reveal" data-cat="' +
       esc(p.cat) +
       '">' +
       '<a href="/post?id=' +
@@ -951,7 +933,7 @@
       " 字</span>" +
       "</div>" +
       "</div>" +
-      '<div class="cover' + (p.cover ? "" : " ph") + '" style="--ph-h:' + coverHue(p.id, i) + '">' + coverInner + "</div>" +
+      (p.cover ? '<div class="cover"><img src="' + esc(p.cover) + '" alt="' + esc(p.title) + '" loading="lazy"></div>' : "") +
       "</a>" +
       "</article>"
     );
@@ -992,9 +974,6 @@
   }
 
   function glassPostH(p) {
-    var thumb = p.cover
-      ? '<img src="' + esc(p.cover) + '" alt="" loading="lazy">'
-      : phInner(p);
     var chips = (p.tags || [])
       .slice(0, 5)
       .map(function (t) {
@@ -1002,7 +981,7 @@
       })
       .join("");
     return (
-      '<a class="g-posth" href="/post?id=' + encodeURIComponent(p.id) + '">' +
+      '<a class="g-posth' + (p.cover ? "" : " no-cover") + '" href="/post?id=' + encodeURIComponent(p.id) + '">' +
       '<div class="info">' +
       '<div class="ttl"><span class="mark">' + ICONS.doc + "</span>" +
       "<h2>" + esc(p.title) + "</h2>" +
@@ -1012,7 +991,7 @@
       '<div class="meta"><span>' + ICONS.cal + fmtDate(p.date) + "</span>" +
       "<span>" + ICONS.doc + wordCount(p).toLocaleString() + " 字</span></div>" +
       "</div>" +
-      '<div class="thumb' + (p.cover ? "" : " ph") + '">' + thumb + "</div>" +
+      (p.cover ? '<div class="thumb"><img src="' + esc(p.cover) + '" alt="" loading="lazy"></div>' : "") +
       "</a>"
     );
   }
@@ -3965,7 +3944,7 @@ function interceptLinks(e) {
 
     var cover = p.cover
       ? '<div class="post-cover"><img src="' + esc(p.cover) + '" alt="' + esc(p.title) + '"></div>'
-      : '<div class="post-cover ph">' + phInner(p) + "</div>";
+      : "";
 
     var idx = orderedPosts().indexOf(p);
     var prev = orderedPosts()[idx + 1];
