@@ -877,6 +877,10 @@ button {
 .card-meta .cat {
   color: var(--ink-2);
   font-weight: 500;
+  padding: 2px 9px;
+  border-radius: 999px;
+  background: hsl(var(--cat-h, 262) 52% 52% / 0.12);
+  border: 1px solid hsl(var(--cat-h, 262) 50% 50% / 0.18);
 }
 
 /* 封面 */
@@ -900,6 +904,50 @@ button {
 /* 无封面：卡片转为纯文字卡，不挂任何占位图 */
 .card.no-cover > a { grid-template-columns: 1fr; }
 .g-posth.no-cover { grid-template-columns: 1fr; }
+
+/* 无封面文字卡 / 文章页的极简分类色细节：仅细线、小标，不进入阅读区 */
+.card.no-cover,
+.g-posth.no-cover {
+  position: relative;
+}
+.card.no-cover::before,
+.g-posth.no-cover::before {
+  content: "";
+  position: absolute;
+  top: 18px;
+  bottom: 18px;
+  left: 0;
+  width: 3px;
+  border-radius: 3px;
+  background: hsl(var(--cat-h, 262) 52% 56% / 0.5);
+  pointer-events: none;
+}
+.g-article.no-cover {
+  position: relative;
+}
+.g-article.no-cover h1::after {
+  content: "";
+  display: block;
+  width: 44px;
+  height: 3px;
+  margin: 14px 0 0;
+  border-radius: 3px;
+  background: hsl(var(--cat-h, 262) 52% 56% / 0.55);
+}
+[data-theme="dark"] .card.no-cover::before,
+[data-theme="dark"] .g-posth.no-cover::before {
+  background: hsl(var(--cat-h, 262) 50% 66% / 0.6);
+}
+[data-theme="dark"] .g-article.no-cover h1::after {
+  background: hsl(var(--cat-h, 262) 50% 68% / 0.65);
+}
+[data-theme="dark"] .card-meta .cat,
+[data-theme="dark"] .post-meta .cat,
+[data-theme="dark"] .g-meta .cat {
+  color: hsl(var(--cat-h, 262) 62% 80%);
+  background: hsl(var(--cat-h, 262) 45% 55% / 0.16);
+  border-color: hsl(var(--cat-h, 262) 50% 60% / 0.3);
+}
 
 /* 收起留言区后的文末邮箱入口 */
 .g-mail-cta {
@@ -1026,6 +1074,10 @@ button {
 .post-meta .cat {
   color: var(--ink-2);
   font-weight: 500;
+  padding: 2px 9px;
+  border-radius: 999px;
+  background: hsl(var(--cat-h, 262) 52% 52% / 0.12);
+  border: 1px solid hsl(var(--cat-h, 262) 50% 50% / 0.18);
 }
 
 .post-cover {
@@ -3301,6 +3353,11 @@ body.has-app .site-foot .brand .brand-mark {
 }
 .g-meta .cat {
   color: var(--g-accent);
+  font-weight: 500;
+  padding: 2px 9px;
+  border-radius: 999px;
+  background: hsl(var(--cat-h, 262) 52% 52% / 0.12);
+  border: 1px solid hsl(var(--cat-h, 262) 50% 50% / 0.2);
 }
 
 .g-prose {

@@ -901,7 +901,7 @@
     return (
       '<article class="card' + (p.cover ? "" : " no-cover") + ' reveal" data-cat="' +
       esc(p.cat) +
-      '">' +
+      '" style="--cat-h:' + catHue(p.cat) + '">' +
       '<a href="/post?id=' +
       encodeURIComponent(p.id) +
       '">' +
@@ -981,7 +981,7 @@
       })
       .join("");
     return (
-      '<a class="g-posth' + (p.cover ? "" : " no-cover") + '" href="/post?id=' + encodeURIComponent(p.id) + '">' +
+      '<a class="g-posth' + (p.cover ? "" : " no-cover") + '" href="/post?id=' + encodeURIComponent(p.id) + '" style="--cat-h:' + catHue(p.cat) + '">' +
       '<div class="info">' +
       '<div class="ttl"><span class="mark">' + ICONS.doc + "</span>" +
       "<h2>" + esc(p.title) + "</h2>" +
@@ -4002,7 +4002,7 @@ function interceptLinks(e) {
     if (!content) content = '<p class="pg-loading">正文正在取回…</p>';
 
     host.innerHTML =
-      '<article class="g-article">' +
+      '<article class="g-article' + (p.cover ? "" : " no-cover") + '" style="--cat-h:' + catHue(p.cat) + '">' +
       backLinkHtml() +
       "<h1>" +
       esc(p.title) +
