@@ -1396,6 +1396,43 @@
     apply(startCat, startTag, 0);
   }
 
+  /* ---------- 农历库：闲时异步取 ----------
+     lunar.js 443KB，全站只有右栏那个小日历用得上，没必要占首屏带宽。
+     等空下来再取，取到后重画一次日历；取不到就只显示公历，别处不受影响。
+     版本号从 main.js 自己的 src 上抄，这样 bump_version 只管改 HTML 就够。 */
+  var _lunarState = 0; // 0 未开始 / 1 加载中 / 2 已就绪
+
+  function lunarUrl() {
+    var me = document.currentScript;
+    if (!me) {
+      var ss = document.getElementsByTagName("script");
+      for (var i = ss.length - 1; i >= 0; i--) {
+        if (/(^|\/)main\.js/.test(ss[i].src || "")) { me = ss[i]; break; }
+      }
+    }
+    var ver = me && me.src ? (me.src.match(/[?&]v=([0-9a-z]+)/) || [])[1] : "";
+    return "assets/js/lunar.js" + (ver ? "?v=" + ver : "");
+  }
+
+  function fetchLunar() {
+    if (_lunarState || window.Solar) return;
+    _lunarState = 1;
+    var s = document.createElement("script");
+    s.src = lunarUrl();
+    s.async = true;
+    s.onload = function () {
+      _lunarState = 2;
+      if (typeof window.__rezeRepaintCal === "function") window.__rezeRepaintCal();
+    };
+    s.onerror = function () { _lunarState = 0; };
+    (document.head || document.documentElement).appendChild(s);
+  }
+
+  function scheduleLunar() {
+    if ("requestIdleCallback" in window) requestIdleCallback(fetchLunar, { timeout: 2500 });
+    else setTimeout(fetchLunar, 1500);
+  }
+
   /* ---------- 右栏小日历：农历 + 节日 + 发文标记，可翻月 ----------
      只用来「看日期」，点日期不改任何数据，也不做日程。 */
   function initMiniCal(right) {
@@ -1473,8 +1510,9 @@
     };
     paint();
 
-    // 农历库改成闲时异步取，取到后由首页那段脚本回调这里重画一次
+    // 农历库闲时再取，取到后回调这里重画一次
     window.__rezeRepaintCal = paint;
+    scheduleLunar();
   }
 
   /* ---------- 诗笺：点一下换一句 ----------
@@ -4359,6 +4397,7 @@ function interceptLinks(e) {
     var bgRow = overlay.querySelector("#bg-row");
     var bgs = bgList();
 
+    // 缩略图面板默认 display:none，图不加 lazy 的话每次进站都会把这 8 张大图全下一遍
     function paintBgRow() {
       if (!bgRow) return;
       if (!bgs.length) {
@@ -4374,7 +4413,7 @@ function interceptLinks(e) {
         .map(function (src, i) {
           return (
             '<button class="bg-thumb' + (applied.indexOf(src) !== -1 ? " on" : "") + '" data-i="' + i +
-            '" title="背景 ' + (i + 1) + '"><img src="' + esc(src) + '" alt="背景 ' + (i + 1) + '"></button>'
+            '" title="背景 ' + (i + 1) + '"><img src="' + esc(src) + '" alt="背景 ' + (i + 1) + '" loading="lazy" decoding="async"></button>'
           );
         })
         .join("") +
@@ -4382,8 +4421,7 @@ function interceptLinks(e) {
         "🎲</button>";
     }
 
-    paintBgRow();
-
+    // 缩略图等面板真正打开再建，不然每次进站都要白下 8 张大图
     if (bgRow) {
       bgRow.addEventListener("click", function (e) {
         var b = e.target.closest(".bg-thumb");
@@ -4404,6 +4442,7 @@ function interceptLinks(e) {
 
     btn.addEventListener("click", function () {
       overlay.classList.add("open");
+      paintBgRow();
       syncSegs();
     });
     overlay.addEventListener("click", function (e) {
