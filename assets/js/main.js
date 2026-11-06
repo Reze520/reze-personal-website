@@ -3405,8 +3405,11 @@ function interceptLinks(e) {
   }
 
   /* ---------- 文章留言（读者留言） ----------
-     在文章详情页底部挂载一个留言区：列表 + 表单。
-     数据走 /site-data/comments（与内容同源，无 CORS）。
+     在文章详情页底部挂一个「留言」入口，默认收起，展开才有列表与输入框。
+     2026-11-06 重做：原来一大块表单常驻在正文卡之外，直接压着背景插画，
+     深色下字和框都发糊，还有个亮色按钮格外扎眼；全站留言长期是 0，
+     一整块空表单既占版面又劝退。现在没人用时只剩一行小字，有回音时自动摊开，
+     想写一句只要一行加回车。数据仍走 /site-data/comments，
      所有用户内容一律用 textContent 渲染，避免 XSS。 */
   function fmtCmtTime(s) {
     if (!s) return "";
@@ -3432,58 +3435,106 @@ function interceptLinks(e) {
     sec.className = "g-comments";
     sec.setAttribute("data-post", postId);
 
-    var h = document.createElement("h2");
-    h.className = "g-comments-title";
-    h.appendChild(document.createTextNode("留言 "));
+    /* 一行入口：留言 · 条数 · 「写一句」提示 · 箭头（CSS 画） */
+    var toggle = document.createElement("button");
+    toggle.type = "button";
+    toggle.className = "g-cmt-toggle";
+    toggle.setAttribute("aria-expanded", "false");
+    var label = document.createElement("span");
+    label.textContent = "留言";
     var count = document.createElement("span");
     count.className = "g-comments-count";
     count.textContent = "0";
-    h.appendChild(count);
-    sec.appendChild(h);
+    var hint = document.createElement("span");
+    hint.className = "g-cmt-toggle-hint";
+    hint.textContent = "写一句";
+    toggle.appendChild(label);
+    toggle.appendChild(count);
+    toggle.appendChild(hint);
+    sec.appendChild(toggle);
+
+    var panel = document.createElement("div");
+    panel.className = "g-cmt-panel";
+    panel.hidden = true;
 
     var list = document.createElement("div");
     list.className = "g-cmt-list";
-    sec.appendChild(list);
+    panel.appendChild(list);
 
     var form = document.createElement("form");
     form.className = "g-cmt-form";
     form.setAttribute("autocomplete", "off");
 
+    var compose = document.createElement("div");
+    compose.className = "g-cmt-compose";
+    var ta = document.createElement("textarea");
+    ta.name = "text";
+    ta.className = "g-cmt-text";
+    ta.rows = 1;
+    ta.maxLength = 2000;
+    ta.required = true;
+    ta.placeholder = "读到这儿，想到什么就留一句";
+    var btn = document.createElement("button");
+    btn.type = "submit";
+    btn.className = "g-cmt-submit";
+    btn.textContent = "发送";
+    compose.appendChild(ta);
+    compose.appendChild(btn);
+    form.appendChild(compose);
+
+    var foot = document.createElement("div");
+    foot.className = "g-cmt-foot";
+    var status = document.createElement("span");
+    status.className = "g-cmt-status";
+    var signBtn = document.createElement("button");
+    signBtn.type = "button";
+    signBtn.className = "g-cmt-sign";
+    signBtn.textContent = "署名";
+    var tip = document.createElement("span");
+    tip.className = "g-cmt-tip";
+    tip.textContent = "回车发送 · Shift + 回车换行";
+    foot.appendChild(status);
+    foot.appendChild(signBtn);
+    foot.appendChild(tip);
+    form.appendChild(foot);
+
+    var nameWrap = document.createElement("div");
+    nameWrap.className = "g-cmt-name-wrap";
+    nameWrap.hidden = true;
     var nameI = document.createElement("input");
     nameI.type = "text";
     nameI.name = "name";
     nameI.className = "g-cmt-name";
     nameI.maxLength = 40;
-    nameI.placeholder = "昵称（留空默认匿名）";
+    nameI.placeholder = "署名（留空就是匿名）";
+    nameWrap.appendChild(nameI);
+    form.appendChild(nameWrap);
 
-    var ta = document.createElement("textarea");
-    ta.name = "text";
-    ta.className = "g-cmt-text";
-    ta.rows = 3;
-    ta.maxLength = 2000;
-    ta.required = true;
-    ta.placeholder = "说点什么吧（最多 2000 字）";
-
-    var row = document.createElement("div");
-    row.className = "g-cmt-actions";
-    var btn = document.createElement("button");
-    btn.type = "submit";
-    btn.className = "g-cmt-submit";
-    btn.textContent = "发表留言";
-    var status = document.createElement("span");
-    status.className = "g-cmt-status";
-    row.appendChild(btn);
-    row.appendChild(status);
-
-    form.appendChild(nameI);
-    form.appendChild(ta);
-    form.appendChild(row);
-
+    /* 管理入口：平时不占地方，只在有留言时露出一个极小的「管理」；
+       也可以 Shift + 点标题直接进，方便在空文章上删东西。 */
     var adminBtn = document.createElement("button");
     adminBtn.type = "button";
     adminBtn.className = "g-cmt-admin";
-    adminBtn.textContent = "管理留言";
-    adminBtn.addEventListener("click", function () {
+    adminBtn.textContent = "管理";
+    adminBtn.hidden = true;
+    foot.appendChild(adminBtn);
+
+    panel.appendChild(form);
+    sec.appendChild(panel);
+    /* 挂进正文卡里，别留在卡外压着背景插画：卡面是实底，字才不发糊 */
+    var card = host.querySelector(".g-article");
+    (card || host).appendChild(sec);
+
+    function setOpen(on, focusIt) {
+      sec.classList.toggle("is-open", on);
+      panel.hidden = !on;
+      toggle.setAttribute("aria-expanded", on ? "true" : "false");
+      if (on && focusIt) {
+        try { ta.focus({ preventScroll: true }); } catch (e) { ta.focus(); }
+      }
+    }
+
+    function enterAdmin() {
       var pass = sessionStorage.getItem("reze-admin-pass");
       if (!pass) {
         pass = window.prompt("输入管理口令以删除留言：");
@@ -3491,7 +3542,34 @@ function interceptLinks(e) {
         sessionStorage.setItem("reze-admin-pass", pass);
       }
       sec.setAttribute("data-admin", "1");
-      loadComments(sec, postId);
+      setOpen(true, false);
+      loadComments(sec, postId, true);
+    }
+
+    toggle.addEventListener("click", function (e) {
+      if (e.shiftKey) { enterAdmin(); return; }
+      setOpen(!sec.classList.contains("is-open"), true);
+    });
+    adminBtn.addEventListener("click", enterAdmin);
+
+    signBtn.addEventListener("click", function () {
+      nameWrap.hidden = !nameWrap.hidden;
+      if (nameWrap.hidden) { nameI.value = ""; }
+      else { nameI.focus(); }
+      signBtn.textContent = nameWrap.hidden ? "署名" : "不留名了";
+    });
+
+    /* 一行输入，写长了自己长高；中文输入法选字时的回车不发送 */
+    ta.addEventListener("input", function () {
+      ta.style.height = "auto";
+      ta.style.height = Math.min(ta.scrollHeight, 160) + "px";
+    });
+    ta.addEventListener("keydown", function (e) {
+      if (e.key === "Enter" && !e.shiftKey && !e.isComposing) {
+        e.preventDefault();
+        if (form.requestSubmit) form.requestSubmit();
+        else btn.click();
+      }
     });
 
     form.addEventListener("submit", function (e) {
@@ -3510,8 +3588,9 @@ function interceptLinks(e) {
         .then(function (res) {
           if (res.ok && res.j && res.j.ok) {
             ta.value = "";
-            status.textContent = "已发表";
-            loadComments(sec, postId);
+            ta.style.height = "auto";
+            status.textContent = "已发出";
+            loadComments(sec, postId, true);
           } else {
             status.textContent = (res.j && res.j.error) || "发送失败，稍后再试";
           }
@@ -3520,15 +3599,15 @@ function interceptLinks(e) {
         .then(function () { btn.disabled = false; });
     });
 
-    sec.appendChild(adminBtn);
-    sec.appendChild(form);
-    host.appendChild(sec);
     loadComments(sec, postId);
   }
 
-  function loadComments(sec, postId) {
+  function loadComments(sec, postId, keepOpen) {
     var list = sec.querySelector(".g-cmt-list");
     var count = sec.querySelector(".g-comments-count");
+    var panel = sec.querySelector(".g-cmt-panel");
+    var toggle = sec.querySelector(".g-cmt-toggle");
+    var adminBtn = sec.querySelector(".g-cmt-admin");
     var isAdmin = sec.getAttribute("data-admin") === "1";
     var pass = sessionStorage.getItem("reze-admin-pass");
     fetch("/site-data/comments?post=" + encodeURIComponent(postId), { cache: "no-store" })
@@ -3537,13 +3616,7 @@ function interceptLinks(e) {
         var cs = (data && data.comments) || [];
         count.textContent = String(cs.length);
         list.innerHTML = "";
-        if (!cs.length) {
-          var empty = document.createElement("p");
-          empty.className = "g-cmt-empty";
-          empty.textContent = "还没有留言，来当第一个。";
-          list.appendChild(empty);
-          return;
-        }
+        if (adminBtn) adminBtn.hidden = !cs.length;
         cs.forEach(function (c) {
           var item = document.createElement("div");
           item.className = "g-cmt";
@@ -3572,19 +3645,24 @@ function interceptLinks(e) {
               fetch("/site-data/comments/" + c.id, {
                 method: "DELETE",
                 headers: { "X-Admin-Pass": pass }
-              }).then(function (r) { if (r.ok) loadComments(sec, postId); });
+              }).then(function (r) { if (r.ok) loadComments(sec, postId, true); });
             });
             item.appendChild(del);
           }
           list.appendChild(item);
         });
+        /* 有回音就摊开让后来的人看见；没人留话时保持收起，
+           用户自己点开过就别替他合上。 */
+        if (cs.length && (keepOpen || !sec.classList.contains("is-open"))) {
+          sec.classList.add("is-open");
+          panel.hidden = false;
+          toggle.setAttribute("aria-expanded", "true");
+        }
       })
       .catch(function () {
         list.innerHTML = "";
-        var err = document.createElement("p");
-        err.className = "g-cmt-empty";
-        err.textContent = "留言加载失败。";
-        list.appendChild(err);
+        var st = sec.querySelector(".g-cmt-status");
+        if (st) st.textContent = "留言没读出来，刷新一下试试";
       });
   }
 

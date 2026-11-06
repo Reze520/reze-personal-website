@@ -9851,36 +9851,82 @@ body.has-app .site-head.is-stuck {
   border-color: rgba(255, 255, 255, 0.1);
 }
 
-/* ---------- 文章留言（读者留言） ---------- */
+/* ---------- 文章留言（读者留言） ----------
+   2026-11-06 重做：这一块原先挂在正文卡之外，输入框直接压在背景插画上，
+   深色下发糊，还常驻一块没人用的大表单和一个亮色按钮。
+   现在把它挂进正文卡（实底），默认只留一行细入口，展开才出现面板；
+   接口与数据结构一律不动。 */
 .g-comments {
-  margin-top: 30px;
-  padding-top: 22px;
+  margin: 30px 0 4px;
+  padding-top: 0;
   border-top: 1px solid var(--line);
 }
-.g-comments-title {
+.g-cmt-toggle {
   display: flex;
   align-items: baseline;
   gap: 8px;
-  margin: 0 0 14px;
-  font-size: 1.05rem;
+  width: 100%;
+  padding: 14px 2px 12px;
+  font: inherit;
+  font-size: .95rem;
   font-weight: 600;
+  color: var(--ink);
+  text-align: left;
+  background: none;
+  border: 0;
+  cursor: pointer;
 }
+.g-cmt-toggle:hover { color: var(--accent); }
+.g-cmt-toggle:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+.g-cmt-toggle::after {
+  content: "›";
+  margin-left: auto;
+  font-size: 1.15rem;
+  font-weight: 400;
+  color: var(--ink-3);
+  transition: transform .18s ease;
+}
+.g-comments.is-open .g-cmt-toggle::after { transform: rotate(90deg); }
 .g-comments-count {
+  font-size: .78rem;
+  font-weight: 400;
+  color: var(--ink-3);
+  font-variant-numeric: tabular-nums;
+}
+.g-cmt-toggle-hint {
   font-size: .8rem;
   font-weight: 400;
   color: var(--ink-3);
 }
+.g-comments.is-open .g-cmt-toggle-hint { display: none; }
+
+/* 外层已是正文卡的实底，这里只铺一层浅一档的底做分区，不再叠一块重卡片 */
+.g-cmt-panel {
+  padding: 14px;
+  background: var(--panel-2);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+}
+.g-cmt-panel[hidden],
+.g-cmt-name-wrap[hidden] { display: none; }
+
 .g-cmt-list {
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 10px;
+  margin-bottom: 14px;
 }
+.g-cmt-list:empty { display: none; }
 .g-cmt {
   position: relative;
-  padding: 12px 14px;
-  border: var(--card-border);
-  border-radius: 12px;
-  background: var(--card-bg);
+  padding: 10px 12px 10px 14px;
+  background: var(--surface, var(--panel));
+  border-radius: var(--radius);
+  border-left: 2px solid color-mix(in srgb, var(--accent) 45%, transparent);
 }
 .g-cmt-head {
   display: flex;
@@ -9888,92 +9934,132 @@ body.has-app .site-head.is-stuck {
   gap: 8px;
   margin-bottom: 4px;
 }
-.g-cmt-who { font-weight: 600; font-size: .92rem; }
-.g-cmt-when { font-size: .76rem; color: var(--ink-3); }
+.g-cmt-who { font-weight: 600; font-size: .85rem; }
+.g-cmt-when {
+  margin-left: auto;
+  font-size: .74rem;
+  color: var(--ink-3);
+  font-variant-numeric: tabular-nums;
+}
 .g-cmt-body {
+  font-size: .9rem;
   line-height: 1.7;
+  color: var(--ink);
   white-space: pre-wrap;
   word-break: break-word;
 }
-.g-cmt-empty {
-  margin: 4px 0;
-  font-size: .9rem;
-  color: var(--ink-3);
-}
 .g-cmt-del {
   position: absolute;
-  top: 10px;
-  right: 10px;
+  top: 8px;
+  right: 8px;
   padding: 2px 6px;
+  font: inherit;
   font-size: .72rem;
   color: var(--ink-3);
   background: none;
-  border: none;
+  border: 0;
   cursor: pointer;
 }
 .g-cmt-del:hover { color: #c0392b; }
-.g-cmt-form {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  margin-top: 16px;
+.g-cmt-empty {
+  margin: 4px 0;
+  font-size: .88rem;
+  color: var(--ink-3);
 }
-.g-cmt-name {
-  max-width: 260px;
-}
-.g-cmt-name,
+
+.g-cmt-form { display: flex; flex-direction: column; gap: 8px; }
+.g-cmt-compose { display: flex; align-items: flex-end; gap: 8px; }
 .g-cmt-text {
+  flex: 1 1 auto;
   box-sizing: border-box;
-  width: 100%;
+  min-width: 0;
+  min-height: 40px;
+  max-height: 160px;
   padding: 9px 11px;
   font: inherit;
+  font-size: .9rem;
+  line-height: 1.55;
   color: var(--ink);
-  background: var(--card-bg);
-  border: 1px solid var(--line);
-  border-radius: 10px;
-  resize: vertical;
+  background: var(--surface, var(--panel));
+  border: 1px solid var(--line-2);
+  border-radius: var(--radius);
+  resize: none;
+  overflow-y: auto;
 }
-.g-cmt-name:focus,
-.g-cmt-text:focus {
+.g-cmt-name {
+  box-sizing: border-box;
+  width: 100%;
+  max-width: 220px;
+  padding: 7px 10px;
+  font: inherit;
+  font-size: .85rem;
+  color: var(--ink);
+  background: var(--surface, var(--panel));
+  border: 1px solid var(--line-2);
+  border-radius: var(--radius);
+}
+.g-cmt-text:focus,
+.g-cmt-name:focus {
   outline: none;
   border-color: var(--accent);
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--accent) 16%, transparent);
 }
-.g-cmt-name::placeholder,
-.g-cmt-text::placeholder { color: var(--ink-3); }
-.g-cmt-actions {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-}
+.g-cmt-text::placeholder,
+.g-cmt-name::placeholder { color: var(--ink-3); }
+/* 低调的描边按钮：不再是整块亮色，只在 hover 时填色 */
 .g-cmt-submit {
-  padding: 8px 18px;
+  flex: 0 0 auto;
+  min-height: 40px;
+  padding: 9px 16px;
   font: inherit;
+  font-size: .85rem;
+  color: var(--ink-2);
+  background: transparent;
+  border: 1px solid var(--line-2);
+  border-radius: var(--radius);
+  cursor: pointer;
+  transition: color .16s ease, border-color .16s ease, background .16s ease;
+}
+.g-cmt-submit:hover {
   color: var(--accent-ink);
   background: var(--accent);
-  border: none;
-  border-radius: 10px;
-  cursor: pointer;
+  border-color: var(--accent);
 }
-.g-cmt-submit:disabled {
-  opacity: .55;
-  cursor: default;
+.g-cmt-submit:disabled { opacity: .5; cursor: default; }
+.g-cmt-foot {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 20px;
+  flex-wrap: wrap;
 }
-.g-cmt-status {
-  font-size: .82rem;
+.g-cmt-status { font-size: .78rem; color: var(--ink-3); }
+.g-cmt-tip {
+  margin-left: auto;
+  font-size: .74rem;
   color: var(--ink-3);
 }
+.g-cmt-sign,
 .g-cmt-admin {
-  margin-top: 10px;
-  padding: 4px 10px;
+  padding: 0;
   font: inherit;
-  font-size: .8rem;
+  font-size: .76rem;
   color: var(--ink-3);
   background: none;
-  border: 1px solid var(--line);
-  border-radius: 8px;
+  border: 0;
   cursor: pointer;
+  text-decoration: underline;
+  text-underline-offset: 3px;
 }
+.g-cmt-sign:hover,
 .g-cmt-admin:hover { color: var(--ink); }
+.g-cmt-admin[hidden] { display: none; }
+
+@media (max-width: 560px) {
+  .g-cmt-compose { flex-direction: column; align-items: stretch; }
+  .g-cmt-submit { align-self: flex-end; }
+  .g-cmt-tip { display: none; }
+}
 
 /* ---------- 站内视频卡（正文里的 data-bvid） ----------
    正文只写 <div data-bvid>，main.js 的 mountVideos 补上这道壳。
