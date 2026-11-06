@@ -6471,14 +6471,12 @@ body {
 
 /* 文章列表分页：实底容器 + 高对比按钮，不再压在花纹背景上隐形 */
 .g-pager {
-  display: flex; flex-wrap: wrap; align-items: center; justify-content: center;
-  gap: 6px; width: fit-content; max-width: 100%;
-  margin: 26px auto 8px; padding: 10px 14px;
-  border: 1px solid var(--line-2); border-radius: 16px;
-  background: var(--panel); box-shadow: var(--shadow);
+  display: flex; flex-wrap: nowrap; align-items: center; justify-content: center;
+  gap: 6px; max-width: 100%; margin: 22px 0 8px;
+  overflow-x: auto; scrollbar-width: thin;
 }
 .g-pager .pg-btn {
-  min-width: 36px; height: 36px; padding: 0 10px;
+  flex: none; min-width: 36px; height: 36px; padding: 0 10px;
   border-radius: 10px; border: 1px solid var(--line-2);
   background: var(--panel-2); color: var(--ink);
   cursor: pointer; font-size: 14px; font-weight: 600;
@@ -6509,7 +6507,7 @@ body {
 .g-pager .pg-ellipsis { color: var(--ink-3); align-self: center; padding: 0 2px; user-select: none; }
 .g-pager .pg-jump {
   display: inline-flex; align-items: center; gap: 6px;
-  margin-left: 8px; padding-left: 12px; border-left: 1px solid var(--line-2);
+  margin-left: 6px; flex: none;
 }
 .g-pager .pg-input {
   width: 62px; height: 36px; padding: 0 8px; box-sizing: border-box;
@@ -6532,7 +6530,7 @@ body {
 .g-pager .pg-go:hover { background: var(--g-accent); color: var(--accent-ink); }
 
 @media (max-width: 720px) {
-  .g-pager { gap: 5px; padding: 9px 10px; }
+  .g-pager { gap: 5px; justify-content: flex-start; padding-bottom: 4px; }
   .g-pager .pg-btn { min-width: 32px; height: 34px; padding: 0 8px; font-size: 13px; }
   .g-pager .pg-btn.pg-prev,
   .g-pager .pg-btn.pg-next,

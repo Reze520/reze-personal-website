@@ -1196,9 +1196,8 @@
     );
   }
 
-  // 列表分页条：左右箭头 + 首尾各 5 页 + 当前页前后各 2 页 + 可点省略号 + 跳页框
-  // 三段窗口重叠就合并。旧版在第 5 页会输出「1 2 3 4 5 … 21」这种断层，
-  // 第 6、7 页既看不见也点不到，只能一页页按下一页，等于卡在开头。
+  // 列表分页条：不固定铺一长串页码，只留首尾锚点 + 当前页附近，其余折进可点省略号
+  // 靠近两端时把该侧锚点摊开到 5 页，起步和收尾都不必一页页按。
   function pagerNums(pages, page) {
     var cur = page + 1; // 1-based 当前页
     if (pages <= 11) {
@@ -1206,10 +1205,12 @@
       for (var i = 1; i <= pages; i++) a.push(i);
       return a;
     }
+    var headEnd = cur <= 3 ? 5 : 1;
+    var tailStart = cur >= pages - 2 ? pages - 4 : pages;
     var ranges = [
-      [1, Math.min(5, pages)],
+      [1, Math.min(headEnd, pages)],
       [Math.max(1, cur - 2), Math.min(pages, cur + 2)],
-      [Math.max(1, pages - 4), pages]
+      [Math.max(1, tailStart), pages]
     ];
     ranges.sort(function (x, y) { return x[0] - y[0]; });
     var merged = [];
@@ -1221,8 +1222,10 @@
     var out = [];
     merged.forEach(function (r, idx) {
       if (idx && r[0] > merged[idx - 1][1] + 1) {
-        // 省略号本身可点：跳到被略去那段的中点，省得一页页挪
-        out.push({ gap: Math.floor((merged[idx - 1][1] + r[0]) / 2) });
+        var lo = merged[idx - 1][1];
+        // 只缺一页就直接补上，别为它多放一个省略号；缺口大才折成可点的省略号
+        if (r[0] - lo === 2) out.push(lo + 1);
+        else out.push({ gap: Math.floor((lo + r[0]) / 2) });
       }
       for (var i = r[0]; i <= r[1]; i++) out.push(i);
     });
