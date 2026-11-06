@@ -6469,7 +6469,7 @@ body {
   .cal-sub { display: none; }
 }
 
-/* 文章列表分页：实底容器 + 高对比按钮，不再压在花纹背景上隐形 */
+/* 文章列表分页：单行轻排，箭头组 / 页码窗口 / 跳页组三段拉开，按钮实底高对比 */
 .g-pager {
   display: flex; flex-wrap: nowrap; align-items: center; justify-content: center;
   gap: 6px; max-width: 100%; margin: 22px 0 8px;
@@ -6482,7 +6482,7 @@ body {
   cursor: pointer; font-size: 14px; font-weight: 600;
   transition: all 0.2s var(--ease);
 }
-.g-pager .pg-btn:hover:not(.disabled):not(.on):not(.pg-gap) {
+.g-pager .pg-btn:hover:not(.disabled):not(.on) {
   border-color: var(--g-accent); color: var(--g-accent);
   background: color-mix(in srgb, var(--g-accent) 12%, var(--panel));
 }
@@ -6497,17 +6497,12 @@ body {
 .g-pager .pg-btn.pg-next,
 .g-pager .pg-btn.pg-first,
 .g-pager .pg-btn.pg-last { font-size: 18px; font-weight: 700; line-height: 1; padding: 0 12px; }
-/* 省略号可点：跳到被略去那段的中点 */
-.g-pager .pg-btn.pg-gap {
-  min-width: 26px; padding: 0 4px; letter-spacing: 1px;
-  border-color: transparent; background: transparent;
-  color: var(--ink-3); font-weight: 400;
-}
-.g-pager .pg-btn.pg-gap:hover { color: var(--g-accent); background: transparent; }
-.g-pager .pg-ellipsis { color: var(--ink-3); align-self: center; padding: 0 2px; user-select: none; }
+/* 箭头与页码窗口之间留一道呼吸，翻页时数字组位置稳定不挤 */
+.g-pager .pg-btn.pg-prev { margin-right: 8px; }
+.g-pager .pg-btn.pg-next { margin-left: 8px; }
 .g-pager .pg-jump {
-  display: inline-flex; align-items: center; gap: 6px;
-  margin-left: 6px; flex: none;
+  display: inline-flex; align-items: center; gap: 6px; flex: none;
+  margin-left: 12px; padding-left: 14px; border-left: 1px solid var(--line-2);
 }
 .g-pager .pg-input {
   width: 62px; height: 36px; padding: 0 8px; box-sizing: border-box;
@@ -6528,6 +6523,11 @@ body {
   transition: all 0.2s var(--ease);
 }
 .g-pager .pg-go:hover { background: var(--g-accent); color: var(--accent-ink); }
+/* 首尾页不再钉在条上，用一行淡字把总页数补回来 */
+.g-pager .pg-total {
+  margin-left: 4px; white-space: nowrap;
+  color: var(--ink-3); font-size: 12px; font-weight: 400;
+}
 
 @media (max-width: 720px) {
   .g-pager { gap: 5px; justify-content: flex-start; padding-bottom: 4px; }
@@ -6536,7 +6536,11 @@ body {
   .g-pager .pg-btn.pg-next,
   .g-pager .pg-btn.pg-first,
   .g-pager .pg-btn.pg-last { padding: 0 9px; font-size: 17px; }
+  .g-pager .pg-btn.pg-prev { margin-right: 5px; }
+  .g-pager .pg-btn.pg-next { margin-left: 5px; }
+  .g-pager .pg-jump { margin-left: 8px; padding-left: 10px; }
   .g-pager .pg-input, .g-pager .pg-go { height: 34px; }
+  .g-pager .pg-total { display: none; }
 }
 
 /* ============================================================

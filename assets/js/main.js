@@ -1196,39 +1196,16 @@
     );
   }
 
-  // 列表分页条：不固定铺一长串页码，只留首尾锚点 + 当前页附近，其余折进可点省略号
-  // 靠近两端时把该侧锚点摊开到 5 页，起步和收尾都不必一页页按。
+  // 列表分页条：首尾箭头 + 一个固定宽度的滑动页码窗口 + 跳页框。
+  // 首尾页已有 « » 直达，页码不再固定钉住第一页和最后一页，也不再插省略号；
+  // 窗口恒为 7 个（窄屏 5 个），靠边自动夹紧，翻页时整条宽度不跳动。
   function pagerNums(pages, page) {
     var cur = page + 1; // 1-based 当前页
-    if (pages <= 11) {
-      var a = [];
-      for (var i = 1; i <= pages; i++) a.push(i);
-      return a;
-    }
-    var headEnd = cur <= 3 ? 5 : 1;
-    var tailStart = cur >= pages - 2 ? pages - 4 : pages;
-    var ranges = [
-      [1, Math.min(headEnd, pages)],
-      [Math.max(1, cur - 2), Math.min(pages, cur + 2)],
-      [Math.max(1, tailStart), pages]
-    ];
-    ranges.sort(function (x, y) { return x[0] - y[0]; });
-    var merged = [];
-    ranges.forEach(function (r) {
-      var last = merged[merged.length - 1];
-      if (!last || r[0] > last[1] + 1) merged.push([r[0], r[1]]);
-      else if (r[1] > last[1]) last[1] = r[1];
-    });
+    var wide = (typeof window === "undefined" ? 1200 : window.innerWidth || 1200) > 720;
+    var win = Math.min(pages, wide ? 7 : 5);
+    var start = Math.max(1, Math.min(cur - Math.floor(win / 2), pages - win + 1));
     var out = [];
-    merged.forEach(function (r, idx) {
-      if (idx && r[0] > merged[idx - 1][1] + 1) {
-        var lo = merged[idx - 1][1];
-        // 只缺一页就直接补上，别为它多放一个省略号；缺口大才折成可点的省略号
-        if (r[0] - lo === 2) out.push(lo + 1);
-        else out.push({ gap: Math.floor((lo + r[0]) / 2) });
-      }
-      for (var i = r[0]; i <= r[1]; i++) out.push(i);
-    });
+    for (var i = 0; i < win; i++) out.push(start + i);
     return out;
   }
 
@@ -1244,20 +1221,17 @@
     h += '<button class="pg-btn pg-prev' + (prev ? " disabled" : "") + '" data-p="' + (page - 1) +
       '"' + (prev ? " disabled aria-disabled=\"true\"" : "") + ' aria-label="上一页">‹</button>';
     pagerNums(pages, page).forEach(function (n) {
-      if (typeof n === "object") {
-        var dest = Math.max(0, Math.min(pages - 1, n.gap - 1));
-        h += '<button class="pg-btn pg-gap" data-p="' + dest +
-          '" title="跳到第 ' + n.gap + ' 页" aria-label="跳到第 ' + n.gap + ' 页">…</button>';
-      } else {
-        h += '<button class="pg-btn' + (n - 1 === page ? " on" : "") + '" data-p="' + (n - 1) + '">' + n + "</button>";
-      }
+      h += '<button class="pg-btn pg-num' + (n - 1 === page ? " on" : "") +
+        '" data-p="' + (n - 1) + '"' + (n - 1 === page ? ' aria-current="page"' : "") +
+        ">" + n + "</button>";
     });
     h += '<button class="pg-btn pg-next' + (next ? " disabled" : "") + '" data-p="' + (page + 1) +
       '"' + (next ? " disabled aria-disabled=\"true\"" : "") + ' aria-label="下一页">›</button>';
     h += '<button class="pg-btn pg-last' + (last ? " disabled" : "") + '" data-p="' + (pages - 1) +
       '"' + (last ? " disabled aria-disabled=\"true\"" : "") + ' aria-label="尾页">»</button>';
     h += '<span class="pg-jump"><input class="pg-input" type="number" min="1" max="' + pages +
-      '" placeholder="跳至" aria-label="跳转到页码"><button class="pg-go" type="button">跳转</button></span>';
+      '" placeholder="跳至" aria-label="跳转到页码"><button class="pg-go" type="button">跳转</button>' +
+      '<span class="pg-total">共 ' + pages + " 页</span></span>";
     return h + "</div>";
   }
 
