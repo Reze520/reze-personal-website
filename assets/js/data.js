@@ -124,6 +124,10 @@ window.SITE = {
     "assets/uploads/bg3.jpg", // 白发黑西装（已锐化增强）
     "assets/uploads/bg.jpg",  // 夏日海滩
     "assets/uploads/bg5.jpg", // 月下花枝（最早那款背景）
+    "assets/uploads/bg/night-bridge.jpg", // 夜色悬索桥（Unsplash · Johnny Lam）
+    "assets/uploads/bg/purple-mist.jpg",  // 紫雾枯树（Unsplash · Kundan Ramisetti）
+    "assets/uploads/bg/city-night.jpg",   // 黑白夜城天际线（Unsplash · Oleg Chursin）
+    "assets/uploads/bg/forest-dusk.jpg",  // 暮色林线（Unsplash · Julie Geiger）
   ],
 
   // 左栏公告，留空就不显示这张卡

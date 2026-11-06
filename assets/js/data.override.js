@@ -44,7 +44,11 @@ window.SITE = {
     "assets/uploads/bg1.jpg",
     "assets/uploads/bg3.jpg",
     "assets/uploads/bg.jpg",
-    "assets/uploads/bg5.jpg"
+    "assets/uploads/bg5.jpg",
+    "assets/uploads/bg/night-bridge.jpg",
+    "assets/uploads/bg/purple-mist.jpg",
+    "assets/uploads/bg/city-night.jpg",
+    "assets/uploads/bg/forest-dusk.jpg"
   ],
   "notice": "少年不识愁滋味，爱上层楼。爱上层楼，为赋新词强说愁。\n而今识尽愁滋味，欲说还休。欲说还休，却道天凉好个秋。",
   "moments": [
@@ -237,946 +241,1208 @@ window.SITE = {
   ],
   "links": [
     {
+      "cat": "AI 工具",
       "name": "DeepSeek",
       "url": "https://chat.deepseek.com",
       "desc": "推理与代码",
-      "icon": "undefined"
+      "fav": "assets/icons/chat.deepseek.com.png"
     },
     {
+      "cat": "AI 工具",
       "name": "Kimi",
       "url": "https://kimi.moonshot.cn",
       "desc": "长文阅读",
-      "icon": "undefined"
+      "fav": "assets/icons/kimi.moonshot.cn.ico"
     },
     {
+      "cat": "AI 工具",
       "name": "豆包",
       "url": "https://www.doubao.com",
       "desc": "字节 AI 助手",
-      "icon": "undefined"
+      "fav": "assets/icons/doubao.com.png"
     },
     {
+      "cat": "AI 工具",
       "name": "通义千问",
       "url": "https://tongyi.aliyun.com",
       "desc": "阿里 AI 助手",
-      "icon": "undefined"
+      "fav": "assets/icons/tongyi.aliyun.com.png"
     },
     {
+      "cat": "AI 工具",
       "name": "腾讯元宝",
       "url": "https://yuanbao.tencent.com",
       "desc": "接公众号语料",
-      "icon": "undefined"
+      "fav": "assets/icons/yuanbao.tencent.com.png"
     },
     {
+      "cat": "AI 工具",
       "name": "文心一言",
       "url": "https://yiyan.baidu.com",
       "desc": "百度 AI 助手",
-      "icon": "undefined"
+      "fav": "assets/icons/yiyan.baidu.com.png"
     },
     {
+      "cat": "AI 工具",
       "name": "智谱清言",
       "url": "https://chatglm.cn",
       "desc": "GLM 系列",
-      "icon": "undefined"
+      "fav": "assets/icons/chatglm.cn.ico"
     },
     {
+      "cat": "AI 工具",
       "name": "讯飞星火",
       "url": "https://xinghuo.xfyun.cn",
       "desc": "语音能力强",
-      "icon": "undefined"
+      "fav": "assets/icons/xinghuo.xfyun.cn.png"
     },
     {
+      "cat": "AI 工具",
       "name": "秘塔 AI 搜索",
       "url": "https://metaso.cn",
       "desc": "无广告检索",
-      "icon": "undefined"
+      "fav": "assets/icons/metaso.cn.png"
     },
     {
+      "cat": "AI 工具",
       "name": "天工 AI",
       "url": "https://www.tiangong.cn",
       "desc": "搜索 + 写作",
-      "icon": "undefined"
+      "fav": "assets/icons/tiangong.cn.png"
     },
     {
+      "cat": "AI 工具",
       "name": "海螺 AI",
       "url": "https://hailuoai.com",
       "desc": "语音与视频",
-      "icon": "undefined"
+      "fav": "assets/icons/hailuoai.com.png"
     },
     {
+      "cat": "AI 工具",
       "name": "即梦 AI",
       "url": "https://jimeng.jianying.com",
       "desc": "文生图 / 视频",
-      "icon": "undefined"
+      "fav": "assets/icons/jimeng.jianying.com.ico"
     },
     {
+      "cat": "AI 工具",
       "name": "可灵 AI",
       "url": "https://klingai.com",
       "desc": "文生视频",
-      "icon": "undefined"
+      "fav": "assets/icons/klingai.com.png"
     },
     {
+      "cat": "AI 工具",
       "name": "Claude",
       "url": "https://claude.ai",
       "desc": "Anthropic",
-      "icon": "undefined"
+      "fav": "assets/icons/claude.ai.png"
     },
     {
+      "cat": "AI 工具",
       "name": "Midjourney",
       "url": "https://www.midjourney.com",
       "desc": "AI 绘画",
-      "icon": "undefined"
+      "fav": "assets/icons/midjourney.com.png"
     },
     {
+      "cat": "开发技术",
       "name": "GitHub",
       "url": "https://github.com",
       "desc": "代码托管",
-      "icon": "undefined"
+      "fav": "assets/icons/github.com.svg"
     },
     {
+      "cat": "开发技术",
       "name": "Gitee",
       "url": "https://gitee.com",
       "desc": "国内代码托管",
-      "icon": "undefined"
+      "fav": "assets/icons/gitee.com.ico"
     },
     {
+      "cat": "开发技术",
       "name": "MDN",
       "url": "https://developer.mozilla.org",
       "desc": "前端文档",
-      "icon": "undefined"
+      "fav": "assets/icons/developer.mozilla.org.png"
     },
     {
+      "cat": "开发技术",
       "name": "菜鸟教程",
       "url": "https://www.runoob.com",
       "desc": "入门教程",
-      "icon": "undefined"
+      "fav": "assets/icons/runoob.com.png"
     },
     {
+      "cat": "开发技术",
       "name": "菜鸟工具",
       "url": "https://c.runoob.com",
       "desc": "在线小工具",
-      "icon": "undefined"
+      "fav": "assets/icons/c.runoob.com.png"
     },
     {
+      "cat": "开发技术",
       "name": "Stack Overflow",
       "url": "https://stackoverflow.com",
       "desc": "英文问答",
-      "icon": "undefined"
+      "fav": "assets/icons/stackoverflow.com.ico"
     },
     {
+      "cat": "开发技术",
       "name": "掘金",
       "url": "https://juejin.cn",
       "desc": "中文技术社区",
-      "icon": "undefined"
+      "fav": "assets/icons/juejin.cn.png"
     },
     {
+      "cat": "开发技术",
       "name": "CSDN",
       "url": "https://www.csdn.net",
       "desc": "中文技术博客",
-      "icon": "undefined"
+      "fav": "assets/icons/csdn.net.ico"
     },
     {
+      "cat": "开发技术",
       "name": "博客园",
       "url": "https://www.cnblogs.com",
       "desc": "老牌技术博客",
-      "icon": "undefined"
+      "fav": "assets/icons/cnblogs.com.png"
     },
     {
+      "cat": "开发技术",
       "name": "开源中国",
       "url": "https://www.oschina.net",
       "desc": "开源资讯",
-      "icon": "undefined"
+      "fav": "assets/icons/oschina.net.png"
     },
     {
+      "cat": "开发技术",
       "name": "Can I use",
       "url": "https://caniuse.com",
       "desc": "兼容性查询",
-      "icon": "undefined"
+      "fav": "assets/icons/caniuse.com.png"
     },
     {
+      "cat": "开发技术",
       "name": "CodePen",
       "url": "https://codepen.io",
       "desc": "前端在线实验",
-      "icon": "undefined"
+      "fav": "assets/icons/codepen.io.ico"
     },
     {
+      "cat": "开发技术",
       "name": "Cloudflare",
       "url": "https://dash.cloudflare.com",
       "desc": "部署与 CDN",
-      "icon": "undefined"
+      "fav": "assets/icons/dash.cloudflare.com.ico"
     },
     {
+      "cat": "开发技术",
       "name": "npm",
       "url": "https://www.npmjs.com",
       "desc": "包管理",
-      "icon": "undefined"
+      "fav": "assets/icons/npmjs.com.png"
     },
     {
+      "cat": "开发技术",
       "name": "力扣",
       "url": "https://leetcode.cn",
       "desc": "刷题",
-      "icon": "undefined"
+      "fav": "assets/icons/leetcode.cn.ico"
     },
     {
+      "cat": "开发技术",
       "name": "ES6 教程",
       "url": "https://es6.ruanyifeng.com",
       "desc": "阮一峰",
-      "icon": "undefined"
+      "fav": "assets/icons/es6.ruanyifeng.com.ico"
     },
     {
+      "cat": "开发技术",
       "name": "阿里云",
       "url": "https://www.aliyun.com",
       "desc": "云服务",
-      "icon": "undefined"
+      "fav": "assets/icons/aliyun.com.png"
     },
     {
+      "cat": "开发技术",
       "name": "腾讯云",
       "url": "https://cloud.tencent.com",
       "desc": "云服务",
-      "icon": "undefined"
+      "fav": "assets/icons/cloud.tencent.com.png"
     },
     {
+      "cat": "设计素材",
       "name": "阿里图标库",
       "url": "https://www.iconfont.cn",
       "desc": "免费图标",
-      "icon": "undefined"
+      "fav": "assets/icons/iconfont.cn.png"
     },
     {
+      "cat": "设计素材",
       "name": "Iconify",
       "url": "https://icon-sets.iconify.design",
       "desc": "图标聚合",
-      "icon": "undefined"
+      "fav": "assets/icons/icon-sets.iconify.design.png"
     },
     {
+      "cat": "设计素材",
       "name": "Coolors",
       "url": "https://coolors.co",
       "desc": "配色生成",
-      "icon": "undefined"
+      "fav": "assets/icons/coolors.co.png"
     },
     {
+      "cat": "设计素材",
       "name": "Figma",
       "url": "https://www.figma.com",
       "desc": "在线设计",
-      "icon": "undefined"
+      "fav": "assets/icons/figma.com.png"
     },
     {
+      "cat": "设计素材",
       "name": "TinyPNG",
       "url": "https://tinypng.com",
       "desc": "图片压缩",
-      "icon": "undefined"
+      "fav": "assets/icons/tinypng.com.png"
     },
     {
+      "cat": "设计素材",
       "name": "花瓣网",
       "url": "https://huaban.com",
       "desc": "灵感采集",
-      "icon": "undefined"
+      "fav": "assets/icons/huaban.com.png"
     },
     {
+      "cat": "设计素材",
       "name": "稿定设计",
       "url": "https://www.gaoding.com",
       "desc": "模板做图",
-      "icon": "undefined"
+      "fav": "assets/icons/gaoding.com.png"
     },
     {
+      "cat": "设计素材",
       "name": "创客贴",
       "url": "https://www.chuangkit.com",
       "desc": "在线设计",
-      "icon": "undefined"
+      "fav": "assets/icons/chuangkit.com.ico"
     },
     {
+      "cat": "设计素材",
       "name": "站酷",
       "url": "https://www.zcool.com.cn",
       "desc": "设计师社区",
-      "icon": "undefined"
+      "fav": "assets/icons/zcool.com.cn.png"
     },
     {
+      "cat": "设计素材",
       "name": "100font",
       "url": "https://www.100font.com",
       "desc": "免费商用字体",
-      "icon": "undefined"
+      "fav": "assets/icons/100font.com.png"
     },
     {
+      "cat": "设计素材",
       "name": "Unsplash",
       "url": "https://unsplash.com",
       "desc": "免费图库",
-      "icon": "undefined"
+      "fav": "assets/icons/unsplash.com.ico"
     },
     {
+      "cat": "设计素材",
       "name": "Pexels",
       "url": "https://www.pexels.com",
       "desc": "免费图库",
-      "icon": "undefined"
+      "fav": "assets/icons/pexels.com.png"
     },
     {
+      "cat": "设计素材",
       "name": "Pixabay",
       "url": "https://pixabay.com",
       "desc": "免费素材",
-      "icon": "undefined"
+      "fav": "assets/icons/pixabay.com.png"
     },
     {
+      "cat": "设计素材",
       "name": "改图宝",
       "url": "https://www.gaitubao.com",
       "desc": "在线改尺寸",
-      "icon": "undefined"
+      "fav": "assets/icons/gaitubao.com.png"
     },
     {
+      "cat": "设计素材",
       "name": "Canva",
       "url": "https://www.canva.com",
       "desc": "在线设计",
-      "icon": "undefined"
+      "fav": "assets/icons/canva.com.jpg"
     },
     {
+      "cat": "效率工具",
       "name": "语雀",
       "url": "https://www.yuque.com",
       "desc": "文档知识库",
-      "icon": "undefined"
+      "fav": "assets/icons/yuque.com.png"
     },
     {
+      "cat": "效率工具",
       "name": "飞书",
       "url": "https://www.feishu.cn",
       "desc": "协作办公",
-      "icon": "undefined"
+      "fav": "assets/icons/feishu.cn.png"
     },
     {
+      "cat": "效率工具",
       "name": "Excalidraw",
       "url": "https://excalidraw.com",
       "desc": "手绘风白板",
-      "icon": "undefined"
+      "fav": "assets/icons/excalidraw.com.png"
     },
     {
+      "cat": "效率工具",
       "name": "ProcessOn",
       "url": "https://www.processon.com",
       "desc": "流程图",
-      "icon": "undefined"
+      "fav": "assets/icons/processon.com.ico"
     },
     {
+      "cat": "效率工具",
       "name": "草料二维码",
       "url": "https://cli.im",
       "desc": "二维码生成",
-      "icon": "undefined"
+      "fav": "assets/icons/cli.im.ico"
     },
     {
+      "cat": "效率工具",
       "name": "石墨文档",
       "url": "https://shimo.im",
       "desc": "在线文档",
-      "icon": "undefined"
+      "fav": "assets/icons/shimo.im.ico"
     },
     {
+      "cat": "效率工具",
       "name": "金山文档",
       "url": "https://www.kdocs.cn",
       "desc": "WPS 云文档",
-      "icon": "undefined"
+      "fav": "assets/icons/kdocs.cn.png"
     },
     {
+      "cat": "效率工具",
       "name": "腾讯文档",
       "url": "https://docs.qq.com",
       "desc": "在线表格",
-      "icon": "undefined"
+      "fav": "assets/icons/docs.qq.com.png"
     },
     {
+      "cat": "效率工具",
       "name": "幕布",
       "url": "https://mubu.com",
       "desc": "大纲笔记",
-      "icon": "undefined"
+      "fav": "assets/icons/mubu.com.png"
     },
     {
+      "cat": "效率工具",
       "name": "坚果云",
       "url": "https://www.jianguoyun.com",
       "desc": "文件同步",
-      "icon": "undefined"
+      "fav": "assets/icons/jianguoyun.com.png"
     },
     {
+      "cat": "效率工具",
       "name": "奶牛快传",
       "url": "https://cowtransfer.com",
       "desc": "大文件传输",
-      "icon": "undefined"
+      "fav": "assets/icons/cowtransfer.com.png"
     },
     {
+      "cat": "效率工具",
       "name": "iLovePDF",
       "url": "https://www.ilovepdf.com",
       "desc": "PDF 处理",
-      "icon": "undefined"
+      "fav": "assets/icons/ilovepdf.com.png"
     },
     {
+      "cat": "效率工具",
       "name": "Aconvert",
       "url": "https://www.aconvert.com",
       "desc": "格式转换",
-      "icon": "undefined"
+      "fav": "assets/icons/aconvert.com.ico"
     },
     {
+      "cat": "效率工具",
       "name": "讯飞听见",
       "url": "https://www.iflyrec.com",
       "desc": "录音转文字",
-      "icon": "undefined"
+      "fav": "assets/icons/iflyrec.com.png"
     },
     {
+      "cat": "效率工具",
       "name": "少数派",
       "url": "https://sspai.com",
       "desc": "效率内容",
-      "icon": "undefined"
+      "fav": "assets/icons/sspai.com.ico"
     },
     {
+      "cat": "新闻时政",
       "name": "人民网",
       "url": "http://www.people.com.cn",
       "desc": "人民日报",
-      "icon": "undefined"
+      "fav": "assets/icons/people.com.cn.ico"
     },
     {
+      "cat": "新闻时政",
       "name": "新华网",
       "url": "http://www.news.cn",
       "desc": "新华社",
-      "icon": "undefined"
+      "fav": "assets/icons/news.cn.png"
     },
     {
+      "cat": "新闻时政",
       "name": "央视网",
       "url": "https://www.cctv.com",
       "desc": "中央电视台",
-      "icon": "undefined"
+      "fav": "assets/icons/cctv.com.ico"
     },
     {
+      "cat": "新闻时政",
       "name": "中国新闻网",
       "url": "https://www.chinanews.com.cn",
       "desc": "中新社",
-      "icon": "undefined"
+      "fav": "assets/icons/chinanews.com.cn.svg"
     },
     {
+      "cat": "新闻时政",
       "name": "中国日报",
       "url": "https://www.chinadaily.com.cn",
       "desc": "英文时政",
-      "icon": "undefined"
+      "fav": "assets/icons/chinadaily.com.cn.png"
     },
     {
+      "cat": "新闻时政",
       "name": "光明网",
       "url": "https://www.gmw.cn",
       "desc": "光明日报",
-      "icon": "undefined"
+      "fav": "assets/icons/gmw.cn.ico"
     },
     {
+      "cat": "新闻时政",
       "name": "环球网",
       "url": "https://www.huanqiu.com",
       "desc": "国际新闻",
-      "icon": "undefined"
+      "fav": "assets/icons/huanqiu.com.png"
     },
     {
+      "cat": "新闻时政",
       "name": "参考消息",
       "url": "https://www.cankaoxiaoxi.com",
       "desc": "外媒编译",
-      "icon": "undefined"
+      "fav": "assets/icons/cankaoxiaoxi.com.svg"
     },
     {
+      "cat": "新闻时政",
       "name": "澎湃新闻",
       "url": "https://www.thepaper.cn",
       "desc": "深度报道",
-      "icon": "undefined"
+      "fav": "assets/icons/thepaper.cn.ico"
     },
     {
+      "cat": "新闻时政",
       "name": "界面新闻",
       "url": "https://www.jiemian.com",
       "desc": "财经新闻",
-      "icon": "undefined"
+      "fav": "assets/icons/jiemian.com.png"
     },
     {
+      "cat": "新闻时政",
       "name": "财新网",
       "url": "https://www.caixin.com",
       "desc": "财经调查",
-      "icon": "undefined"
+      "fav": "assets/icons/caixin.com.ico"
     },
     {
+      "cat": "新闻时政",
       "name": "第一财经",
       "url": "https://www.yicai.com",
       "desc": "财经资讯",
-      "icon": "undefined"
+      "fav": "assets/icons/yicai.com.png"
     },
     {
+      "cat": "新闻时政",
       "name": "观察者网",
       "url": "https://www.guancha.cn",
       "desc": "时评",
-      "icon": "undefined"
+      "fav": "assets/icons/guancha.cn.png"
     },
     {
+      "cat": "新闻时政",
       "name": "南方周末",
       "url": "https://www.infzm.com",
       "desc": "深度长文",
-      "icon": "undefined"
+      "fav": "assets/icons/infzm.com.svg"
     },
     {
+      "cat": "新闻时政",
       "name": "联合早报",
       "url": "https://www.zaobao.com.sg",
       "desc": "新加坡视角",
-      "icon": "undefined"
+      "fav": "assets/icons/zaobao.com.sg.png"
     },
     {
+      "cat": "政府服务",
       "name": "中国政府网",
       "url": "https://www.gov.cn",
       "desc": "政策文件",
-      "icon": "undefined"
+      "fav": "assets/icons/gov.cn.svg"
     },
     {
+      "cat": "政府服务",
       "name": "国家统计局",
       "url": "https://www.stats.gov.cn",
       "desc": "统计数据",
-      "icon": "undefined"
+      "fav": "assets/icons/stats.gov.cn.svg"
     },
     {
+      "cat": "政府服务",
       "name": "教育部",
       "url": "http://www.moe.gov.cn",
       "desc": "教育政策",
-      "icon": "undefined"
+      "fav": "assets/icons/moe.gov.cn.svg"
     },
     {
+      "cat": "政府服务",
       "name": "人社部",
       "url": "http://www.mohrss.gov.cn",
       "desc": "就业社保",
-      "icon": "undefined"
+      "fav": "assets/icons/mohrss.gov.cn.svg"
     },
     {
+      "cat": "政府服务",
       "name": "国家税务总局",
       "url": "https://www.chinatax.gov.cn",
       "desc": "税务政策",
-      "icon": "undefined"
+      "fav": "assets/icons/chinatax.gov.cn.svg"
     },
     {
+      "cat": "政府服务",
       "name": "国家医保局",
       "url": "http://www.nhsa.gov.cn",
       "desc": "医保政策",
-      "icon": "undefined"
+      "fav": "assets/icons/nhsa.gov.cn.svg"
     },
     {
+      "cat": "政府服务",
       "name": "外交部",
       "url": "https://www.mfa.gov.cn",
       "desc": "外交表态",
-      "icon": "undefined"
+      "fav": "assets/icons/mfa.gov.cn.svg"
     },
     {
+      "cat": "政府服务",
       "name": "共产党员网",
       "url": "https://www.12371.cn",
       "desc": "党建学习",
-      "icon": "undefined"
+      "fav": "assets/icons/12371.cn.png"
     },
     {
+      "cat": "政府服务",
       "name": "学信网",
       "url": "https://www.chsi.com.cn",
       "desc": "学历查询",
-      "icon": "undefined"
+      "fav": "assets/icons/chsi.com.cn.png"
     },
     {
+      "cat": "政府服务",
       "name": "中国人事考试网",
       "url": "http://www.cpta.com.cn",
       "desc": "资格考试",
-      "icon": "undefined"
+      "fav": "assets/icons/cpta.com.cn.svg"
     },
     {
+      "cat": "政府服务",
       "name": "国家政务服务平台",
       "url": "http://gjzwfw.www.gov.cn",
       "desc": "一网通办",
-      "icon": "undefined"
+      "fav": "assets/icons/gjzwfw.www.gov.cn.ico"
     },
     {
+      "cat": "政府服务",
       "name": "学习强国",
       "url": "https://www.xuexi.cn",
       "desc": "时政学习",
-      "icon": "undefined"
+      "fav": "assets/icons/xuexi.cn.ico"
     },
     {
+      "cat": "社交社区",
       "name": "微博",
       "url": "https://weibo.com",
       "desc": "公共讨论",
-      "icon": "undefined"
+      "fav": "assets/icons/weibo.com.ico"
     },
     {
+      "cat": "社交社区",
       "name": "知乎",
       "url": "https://www.zhihu.com",
       "desc": "问答社区",
-      "icon": "undefined"
+      "fav": "assets/icons/zhihu.com.png"
     },
     {
+      "cat": "社交社区",
       "name": "豆瓣",
       "url": "https://www.douban.com",
       "desc": "书影音标记",
-      "icon": "undefined"
+      "fav": "assets/icons/douban.com.png"
     },
     {
+      "cat": "社交社区",
       "name": "百度贴吧",
       "url": "https://tieba.baidu.com",
       "desc": "兴趣贴吧",
-      "icon": "undefined"
+      "fav": "assets/icons/tieba.baidu.com.ico"
     },
     {
+      "cat": "社交社区",
       "name": "小红书",
       "url": "https://www.xiaohongshu.com",
       "desc": "生活分享",
-      "icon": "undefined"
+      "fav": "assets/icons/xiaohongshu.com.ico"
     },
     {
+      "cat": "社交社区",
       "name": "抖音",
       "url": "https://www.douyin.com",
       "desc": "短视频",
-      "icon": "undefined"
+      "fav": "assets/icons/douyin.com.png"
     },
     {
+      "cat": "社交社区",
       "name": "哔哩哔哩",
       "url": "https://www.bilibili.com",
       "desc": "中长视频",
-      "icon": "undefined"
+      "fav": "assets/icons/bilibili.com.png"
     },
     {
+      "cat": "社交社区",
       "name": "即刻",
       "url": "https://okjike.com",
       "desc": "话题圈子",
-      "icon": "undefined"
+      "fav": "assets/icons/okjike.com.svg"
     },
     {
+      "cat": "学术文献",
       "name": "中国知网",
       "url": "https://www.cnki.net",
       "desc": "期刊论文",
-      "icon": "undefined"
+      "fav": "assets/icons/cnki.net.ico"
     },
     {
+      "cat": "学术文献",
       "name": "万方数据",
       "url": "https://www.wanfangdata.com.cn",
       "desc": "期刊学位",
-      "icon": "undefined"
+      "fav": "assets/icons/wanfangdata.com.cn.ico"
     },
     {
+      "cat": "学术文献",
       "name": "维普",
       "url": "http://www.cqvip.com",
       "desc": "中文期刊",
-      "icon": "undefined"
+      "fav": "assets/icons/cqvip.com.ico"
     },
     {
+      "cat": "学术文献",
       "name": "国家哲学社会科学文献中心",
       "url": "https://www.ncpssd.org",
       "desc": "免费人文社科",
-      "icon": "undefined"
+      "fav": "assets/icons/ncpssd.org.ico"
     },
     {
+      "cat": "学术文献",
       "name": "百度学术",
       "url": "https://xueshu.baidu.com",
       "desc": "论文检索",
-      "icon": "undefined"
+      "fav": "assets/icons/xueshu.baidu.com.ico"
     },
     {
+      "cat": "学术文献",
       "name": "中国大学 MOOC",
       "url": "https://www.icourse163.org",
       "desc": "免费公开课",
-      "icon": "undefined"
+      "fav": "assets/icons/icourse163.org.png"
     },
     {
+      "cat": "学术文献",
       "name": "爱课程",
       "url": "https://www.icourses.cn",
       "desc": "高校课程",
-      "icon": "undefined"
+      "fav": "assets/icons/icourses.cn.svg"
     },
     {
+      "cat": "学术文献",
       "name": "智慧教育平台",
       "url": "https://higher.smartedu.cn",
       "desc": "国家平台",
-      "icon": "undefined"
+      "fav": "assets/icons/higher.smartedu.cn.png"
     },
     {
+      "cat": "学术文献",
       "name": "国家图书馆",
       "url": "http://www.nlc.cn",
       "desc": "馆藏检索",
-      "icon": "undefined"
+      "fav": "assets/icons/nlc.cn.png"
     },
     {
+      "cat": "学术文献",
       "name": "ReadPaper",
       "url": "https://readpaper.com",
       "desc": "论文阅读翻译",
-      "icon": "undefined"
+      "fav": "assets/icons/readpaper.com.ico"
     },
     {
+      "cat": "金融财经",
       "name": "东方财富",
       "url": "https://www.eastmoney.com",
       "desc": "行情与数据",
-      "icon": "undefined"
+      "fav": "assets/icons/eastmoney.com.png"
     },
     {
+      "cat": "金融财经",
       "name": "雪球",
       "url": "https://xueqiu.com",
       "desc": "投资讨论",
-      "icon": "undefined"
+      "fav": "assets/icons/xueqiu.com.ico"
     },
     {
+      "cat": "金融财经",
       "name": "同花顺",
       "url": "https://www.10jqka.com.cn",
       "desc": "行情软件",
-      "icon": "undefined"
+      "fav": "assets/icons/10jqka.com.cn.png"
     },
     {
+      "cat": "金融财经",
       "name": "新浪财经",
       "url": "https://finance.sina.com.cn",
       "desc": "财经资讯",
-      "icon": "undefined"
+      "fav": "assets/icons/finance.sina.com.cn.png"
     },
     {
+      "cat": "金融财经",
       "name": "中国人民银行",
       "url": "http://www.pbc.gov.cn",
       "desc": "货币政策",
-      "icon": "undefined"
+      "fav": "assets/icons/pbc.gov.cn.svg"
     },
     {
+      "cat": "金融财经",
       "name": "上海证券交易所",
       "url": "https://www.sse.com.cn",
       "desc": "上交所",
-      "icon": "undefined"
+      "fav": "assets/icons/sse.com.cn.svg"
     },
     {
+      "cat": "金融财经",
       "name": "深圳证券交易所",
       "url": "https://www.szse.cn",
       "desc": "深交所",
-      "icon": "undefined"
+      "fav": "assets/icons/szse.cn.png"
     },
     {
+      "cat": "金融财经",
       "name": "巨潮资讯",
       "url": "http://www.cninfo.com.cn",
       "desc": "公告披露",
-      "icon": "undefined"
+      "fav": "assets/icons/cninfo.com.cn.svg"
     },
     {
+      "cat": "金融财经",
       "name": "中国证监会",
       "url": "http://www.csrc.gov.cn",
       "desc": "监管信息",
-      "icon": "undefined"
+      "fav": "assets/icons/csrc.gov.cn.svg"
     },
     {
+      "cat": "金融财经",
       "name": "国家外汇管理局",
       "url": "https://www.safe.gov.cn",
       "desc": "汇率与外汇",
-      "icon": "undefined"
+      "fav": "assets/icons/safe.gov.cn.svg"
     },
     {
+      "cat": "数理工具",
       "name": "Desmos",
       "url": "https://www.desmos.com/calculator",
       "desc": "函数画图",
-      "icon": "undefined"
+      "fav": "assets/icons/desmos.com.ico"
     },
     {
+      "cat": "数理工具",
       "name": "GeoGebra",
       "url": "https://www.geogebra.org",
       "desc": "几何代数",
-      "icon": "undefined"
+      "fav": "assets/icons/geogebra.org.ico"
     },
     {
+      "cat": "数理工具",
       "name": "WolframAlpha",
       "url": "https://www.wolframalpha.com",
       "desc": "符号计算",
-      "icon": "undefined"
+      "fav": "assets/icons/wolframalpha.com.ico"
     },
     {
+      "cat": "数理工具",
       "name": "Symbolab",
       "url": "https://www.symbolab.com",
       "desc": "解题步骤",
-      "icon": "undefined"
+      "fav": "assets/icons/symbolab.com.ico"
     },
     {
+      "cat": "数理工具",
       "name": "OEIS",
       "url": "https://oeis.org",
       "desc": "整数数列",
-      "icon": "undefined"
+      "fav": "assets/icons/oeis.org.png"
     },
     {
+      "cat": "数理工具",
       "name": "MathWorld",
       "url": "https://mathworld.wolfram.com",
       "desc": "数学百科",
-      "icon": "undefined"
+      "fav": "assets/icons/mathworld.wolfram.com.ico"
     },
     {
+      "cat": "数理工具",
       "name": "PhET",
       "url": "https://phet.colorado.edu/zh_CN",
       "desc": "物理仿真",
-      "icon": "undefined"
+      "fav": "assets/icons/phet.colorado.edu.ico"
     },
     {
+      "cat": "数理工具",
       "name": "数学乐",
       "url": "https://www.shuxuele.com",
       "desc": "中学数学",
-      "icon": "undefined"
+      "fav": "assets/icons/shuxuele.com.ico"
     },
     {
+      "cat": "数理工具",
       "name": "可汗学院",
       "url": "https://zh.khanacademy.org",
       "desc": "免费课程",
-      "icon": "undefined"
+      "fav": "assets/icons/zh.khanacademy.org.ico"
     },
     {
+      "cat": "人文历史",
       "name": "豆瓣读书",
       "url": "https://book.douban.com",
       "desc": "书评与评分",
-      "icon": "undefined"
+      "fav": "assets/icons/book.douban.com.ico"
     },
     {
+      "cat": "人文历史",
       "name": "书格",
       "url": "https://shuge.org",
       "desc": "古籍影印",
-      "icon": "undefined"
+      "fav": "assets/icons/shuge.org.ico"
     },
     {
+      "cat": "人文历史",
       "name": "中国哲学书电子化计划",
       "url": "https://ctext.org/zhs",
       "desc": "先秦典籍",
-      "icon": "undefined"
+      "fav": "assets/icons/ctext.org.ico"
     },
     {
+      "cat": "人文历史",
       "name": "国学大师",
       "url": "http://www.guoxuedashi.net",
       "desc": "古籍检索",
-      "icon": "undefined"
+      "fav": "assets/icons/guoxuedashi.net.jpg"
     },
     {
+      "cat": "人文历史",
       "name": "中国国家博物馆",
       "url": "http://www.chnmuseum.cn",
       "desc": "馆藏与展览",
-      "icon": "undefined"
+      "fav": "assets/icons/chnmuseum.cn.svg"
     },
     {
+      "cat": "人文历史",
       "name": "故宫博物院",
       "url": "https://www.dpm.org.cn",
       "desc": "数字文物",
-      "icon": "undefined"
+      "fav": "assets/icons/dpm.org.cn.svg"
     },
     {
+      "cat": "人文历史",
       "name": "中国社会科学网",
       "url": "http://www.cssn.cn",
       "desc": "社科学术",
-      "icon": "undefined"
+      "fav": "assets/icons/cssn.cn.png"
     },
     {
+      "cat": "影音娱乐",
       "name": "网易云音乐",
       "url": "https://music.163.com",
       "desc": "音乐社区",
-      "icon": "undefined"
+      "fav": "assets/icons/music.163.com.ico"
     },
     {
+      "cat": "影音娱乐",
       "name": "QQ 音乐",
       "url": "https://y.qq.com",
       "desc": "曲库",
-      "icon": "undefined"
+      "fav": "assets/icons/y.qq.com.png"
     },
     {
+      "cat": "影音娱乐",
       "name": "豆瓣电影",
       "url": "https://movie.douban.com",
       "desc": "评分与影评",
-      "icon": "undefined"
+      "fav": "assets/icons/movie.douban.com.png"
     },
     {
+      "cat": "影音娱乐",
       "name": "爱奇艺",
       "url": "https://www.iqiyi.com",
       "desc": "影视剧",
-      "icon": "undefined"
+      "fav": "assets/icons/iqiyi.com.png"
     },
     {
+      "cat": "影音娱乐",
       "name": "腾讯视频",
       "url": "https://v.qq.com",
       "desc": "影视综艺",
-      "icon": "undefined"
+      "fav": "assets/icons/v.qq.com.jpg"
     },
     {
+      "cat": "影音娱乐",
       "name": "优酷",
       "url": "https://www.youku.com",
       "desc": "影视",
-      "icon": "undefined"
+      "fav": "assets/icons/youku.com.ico"
     },
     {
+      "cat": "影音娱乐",
       "name": "芒果 TV",
       "url": "https://www.mgtv.com",
       "desc": "综艺",
-      "icon": "undefined"
+      "fav": "assets/icons/mgtv.com.ico"
     },
     {
+      "cat": "漫画阅读",
       "name": "哔哩哔哩漫画",
       "url": "https://manga.bilibili.com",
       "desc": "正版日漫",
-      "icon": "undefined"
+      "fav": "assets/icons/manga.bilibili.com.ico"
     },
     {
+      "cat": "漫画阅读",
       "name": "快看漫画",
       "url": "https://www.kuaikanmanhua.com",
       "desc": "原创国漫",
-      "icon": "undefined"
+      "fav": "assets/icons/kuaikanmanhua.com.ico"
     },
     {
+      "cat": "漫画阅读",
       "name": "腾讯动漫",
       "url": "https://ac.qq.com",
       "desc": "正版国漫",
-      "icon": "undefined"
+      "fav": "assets/icons/ac.qq.com.ico"
     },
     {
+      "cat": "漫画阅读",
       "name": "咚漫",
       "url": "https://www.dongmanmanhua.cn",
       "desc": "韩漫",
-      "icon": "undefined"
+      "fav": "assets/icons/dongmanmanhua.cn.ico"
     },
     {
+      "cat": "生活服务",
       "name": "高德地图",
       "url": "https://www.amap.com",
       "desc": "地图导航",
-      "icon": "undefined"
+      "fav": "assets/icons/amap.com.ico"
     },
     {
+      "cat": "生活服务",
       "name": "12306",
       "url": "https://www.12306.cn",
       "desc": "火车票",
-      "icon": "undefined"
+      "fav": "assets/icons/12306.cn.png"
     },
     {
+      "cat": "生活服务",
       "name": "中国天气",
       "url": "https://www.weather.com.cn",
       "desc": "天气预报",
-      "icon": "undefined"
+      "fav": "assets/icons/weather.com.cn.png"
     },
     {
+      "cat": "生活服务",
       "name": "百度翻译",
       "url": "https://fanyi.baidu.com",
       "desc": "中英互译",
-      "icon": "undefined"
+      "fav": "assets/icons/fanyi.baidu.com.ico"
     },
     {
+      "cat": "生活服务",
       "name": "DeepL",
       "url": "https://www.deepl.com",
       "desc": "翻译",
-      "icon": "undefined"
+      "fav": "assets/icons/deepl.com.png"
     },
     {
+      "cat": "生活服务",
       "name": "淘宝",
       "url": "https://www.taobao.com",
       "desc": "购物",
-      "icon": "undefined"
+      "fav": "assets/icons/taobao.com.png"
     },
     {
+      "cat": "生活服务",
       "name": "京东",
       "url": "https://www.jd.com",
       "desc": "购物",
-      "icon": "undefined"
+      "fav": "assets/icons/jd.com.png"
     },
     {
+      "cat": "生活服务",
       "name": "美团",
       "url": "https://www.meituan.com",
       "desc": "外卖到店",
-      "icon": "undefined"
+      "fav": "assets/icons/meituan.com.png"
     },
     {
+      "cat": "生活服务",
       "name": "大众点评",
       "url": "https://www.dianping.com",
       "desc": "本地生活",
-      "icon": "undefined"
+      "fav": "assets/icons/dianping.com.png"
     },
     {
+      "cat": "生活服务",
       "name": "快递100",
       "url": "https://www.kuaidi100.com",
       "desc": "查快递",
-      "icon": "undefined"
+      "fav": "assets/icons/kuaidi100.com.png"
     },
     {
+      "cat": "生活服务",
       "name": "携程",
       "url": "https://www.ctrip.com",
       "desc": "机票酒店",
-      "icon": "undefined"
+      "fav": "assets/icons/ctrip.com.ico"
     },
     {
+      "cat": "生活服务",
       "name": "QQ 邮箱",
       "url": "https://mail.qq.com",
       "desc": "邮箱",
-      "icon": "undefined"
+      "fav": "assets/icons/mail.qq.com.png"
+    },
+    {
+      "name": "环球人物网",
+      "url": "https://www.globalpeople.com.cn/",
+      "desc": "人民日报社旗下人物类新闻周刊",
+      "cat": "新闻时政",
+      "fav": "https://icons.duckduckgo.com/ip3/globalpeople.com.cn.ico"
+    },
+    {
+      "name": "求是网",
+      "url": "https://www.qstheory.cn/",
+      "desc": "中共中央机关刊《求是》官网，理论强党",
+      "cat": "新闻时政",
+      "fav": "https://icons.duckduckgo.com/ip3/qstheory.cn.ico"
+    },
+    {
+      "name": "三联生活周刊",
+      "url": "https://www.lifeweek.com.cn/",
+      "desc": "一本杂志和他倡导的生活",
+      "cat": "人文历史",
+      "fav": "https://icons.duckduckgo.com/ip3/lifeweek.com.cn.ico"
+    },
+    {
+      "name": "53BK 全国报刊大全",
+      "url": "https://www.53bk.com/",
+      "desc": "在线看报·全国报刊导航",
+      "cat": "人文历史",
+      "fav": "https://icons.duckduckgo.com/ip3/53bk.com.ico"
+    },
+    {
+      "name": "南风窗",
+      "url": "https://www.nfcmag.com/",
+      "desc": "洞察中国社会的政经新闻月刊",
+      "cat": "新闻时政",
+      "fav": "https://icons.duckduckgo.com/ip3/nfcmag.com.ico"
+    },
+    {
+      "name": "国家人文历史",
+      "url": "https://www.gjrwls.com/",
+      "desc": "人民日报社主管主办的人文历史半月刊",
+      "cat": "人文历史",
+      "fav": "https://icons.duckduckgo.com/ip3/gjrwls.com.ico"
+    },
+    {
+      "name": "中国国家地理网",
+      "url": "https://www.dili360.com/",
+      "desc": "《中国国家地理》官方站点",
+      "cat": "人文历史",
+      "fav": "https://icons.duckduckgo.com/ip3/dili360.com.ico"
+    },
+    {
+      "name": "哈佛商业评论中文版",
+      "url": "https://www.hbrchina.org/",
+      "desc": "全球商业管理思想的中文阵地",
+      "cat": "金融财经",
+      "fav": "https://icons.duckduckgo.com/ip3/hbrchina.org.ico"
+    },
+    {
+      "name": "商业周刊中文版",
+      "url": "https://www.bbwc.cn/",
+      "desc": "彭博商业周刊中文版·国际视野",
+      "cat": "金融财经",
+      "fav": "https://icons.duckduckgo.com/ip3/bbwc.cn.ico"
+    },
+    {
+      "name": "读者",
+      "url": "https://www.duzhe.com/",
+      "desc": "甘肃人民出版社《读者》官网",
+      "cat": "人文历史",
+      "fav": "https://icons.duckduckgo.com/ip3/duzhe.com.ico"
+    },
+    {
+      "name": "青年文摘",
+      "url": "https://www.qnwz.cn/",
+      "desc": "中国青年出版总社旗下文摘月刊",
+      "cat": "人文历史",
+      "fav": "https://icons.duckduckgo.com/ip3/qnwz.cn.ico"
+    },
+    {
+      "name": "半月谈",
+      "url": "https://www.banyuetan.org/",
+      "desc": "中宣部委托新华社主办的时政刊物",
+      "cat": "新闻时政",
+      "fav": "https://icons.duckduckgo.com/ip3/banyuetan.org.ico"
+    },
+    {
+      "name": "人物",
+      "url": "https://www.renwugc.com/",
+      "desc": "报道时代人物的新闻周刊",
+      "cat": "新闻时政",
+      "fav": "https://icons.duckduckgo.com/ip3/renwugc.com.ico"
+    },
+    {
+      "name": "New Scientist",
+      "url": "https://www.newscientist.com/",
+      "desc": "国际科学新闻与科技前沿",
+      "cat": "学术文献",
+      "fav": "https://icons.duckduckgo.com/ip3/newscientist.com.ico"
+    },
+    {
+      "name": "南方人物周刊",
+      "url": "https://www.nfpeople.com/",
+      "desc": "南方报业旗下的人物类新闻周刊",
+      "cat": "新闻时政",
+      "fav": "https://icons.duckduckgo.com/ip3/nfpeople.com.ico"
     }
   ],
   "album": [
@@ -1662,7 +1928,7 @@ window.POSTS = [
     "_dbid": 260
   },
   {
-    "id": "g20-19比1-背后-全世界为什么开始抵制中国出口",
+    "id": "post-243",
     "title": "G20「19比1」背后：全世界为什么开始抵制中国出口",
     "date": "2026-10-31",
     "updated": "2026-11-06",
@@ -6595,7 +6861,7 @@ window.POSTS = [
     "_dbid": 76
   },
   {
-    "id": "当梗替你说话",
+    "id": "post-74",
     "title": "当梗替你说话",
     "date": "2026-03-11",
     "updated": "2026-11-06",
