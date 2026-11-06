@@ -57,7 +57,7 @@ def main(path):
     data = json.load(io.open(path, encoding="utf-8"))
     posts = data.get("posts") or []
     posts = [p for p in posts if p.get("id") and p.get("title")]
-    posts.sort(key=lambda p: str(p.get("date") or ""), reverse=True)
+    posts.sort(key=lambda p: str(p.get("updated") or p.get("date") or ""), reverse=True)
 
     # ---------- sitemap ----------
     out = ['<?xml version="1.0" encoding="UTF-8"?>',
@@ -88,7 +88,7 @@ def main(path):
 
     items = []
     for p in posts[:60]:
-        d = parse_date(p.get("date"))
+        d = parse_date(p.get("updated") or p.get("date"))
         if not d:
             continue
         link = "%s/post?id=%s" % (ORIGIN, quote(str(p["id"])))
