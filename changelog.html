@@ -20,7 +20,7 @@
 <meta property="og:image:width" content="474">
 <meta property="og:image:height" content="474">
 <link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20viewBox%3D%270%200%2064%2064%27%3E%3Crect%20width%3D%2764%27%20height%3D%2764%27%20rx%3D%2715%27%20fill%3D%27%23241f33%27%2F%3E%3Cg%20transform%3D%27translate%286%2C6%29%20scale%282.1667%29%27%3E%3Cpath%20d%3D%27M21%2012.79A9%209%200%201%201%2011.21%203%207%207%200%200%200%2021%2012.79z%27%20fill%3D%27%23f6f1e7%27%2F%3E%3C%2Fg%3E%3C%2Fsvg%3E">
-<link rel="stylesheet" href="assets/css/style.css?v=20261107i">
+<link rel="stylesheet" href="assets/css/style.css?v=20261107j">
   <link rel="alternate" type="application/rss+xml" title="RezeのBlog" href="feed.xml">
 </head>
 <body class="has-app">
@@ -73,7 +73,7 @@
 <header class="cl-head">
 <h1>更新日志</h1>
 <div class="cl-facts">
-<span><b>38</b> 条记录</span>
+<span><b>40</b> 条记录</span>
 <span><b>6</b> 个时间节点</span>
 <span>跨度 2020.07 — 2026.11</span>
 </div>
@@ -82,7 +82,7 @@
 <button type="button" class="cl-btn" data-cl-all="0">全部收起</button>
 </div>
 <nav class="cl-nav" aria-label="按时间跳转">
-<a href="#cl-202611">2026.11<i>9 条</i></a>
+<a href="#cl-202611">2026.11<i>11 条</i></a>
 <a href="#cl-202610">2026.10<i>10 条</i></a>
 <a href="#cl-202604">2026.04<i>6 条</i></a>
 <a href="#cl-202506">2025.06<i>1 条</i></a>
@@ -91,9 +91,24 @@
 </nav>
 </header>
 <section class="cl-month" id="cl-202611">
-<h2>2026 年 11 月<span class="cl-count">9 条</span></h2>
+<h2>2026 年 11 月<span class="cl-count">11 条</span></h2>
 <ol class="cl-list">
 <li class="cl-item"><details open>
+<summary><span class="cl-kind" data-k="界面">界面</span><span class="cl-t">404 页补上最近更新、分类入口与随机一篇</span><span class="cl-n">3 项</span></summary>
+<div class="cl-body"><ul>
+<li>原来只有一句说明加两个按钮，一屏之内没有可点的东西。现在补三块：最近更新五条（标题、日期、分类）、按分类入口（带篇数）、随机一篇。数据直接读 <code>data.meta.js</code> 的 <code>window.POSTS</code>，不额外发请求，脚本不到四十行。</li>
+<li>样式单独一套 <code>.nf-*</code>，含 520px 断点；<code>main.nf</code> 收在 620px 内，标题区左对齐接列表，和站内文章页的排法一致。这一页没有 <code>.app</code> 容器，<code>interceptLinks()</code> 本来就在最前面 return，链接照旧整页跳转。</li>
+<li>顺手修掉关于页残留的旧标题：<code>og:title</code> 与静态 <code>&lt;h1&gt;</code> 还停在「欢迎来到 reze 的小站」，和 <code>&lt;title&gt;</code> 对不上；导航里的「关于我」统一成「关于」。</li>
+</ul></div>
+</details></li>
+<li class="cl-item"><details>
+<summary><span class="cl-kind" data-k="基建">基建</span><span class="cl-t">诗笺被云端旧设置压到 11 首，补齐到 39 首</span><span class="cl-n">2 项</span></summary>
+<div class="cl-body"><ul>
+<li><code>data.js</code> 里有 29 首，线上只轮得到 11 首：<code>cloud.js</code> 拉到 settings 之后整段覆盖 <code>poems</code>，而 D1 里存的还是早前 11 首那一版，本地后加的十几首从没进过云端。</li>
+<li>新增王维《山居秋暝》、苏轼《临江仙·送钱穆父》、赵师秀《约客》、张若虚《春江花月夜》、杜甫《旅夜书怀》、纳兰性德《浣溪沙》、唐珙《题龙阳县青草湖》、陆游《临安春雨初霁》、秦观《浣溪沙》、苏轼《和子由渑池怀旧》十首，连同原有的共 39 首，写回 D1，<code>data.meta.js</code> 与 <code>data.override.js</code> 两份兜底同步。改前落了 settings 快照，改后 GET 回来核对条数。</li>
+</ul></div>
+</details></li>
+<li class="cl-item"><details>
 <summary><span class="cl-kind" data-k="基建">基建</span><span class="cl-t">更新日志改版：按条折叠，正文改由 markdown 编译</span><span class="cl-n">3 项</span></summary>
 <div class="cl-body"><ul>
 <li>原来是一路铺开的长文，一页十二屏，想找一次改动得一直往下翻。改成一条一行：类型徽标 + 陈述句标题 + 项数，默认只展开最新一条，顶部有「展开全部／全部收起」和月份锚点，整页收到四屏上下。</li>
@@ -479,10 +494,10 @@
   } catch (e) {}
 })();
 </script>
-<script defer src="assets/js/data.meta.js?v=20261107i"></script>
-<script defer src="assets/js/cloud.js?v=20261107i"></script>
-<script defer src="assets/js/weather.js?v=20261107i"></script>
-<script defer src="assets/js/main.js?v=20261107i"></script>
+<script defer src="assets/js/data.meta.js?v=20261107j"></script>
+<script defer src="assets/js/cloud.js?v=20261107j"></script>
+<script defer src="assets/js/weather.js?v=20261107j"></script>
+<script defer src="assets/js/main.js?v=20261107j"></script>
 <script>
 /* 更新日志的一键展开／收起。details 自己就能点，这段只管批量开关。 */
 document.addEventListener("click", function (e) {

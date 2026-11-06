@@ -2819,7 +2819,7 @@ var PAGE_META = {
   links: ["导航 · RezeのBlog", "常去的地方。"],
   weather: ["天气 · RezeのBlog", "几个城市的天气并列。"],
   timeline: ["时间线 · RezeのBlog", "这个站的技术改动记录。"],
-  about: ["关于我 · RezeのBlog", "关于本站：缘起、搭建方式与联系方式。"],
+  about: ["关于这个站 · RezeのBlog", "关于本站：缘起、搭建方式与联系方式。"],
   post: ["文章 · RezeのBlog", "RezeのBlog的个人博客。"]
 };
 var SITE_ORIGIN = "https://reze520.pages.dev";
@@ -2858,7 +2858,7 @@ function syncMeta(page, params) {
       type = "article";
     } else {
       title = "没有找到这篇文章 · " + SITE.name;
-      desc = "文章可能已被移动或改名。";
+      desc = "这篇文章可能被移动或改名了，可以去文章列表里重新找找。";
     }
   } else if (page === "about") {
     type = "profile";
@@ -3924,9 +3924,9 @@ function interceptLinks(e) {
         host.innerHTML =
           '<article class="g-article">' +
           backLinkHtml() +
-          "<h1>正在加载</h1>" +
-          '<div class="g-meta"><span>正在取回正文</span></div>' +
-          '<div class="g-prose prose"></div>' +
+          "<h1>正在读取这一篇</h1>" +
+          '<div class="g-meta"><span>内容正在取回</span></div>' +
+          '<div class="g-prose prose"><p>稍等一会儿。如果一直停在这里，刷新一次通常就好。</p></div>' +
           "</article>";
         return;
       }
@@ -3938,14 +3938,14 @@ function interceptLinks(e) {
         ? '<article class="g-article">' +
           backLinkHtml() +
           "<h1>暂时读不到这一篇</h1>" +
-          '<div class="g-meta"><span>请求未成功</span></div>' +
-          '<div class="g-prose prose"><p>正文没有取回来。<a href="/writing">文章列表</a></p></div>' +
+          '<div class="g-meta"><span>网络没接上，或者服务器在忙</span></div>' +
+          '<div class="g-prose prose"><p>刷新一次试试。如果一直这样，可以先去<a href="/writing">文章列表</a>。</p></div>' +
           "</article>"
         : '<article class="g-article">' +
           backLinkHtml() +
           "<h1>没有找到这篇文章</h1>" +
-          '<div class="g-meta"><span>文章可能已被移动或改名</span></div>' +
-          '<div class="g-prose prose"><p><a href="/writing">文章列表</a></p></div>' +
+          '<div class="g-meta"><span>它可能被移动或改名了</span></div>' +
+          '<div class="g-prose prose"><p>你可以从<a href="/writing">文章列表</a>里重新找找。</p></div>' +
           "</article>";
       return;
     }
