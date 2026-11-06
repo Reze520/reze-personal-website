@@ -94,11 +94,15 @@ def main(path):
         link = "%s/post?id=%s" % (ORIGIN, quote(str(p["id"])))
         body = strip_html(p.get("excerpt") or p.get("content"))[:300]
         pub = d.strftime("%a, %d %b %Y 00:00:00 +0800")
-        cats = ""
-        if p.get("cat"):
-            cats += "<category>%s</category>" % esc(p["cat"])
-        for t in (p.get("tags") or []):
-            cats += "<category>%s</category>" % esc(t)
+        # 分类和标签会重名（比如 cat=技术、tags 里又写一遍「技术」），
+        # 以前原样输出，同一个 <category> 在一条 item 里出现两次，订阅器会把栏目列成双份
+        cats, seen = "", set()
+        for c in [p.get("cat")] + list(p.get("tags") or []):
+            c = str(c or "").strip()
+            if not c or c in seen:
+                continue
+            seen.add(c)
+            cats += "<category>%s</category>" % esc(c)
         items.append(
             "<item><title>%s</title><link>%s</link>"
             "<guid isPermaLink=\"true\">%s</guid><pubDate>%s</pubDate>%s"

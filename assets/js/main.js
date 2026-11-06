@@ -588,10 +588,13 @@
     return SITE.homeBg ? [SITE.homeBg] : [];
   }
 
-  // 把背景图铺到全屏层；fade 为 true 时先淡出再换图，避免生硬跳变
-  function applyPageBg(src, fade) {
+  // 把背景图铺到全屏层；fade 为 true 时先淡出再换图，避免生硬跳变。
+  // remember 为 false 时不记地址：随机模式每次都换，记下来下次反而会先闪一张旧的。
+  // 首页那段早恢复脚本靠 reze-bg-url 取图，不再自己维护图片列表。
+  function applyPageBg(src, fade, remember) {
     var el = $("#page-bg");
     if (!el || !src) return;
+    if (remember !== false) STORAGE.set("reze-bg-url", String(src));
     var url = 'url("' + String(src).replace(/"/g, "%22") + '")';
     if (!fade) {
       el.style.backgroundImage = url;
@@ -609,8 +612,9 @@
     var list = bgList();
     if (!list.length) return;
     var saved = STORAGE.get("reze-bg-idx");
+    var random = saved === "-1";
     var idx;
-    if (saved === "-1") {
+    if (random) {
       idx = Math.floor(Math.random() * list.length); // 随机模式：不固化结果
     } else {
       var n = Number(saved);
@@ -621,7 +625,7 @@
         STORAGE.set("reze-bg-idx", String(idx));
       }
     }
-    applyPageBg(list[idx]);
+    applyPageBg(list[idx], false, !random);
   }
 
   function $(sel, root) {    return (root || document).querySelector(sel);
@@ -1468,6 +1472,9 @@
       paint();
     };
     paint();
+
+    // 农历库改成闲时异步取，取到后由首页那段脚本回调这里重画一次
+    window.__rezeRepaintCal = paint;
   }
 
   /* ---------- 诗笺：点一下换一句 ----------
@@ -4386,7 +4393,7 @@ function interceptLinks(e) {
           // 随机模式：清除记忆，下次进站随机挑一张
           STORAGE.set("reze-bg-idx", "-1");
           var pick = Math.floor(Math.random() * bgs.length);
-          applyPageBg(bgs[pick], true);
+          applyPageBg(bgs[pick], true, false);
         } else {
           STORAGE.set("reze-bg-idx", String(i));
           applyPageBg(bgs[i], true);

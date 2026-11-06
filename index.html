@@ -19,7 +19,7 @@
 <meta property="og:image:width" content="474">
 <meta property="og:image:height" content="474">
 <link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20viewBox%3D%270%200%2064%2064%27%3E%3Crect%20width%3D%2764%27%20height%3D%2764%27%20rx%3D%2715%27%20fill%3D%27%23241f33%27%2F%3E%3Cg%20transform%3D%27translate%286%2C6%29%20scale%282.1667%29%27%3E%3Cpath%20d%3D%27M21%2012.79A9%209%200%201%201%2011.21%203%207%207%200%200%200%2021%2012.79z%27%20fill%3D%27%23f6f1e7%27%2F%3E%3C%2Fg%3E%3C%2Fsvg%3E">
-<link rel="stylesheet" href="assets/css/style.css?v=20261107c">
+<link rel="stylesheet" href="assets/css/style.css?v=20261107d">
   <link rel="alternate" type="application/rss+xml" title="RezeのBlog" href="feed.xml">
   <script type="application/ld+json">
   {"@context":"https://schema.org","@type":"WebSite","name":"RezeのBlog","url":"https://reze520.pages.dev/","description":"生活、兴趣、随手做的小东西，还有那些没头没尾的想法。","inLanguage":"zh-CN"}
@@ -31,19 +31,19 @@
 <div class="page-bg" id="page-bg"></div>
 
 <script>
-/* 尽早恢复记忆中的背景，避免加载时闪纯色 */
+/* 尽早恢复上次那张背景，避免进站时先闪一下纯色。
+   以前这里写死了 4 张图的列表，后来背景加到 8 张就漏了一半；
+   现在改由 main.js 应用背景时把实际地址记进 reze-bg-url，数量怎么变都跟得上。 */
 (function () {
   try {
-    var BGS = ["assets/uploads/bg1.jpg", "assets/uploads/bg3.jpg", "assets/uploads/bg.jpg", "assets/uploads/bg5.jpg"];
-    var i = parseInt(localStorage.getItem("reze-bg-idx") || "-1", 10);
-    if (i >= 0 && i < BGS.length) {
-      var u = BGS[i];
-      var p = document.getElementById("page-bg");
-      if (p) p.style.backgroundImage = 'url("' + u + '")';
-      var l = document.createElement("link");
-      l.rel = "preload"; l.as = "image"; l.href = u;
-      document.head.appendChild(l);
-    }
+    var u = localStorage.getItem("reze-bg-url") || "";
+    if (!u || u.indexOf("assets/") !== 0) return;
+    var p = document.getElementById("page-bg");
+    if (p) p.style.backgroundImage = 'url("' + u.replace(/"/g, "%22") + '")';
+    var l = document.createElement("link");
+    l.rel = "preload"; l.as = "image"; l.href = u;
+    l.setAttribute("fetchpriority", "high");
+    document.head.appendChild(l);
   } catch (e) {}
 })();
 </script>
@@ -147,11 +147,34 @@
   } catch (e) {}
 })();
 </script>
-<script defer src="assets/js/lunar.js?v=20261107c"></script>
-<script defer src="assets/js/data.meta.js?v=20261107c"></script>
-<script defer src="assets/js/playlist.js?v=20261107c"></script>
-<script defer src="assets/js/cloud.js?v=20261107c"></script>
-<script defer src="assets/js/weather.js?v=20261107c"></script>
-<script defer src="assets/js/main.js?v=20261107c"></script>
+<script defer src="assets/js/data.meta.js?v=20261107d"></script>
+<script defer src="assets/js/playlist.js?v=20261107d"></script>
+<script defer src="assets/js/cloud.js?v=20261107d"></script>
+<script defer src="assets/js/weather.js?v=20261107d"></script>
+<script defer src="assets/js/main.js?v=20261107d"></script>
+<script>
+/* 农历库 443KB，全站只有右栏那个小日历用它，不值当占首屏带宽。
+   等页面闲下来再取；取到后重画一次日历，取不到就只显示公历，别的都不受影响。 */
+(function () {
+  var done = false;
+  function fetchLunar() {
+    if (done) return;
+    done = true;
+    var s = document.createElement("script");
+    s.src = "assets/js/lunar.js?v=20261107d";
+    s.async = true;
+    s.onload = function () {
+      if (typeof window.__rezeRepaintCal === "function") window.__rezeRepaintCal();
+    };
+    document.head.appendChild(s);
+  }
+  function idle() {
+    if ("requestIdleCallback" in window) requestIdleCallback(fetchLunar, { timeout: 2500 });
+    else setTimeout(fetchLunar, 1500);
+  }
+  if (document.readyState === "complete") idle();
+  else window.addEventListener("load", idle, { once: true });
+})();
+</script>
 </body>
 </html>

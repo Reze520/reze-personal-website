@@ -120,14 +120,14 @@ window.SITE = {
   // homeBg 是旧字段，留作单图兜底；数组非空时以数组为准
   homeBg: "",
   homeBgs: [
-    "assets/uploads/bg1.jpg", // 雨夜伞下
-    "assets/uploads/bg3.jpg", // 白发黑西装（已锐化增强）
-    "assets/uploads/bg.jpg",  // 夏日海滩
-    "assets/uploads/bg5.jpg", // 月下花枝（最早那款背景）
-    "assets/uploads/bg/night-bridge.jpg", // 夜色悬索桥（Unsplash · Johnny Lam）
-    "assets/uploads/bg/purple-mist.jpg",  // 紫雾枯树（Unsplash · Kundan Ramisetti）
-    "assets/uploads/bg/city-night.jpg",   // 黑白夜城天际线（Unsplash · Oleg Chursin）
-    "assets/uploads/bg/forest-dusk.jpg",  // 暮色林线（Unsplash · Julie Geiger）
+    "assets/uploads/bg1.webp", // 雨夜伞下
+    "assets/uploads/bg3.webp", // 白发黑西装（已锐化增强）
+    "assets/uploads/bg.webp",  // 夏日海滩
+    "assets/uploads/bg5.webp", // 月下花枝（最早那款背景）
+    "assets/uploads/bg/night-bridge.webp", // 夜色悬索桥（Unsplash · Johnny Lam）
+    "assets/uploads/bg/purple-mist.webp",  // 紫雾枯树（Unsplash · Kundan Ramisetti）
+    "assets/uploads/bg/city-night.webp",   // 黑白夜城天际线（Unsplash · Oleg Chursin）
+    "assets/uploads/bg/forest-dusk.webp",  // 暮色林线（Unsplash · Julie Geiger）
   ],
 
   // 左栏公告，留空就不显示这张卡
@@ -441,6 +441,12 @@ window.SITE = {
     { cat: "新闻时政", name: "观察者网", url: "https://www.guancha.cn", desc: "时评", fav: "assets/icons/guancha.cn.png" },
     { cat: "新闻时政", name: "南方周末", url: "https://www.infzm.com", desc: "深度长文", fav: "assets/icons/infzm.com.svg" },
     { cat: "新闻时政", name: "联合早报", url: "https://www.zaobao.com.sg", desc: "新加坡视角", fav: "assets/icons/zaobao.com.sg.png" },
+    { cat: "新闻时政", name: "环球人物网", url: "https://www.globalpeople.com.cn/", desc: "人民日报社旗下人物类新闻周刊", fav: "https://icons.duckduckgo.com/ip3/globalpeople.com.cn.ico" },
+    { cat: "新闻时政", name: "求是网", url: "https://www.qstheory.cn/", desc: "中共中央机关刊《求是》官网", fav: "https://icons.duckduckgo.com/ip3/qstheory.cn.ico" },
+    { cat: "新闻时政", name: "半月谈", url: "https://www.banyuetan.org/", desc: "中宣部委托新华社主办的时政刊物", fav: "https://icons.duckduckgo.com/ip3/banyuetan.org.ico" },
+    { cat: "新闻时政", name: "南风窗", url: "https://www.nfcmag.com/", desc: "洞察中国社会的政经新闻月刊", fav: "https://icons.duckduckgo.com/ip3/nfcmag.com.ico" },
+    { cat: "新闻时政", name: "南方人物周刊", url: "https://www.nfpeople.com/", desc: "南方报业旗下的人物类新闻周刊", fav: "https://icons.duckduckgo.com/ip3/nfpeople.com.ico" },
+    { cat: "新闻时政", name: "人物", url: "https://www.renwugc.com/", desc: "报道时代人物的新闻周刊", fav: "https://icons.duckduckgo.com/ip3/renwugc.com.ico" },
     { cat: "政府服务", name: "中国政府网", url: "https://www.gov.cn", desc: "政策文件", fav: "assets/icons/gov.cn.svg" },
     { cat: "政府服务", name: "国家统计局", url: "https://www.stats.gov.cn", desc: "统计数据", fav: "assets/icons/stats.gov.cn.svg" },
     { cat: "政府服务", name: "教育部", url: "http://www.moe.gov.cn", desc: "教育政策", fav: "assets/icons/moe.gov.cn.svg" },
@@ -471,6 +477,7 @@ window.SITE = {
     { cat: "学术文献", name: "智慧教育平台", url: "https://higher.smartedu.cn", desc: "国家平台", fav: "assets/icons/higher.smartedu.cn.png" },
     { cat: "学术文献", name: "国家图书馆", url: "http://www.nlc.cn", desc: "馆藏检索", fav: "assets/icons/nlc.cn.png" },
     { cat: "学术文献", name: "ReadPaper", url: "https://readpaper.com", desc: "论文阅读翻译", fav: "assets/icons/readpaper.com.ico" },
+    { cat: "学术文献", name: "New Scientist", url: "https://www.newscientist.com/", desc: "国际科学新闻与科技前沿", fav: "https://icons.duckduckgo.com/ip3/newscientist.com.ico" },
     { cat: "金融财经", name: "东方财富", url: "https://www.eastmoney.com", desc: "行情与数据", fav: "assets/icons/eastmoney.com.png" },
     { cat: "金融财经", name: "雪球", url: "https://xueqiu.com", desc: "投资讨论", fav: "assets/icons/xueqiu.com.ico" },
     { cat: "金融财经", name: "同花顺", url: "https://www.10jqka.com.cn", desc: "行情软件", fav: "assets/icons/10jqka.com.cn.png" },
@@ -481,6 +488,8 @@ window.SITE = {
     { cat: "金融财经", name: "巨潮资讯", url: "http://www.cninfo.com.cn", desc: "公告披露", fav: "assets/icons/cninfo.com.cn.svg" },
     { cat: "金融财经", name: "中国证监会", url: "http://www.csrc.gov.cn", desc: "监管信息", fav: "assets/icons/csrc.gov.cn.svg" },
     { cat: "金融财经", name: "国家外汇管理局", url: "https://www.safe.gov.cn", desc: "汇率与外汇", fav: "assets/icons/safe.gov.cn.svg" },
+    { cat: "金融财经", name: "哈佛商业评论中文版", url: "https://www.hbrchina.org/", desc: "全球商业管理思想的中文阵地", fav: "https://icons.duckduckgo.com/ip3/hbrchina.org.ico" },
+    { cat: "金融财经", name: "商业周刊中文版", url: "https://www.bbwc.cn/", desc: "彭博商业周刊中文版·国际视野", fav: "https://icons.duckduckgo.com/ip3/bbwc.cn.ico" },
     { cat: "数理工具", name: "Desmos", url: "https://www.desmos.com/calculator", desc: "函数画图", fav: "assets/icons/desmos.com.ico" },
     { cat: "数理工具", name: "GeoGebra", url: "https://www.geogebra.org", desc: "几何代数", fav: "assets/icons/geogebra.org.ico" },
     { cat: "数理工具", name: "WolframAlpha", url: "https://www.wolframalpha.com", desc: "符号计算", fav: "assets/icons/wolframalpha.com.ico" },
@@ -497,6 +506,12 @@ window.SITE = {
     { cat: "人文历史", name: "中国国家博物馆", url: "http://www.chnmuseum.cn", desc: "馆藏与展览", fav: "assets/icons/chnmuseum.cn.svg" },
     { cat: "人文历史", name: "故宫博物院", url: "https://www.dpm.org.cn", desc: "数字文物", fav: "assets/icons/dpm.org.cn.svg" },
     { cat: "人文历史", name: "中国社会科学网", url: "http://www.cssn.cn", desc: "社科学术", fav: "assets/icons/cssn.cn.png" },
+    { cat: "人文历史", name: "三联生活周刊", url: "https://www.lifeweek.com.cn/", desc: "一本杂志和他倡导的生活", fav: "https://icons.duckduckgo.com/ip3/lifeweek.com.cn.ico" },
+    { cat: "人文历史", name: "国家人文历史", url: "https://www.gjrwls.com/", desc: "人民日报社主管主办的人文历史半月刊", fav: "https://icons.duckduckgo.com/ip3/gjrwls.com.ico" },
+    { cat: "人文历史", name: "中国国家地理网", url: "https://www.dili360.com/", desc: "《中国国家地理》官方站点", fav: "https://icons.duckduckgo.com/ip3/dili360.com.ico" },
+    { cat: "人文历史", name: "读者", url: "https://www.duzhe.com/", desc: "甘肃人民出版社《读者》官网", fav: "https://icons.duckduckgo.com/ip3/duzhe.com.ico" },
+    { cat: "人文历史", name: "青年文摘", url: "https://www.qnwz.cn/", desc: "中国青年出版总社旗下文摘月刊", fav: "https://icons.duckduckgo.com/ip3/qnwz.cn.ico" },
+    { cat: "人文历史", name: "53BK 全国报刊大全", url: "https://www.53bk.com/", desc: "在线看报·全国报刊导航", fav: "https://icons.duckduckgo.com/ip3/53bk.com.ico" },
     { cat: "影音娱乐", name: "网易云音乐", url: "https://music.163.com", desc: "音乐社区", fav: "assets/icons/music.163.com.ico" },
     { cat: "影音娱乐", name: "QQ 音乐", url: "https://y.qq.com", desc: "曲库", fav: "assets/icons/y.qq.com.png" },
     { cat: "影音娱乐", name: "豆瓣电影", url: "https://movie.douban.com", desc: "评分与影评", fav: "assets/icons/movie.douban.com.png" },
@@ -1032,7 +1047,7 @@ window.SITE = {
 
   // 首屏欢迎页（只影响首页）
   splash: {
-    bg: "assets/uploads/bg.jpg", // 背景图：这张是「月下花枝」，左侧留白正好放标题
+    bg: "assets/uploads/bg.webp", // 背景图：这张是「月下花枝」，左侧留白正好放标题
     video: "", // 背景视频：如 "assets/uploads/hero.mp4"，填了就优先用视频
     hi: "", // 首屏那行英文小标，留空就不显示
     title: "RezeのBlog",
