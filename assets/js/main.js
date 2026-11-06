@@ -3014,6 +3014,11 @@ function applyRoute() {
     location.replace("/post" + (r.qs || ""));
     return;
   }
+  // 静态文档没有渲染分支，落到这里只会被渲染成首页卡片流；整页跳过去。
+  if (STATIC_PAGES.indexOf(page) >= 0) {
+    location.replace("/" + page);
+    return;
+  }
   // 老地址没带分类、但眼下停在某个分类上（点了返回）时，把分类补进 hash，
   // 这样刷新一下也还停在这一栏，不会掉回全部。
   // 另外：地址里的 ?cat= 也要留在 hash 里 —— 之前切到写作页会把 location.search 清掉，
@@ -3260,6 +3265,10 @@ function goPage(hash) {
   applyRoute();
 }
 
+/* 正文编译在 HTML 里、SPA 没有渲染分支的页面。点到它们、或者从它们点出去，
+   都得交给浏览器整页跳转。加新静态页时把名字写进这个清单。 */
+var STATIC_PAGES = ["changelog"];
+
 function interceptLinks(e) {
   if (e.defaultPrevented || e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
   var a = e.target.closest("a[href]");
@@ -3275,9 +3284,15 @@ function interceptLinks(e) {
   // 这里不做 SPA 拦截，直接交给浏览器整页跳转。否则 pushState 改了地址栏、
   // 页面却还停在文章页，必须刷新才回得去（「点主页还在文章页」那一类 bug 的根因）。
   if (!document.querySelector(".app")) return;
-  e.preventDefault();
+  // 当前这页本身是静态文档（正文编译在 HTML 里）：站内跳转一律整页走，
+  // 否则只是地址栏换了个字，内容还停在原来的页面上。
+  if (document.querySelector(".app[data-static]")) return;
   var file = u.pathname.split("/").pop().replace(/\.html$/, "") || "home";
   if (file === "index") file = "home";
+  // 目标页是静态文档，同理整页跳。以前在首页点「更新日志」就漏在这里：
+  // pushState 把地址换成 /changelog，正文还是首页的卡片流，得手动刷新一次才到。
+  if (STATIC_PAGES.indexOf(file) >= 0) return;
+  e.preventDefault();
   var app = document.querySelector(".app");
   var from = (app && app.getAttribute("data-page")) || "";
   var toPost = file === "post";
