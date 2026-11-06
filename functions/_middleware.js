@@ -16,7 +16,8 @@ export async function onRequest(context) {
   if (url.pathname !== "/post" && url.pathname !== "/post.html") return context.next();
 
   const id = url.searchParams.get("id");
-  if (!id) return context.next();
+  /* 光秃秃的 /post 没有文章可指，别停在「没有找到这篇文章」上 */
+  if (!id) return Response.redirect(ORIGIN + "/writing", 302);
 
   return Response.redirect(ORIGIN + "/p/" + encodeURIComponent(id), 301);
 }
