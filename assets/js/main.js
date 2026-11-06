@@ -6,19 +6,14 @@
 (function () {
   "use strict";
 
-  /* 亮度先落地：style.css 里 --lite 默认 0.12，用户调过的话这里第一时间覆盖，
-     免得等到打开设置面板才生效（那一下会亮/暗跳一次）。 */
+  /* 背景亮度先落地：style.css 里 --bg-bright 默认 1，
+     用户调过的话这里第一时间覆盖，免得进页面先闪一下原亮度再变暗。
+     旧版存的是 reze-lite（白幕不透明度），语义完全不同，直接作废。 */
   try {
-    var _root0 = document.documentElement;
-    var _dark0 = _root0.getAttribute("data-theme") === "dark";
-    var _lite = localStorage.getItem("reze-lite");
-    /* 浅色下不铺白幕：那层白压在字上面，越提字越淡（34 节已把默认值归零）。
-       "12" 是旧版本的浅色默认值，读到了也当没设过。 */
-    if (_lite === null || (!_dark0 && _lite === "12")) {
-      if (!_dark0) _root0.style.setProperty("--lite", "0");
-    } else {
-      var _n = Math.max(0, Math.min(40, Number(_lite) || 0));
-      _root0.style.setProperty("--lite", (_n / 100).toFixed(2));
+    var _bb = localStorage.getItem("reze-bg-bright");
+    if (_bb !== null) {
+      var _bbn = Math.max(40, Math.min(160, Math.round(Number(_bb) || 100)));
+      document.documentElement.style.setProperty("--bg-bright", (_bbn / 100).toFixed(2));
     }
   } catch (e) {}
 
@@ -4087,8 +4082,8 @@ function interceptLinks(e) {
       '<div class="set-panel">' +
       "<h3>外观设置</h3>" +
       '<p class="sub">改完立刻生效，会自动记住</p>' +
-      '<div class="set-group"><label>亮度<span class="lite-val" id="lite-val">+12%</span></label>' +
-      '<input type="range" class="lite-slider" id="lite" min="0" max="40" step="1" value="12"></div>' +
+      '<div class="set-group"><label>背景亮度<span class="lite-val" id="lite-val">100%</span></label>' +
+      '<input type="range" class="lite-slider" id="lite" min="40" max="160" step="1" value="100"></div>' +
       '<div class="set-group"><label>主题色</label>' +
       '<input type="range" class="hue-slider" id="hue" min="0" max="360" step="1" value="215"></div>' +
       '<div class="set-group"><label>配色预设</label>' +
@@ -4131,17 +4126,19 @@ function interceptLinks(e) {
     var lite = overlay.querySelector("#lite");
     var liteVal = overlay.querySelector("#lite-val");
 
-    /* ---------- 亮度 ----------
-       只改一个 CSS 变量，真正的白色提亮层在 style.css 的 html::after 上。
-       0–40 对应 --lite 0–0.40。为什么不用 filter:brightness：
-       那会给元素造一个包含块，页面里所有 position:fixed 的浮层
-       （目录、进度条、背景）全都会改成相对它定位，一开就散架。 */
+    /* ---------- 背景亮度 ----------
+       真亮度：直接给 .page-bg 上 filter: brightness(倍数)，整幅背景图一起
+       变亮变暗，色彩关系和层次都保留 —— 这就是和「盖白幕」最本质的区别。
+       40%–160%，100% 是原图。
+       为什么不加在 html 或 body 上：filter 会造包含块，页面上所有
+       position:fixed 的浮层（目录、进度条、背景、播放器）都会改成相对它
+       定位，一开就散架。只加在背景层上，它内部没有 fixed 子元素，安全。 */
     function applyLite(v) {
-      var n = Math.max(0, Math.min(40, Math.round(Number(v) || 0)));
-      root.style.setProperty("--lite", (n / 100).toFixed(2));
-      if (liteVal) liteVal.textContent = "+" + n + "%";
+      var n = Math.max(40, Math.min(160, Math.round(Number(v) || 100)));
+      root.style.setProperty("--bg-bright", (n / 100).toFixed(2));
+      if (liteVal) liteVal.textContent = n + "%";
       if (lite) lite.value = n;
-      STORAGE.set("reze-lite", String(n));
+      STORAGE.set("reze-bg-bright", String(n));
     }
 
     function applyHue(h) {
@@ -4176,11 +4173,8 @@ function interceptLinks(e) {
 
     var savedHue = STORAGE.get("reze-hue");
     applyHue(savedHue === null ? 215 : Number(savedHue));
-    var savedLite = STORAGE.get("reze-lite");
-    if (savedLite === null || (root.getAttribute("data-theme") !== "dark" && savedLite === "12")) {
-      savedLite = "0";
-    }
-    applyLite(Number(savedLite));
+    var savedLite = STORAGE.get("reze-bg-bright");
+    applyLite(savedLite === null ? 100 : Number(savedLite));
 
     /* ---------- 卡片材质 / 浓度 / 颜色 / 背景弱化 ----------
        四个开关共用 34 节那组变量：
@@ -4342,10 +4336,7 @@ function interceptLinks(e) {
       if (!b) return;
       root.setAttribute("data-theme", b.getAttribute("data-mode"));
       STORAGE.set("reze-theme", b.getAttribute("data-mode"));
-      /* 用户没手动调过亮度时，跟着主题取默认值：深色抬一档，浅色保持 0 */
-      if (STORAGE.get("reze-lite") === null) {
-        applyLite(root.getAttribute("data-theme") === "dark" ? 12 : 0);
-      }
+      /* 背景亮度和主题无关（它调的是背景图本身），切主题不再动它 */
       syncSegs();
     });
 

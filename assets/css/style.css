@@ -27,8 +27,12 @@
   --card-bg: transparent;
   --card-border: 1px solid var(--line);
   --serif-accent: var(--serif);
-  /* 亮度：全站白色提亮层的不透明度，外观设置里可调（0–0.40） */
-  --lite: 0.12;
+  /* 旧版「亮度」是盖在整页最上层的白幕，会连字一起冲淡，看着像蒙布。
+     现在亮度走 --bg-bright（只对背景图做 brightness），白幕默认关闭，
+     变量留着只为兼容旧样式，不再由设置面板控制。 */
+  --lite: 0;
+  /* 背景图亮度倍数：1 = 原图。设置面板里 40%–160% 映射到这里 */
+  --bg-bright: 1;
   color-scheme: light;
 }
 
@@ -2311,7 +2315,12 @@ body::after {
   z-index: -2;
   background: #14111d center 22% / cover no-repeat;
   transform: scale(1.06);
-  transition: opacity 0.6s var(--ease);
+  /* 背景亮度：直接作用在背景图上，明暗是「整幅图变亮变暗」，
+     不是往上盖白幕 —— 盖白幕只会抬白点、压平对比，看着像蒙了层布。
+     filter 会造包含块，但这一层内部只有两个伪元素、没有 fixed 子元素，
+     所以不会把浮层带跑。 */
+  filter: brightness(var(--bg-bright, 1));
+  transition: opacity 0.6s var(--ease), filter 0.25s var(--ease);
   animation: bgBreathe 36s ease-in-out infinite alternate;
   will-change: transform;
 }
@@ -4809,11 +4818,11 @@ body.has-app .site-head.is-over-hero .icon-btn {
 }
 
 /* ---------- 设置面板 ---------- */
-/* ---------- 亮度层 ----------
-   全站铺一张纯白，靠 --lite 控制不透明度（0–0.40），外观设置里调。
-   只加白、不动布局，所以不会像 filter:brightness 那样把内部的
-   position:fixed 变成相对 html。pointer-events 关掉，不挡任何点击。
-   深色主题下这是把暗部整体提起来最省事的办法。 */
+/* ---------- 提亮白幕（已停用） ----------
+   以前「亮度」滑块控制的是这层纯白的不透明度。它压在最上层、盖住文字，
+   只会把白点抬起来、把对比压平，观感就是「蒙了一层布」。
+   现在亮度改成 .page-bg 上的 filter: brightness()，这层固定为 0 不再显示，
+   结构留着是因为旧样式与打印规则还引用它。 */
 html::after {
   content: "";
   position: fixed;
