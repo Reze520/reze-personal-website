@@ -1223,8 +1223,12 @@
   function buildPager(pages, page) {
     if (pages <= 1) return "";
     var h = '<div class="g-pager">';
+    var first = page <= 0;
     var prev = page <= 0;
     var next = page >= pages - 1;
+    var last = page >= pages - 1;
+    h += '<button class="pg-btn pg-first' + (first ? " disabled" : "") + '" data-p="0"' +
+      (first ? " disabled aria-disabled=\"true\"" : "") + ' aria-label="首页">«</button>';
     h += '<button class="pg-btn pg-prev' + (prev ? " disabled" : "") + '" data-p="' + (page - 1) +
       '"' + (prev ? " disabled aria-disabled=\"true\"" : "") + ' aria-label="上一页">‹</button>';
     pagerNums(pages, page).forEach(function (n) {
@@ -1236,6 +1240,8 @@
     });
     h += '<button class="pg-btn pg-next' + (next ? " disabled" : "") + '" data-p="' + (page + 1) +
       '"' + (next ? " disabled aria-disabled=\"true\"" : "") + ' aria-label="下一页">›</button>';
+    h += '<button class="pg-btn pg-last' + (last ? " disabled" : "") + '" data-p="' + (pages - 1) +
+      '"' + (last ? " disabled aria-disabled=\"true\"" : "") + ' aria-label="尾页">»</button>';
     h += '<span class="pg-jump"><input class="pg-input" type="number" min="1" max="' + pages +
       '" placeholder="跳至" aria-label="跳转到页码"><button class="pg-go" type="button">跳转</button></span>';
     return h + "</div>";

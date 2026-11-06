@@ -6482,7 +6482,9 @@ body {
 .g-pager .pg-btn.disabled,
 .g-pager .pg-btn[disabled] { opacity: 0.35; cursor: default; pointer-events: none; }
 .g-pager .pg-btn.pg-prev,
-.g-pager .pg-btn.pg-next { font-size: 17px; line-height: 1; padding: 0 12px; }
+.g-pager .pg-btn.pg-next,
+.g-pager .pg-btn.pg-first,
+.g-pager .pg-btn.pg-last { font-size: 17px; line-height: 1; padding: 0 12px; }
 .g-pager .pg-ellipsis { color: var(--g-text-2); align-self: center; padding: 0 2px; user-select: none; }
 .g-pager .pg-jump { display: inline-flex; align-items: center; gap: 6px; margin-left: 6px; }
 .g-pager .pg-input {
