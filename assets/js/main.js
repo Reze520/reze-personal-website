@@ -5332,6 +5332,20 @@ function interceptLinks(e) {
     window.addEventListener("hashchange", applyRoute);
     window.addEventListener("popstate", applyRoute);
     document.addEventListener("click", interceptLinks);
+    /* 文章页挂了 <base href="/">，以 # 开头的锚点会被浏览器解析到首页去。
+       这里统一接管：滚到本页对应位置，地址写回当前路径，不跳站。 */
+    document.addEventListener("click", function (e) {
+      var a = e.target && e.target.closest ? e.target.closest('a[href^="#"]') : null;
+      if (!a) return;
+      var h = a.getAttribute("href") || "";
+      // #/writing 这种老 hash 路由交给路由处理，不当锚点
+      if (h.length < 2 || h.charAt(1) === "/") return;
+      var el = document.getElementById(h.slice(1));
+      if (!el) return;
+      e.preventDefault();
+      el.scrollIntoView({ behavior: "smooth", block: "start" });
+      try { history.replaceState(null, "", location.pathname + location.search + h); } catch (err) {}
+    });
     // 诗笺：点击换一首。事件托管，左栏每次重渲染都不用重新绑
     document.addEventListener("click", function (e) {
       var t = e.target;

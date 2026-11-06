@@ -20,7 +20,7 @@
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20viewBox%3D%270%200%2064%2064%27%3E%3Crect%20width%3D%2764%27%20height%3D%2764%27%20rx%3D%2715%27%20fill%3D%27%23241f33%27%2F%3E%3Cg%20transform%3D%27translate%286%2C6%29%20scale%282.1667%29%27%3E%3Cpath%20d%3D%27M21%2012.79A9%209%200%201%201%2011.21%203%207%207%200%200%200%2021%2012.79z%27%20fill%3D%27%23f6f1e7%27%2F%3E%3C%2Fg%3E%3C%2Fsvg%3E">
-<link rel="stylesheet" href="assets/css/style.css?v=20261107l">
+<link rel="stylesheet" href="assets/css/style.css?v=20261107m">
   <link rel="alternate" type="application/rss+xml" title="RezeのBlog" href="feed.xml">
 </head>
 <body class="has-app">
@@ -94,11 +94,12 @@
 <h2>2026 年 11 月<span class="cl-count">16 条</span></h2>
 <ol class="cl-list">
 <li class="cl-item"><details open>
-<summary><span class="cl-kind" data-k="基建">基建</span><span class="cl-t">文章改路径地址 /p/post-263，旧地址 301 过去</span><span class="cl-n">3 项</span></summary>
+<summary><span class="cl-kind" data-k="基建">基建</span><span class="cl-t">文章改路径地址 /p/post-263，旧地址 301 过去</span><span class="cl-n">4 项</span></summary>
 <div class="cl-body"><ul>
 <li>原来是 <code>/post?id=post-263</code>，带问号，分享卡片和搜索引擎都不太把它当一篇独立文章。现在每篇一条路径地址，<code>functions/p/[[slug]].js</code> 读静态 <code>post.html</code> 当壳，把 title、description、og、canonical 与 BlogPosting 换成这一篇的，正文照旧直出。查不到文章时返回 404 页并带上 404 状态码，不让搜索引擎当成软 404。</li>
 <li><code>functions/_middleware.js</code> 从「改写文章页 meta」收成一条 301：<code>/post?id=…</code> → <code>/p/…</code>，已收录的、别人收藏的地址不会断。老 hash 地址（<code>post.html#/post?id=x</code>）在页面里直接搬到新路径，少一跳。</li>
 <li>前端 <code>postHref()</code> 统一生成文章地址，13 处手拼的 <code>"/post?id="</code> 全部换掉；<code>parseHash()</code> 认 <code>/p/…</code>，点文章照旧整页跳，来源列表的位置与分类仍然记得。<code>gen_feeds.py</code> 跟着改，feed 与 sitemap 重跑（330 条）。</li>
+<li>路径深了一层，相对地址全失灵：<code>post.html</code> 的样式、脚本、<code>feed.xml</code> 改成以 <code>/</code> 开头，页面加 <code>&lt;base href="/"&gt;</code> 兜住正文里的图与音频（数据库里存的是 <code>assets/…</code> 相对路径，330 篇没法逐个改）。锚点会被 base 带到首页，改由脚本接管：滚到本页位置，地址写回当前路径。</li>
 </ul></div>
 </details></li>
 <li class="cl-item"><details>
@@ -530,10 +531,10 @@
   } catch (e) {}
 })();
 </script>
-<script defer src="assets/js/data.meta.js?v=20261107l"></script>
-<script defer src="assets/js/cloud.js?v=20261107l"></script>
-<script defer src="assets/js/weather.js?v=20261107l"></script>
-<script defer src="assets/js/main.js?v=20261107l"></script>
+<script defer src="assets/js/data.meta.js?v=20261107m"></script>
+<script defer src="assets/js/cloud.js?v=20261107m"></script>
+<script defer src="assets/js/weather.js?v=20261107m"></script>
+<script defer src="assets/js/main.js?v=20261107m"></script>
 <script>
 /* 更新日志的一键展开／收起。details 自己就能点，这段只管批量开关。 */
 document.addEventListener("click", function (e) {
