@@ -65,11 +65,16 @@ def build_md(post):
 
 
 def write_lf(path, text):
-    data = text.encode("utf-8")
-    if path.exists() and path.read_bytes() == data:
-        return False
+    # core.autocrlf 会把仓库里的 .md 检出成 CRLF，按字节比会每次重写 331 个文件；
+    # 按文本比（read_text 会把 CRLF 归一成 LF），内容没变就不碰它。
+    if path.exists():
+        try:
+            if path.read_text(encoding="utf-8") == text:
+                return False
+        except (UnicodeDecodeError, OSError):
+            pass
     with open(path, "wb") as f:
-        f.write(data)
+        f.write(text.encode("utf-8"))
     return True
 
 
