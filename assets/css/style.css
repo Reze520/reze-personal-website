@@ -6771,6 +6771,10 @@ body {
   color: var(--g-text-3);
   font-variant-numeric: tabular-nums;
 }
+
+.wx-loc .wx-stale {
+  color: var(--accent);
+}
 .wx-big {
   display: flex;
   align-items: center;

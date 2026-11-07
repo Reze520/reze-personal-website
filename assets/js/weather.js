@@ -48,6 +48,30 @@
     return Math.round(Number(n) || 0);
   }
 
+  /* fetch + 超时：原生 fetch 没有超时，一旦连接在某处挂起（网络抖动、
+     TLS 握手不完成、服务器迟迟不响应），就会永远 pending，天气卡随之
+     永久停在“正在获取”。这里用 AbortController 在 ms 毫秒后中断，超时
+     抛带 timeout 标记的错误，上层据此显示“重试”而不是无限转圈。 */
+  function fetchJSON(url, ms) {
+    var ctrl = new AbortController();
+    var timer = setTimeout(function () { ctrl.abort(); }, ms || 15000);
+    return fetch(url, { signal: ctrl.signal })
+      .then(function (r) {
+        if (!r.ok) throw new Error("HTTP " + r.status);
+        return r.json();
+      })
+      .then(function (d) { clearTimeout(timer); return d; })
+      .catch(function (e) {
+        clearTimeout(timer);
+        if (e && e.name === "AbortError") {
+          var te = new Error("请求超时，点重试再试一次");
+          te.timeout = true;
+          throw te;
+        }
+        throw e;
+      });
+  }
+
   /* ---------- 天气图标 ---------- */
   var S = 'viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.55" ' +
           'stroke-linecap="round" stroke-linejoin="round"';
@@ -211,11 +235,30 @@
     query: "",
     results: [],
     searching: false,
-    addOpen: false
+    addOpen: false,
+    stale: false
   };
   state.active = activeId(state.cities);
 
   var cache = { key: "", time: 0, data: null };
+
+  // 持久缓存：内存 cache 随刷新清空，这里再多存一份到 localStorage，
+  // 有效期 6 小时。偶发失败（断网、接口抖动）时先用旧数据顶着，
+  // 不让整块天气一下变成空白。
+  var LS_CACHE_KEY = "reze-weather-cache-v1";
+  function saveCache(key, data) {
+    try { store(LS_CACHE_KEY, JSON.stringify({ k: key, t: Date.now(), d: data })); } catch (e) {}
+  }
+  function readCache(key) {
+    try {
+      var raw = store(LS_CACHE_KEY);
+      if (!raw) return null;
+      var o = JSON.parse(raw);
+      if (!o || o.k !== key) return null;
+      if (Date.now() - (o.t || 0) > 6 * 60 * 60 * 1000) return null;
+      return o.d || null;
+    } catch (e) { return null; }
+  }
   var listeners = [];
 
   function citiesHash(arr) {
@@ -245,17 +288,23 @@
       "uv_index_max,precipitation_probability_max" +
       "&timezone=auto&forecast_days=7";
 
-    return fetch(url)
-      .then(function (r) {
-        if (!r.ok) throw new Error("HTTP " + r.status);
-        return r.json();
-      })
+    return fetchJSON(url, 15000)
       .then(function (d) {
         // 单个坐标返回对象，多个坐标返回数组，这里统一成数组
         var list = Array.isArray(d) ? d : [d];
         cache = { key: key, time: Date.now(), data: list };
+        saveCache(key, list);
+        state.stale = false;
         return list;
+      })
+      .catch(function (e) {
+        // 这次没取到：有本地持久缓存就先顶上（标记过期），没有才把错抛上去
+        var c = readCache(key);
+        if (c) { state.stale = true; return c; }
+        throw e;
       });
+
+
   }
 
   function load(force) {
@@ -270,6 +319,7 @@
       })
       .catch(function (e) {
         state.error = e && e.message ? e.message : "网络请求失败";
+        state.stale = false;
       })
       .then(function () {
         state.loading = false;
@@ -395,7 +445,7 @@
       '<div class="wx-hero-l">' +
       '<div class="wx-loc">' + esc(city.name) +
       (city.admin ? '<em>' + esc(city.admin) + "</em>" : "") +
-      '<span class="wx-live">' + (state.loading ? "更新中" : "已更新 " + hhmm(new Date(state.updated))) +
+      '<span class="wx-live">' + (state.loading ? "更新中" : state.stale ? "可能不是最新" : "已更新 " + hhmm(new Date(state.updated))) +
       "</span></div>" +
       '<div class="wx-big">' +
       '<span class="wx-bigico ' + kindClass(cur.weather_code, cur.is_day) + '">' +
@@ -717,11 +767,11 @@
     state.searching = true;
     state.results = [];
     paintResults();
-    fetch(GEO + "?name=" + encodeURIComponent(q) + "&count=8&language=zh&format=json")
-      .then(function (r) { return r.json(); })
+    fetchJSON(GEO + "?name=" + encodeURIComponent(q) + "&count=8&language=zh&format=json", 12000)
       .then(function (d) { return (d && d.results) || []; })
       .catch(function () { return []; })
       .then(function (list) {
+
         // 只留有人口的城市，避免搜出同名小村庄
         state.results = list
           .filter(function (r) { return r.latitude != null && r.longitude != null; })
