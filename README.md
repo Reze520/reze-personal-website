@@ -564,12 +564,15 @@ python tools/gen_feeds.py /tmp/content.json
 # 更新日志改了之后，重新编译成页面
 python tools/build_changelog.py
 
+# 发新文之后跑一次：把云端全文导回仓库兜底，顺手重生成首屏元数据
+python tools/sync_content.py
+
 # 诗笺加了新诗之后，重裁字体（否则新字会退回宋体，字形不一样）
 python tools/subset_font.py                      # 直接从线上取诗词
 python tools/subset_font.py /tmp/content.json     # 或者用本地快照
 ```
 
-三个脚本都只动生成物，不改源文件，跑完看一眼 diff 再提交就行。
+这几个脚本都只动生成物，不改源文件，跑完看一眼 diff 再提交就行。
 
 ---
 

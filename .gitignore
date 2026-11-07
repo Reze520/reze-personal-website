@@ -9,6 +9,8 @@ Thumbs.db
 # 临时文件
 _t*.html
 *.log
+__pycache__/
+*.pyc
 
 # 只在本地用、不随站点发布的东西（原始书籍、备份、临时 JSON、完整字体等）
 # Cloudflare Pages 部署的是整个仓库，所以「不进 git」就等于「不上线」。
