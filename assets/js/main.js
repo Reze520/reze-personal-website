@@ -997,7 +997,7 @@
     );
   }
 
-  /* ---------- 动态 / 相册 / 导航 ---------- */
+  /* ---------- 动态 / 导航 ---------- */
   function momentsMainHtml() {
     var list = (SITE.moments || []).slice().sort(function (a, b) {
       return a.date < b.date ? 1 : -1;
@@ -1064,62 +1064,6 @@
       });
 
     paint();
-  }
-
-  function albumMainHtml() {
-    var items = SITE.album || [];
-    var cats = SITE.albumCats || [];
-    // 收集所有相册里出现的分类（含未在 albumCats 里的）
-    var seen = cats.slice();
-    items.forEach(function (it) { if (it.cat && seen.indexOf(it.cat) < 0) seen.push(it.cat); });
-    var chips = '<div class="g-tabs" id="al-tabs" style="margin:0 0 14px"><button class="g-tab" data-acat="" aria-pressed="true">全部<span class="n">' + items.length + "</span></button>";
-    seen.forEach(function (c) {
-      var n = items.filter(function (it) { return it.cat === c; }).length;
-      chips += '<button class="g-tab" data-acat="' + esc(c) + '" aria-pressed="false">' + esc(c) + '<span class="n">' + n + "</span></button>";
-    });
-    chips += "</div>";
-
-    function cellsOf(list) {
-      return list
-        .map(function (it) {
-          var inner = it.src
-            ? '<img src="' + esc(it.src) + '" alt="' + esc(it.caption || "") + '" loading="lazy">'
-            : '<div class="ph">待添加</div>';
-          return (
-            "<figure>" + inner + "<figcaption><span>" + esc(it.caption || "") +
-            "</span><time>" + fmtDate(it.date) + "</time></figcaption></figure>"
-          );
-        })
-        .join("");
-    }
-    return chips + '<div class="g-album" id="al-grid">' + cellsOf(items) + "</div>";
-  }
-
-  function bindAlbumTabs(root) {
-    var tabs = root.querySelector("#al-tabs");
-    var grid = root.querySelector("#al-grid");
-    if (!tabs || !grid) return;
-    var items = SITE.album || [];
-    function paint(cat) {
-      var list = items.filter(function (it) { return !cat || it.cat === cat; });
-      grid.innerHTML = list.length
-        ? list.map(function (it) {
-            var inner = it.src
-              ? '<img src="' + esc(it.src) + '" alt="' + esc(it.caption || "") + '" loading="lazy">'
-              : '<div class="ph">待添加</div>';
-            return "<figure>" + inner + "<figcaption><span>" + esc(it.caption || "") +
-              "</span><time>" + fmtDate(it.date) + "</time></figcaption></figure>";
-          }).join("")
-        : '<div class="g-empty">这个分类还没有照片</div>';
-      tabs.querySelectorAll(".g-tab").forEach(function (b) {
-        b.setAttribute("aria-pressed", String(b.getAttribute("data-acat") === cat));
-      });
-    }
-    tabs.addEventListener("click", function (e) {
-      var b = e.target.closest(".g-tab[data-acat]");
-      if (!b) return;
-      paint(b.getAttribute("data-acat"));
-    });
   }
 
   // 导航页当前选中的分类（空 = 全部）
@@ -2360,7 +2304,7 @@ function aboutHtml() {
     '<p>这个站从 2020 年前后开始搭，中间推倒重来过几次。现在这一版是手写的 HTML、CSS 和原生 JavaScript，没有框架、没有构建工具，也没有打包流程，一堆静态文件挂在 Cloudflare Pages 上。</p>' +
     '<p>内容存在 Cloudflare D1，前台读构建时生成的静态元数据，后台通过接口读写；接口取不到时用仓库里的一份副本兜底。</p>' +
     '<h2>里面有什么</h2>' +
-    '<p>目前三百三十篇，约一百二十三万字，分在读书、技术、日常、杂记、文史、电影、类型文学七类。另有动态、相册、导航三块，导航收了一百七十多个站点。</p>' +
+    '<p>目前三百三十篇，约一百二十三万字，分在读书、技术、日常、杂记、文史、电影、类型文学七类。另有动态、导航两块，导航收了一百七十多个站点。</p>' +
     '<h2>没做的部分</h2>' +
     '<p>没有第三方统计脚本，页面不记录来源、停留时长和点击路径；推荐只按正文的相似度算，不建立用户画像；评论区长期空置，已经收起。</p>' +
     '<h2>联系</h2>' +
@@ -2904,7 +2848,6 @@ var PAGE_META = {
   writing: ["全部文章 · RezeのBlog", "RezeのBlog写过的全部文章，按分类和标签浏览。"],
   archive: ["归档 · RezeのBlog", "全部文章按年份排成的目录，从二〇二〇年排到今天。"],
   moments: ["动态 · RezeのBlog", "碎片式的短记录。"],
-  album: ["相册 · RezeのBlog", "照片存档。"],
   links: ["导航 · RezeのBlog", "常去的地方。"],
   weather: ["天气 · RezeのBlog", "几个城市的天气并列。"],
   timeline: ["时间线 · RezeのBlog", "这个站的技术改动记录。"],
@@ -3003,9 +2946,6 @@ function renderMain() {
   if (page === "moments") {
     main.innerHTML = momentsMainHtml();
     bindMoments(main);
-  } else if (page === "album") {
-    main.innerHTML = albumMainHtml();
-    bindAlbumTabs(main);
   } else if (page === "links") {
     main.innerHTML = linksMainHtml();
   } else if (page === "weather") {
@@ -3077,7 +3017,7 @@ function postRouteFix() {
 function updateNavActive(page) {
   // 链接现在都是 /writing 这种路径，得按路径整段比，不能再用 indexOf 找子串：
   // 首页的 "/" 是任何地址的子串，那样每一页都会把「主页」点亮。
-  var navMap = { home: "/", moments: "/moments", writing: "/writing", album: "/album", links: "/links", weather: "/weather" };
+  var navMap = { home: "/", moments: "/moments", writing: "/writing", links: "/links", weather: "/weather" };
   var want = navMap[page];
   document.querySelectorAll(".nav a").forEach(function (a) {
     var path = (a.getAttribute("href") || "").split(/[?#]/)[0] || "/";

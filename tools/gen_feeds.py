@@ -27,7 +27,6 @@ STATIC_PAGES = [
     ("/writing", "daily", "0.9"),
     ("/archive", "weekly", "0.8"),
     ("/moments", "weekly", "0.7"),
-    ("/album", "weekly", "0.7"),
     ("/links", "monthly", "0.6"),
     ("/weather", "weekly", "0.5"),
     ("/timeline", "monthly", "0.6"),
