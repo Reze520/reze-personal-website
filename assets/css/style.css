@@ -10939,7 +10939,7 @@ html {
   color: var(--ink-2);
   background: transparent;
   border: 1px solid var(--line);
-  border-radius: var(--radius-pill);
+  border-radius: var(--radius);
   cursor: pointer;
   transition: color 0.18s, border-color 0.18s, background 0.18s;
 }
@@ -11342,4 +11342,126 @@ html {
   .g-post h2 {
     font-size: 17px;
   }
+}
+
+/* ============================================================
+   35. 归档页：按年铺开的目录
+   ------------------------------------------------------------
+   - 年份头用衬线大数字，右边挂该年篇数，下面一条稍重的线。
+   - 条目左一列「月.日」等宽小字，右边标题。只有 1px 分隔线，
+     没有卡片、没有缩略图 —— 一屏能扫过二十几条，七年才显得出厚度。
+   - 顶部一排年份，点了平滑滚到那一年。不写 hash，免得和路由打架。
+   ============================================================ */
+
+.arc-top { margin-bottom: 2px; }
+
+.arc-jump {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin: 10px 0 0;
+}
+
+.arc-j {
+  font: inherit;
+  font-size: 11.5px;
+  font-family: var(--mono);
+  line-height: 1;
+  padding: 5px 9px 6px;
+  color: var(--ink-3);
+  background: transparent;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-pill);
+  cursor: pointer;
+  font-variant-numeric: tabular-nums;
+  transition: color 0.18s var(--ease), border-color 0.18s var(--ease);
+}
+.arc-j:hover { color: var(--ink); border-color: var(--line-2); }
+
+.arc-year {
+  /* 一年一张纸。底色跟列表页的卡片同一套（--glass），但不加背景模糊：
+     一张纸三四千像素高，blur 那么一大块在手机上会拖滚动。
+     不铺底的话，浅色主题下目录直接压在墙纸上，标题还能看，日期就糊了。 */
+  margin: 0 0 14px;
+  padding: 2px 22px 14px;
+  background: var(--glass);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  scroll-margin-top: 80px;
+}
+
+.arc-h {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+  margin: 16px 0 2px;
+  padding: 0 0 10px;
+  border-bottom: 1px solid var(--line-2);
+  font-weight: 400;
+}
+.arc-year:first-of-type .arc-h { margin-top: 12px; }
+
+.arc-num {
+  font-family: var(--serif);
+  font-size: 32px;
+  line-height: 1;
+  letter-spacing: 0.01em;
+  color: var(--ink);
+  font-variant-numeric: tabular-nums;
+}
+
+.arc-cnt {
+  font-size: 11.5px;
+  color: var(--ink-3);
+  font-variant-numeric: tabular-nums;
+}
+
+.arc-row {
+  display: grid;
+  grid-template-columns: 52px minmax(0, 1fr);
+  gap: 14px;
+  align-items: baseline;
+  padding: 8px 0;
+  border-bottom: 1px solid var(--line);
+  color: inherit;
+  text-decoration: none;
+}
+.arc-d {
+  font-family: var(--mono);
+  font-size: 11.5px;
+  letter-spacing: 0.01em;
+  color: var(--ink-3);
+  font-variant-numeric: tabular-nums;
+  transition: color 0.18s var(--ease);
+}
+.arc-t {
+  font-size: 15.5px;
+  line-height: 1.55;
+  color: var(--ink);
+}
+.arc-row:hover .arc-t {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  text-decoration-thickness: 1px;
+}
+.arc-row:hover .arc-d { color: var(--ink-2); }
+
+@media (max-width: 620px) {
+  .arc-year { padding: 2px 16px 12px; border-radius: 12px; }
+  .arc-h { margin-top: 14px; }
+  .arc-num { font-size: 26px; }
+  .arc-row { grid-template-columns: 44px minmax(0, 1fr); gap: 10px; }
+  .arc-t { font-size: 15px; }
+}
+
+/* 列表页尺度行末尾的「按年看」，进归档 */
+.g-archlink {
+  color: var(--ink-2);
+  text-decoration: none;
+  border-bottom: 1px solid var(--line-2);
+  transition: color 0.18s var(--ease), border-color 0.18s var(--ease);
+}
+.g-archlink:hover {
+  color: var(--ink);
+  border-bottom-color: var(--ink-3);
 }

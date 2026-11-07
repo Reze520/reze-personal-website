@@ -1348,7 +1348,8 @@
         '<button class="g-chip" data-cat="' + esc(c) + '" aria-pressed="false">' + esc(c) +
         '<span class="count">' + counts[c] + "</span></button>";
     });
-    return '<p class="g-scale">' + listScaleText() + "</p>" +
+    return '<p class="g-scale">' + listScaleText() +
+      ' · <a class="g-archlink" href="/archive">按年看</a></p>' +
       '<div class="g-filters" id="g-filters">' + chips + "</div>" +
       '<div class="g-list" id="g-list"></div>';
   }
@@ -2237,6 +2238,72 @@ function tlDescHtml(text) {
   );
 }
 
+/* ---------- 归档：全部文章按年排成一份目录 ----------
+   列表页解决「我想找某篇」，归档页解决「我想从头看一遍」。
+   只用 POSTS（元数据），正文一个字都不取，所以翻到底也不额外发请求。
+   版式是实心目录：一年一个年份头，下面一列日期加标题，不做卡片，
+   分隔线只有 1px —— 目的是让七年的厚度能在一次滚动里显出来。 */
+function archiveMainHtml() {
+  var list = POSTS.slice().sort(function (a, b) {
+    return String(b.date || "").localeCompare(String(a.date || ""));
+  });
+  var years = [];
+  var byYear = {};
+  list.forEach(function (p) {
+    var y = String(p.date || "").slice(0, 4);
+    if (!y) return;
+    if (!byYear[y]) {
+      byYear[y] = [];
+      years.push(y);
+    }
+    byYear[y].push(p);
+  });
+  years.sort().reverse();
+
+  var jump = years
+    .map(function (y) {
+      return '<button class="arc-j" type="button" data-y="' + y + '">' + y + "</button>";
+    })
+    .join("");
+
+  var blocks = years
+    .map(function (y) {
+      var rows = byYear[y]
+        .map(function (p) {
+          var d = String(p.date || "");
+          var md = d.slice(5, 7).replace(/^0/, "") + "." + d.slice(8, 10);
+          return (
+            '<a class="arc-row" href="' + postHref(p) + '">' +
+            '<span class="arc-d">' + md + "</span>" +
+            '<span class="arc-t">' + esc(p.title || "") + "</span>" +
+            "</a>"
+          );
+        })
+        .join("");
+      return (
+        '<section class="arc-year" id="y' + y + '" data-y="' + y + '">' +
+        '<h2 class="arc-h"><span class="arc-num">' + y + "</span>" +
+        '<span class="arc-cnt">' + byYear[y].length + " 篇</span></h2>" +
+        '<div class="arc-rows">' + rows + "</div></section>"
+      );
+    })
+    .join("");
+
+  return (
+    '<div class="arc-top"><p class="g-scale">' + listScaleText() + "</p>" +
+    '<div class="arc-jump">' + jump + "</div></div>" + blocks
+  );
+}
+
+function bindArchive(root) {
+  root.querySelectorAll(".arc-j").forEach(function (b) {
+    b.addEventListener("click", function () {
+      var sec = root.querySelector('.arc-year[data-y="' + b.getAttribute("data-y") + '"]');
+      if (sec) sec.scrollIntoView({ behavior: "smooth", block: "start" });
+    });
+  });
+}
+
 /* 时间线先只渲染最近几条，底部「加载更早」再往前翻。
    一页铺 22 条太长，分页又和这个版式不适配。 */
 var TL_STEP = 10;
@@ -2835,6 +2902,7 @@ function syncListQuery(cat, tag, page) {
 var PAGE_META = {
   home: ["RezeのBlog", "RezeのBlog的个人博客。读书、技术、文史与日常的记录。"],
   writing: ["全部文章 · RezeのBlog", "RezeのBlog写过的全部文章，按分类和标签浏览。"],
+  archive: ["归档 · RezeのBlog", "全部文章按年份排成的目录，从二〇二〇年排到今天。"],
   moments: ["动态 · RezeのBlog", "碎片式的短记录。"],
   album: ["相册 · RezeのBlog", "照片存档。"],
   links: ["导航 · RezeのBlog", "常去的地方。"],
@@ -2948,6 +3016,9 @@ function renderMain() {
       main.innerHTML = '<div class="g-card"><div class="g-card-head"><span class="t">天气</span></div>' +
         '<div class="g-notice">天气模块没加载出来，刷新一下试试。</div></div>';
     }
+  } else if (page === "archive") {
+    main.innerHTML = archiveMainHtml();
+    bindArchive(main);
   } else if (page === "timeline") {
     main.innerHTML = timelineMainHtml();
   } else if (page === "about") {

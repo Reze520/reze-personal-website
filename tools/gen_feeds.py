@@ -25,6 +25,7 @@ ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 STATIC_PAGES = [
     ("/", "weekly", "1.0"),
     ("/writing", "daily", "0.9"),
+    ("/archive", "weekly", "0.8"),
     ("/moments", "weekly", "0.7"),
     ("/album", "weekly", "0.7"),
     ("/links", "monthly", "0.6"),
