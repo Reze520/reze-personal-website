@@ -5717,6 +5717,31 @@ body.has-app .site-head.is-over-hero .nav-more-btn:hover {
 .ply-track.on .nm i {
   color: color-mix(in srgb, var(--g-accent) 78%, var(--g-ink));
 }
+/* 歌单没读到时，列表区明说状态，别让人以为站上只有一首歌 */
+.ply-loadfail {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 14px 8px 6px;
+  font-size: 12px;
+  color: var(--g-text-3);
+}
+.ply-retry {
+  flex: none;
+  padding: 5px 13px;
+  font: inherit;
+  color: var(--g-text);
+  background: var(--g-fill);
+  border: 1px solid var(--glass-line);
+  border-radius: 9px;
+  cursor: pointer;
+  transition: color 0.15s ease, background 0.15s ease;
+}
+.ply-retry:hover {
+  color: var(--g-accent);
+  background: rgba(184, 161, 247, 0.14);
+}
 
 .ply-lyrics {
   position: relative;

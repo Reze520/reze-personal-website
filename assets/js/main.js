@@ -166,6 +166,11 @@
   var playerList = [];
   var playerIdx = 0;
   var playMode = "list"; // list 顺序循环 / one 单曲循环 / shuffle 随机
+  // 歌单脚本有没有读到：ok / loading / failed。读不到不装成「只有一首」
+  var playlistState = "ok";
+  var playlistBusy = false;
+  var refreshTrackList = null; // 浮窗列表重绘钩子（initFloatPlayer 注册）
+  var retryPlaylistHook = null; // 列表里「重试」按钮的回调（initMusic 注册）
   // 当前这首的歌词（解析好的）。放成共享变量：首页会重渲染多次，
   // 每份闭包各存一份 lyricLines 就会互相打架（切歌后歌词对不上）。
   var curLyricLines = [];
@@ -562,6 +567,59 @@
       };
     }
     return list[((i % list.length) + list.length) % list.length];
+  }
+
+  // playlist.js 是同步赋值。读不到就说明那次脚本没加载成功，返回 null，
+  // 别把「没读到」和「站上只有一首」当成一回事。
+  function readPlaylist() {
+    var raw = window.PLAYLIST;
+    if (!Array.isArray(raw) || !raw.length) return null;
+    var out = raw.filter(function (t) {
+      return t && t.src;
+    });
+    return out.length ? out : null;
+  }
+
+  // 重新拉一次 playlist.js：换查询串绕开那份坏缓存，最多两次。
+  // 每次带超时，请求挂起时不会永远停在「歌单加载中」。
+  function rescuePlaylist(attempt, done) {
+    var tag = document.querySelector(
+      'script[src*="playlist.js"]:not([data-retry])'
+    );
+    var src = tag ? tag.getAttribute("src") : "assets/js/playlist.js?v=1";
+    var sep = src.indexOf("?") >= 0 ? "&" : "?";
+    var s = document.createElement("script");
+    var settled = false;
+    var timer = setTimeout(function () {
+      finish(null);
+    }, 8000);
+    function finish(arr) {
+      if (settled) return;
+      settled = true;
+      clearTimeout(timer);
+      s.onload = s.onerror = null;
+      if (s.parentNode) s.parentNode.removeChild(s);
+      if (arr) {
+        done(arr);
+        return;
+      }
+      if (attempt + 1 < 2) {
+        setTimeout(function () {
+          rescuePlaylist(attempt + 1, done);
+        }, 600);
+      } else {
+        done(null);
+      }
+    }
+    s.onload = function () {
+      finish(readPlaylist());
+    };
+    s.onerror = function () {
+      finish(null);
+    };
+    s.setAttribute("data-retry", "1");
+    s.src = src + sep + "r=" + Date.now() + "-" + attempt;
+    document.head.appendChild(s);
   }
 
   // file:// 协议下访问 storage 会抛 SecurityError，必须兜住，
@@ -2039,11 +2097,26 @@
 
     function paintTrackList() {
       if (!tracksBox) return;
+      // 歌单没读到，列表按钮不藏：面板里明说状态，别让人以为站上只有一首歌
+      if (playlistState === "failed") {
+        tracksBox.innerHTML =
+          '<div class="ply-loadfail"><span>歌单加载失败</span>' +
+          '<button type="button" class="ply-retry" data-retry-playlist>重试</button></div>';
+        if (listBtn) listBtn.style.display = "";
+        return;
+      }
+      if (playlistState === "loading") {
+        tracksBox.innerHTML =
+          '<div class="ply-loadfail"><span>歌单加载中</span></div>';
+        if (listBtn) listBtn.style.display = "";
+        return;
+      }
       if (playerList.length < 2) {
         tracksBox.innerHTML = "";
         if (listBtn) listBtn.style.display = "none";
         return;
       }
+      if (listBtn) listBtn.style.display = ""; // 补回来时把之前藏掉的按钮放出来
       tracksBox.innerHTML = playerList
         .map(function (t, i) {
           return (
@@ -2102,6 +2175,10 @@
     }
     if (tracksBox) {
       tracksBox.addEventListener("click", function (e) {
+        if (e.target.closest("[data-retry-playlist]")) {
+          if (retryPlaylistHook) retryPlaylistHook();
+          return;
+        }
         var b = e.target.closest(".ply-track");
         if (!b) return;
         loadTrack(Number(b.getAttribute("data-i")), true);
@@ -2146,6 +2223,11 @@
       );
     }
     paintTrackList();
+    // 歌单后台补回来后由 initMusic 调用：重画列表，必要时同步当前曲目
+    refreshTrackList = function (syncCurrent) {
+      paintTrackList();
+      if (syncCurrent && playerList.length) loadTrack(playerIdx, false);
+    };
 
     // 播完自动切下一首（单曲循环由 audio.loop 自己处理，不会走到这里）
     if (audio) {
@@ -4837,11 +4919,13 @@ function interceptLinks(e) {
     btn.setAttribute("data-tip", "背景音乐");
     btn.innerHTML = ICONS.disc;
 
-    // 播放列表：优先用 playlist.js，没有就退回 SITE 里那一首
-    var list = (window.PLAYLIST || []).filter(function (t) {
-      return t && t.src;
-    });
-    if (!list.length) list = [trackAt(0)];
+    // 播放列表：优先用 playlist.js。读不到先放 SITE 那一首，别让播放器哑掉；
+    // 但记下状态，后台再拉一次歌单，拉不回来也明说，不静默装成「只有一首」。
+    var list = readPlaylist();
+    if (!list) {
+      playlistState = "loading";
+      list = [trackAt(0)];
+    }
 
     playerList = list;
     try {
@@ -4965,6 +5049,31 @@ function interceptLinks(e) {
     else {
       btn.className = "music-btn";
       document.body.appendChild(btn);
+    }
+
+    // 列表区那颗「重试」按钮走这里
+    retryPlaylistHook = runPlaylistRescue;
+    if (playlistState === "loading") runPlaylistRescue();
+
+    function runPlaylistRescue() {
+      if (playlistBusy) return;
+      playlistBusy = true;
+      playlistState = "loading";
+      if (refreshTrackList) refreshTrackList(false);
+      rescuePlaylist(0, function (arr) {
+        playlistBusy = false;
+        if (arr) {
+          playerList = arr;
+          playlistState = "ok";
+          if (playerIdx >= arr.length) playerIdx = 0;
+          if (refreshTrackList) refreshTrackList(!asked);
+          showToast("歌单已恢复，" + arr.length + " 首。");
+        } else {
+          playlistState = "failed";
+          if (refreshTrackList) refreshTrackList(false);
+          showToast("歌单加载失败。");
+        }
+      });
     }
   }
 
