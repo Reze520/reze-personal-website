@@ -1,0 +1,38 @@
+name: 内容备份
+
+# 云端 D1 是唯一可写源。把每篇文章落成仓库里的独立 .md，
+# 忘了手动同步时有这一层托底；内容没变化就不产生提交。
+on:
+  schedule:
+    - cron: "17 4 * * 1"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  export:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: 导出逐篇源文件
+        run: python tools/export_content.py --no-sync
+
+      - name: 有变化才提交
+        run: |
+          git config user.name "content-backup"
+          git config user.email "content-backup@users.noreply.github.com"
+          git add content/posts
+          if git diff --cached --quiet; then
+            echo "内容没有变化"
+            exit 0
+          fi
+          git commit -m "内容备份：云端全文导出为逐篇源文件"
+          git push origin main

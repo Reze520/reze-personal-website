@@ -10728,6 +10728,12 @@ html {
   background: rgba(var(--card-tint), var(--card-alpha));
 }
 
+/* 文章详情页的正文要压住背后的插画，比列表卡片再实一档。
+   max() 让外观面板把卡片浓度调到更高时仍然跟着走。 */
+.post-app .g-article::before {
+  background: rgba(var(--card-tint), max(var(--card-alpha), 0.9));
+}
+
 .g-card,
 .g-post,
 .g-posth,

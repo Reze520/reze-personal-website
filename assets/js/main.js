@@ -646,12 +646,61 @@
     return SITE.homeBg ? [SITE.homeBg] : [];
   }
 
+  /* ---------- 背景明暗按图适配 ----------
+     八张首屏图的平均亮度从 0.19 到 0.62，固定一层遮罩压不住亮的，
+     又把暗的压成黑。换图时把图缩到 24x24 采一次平均亮度，分三档调
+     .page-bg 的 brightness；外观面板里手动调过的值照样乘在前面。 */
+  var bgManual = 1;
+  var bgToneFactor = 1;
+  var bgToneCache = {};
+  try {
+    var _bm = Number(localStorage.getItem("reze-bg-bright"));
+    if (_bm > 0) bgManual = Math.max(0.4, Math.min(1.6, _bm / 100));
+  } catch (e) {}
+  function applyBgBright() {
+    var v = Math.max(0.4, Math.min(1.6, bgManual * bgToneFactor));
+    document.documentElement.style.setProperty("--bg-bright", v.toFixed(2));
+  }
+  function tuneBgTone(src) {
+    if (!src) return;
+    var key = String(src);
+    if (bgToneCache[key]) {
+      bgToneFactor = bgToneCache[key];
+      applyBgBright();
+      return;
+    }
+    var probe = new Image();
+    probe.onload = function () {
+      var L;
+      try {
+        var c = document.createElement("canvas");
+        c.width = c.height = 24;
+        var g = c.getContext("2d");
+        g.drawImage(probe, 0, 0, 24, 24);
+        var d = g.getImageData(0, 0, 24, 24).data;
+        var sum = 0;
+        for (var i = 0; i < d.length; i += 4) {
+          sum += 0.2126 * d[i] + 0.7152 * d[i + 1] + 0.0722 * d[i + 2];
+        }
+        L = sum / (d.length / 4) / 255;
+      } catch (e) {
+        return; // 外链图会污染 canvas，保持默认档
+      }
+      var f = L > 0.5 ? 0.72 : L < 0.28 ? 1.2 : 0.94;
+      bgToneCache[key] = f;
+      bgToneFactor = f;
+      applyBgBright();
+    };
+    probe.src = key;
+  }
+
   // 把背景图铺到全屏层；fade 为 true 时先淡出再换图，避免生硬跳变。
   // remember 为 false 时不记地址：随机模式每次都换，记下来下次反而会先闪一张旧的。
   // 首页那段早恢复脚本靠 reze-bg-url 取图，不再自己维护图片列表。
   function applyPageBg(src, fade, remember) {
     var el = $("#page-bg");
     if (!el || !src) return;
+    tuneBgTone(src);
     if (remember !== false) STORAGE.set("reze-bg-url", String(src));
     var url = 'url("' + String(src).replace(/"/g, "%22") + '")';
     if (!fade) {
@@ -4360,7 +4409,8 @@ function interceptLinks(e) {
        定位，一开就散架。只加在背景层上，它内部没有 fixed 子元素，安全。 */
     function applyLite(v) {
       var n = Math.max(40, Math.min(160, Math.round(Number(v) || 100)));
-      root.style.setProperty("--bg-bright", (n / 100).toFixed(2));
+      bgManual = n / 100;
+      applyBgBright();
       if (liteVal) liteVal.textContent = n + "%";
       if (lite) lite.value = n;
       STORAGE.set("reze-bg-bright", String(n));
