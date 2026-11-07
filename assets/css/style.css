@@ -11306,71 +11306,12 @@ html {
 }
 
 /* ============================================================
-   31. 首屏入口、列表尺度行、标题抬档
+   31. 列表尺度行、标题抬档
    ------------------------------------------------------------
    只做覆盖，不动上面的结构。
-   - 首屏原来一屏照片加站名，下面什么都没有，进来不知道往哪走；
-     补一行「最新」，写标题和日期，整行可点。
    - 列表页顶部补一行尺度：多少篇、跨几年、多少字。
    - 卡片标题 18 → 21，列表卡 16.5 → 19，和摘要拉开到 1.55 倍。
    ============================================================ */
-
-/* ---------- 31.1 首屏最新一篇 ---------- */
-.splash-latest {
-  display: inline-flex;
-  align-items: center;
-  gap: 10px;
-  margin-top: 30px;
-  max-width: min(560px, 86vw);
-  padding: 9px 16px;
-  border: 1px solid rgba(255, 255, 255, 0.16);
-  border-radius: var(--radius-pill);
-  background: rgba(14, 11, 20, 0.28);
-  -webkit-backdrop-filter: blur(8px);
-  backdrop-filter: blur(8px);
-  color: rgba(255, 255, 255, 0.86);
-  font-size: 12.5px;
-  letter-spacing: 0.01em;
-  text-shadow: 0 1px 8px rgba(0, 0, 0, 0.6);
-  transition: border-color 0.3s var(--ease), background 0.3s var(--ease);
-}
-.splash-latest[hidden] {
-  display: none;
-}
-.splash-latest .k {
-  flex: none;
-  font-family: var(--mono);
-  font-size: 10.5px;
-  letter-spacing: 0.18em;
-  color: rgba(255, 255, 255, 0.5);
-}
-.splash-latest .t {
-  min-width: 0;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-.splash-latest .d {
-  flex: none;
-  font-size: 11.5px;
-  color: rgba(255, 255, 255, 0.55);
-  font-variant-numeric: tabular-nums;
-}
-.splash-latest:hover {
-  border-color: rgba(255, 255, 255, 0.34);
-  background: rgba(14, 11, 20, 0.42);
-}
-@media (max-width: 620px) {
-  .splash-latest {
-    margin-top: 26px;
-    max-width: 82vw;
-    font-size: 12px;
-    padding: 8px 14px;
-  }
-  .splash-latest .k {
-    display: none;
-  }
-}
 
 /* ---------- 31.2 列表页尺度行 ---------- */
 .g-scale {

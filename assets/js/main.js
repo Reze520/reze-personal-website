@@ -4758,22 +4758,6 @@ function interceptLinks(e) {
         : "<span>" + esc((SITE.name || "蕾").charAt(0)) + "</span>";
     }
 
-    /* 最新一篇：整行可点。按日期取，置顶的不算——置顶是排在前面的，
-       不是刚写的。 */
-    var latest = $("#splash-latest");
-    if (latest) {
-      var byDate = (POSTS || []).slice().sort(function (a, b) {
-        return String(b.date || "").localeCompare(String(a.date || ""));
-      });
-      var last = byDate[0];
-      if (last) {
-        latest.href = postHref(last);
-        latest.querySelector(".t").textContent = last.title || "";
-        latest.querySelector(".d").textContent = fmtDate(last.date);
-        latest.hidden = false;
-      }
-    }
-
     var scrollText = splash.querySelector(".splash-scroll span");
     if (scrollText && cfg.scrollText) scrollText.textContent = cfg.scrollText;
 
