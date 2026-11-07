@@ -572,7 +572,7 @@ python tools/subset_font.py                      # 直接从线上取诗词
 python tools/subset_font.py /tmp/content.json     # 或者用本地快照
 ```
 
-这几个脚本都只动生成物，不改源文件，跑完看一眼 diff 再提交就行。内容备份另有每周一次的自动任务（.github/workflows/content-backup.yml），忘了手动跑也会把 content/posts/ 补齐；它只写 main，不触发线上改动。
+这几个脚本都只动生成物，不改源文件，跑完看一眼 diff 再提交就行。内容备份另有每周一次的自动任务（.github/workflows/content-backup.yml），忘了手动跑也会把 content/posts/ 补齐；它只提交 content/posts 的 diff，不动前台文件；Pages 会跟着重新部署一次，页面内容不变。
 
 ---
 

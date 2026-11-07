@@ -1,8 +1,9 @@
 User-agent: *
 Allow: /
 
-# 后台和构建脚本不是给搜索用的
+# 后台、构建脚本、内容源文件不是给搜索用的
 Disallow: /admin.html
 Disallow: /tools/
+Disallow: /content/
 
 Sitemap: https://reze520.pages.dev/sitemap.xml

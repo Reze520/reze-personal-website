@@ -95,7 +95,7 @@ def main():
     ap.add_argument("--dry-run", action="store_true", help="只报告，不写文件")
     ap.add_argument("--snapshot", help="用本地 JSON 快照，不联网")
     ap.add_argument("--url", default=DEFAULT_URL, help="云端内容接口地址")
-    ap.add_argument("--timeout", type=int, default=40, help="请求超时秒数")
+    ap.add_argument("--timeout", type=int, default=90, help="请求超时秒数")
     args = ap.parse_args()
 
     old_text = OVERRIDE.read_text(encoding="utf-8")
