@@ -11709,3 +11709,532 @@ html:not([data-theme="dark"]) .ft-mini { border-left-color: rgba(124, 92, 190, .
 .card.is-pinned .card-title {
   font-weight: 700;
 }
+
+/* ============================================================
+   纸样皮肤：纸白墨字 + 朱红。刊头、目录、一栏半版式。
+   作用域 data-skin="paper"，不动原有两套皮肤。
+   ============================================================ */
+/* 纸样：纸白墨字 + 朱红。作用域 html[data-skin="paper"] */
+html[data-skin="paper"] {
+  --bg: #f6f2e9 !important;
+  --bg-alt: #efe9dc !important;
+  --panel: #fbf8f1 !important;
+  --panel-2: #f1ece1 !important;
+  --ink: #24211c !important;
+  --ink-2: #5b554a !important;
+  --ink-3: #8b8375 !important;
+  --line: #d9d1c1 !important;
+  --line-2: #bfb5a2 !important;
+  --glass: #fbf8f1 !important;
+  --glass-app: #fbf8f1 !important;
+  --glass-post: #fbf8f1 !important;
+  --accent: #a83226 !important;
+  --accent-ink: #fbf8f1 !important;
+  --accent-glow: #a83226 !important;
+  --radius: 2px !important;
+  --radius-lg: 3px !important;
+  --radius-pill: 2px !important;
+  --shadow: none !important;
+  --shadow-hover: none !important;
+  --card-bg: transparent !important;
+  --card-border: 1px solid #d9d1c1 !important;
+  --card-line: #d9d1c1 !important;
+  --card-shadow: none !important;
+  --g-fill: #fbf8f1 !important;
+  --g-fill-2: #f1ece1 !important;
+  --g-fill-3: #e9e2d3 !important;
+  --g-ink: #24211c !important;
+  --g-ink-2: #5b554a !important;
+  --g-ink-3: #8b8375 !important;
+  --g-line: #d9d1c1 !important;
+  --g-line-2: #bfb5a2 !important;
+  --g-shadow-base: none !important;
+  --g-accent: #a83226 !important;
+  --header-bg: #f6f2e9 !important;
+  --header-line: #d9d1c1 !important;
+  --header-shadow: none !important;
+  --prose-ink: #24211c !important;
+  --prose-ink-2: #4a443a !important;
+  --prose-ink-3: #6f6759 !important;
+  --prose-line: #d9d1c1 !important;
+  --prose-code-bg: #efe9dc !important;
+  --prose-code-ink: #7d2a20 !important;
+  --prose-pre-bg: #efe9dc !important;
+  --prose-pre-ink: #24211c !important;
+  --prose-pre-line: #d9d1c1 !important;
+  --surface-shadow: none !important;
+  color-scheme: light;
+}
+
+html[data-skin="paper"] body {
+  background: #f6f2e9 !important;
+  color: #24211c !important;
+}
+html[data-skin="paper"] #page-bg,
+html[data-skin="paper"] .page-bg,
+html[data-skin="paper"] .splash-media {
+  background-image: none !important;
+  opacity: 0 !important;
+}
+html[data-skin="paper"] .page-bg::after,
+html[data-skin="paper"] .page-bg::before,
+html[data-skin="paper"] body::before,
+html[data-skin="paper"] body::after,
+html[data-skin="paper"] .splash-scrim { display: none !important; }
+
+/* 刊头：一整张背景图换成纸面，站名 60px */
+html[data-skin="paper"] .splash {
+  height: auto !important;
+  min-height: 0 !important;
+  padding: 92px 0 26px !important;
+  border-bottom: 1px solid #d9d1c1 !important;
+}
+html[data-skin="paper"] .splash-inner {
+  position: static !important;
+  transform: none !important;
+  max-width: 1000px !important;
+  margin: 0 auto !important;
+  padding: 0 22px !important;
+  text-align: left !important;
+}
+html[data-skin="paper"] .splash-title {
+  font: 500 60px/1.12 "Songti SC", "Source Han Serif SC", "Noto Serif SC", SimSun, Georgia, serif !important;
+  letter-spacing: .02em !important;
+  color: #24211c !important;
+  margin: 0 !important;
+  text-shadow: none !important;
+}
+html[data-skin="paper"] .splash-title::after {
+  content: "";
+  display: inline-block;
+  width: 13px; height: 13px;
+  margin-left: 14px;
+  background: #a83226;
+  vertical-align: 12px;
+}
+html[data-skin="paper"] .splash-typing {
+  font: 400 14px/1.8 "Songti SC", "Source Han Serif SC", SimSun, serif !important;
+  color: #5b554a !important;
+  margin: 10px 0 0 !important;
+  letter-spacing: .06em !important;
+  min-height: 0 !important;
+}
+html[data-skin="paper"] .splash-hi,
+html[data-skin="paper"] .splash-scroll { display: none !important; }
+html[data-skin="paper"] .splash-inner .g-social,
+html[data-skin="paper"] .splash-inner .social,
+html[data-skin="paper"] .splash-inner a[aria-label] { color: #5b554a !important; }
+
+/* 顶栏去掉胶囊与浮层 */
+html[data-skin="paper"] .site-head,
+html[data-skin="paper"] .site-head.is-stuck {
+  background: #f6f2e9 !important;
+  border-bottom: 1px solid #d9d1c1 !important;
+  box-shadow: none !important;
+  backdrop-filter: none !important;
+}
+html[data-skin="paper"] .site-head .nav,
+html[data-skin="paper"] .site-head .nav-pill,
+html[data-skin="paper"] .site-head .g-nav,
+html[data-skin="paper"] .site-head a {
+  background: transparent !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  color: #24211c !important;
+}
+
+/* 收成一栏半：主栏 + 左窄栏，右栏内容合成页尾一行 */
+html[data-skin="paper"] .app {
+  grid-template-columns: 216px minmax(0, 1fr) !important;
+  max-width: 1000px !important;
+  gap: 40px !important;
+  padding-top: 34px !important;
+}
+html[data-skin="paper"] #app-right { display: none !important; }
+html[data-skin="paper"] .col { gap: 0 !important; }
+
+/* 所有容器去玻璃、去圆角、去渐变，改横线分隔 */
+html[data-skin="paper"] .g-card,
+html[data-skin="paper"] .g-posth,
+html[data-skin="paper"] .g-post,
+html[data-skin="paper"] .card,
+html[data-skin="paper"] .g-rec-strip,
+html[data-skin="paper"] .g-rec-base,
+html[data-skin="paper"] .g-moment,
+html[data-skin="paper"] .g-link,
+html[data-skin="paper"] .g-article,
+html[data-skin="paper"] .g-feed li,
+html[data-skin="paper"] .g-cal-card,
+html[data-skin="paper"] .g-toc {
+  background: transparent !important;
+  background-image: none !important;
+  border: 0 !important;
+  border-bottom: 1px solid #ddd5c4 !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  backdrop-filter: none !important;
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+}
+html[data-skin="paper"] .g-card + .g-card,
+html[data-skin="paper"] .g-posth + .g-posth { margin-top: 0 !important; }
+
+/* 左栏：诗笺与播放器靠留白分区，不靠框 */
+html[data-skin="paper"] #app-left .g-card { padding: 16px 0 !important; }
+html[data-skin="paper"] #app-left .g-card h3,
+html[data-skin="paper"] #app-left .g-card .g-card-h {
+  font: 500 12px/1.6 "Songti SC", SimSun, serif !important;
+  letter-spacing: .16em !important;
+  color: #8b8375 !important;
+  border: 0 !important;
+}
+html[data-skin="paper"] .g-poem {
+  font-family: "Ma Shan Zheng", "KaiTi", "楷体", cursive !important;
+  color: #24211c !important;
+}
+html[data-skin="paper"] #app-left .g-card:nth-child(n+4) { display: none !important; }
+
+/* 中栏：目录体 */
+html[data-skin="paper"] .g-tabs,
+html[data-skin="paper"] .g-scale {
+  background: transparent !important;
+  border: 0 !important;
+  border-bottom: 1px solid #bfb5a2 !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+}
+html[data-skin="paper"] .g-tab,
+html[data-skin="paper"] .g-tab.on {
+  background: transparent !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  color: #5b554a !important;
+  font-size: 12.5px !important;
+}
+html[data-skin="paper"] .g-tab.on {
+  color: #a83226 !important;
+  border-bottom: 2px solid #a83226 !important;
+}
+html[data-skin="paper"] .g-posth,
+html[data-skin="paper"] .g-post,
+html[data-skin="paper"] .card {
+  display: block !important;
+  padding: 15px 0 16px !important;
+}
+html[data-skin="paper"] .g-posth h2,
+html[data-skin="paper"] .g-post h2,
+html[data-skin="paper"] .card h2,
+html[data-skin="paper"] .card-title {
+  font: 600 17px/1.55 "Songti SC", "Source Han Serif SC", "Noto Serif SC", SimSun, serif !important;
+  color: #24211c !important;
+  margin: 0 0 5px !important;
+}
+html[data-skin="paper"] .g-posth .excerpt,
+html[data-skin="paper"] .g-post .excerpt,
+html[data-skin="paper"] .card .excerpt {
+  font: 400 13px/1.75 "Songti SC", SimSun, serif !important;
+  color: #5b554a !important;
+  -webkit-line-clamp: 1 !important;
+}
+html[data-skin="paper"] .g-meta,
+html[data-skin="paper"] .card-meta,
+html[data-skin="paper"] .post-meta {
+  font: 400 11.5px/1.6 var(--font-mono, monospace) !important;
+  color: #8b8375 !important;
+}
+html[data-skin="paper"] .tag,
+html[data-skin="paper"] .g-tag,
+html[data-skin="paper"] .card-tags a {
+  background: transparent !important;
+  border: 1px solid #d9d1c1 !important;
+  border-radius: 0 !important;
+  color: #6f6759 !important;
+  font-size: 11px !important;
+}
+html[data-skin="paper"] .pin {
+  background: #a83226 !important;
+  color: #fbf8f1 !important;
+  border-radius: 0 !important;
+  font-size: 11px !important;
+}
+html[data-skin="paper"] .g-posth.is-pinned,
+html[data-skin="paper"] .g-post.is-pinned,
+html[data-skin="paper"] .card.is-pinned {
+  border: 0 !important;
+  border-bottom: 1px solid #ddd5c4 !important;
+  border-left: 0 !important;
+}
+
+/* 置顶区：主卡一条朱红竖线，三张小卡浅纸面 + 摘要 */
+html[data-skin="paper"] .ft-wrap { gap: 12px !important; margin-bottom: 6px !important; }
+html[data-skin="paper"] .ft-lead {
+  display: block !important;
+  background: transparent !important;
+  background-image: none !important;
+  border: 0 !important;
+  border-left: 3px solid #a83226 !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  padding: 2px 0 14px 18px !important;
+}
+html[data-skin="paper"] .ft-lead-main { padding: 0 !important; gap: 7px !important; }
+html[data-skin="paper"] .ft-lead h2 {
+  font: 600 26px/1.45 "Songti SC", "Source Han Serif SC", SimSun, serif !important;
+  color: #24211c !important;
+}
+html[data-skin="paper"] .ft-lead p {
+  font: 400 13.5px/1.8 "Songti SC", SimSun, serif !important;
+  color: #5b554a !important;
+  -webkit-line-clamp: 2 !important;
+}
+html[data-skin="paper"] .ft-lead-meta { font-size: 11.5px !important; color: #8b8375 !important; }
+html[data-skin="paper"] .ft-row { gap: 12px !important; }
+html[data-skin="paper"] .ft-mini {
+  min-height: 0 !important;
+  background: #fbf8f1 !important;
+  background-image: none !important;
+  border: 1px solid #d9d1c1 !important;
+  border-top: 2px solid #a83226 !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  padding: 14px 15px !important;
+  gap: 7px !important;
+}
+html[data-skin="paper"] .ft-mini:hover { transform: none !important; border-color: #a83226 !important; }
+html[data-skin="paper"] .ft-mini h3 {
+  font: 600 15px/1.5 "Songti SC", SimSun, serif !important;
+  color: #24211c !important;
+}
+html[data-skin="paper"] .ft-excerpt {
+  font: 400 12.5px/1.7 "Songti SC", SimSun, serif !important;
+  color: #5b554a !important;
+}
+html[data-skin="paper"] .ft-mini-meta { font-size: 11px !important; color: #8b8375 !important; }
+
+/* 今日一组：种子 + 三条延伸，全部细线 */
+html[data-skin="paper"] .g-rec-strip { padding-bottom: 12px !important; }
+html[data-skin="paper"] .g-rec-hd {
+  font: 500 12px/1.6 "Songti SC", SimSun, serif !important;
+  letter-spacing: .16em !important;
+  color: #8b8375 !important;
+}
+html[data-skin="paper"] .g-rec-body { gap: 24px !important; }
+html[data-skin="paper"] .g-rec-base {
+  background: #f1ece1 !important;
+  border: 0 !important;
+  border-left: 3px solid #a83226 !important;
+  border-radius: 0 !important;
+  padding: 12px 16px !important;
+  gap: 5px !important;
+}
+html[data-skin="paper"] .g-rec-base .rb-k,
+html[data-skin="paper"] .g-rec-items i { color: #a83226 !important; }
+html[data-skin="paper"] .g-rec-base .rb-t {
+  font: 600 16px/1.5 "Songti SC", SimSun, serif !important;
+  color: #24211c !important;
+}
+html[data-skin="paper"] .g-rec-items span { color: #24211c !important; font-size: 12.5px !important; }
+html[data-skin="paper"] .g-rec-items em { color: #8b8375 !important; }
+html[data-skin="paper"] .g-rec-items a { border-color: #ddd5c4 !important; }
+
+/* 右栏的小组件合成页尾一行文字 */
+html:not([data-skin="paper"]) .paper-foot-line { display: none !important; }
+html[data-skin="paper"] .paper-foot-line {
+  display: block !important;
+  max-width: 1000px !important;
+  margin: 0 auto !important;
+  padding: 14px 22px 0 !important;
+  border-top: 1px solid #bfb5a2 !important;
+  font: 400 11.5px/1.9 var(--font-mono, monospace) !important;
+  color: #8b8375 !important;
+  letter-spacing: .06em !important;
+}
+
+/* 文章页 */
+html[data-skin="paper"] .post-app,
+html[data-skin="paper"] .g-article {
+  background: #fbf8f1 !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  max-width: 760px !important;
+}
+html[data-skin="paper"] .g-article h1,
+html[data-skin="paper"] .post-title {
+  font: 600 30px/1.5 "Songti SC", "Source Han Serif SC", SimSun, serif !important;
+  color: #24211c !important;
+}
+html[data-skin="paper"] .g-prose,
+html[data-skin="paper"] .g-prose p,
+html[data-skin="paper"] .g-prose li {
+  font: 400 16px/1.95 "Songti SC", "Source Han Serif SC", SimSun, serif !important;
+  color: #24211c !important;
+}
+html[data-skin="paper"] .g-prose h2,
+html[data-skin="paper"] .g-prose h3 { color: #a83226 !important; }
+html[data-skin="paper"] .g-prose blockquote {
+  border-left: 3px solid #a83226 !important;
+  background: transparent !important;
+  color: #5b554a !important;
+}
+html[data-skin="paper"] .g-prose a { color: #a83226 !important; }
+
+/* 归档页 */
+html[data-skin="paper"] .arc-row,
+html[data-skin="paper"] .ix-group {
+  background: transparent !important;
+  border: 0 !important;
+  border-bottom: 1px solid #ddd5c4 !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+}
+html[data-skin="paper"] .arc-h { color: #a83226 !important; }
+
+/* 页尾 */
+html[data-skin="paper"] .site-foot {
+  background: transparent !important;
+  border-top: 1px solid #bfb5a2 !important;
+  color: #8b8375 !important;
+}
+html[data-skin="paper"] .site-foot a { color: #5b554a !important; }
+
+/* 补：玻璃感来自伪元素背景层，不是容器本身 */
+html[data-skin="paper"] .g-card::before,
+html[data-skin="paper"] .g-posth::before,
+html[data-skin="paper"] .g-post::before,
+html[data-skin="paper"] .card::before,
+html[data-skin="paper"] .g-rec-strip::before,
+html[data-skin="paper"] .g-tabs::before,
+html[data-skin="paper"] .ft-mini::before,
+html[data-skin="paper"] .ft-lead::before,
+html[data-skin="paper"] .g-toc::before,
+html[data-skin="paper"] .g-cal-card::before {
+  content: none !important;
+  display: none !important;
+  background: transparent !important;
+}
+html[data-skin="paper"] .g-posth::after,
+html[data-skin="paper"] .card::after,
+html[data-skin="paper"] .g-post::after {
+  content: none !important;
+  display: none !important;
+  background: transparent !important;
+}
+html[data-skin="paper"] .chips span,
+html[data-skin="paper"] .g-tags span,
+html[data-skin="paper"] .post-tags a,
+html[data-skin="paper"] .card-tags span {
+  background: transparent !important;
+  background-image: none !important;
+  border: 1px solid #ddd5c4 !important;
+  border-radius: 0 !important;
+  color: #6f6759 !important;
+  font-size: 11px !important;
+  padding: 1px 6px !important;
+}
+html[data-skin="paper"] .mark,
+html[data-skin="paper"] .ttl .mark {
+  background: transparent !important;
+  color: #a83226 !important;
+}
+html[data-skin="paper"] .len-bar,
+html[data-skin="paper"] .len-bar i,
+html[data-skin="paper"] .meta .bar i { background: #a83226 !important; }
+
+/* 顶栏图标按钮：深色底白描边全部去掉 */
+html[data-skin="paper"] .icon-btn,
+html[data-skin="paper"] body.has-app .site-head .icon-btn,
+html[data-skin="paper"] body.has-app .site-head.is-over-hero .icon-btn {
+  background: transparent !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  color: #5b554a !important;
+  box-shadow: none !important;
+}
+html[data-skin="paper"] .icon-btn svg { color: #5b554a !important; }
+
+/* 左栏头像、播放器收成素面 */
+html[data-skin="paper"] .g-profile img,
+html[data-skin="paper"] .avatar img { border-radius: 0 !important; border: 1px solid #ddd5c4 !important; }
+html[data-skin="paper"] .g-profile .social a,
+html[data-skin="paper"] .social a {
+  background: transparent !important;
+  border: 0 !important;
+  border-right: 1px solid #ddd5c4 !important;
+  border-radius: 0 !important;
+  color: #6f6759 !important;
+}
+html[data-skin="paper"] .g-profile .nums,
+html[data-skin="paper"] .g-profile .stat {
+  border-color: #ddd5c4 !important;
+  background: transparent !important;
+}
+html[data-skin="paper"] .ply-play {
+  background: #a83226 !important;
+  color: #fbf8f1 !important;
+  border-radius: 0 !important;
+}
+html[data-skin="paper"] .ply-prog input,
+html[data-skin="paper"] .ply-prog .bar { accent-color: #a83226 !important; }
+
+/* 文章页目录与返回按钮 */
+html[data-skin="paper"] .g-toc a.on,
+html[data-skin="paper"] .toc a.on,
+html[data-skin="paper"] .g-toc .on { color: #a83226 !important; border-color: #a83226 !important; }
+html[data-skin="paper"] .post-back,
+html[data-skin="paper"] .g-back {
+  background: transparent !important;
+  border: 0 !important;
+  border-bottom: 1px solid #bfb5a2 !important;
+  border-radius: 0 !important;
+  color: #5b554a !important;
+}
+html[data-skin="paper"] .post-title::after,
+html[data-skin="paper"] .g-article h1::after { background: #a83226 !important; }
+
+/* 装饰序号不保留；推荐区改纯文字细行 */
+html[data-skin="paper"] .g-rec-items i { display: none !important; }
+html[data-skin="paper"] .g-rec-items a { grid-template-columns: minmax(0, 1fr) !important; }
+html[data-skin="paper"] .g-rec-items em { grid-column: 1 !important; }
+
+/* 文章页的分类胶囊、返回按钮 */
+html[data-skin="paper"] .post-meta .cat,
+html[data-skin="paper"] .g-meta .cat,
+html[data-skin="paper"] .card-meta .cat,
+html[data-skin="paper"] .g-article-tags a,
+html[data-skin="paper"] .g-article-tags span {
+  background: transparent !important;
+  background-image: none !important;
+  border: 1px solid #ddd5c4 !important;
+  border-radius: 0 !important;
+  color: #6f6759 !important;
+}
+html[data-skin="paper"] .g-article a,
+html[data-skin="paper"] .post-app a { border-radius: 0 !important; }
+html[data-skin="paper"] .g-article .post-back,
+html[data-skin="paper"] .g-article .back-link,
+html[data-skin="paper"] .g-article > a:first-child {
+  background: transparent !important;
+  border: 0 !important;
+  border-bottom: 1px solid #bfb5a2 !important;
+  box-shadow: none !important;
+  color: #5b554a !important;
+}
+html[data-skin="paper"] #app-left .g-profile a,
+html[data-skin="paper"] #app-left .social a { border-radius: 0 !important; background: transparent !important; }
+
+/* 深色属性仍存在时，纸面不被夜间规则顶掉 */
+html[data-skin="paper"][data-theme="dark"] body,
+html[data-skin="paper"][data-theme="dark"] .app,
+html[data-skin="paper"][data-theme="dark"] .post-app { background: #f6f2e9 !important; color: #24211c !important; }
+html[data-skin="paper"][data-theme="dark"] .g-card,
+html[data-skin="paper"][data-theme="dark"] .g-posth,
+html[data-skin="paper"][data-theme="dark"] .g-post,
+html[data-skin="paper"][data-theme="dark"] .g-article,
+html[data-skin="paper"][data-theme="dark"] .g-prose p,
+html[data-skin="paper"][data-theme="dark"] .g-prose li,
+html[data-skin="paper"][data-theme="dark"] .g-toc {
+  background: transparent !important;
+  color: #24211c !important;
+}
+html[data-skin="paper"][data-theme="dark"] .site-head { background: #f6f2e9 !important; }

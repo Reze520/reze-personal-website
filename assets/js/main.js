@@ -4693,7 +4693,7 @@ function interceptLinks(e) {
       '<button data-mode="light">浅色</button><button data-mode="dark">深色</button></div></div>' +
       '<div class="set-group"><label>皮肤</label>' +
       '<div class="seg" id="skin-seg">' +
-      '<button data-skin="soft">淡紫</button><button data-skin="minimal">极简</button></div></div>' +
+      '<button data-skin="soft">淡紫</button><button data-skin="paper">纸样</button></div></div>' +
       '<div class="set-group"><label>卡片材质</label>' +
       '<div class="seg" id="mat-seg">' +
       '<button data-mat="solid">纯色</button>' +
@@ -4760,7 +4760,7 @@ function interceptLinks(e) {
       var m = overlay.querySelector('#mode-seg [data-mode="dark"]');
       var l = overlay.querySelector('#mode-seg [data-mode="light"]');
       var s = overlay.querySelector('#skin-seg [data-skin="soft"]');
-      var mi = overlay.querySelector('#skin-seg [data-skin="minimal"]');
+      var mi = overlay.querySelector('#skin-seg [data-skin="paper"]');
       if (m) m.setAttribute("aria-pressed", String(dark));
       if (l) l.setAttribute("aria-pressed", String(!dark));
       if (s) s.setAttribute("aria-pressed", String(soft));
@@ -4940,7 +4940,7 @@ function interceptLinks(e) {
       var b = e.target.closest("button");
       if (!b) return;
       root.setAttribute("data-skin", b.getAttribute("data-skin"));
-      STORAGE.set("reze-skin", b.getAttribute("data-skin"));
+      STORAGE.set("reze-skin-v2", b.getAttribute("data-skin"));
       syncSegs();
     });
 
@@ -5008,12 +5008,25 @@ function interceptLinks(e) {
   function initTheme() {
     var root = document.documentElement;
 
+  /* 纸样皮肤下，右栏小组件收成页尾一行文字 */
+  function paperFootLine() {
+    if (root.getAttribute("data-skin") !== "paper") return;
+    var foot = document.querySelector(".site-foot");
+    if (!foot || document.querySelector(".paper-foot-line")) return;
+    var line = document.createElement("div");
+    line.className = "paper-foot-line";
+    var n = (window.POSTS || []).length;
+    line.textContent = (n ? n + " 篇　·　" : "") + "7 分类　·　手写 HTML / CSS，无框架、无追踪";
+    foot.parentNode.insertBefore(line, foot);
+  }
+
     function syncSkinLabels() {
-      var isSoft = root.getAttribute("data-skin") === "soft";
+      var isPaper = root.getAttribute("data-skin") === "paper";
       Array.prototype.forEach.call(document.querySelectorAll(".js-skin-name"), function (n) {
-        n.textContent = isSoft ? "淡紫版" : "极简黑白版";
+        n.textContent = isPaper ? "纸样" : "淡紫版";
       });
     }
+    paperFootLine();
     syncSkinLabels();
 
     var themeBtn = $("#theme-btn");
@@ -5033,9 +5046,9 @@ function interceptLinks(e) {
     var skinBtn = $("#skin-btn");
     if (skinBtn) {
       skinBtn.addEventListener("click", function () {
-        var next = root.getAttribute("data-skin") === "soft" ? "minimal" : "soft";
+        var next = root.getAttribute("data-skin") === "soft" ? "paper" : "soft";
         root.setAttribute("data-skin", next);
-        STORAGE.set("reze-skin", next);
+        STORAGE.set("reze-skin-v2", next);
         syncSkinLabels();
       });
     }
