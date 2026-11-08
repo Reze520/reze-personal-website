@@ -11500,3 +11500,46 @@ html {
   color: var(--ink);
   border-bottom-color: var(--ink-3);
 }
+
+/* ---- 站务页混排 / 篇幅线 / 首屏实数 ---- */
+.g-moment .head .kind {
+  font-size: 10px;
+  padding: 1px 6px;
+  border-radius: 4px;
+  color: var(--g-text-3);
+  border: 1px solid var(--glass-line);
+}
+.g-moment .title {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--g-text);
+  margin-bottom: 4px;
+}
+.g-moment .body { white-space: pre-line; }
+.card-meta span.len-bar,
+.g-posth .meta span.len-bar,
+.g-post .top span.len-bar {
+  display: inline-block;
+  width: 54px;
+  height: 3px;
+  padding: 0;
+  gap: 0;
+  border-radius: 999px;
+  background: hsl(var(--cat-h, 262) 40% 55% / 0.16);
+  overflow: hidden;
+  flex: 0 0 auto;
+}
+.len-bar i {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background: hsl(var(--cat-h, 262) 52% 56% / 0.75);
+}
+.splash-facts {
+  margin: 14px 0 0;
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  color: rgba(255, 255, 255, 0.72);
+  font-variant-numeric: tabular-nums;
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.55);
+}

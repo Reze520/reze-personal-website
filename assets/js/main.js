@@ -785,6 +785,18 @@
     return plain(post.content).length;
   }
 
+  /* 卡片上早写着字数，只是 284 字和 61691 字排在一起是同一种形状。
+     这条细线按全站最长的一篇归一，篇幅自己露出来。 */
+  var _lenMax = 0;
+  function lenBarHtml(post) {
+    var w = wordCount(post) || 0;
+    if (!_lenMax) {
+      _lenMax = POSTS.reduce(function (m, x) { return Math.max(m, wordCount(x) || 0); }, 1);
+    }
+    var pct = Math.max(9, Math.min(100, Math.round(Math.pow(w / _lenMax, 0.45) * 100)));
+    return '<span class="len-bar" aria-hidden="true"><i style="width:' + pct + '%"></i></span>';
+  }
+
   /* 按需取单篇正文。cloud.js 负责请求，取不到时由它退到本地兜底文件。 */
   function fetchPostBody(id) {
     if (typeof window.loadCloudPost === "function") {
@@ -1039,6 +1051,7 @@
       ICONS.doc +
       wordCount(p).toLocaleString() +
       " 字</span>" +
+      lenBarHtml(p) +
       "</div>" +
       "</div>" +
       (p.cover ? '<div class="cover"><img src="' + esc(p.cover) + '" alt="' + esc(p.title) + '" loading="lazy"></div>' : "") +
@@ -1068,7 +1081,7 @@
   function postsMainHtml() {
     var counts = catCounts();
     var tabs =
-      '<a class="g-tab" href="/timeline">归档</a>' +
+      '<a class="g-tab" href="/archive">归档</a>' +
       '<button class="g-tab" data-cat="全部" aria-pressed="true">全部<span class="n">' +
       POSTS.length + "</span></button>";
     Object.keys(counts).forEach(function (c) {
@@ -1097,25 +1110,38 @@
       (chips ? '<div class="chips">' + chips + "</div>" : "") +
       '<p class="excerpt">' + esc(p.excerpt) + "</p>" +
       '<div class="meta"><span>' + ICONS.cal + fmtDate(p.date) + "</span>" +
-      "<span>" + ICONS.doc + wordCount(p).toLocaleString() + " 字</span></div>" +
+      "<span>" + ICONS.doc + wordCount(p).toLocaleString() + " 字</span>" +
+      lenBarHtml(p) + "</div>" +
       "</div>" +
       (p.cover ? '<div class="thumb"><img src="' + esc(p.cover) + '" alt="" loading="lazy"></div>' : "") +
       "</a>"
     );
   }
 
-  /* ---------- 动态 / 导航 ---------- */
-  function momentsMainHtml() {
-    var list = (SITE.moments || []).slice().sort(function (a, b) {
-      return a.date < b.date ? 1 : -1;
+  /* ---------- 站务 / 导航 ---------- */
+  /* 动态记稿子，时间线记站点改动，原本分成两页。这里按日期混成一列，
+     「稿」与「站」只作标签，不解释、不改原文。 */
+  function siteFeed() {
+    var out = [];
+    (SITE.moments || []).forEach(function (m) {
+      out.push({ date: m.date, text: m.text || "", tags: m.tags || [], images: m.images || [], kind: "稿" });
     });
+    (SITE.timeline || []).forEach(function (t) {
+      out.push({ date: t.date, title: t.title || "", text: t.desc || "", tags: t.tags || [], kind: "站" });
+    });
+    return out.sort(function (a, b) {
+      return a.date < b.date ? 1 : (a.date > b.date ? -1 : 0);
+    });
+  }
 
+  function momentsMainHtml() {
+    var list = siteFeed();
     return (
       '<div class="g-card" style="margin-bottom:14px">' +
-      '<div class="g-card-head"><span class="t">' + ICONS.activity + "动态</span>" +
+      '<div class="g-card-head"><span class="t">' + ICONS.activity + "站务</span>" +
       '<span class="more">' + list.length + " 条</span></div>" +
       '<div class="g-searchline">' + ICONS.search +
-      '<input type="text" id="m-search" placeholder="搜搜看以前说过什么…" autocomplete="off"></div></div>' +
+      '<input type="text" id="m-search" placeholder="搜索" autocomplete="off"></div></div>' +
       '<div class="g-moments" id="m-list"></div>'
     );
   }
@@ -1133,14 +1159,21 @@
           .join("") +
         "</div>"
       : "";
+    var chips = (m.tags || []).length
+      ? '<div class="foot">' + m.tags.map(function (x) {
+          return '<span style="--tag-h:' + tagHue(x) + '">' + esc(x) + "</span>";
+        }).join("") + "</div>"
+      : "";
     return (
       '<div class="g-moment">' +
       '<div class="av">' + av + "</div>" +
       "<div>" +
-      '<div class="head"><b>' + esc(SITE.name) + '</b><span class="time">' +
-      esc(m.date) + "</span></div>" +
+      '<div class="head"><b>' + esc(SITE.name) + '</b>' +
+      '<span class="kind">' + esc(m.kind) + '</span>' +
+      '<span class="time">' + esc(m.date) + "</span></div>" +
+      (m.title ? '<div class="title">' + esc(m.title) + "</div>" : "") +
       '<div class="body">' + esc(m.text) + "</div>" +
-      pics +
+      pics + chips +
       "</div></div>"
     );
   }
@@ -1149,19 +1182,17 @@
     var listEl = root.querySelector("#m-list");
     var searchEl = root.querySelector("#m-search");
     if (!listEl) return;
-    var all = (SITE.moments || []).slice().sort(function (a, b) {
-      return a.date < b.date ? 1 : -1;
-    });
+    var all = siteFeed();
     var curQ = "";
 
     function paint() {
       var list = all.filter(function (m) {
-        var okQ = !curQ || (m.text || "").toLowerCase().indexOf(curQ) !== -1;
-        return okQ;
+        var hay = ((m.title || "") + " " + (m.text || "") + " " + (m.tags || []).join(" ")).toLowerCase();
+        return !curQ || hay.indexOf(curQ) !== -1;
       });
       listEl.innerHTML = list.length
         ? list.map(momentMarkup).join("")
-        : '<div class="g-empty">没有找到相关的动态</div>';
+        : '<div class="g-empty">没有找到相关记录</div>';
     }
 
     if (searchEl)
@@ -1416,7 +1447,8 @@
       '<div class="top"><span>' + fmtDate(p.date) + "</span>" +
       '<span class="dot"></span><span class="cat">' + esc(p.cat) + "</span>" +
       (p.pinned ? '<span class="pin">置顶</span>' : "") +
-      '<span class="dot"></span><span>' + wordCount(p).toLocaleString() + " 字</span></div>" +
+      '<span class="dot"></span><span>' + wordCount(p).toLocaleString() + " 字</span>" +
+      lenBarHtml(p) + "</div>" +
       "<h2>" + esc(p.title) + "</h2>" +
       '<p class="excerpt">' + esc(p.excerpt) + "</p>" +
       (chips ? '<div class="chips">' + chips + "</div>" : "") +
@@ -1816,7 +1848,7 @@
     right.innerHTML =
       '<div class="g-card">' +
       '<div class="g-card-head"><span class="t">' + ICONS.clock +
-      '动态</span><a class="more" href="/timeline">更多</a></div>' +
+      '站务</span><a class="more" href="/moments">更多</a></div>' +
       '<ul class="g-feed">' + feed + "</ul></div>" +
       statCard +
       '<div class="g-card g-wx-mini">' +
@@ -2385,46 +2417,7 @@ var TL_STEP = 10;
 var tlShown = TL_STEP;
 
 function timelineMainHtml() {
-  var list = SITE.timeline || [];
-  var total = list.length;
-  var shown = Math.min(tlShown, total);
-  var groups = {};
-  list.slice(0, shown).forEach(function (it) {
-    var k = it.date.slice(0, 7).replace("-", ".");
-    (groups[k] = groups[k] || []).push(it);
-  });
-  var months = Object.keys(groups).sort().reverse();
-  var tlHtml = months.map(function (k) {
-    return (
-      '<div class="tl-year">' + k + "</div>" +
-      groups[k].map(function (it) {
-        var chips = (it.tags || []).map(function (t) {
-          return '<span style="--tag-h:' + tagHue(t) + '">' + esc(t) + "</span>";
-        }).join("");
-        return (
-          '<div class="tl-item"><div class="tl-body">' +
-          '<div class="tl-top"><span>' + fmtDate(it.date) + "</span></div>" +
-          '<h2 class="tl-title">' + esc(it.title) + "</h2>" +
-          tlDescHtml(it.desc) +
-          (chips ? '<div class="tl-chips">' + chips + "</div>" : "") +
-          "</div></div>"
-        );
-      }).join("")
-    );
-  }).join("");
-
-  var more =
-    shown < total
-      ? '<button class="tl-more" id="tl-more">加载更早的 ' +
-        Math.min(TL_STEP, total - shown) + " 条<em>还有 " + (total - shown) + " 条</em></button>"
-      : "";
-
-  return (
-    '<div class="g-card timeline-head">' +
-    "<div><h1>" + ICONS.activity + "时间线</h1><p>记录这个站的每一次改动</p></div>" +
-    '<span class="count">' + total + " 条</span></div>" +
-    '<div class="timeline">' + tlHtml + "</div>" + more
-  );
+  return momentsMainHtml();
 }
 
 function aboutHtml() {
@@ -2978,10 +2971,10 @@ var PAGE_META = {
   home: ["RezeのBlog", "RezeのBlog的个人博客。读书、技术、文史与日常的记录。"],
   writing: ["全部文章 · RezeのBlog", "RezeのBlog写过的全部文章，按分类和标签浏览。"],
   archive: ["归档 · RezeのBlog", "全部文章按年份排成的目录，从二〇二〇年排到今天。"],
-  moments: ["动态 · RezeのBlog", "碎片式的短记录。"],
+  moments: ["站务 · RezeのBlog", "稿子与站点改动，按日期混排。"],
   links: ["导航 · RezeのBlog", "常去的地方。"],
   weather: ["天气 · RezeのBlog", "几个城市的天气并列。"],
-  timeline: ["时间线 · RezeのBlog", "这个站的技术改动记录。"],
+  timeline: ["站务 · RezeのBlog", "稿子与站点改动，按日期混排。"],
   about: ["关于这个站 · RezeのBlog", "关于本站：缘起、搭建方式与联系方式。"],
   post: ["文章 · RezeのBlog", "RezeのBlog的个人博客。"]
 };
@@ -3074,7 +3067,7 @@ function renderMain() {
   var params = (app && app.__params) || new URLSearchParams();
   var prog = $("#progress");
   if (prog) prog.style.width = page === "post" ? "0%" : "";
-  if (page === "moments") {
+  if (page === "moments" || page === "timeline") {
     main.innerHTML = momentsMainHtml();
     bindMoments(main);
   } else if (page === "links") {
@@ -3090,8 +3083,6 @@ function renderMain() {
   } else if (page === "archive") {
     main.innerHTML = archiveMainHtml();
     bindArchive(main);
-  } else if (page === "timeline") {
-    main.innerHTML = timelineMainHtml();
   } else if (page === "about") {
     main.innerHTML = aboutHtml();
   } else if (page === "post") {
@@ -3148,7 +3139,7 @@ function postRouteFix() {
 function updateNavActive(page) {
   // 链接现在都是 /writing 这种路径，得按路径整段比，不能再用 indexOf 找子串：
   // 首页的 "/" 是任何地址的子串，那样每一页都会把「主页」点亮。
-  var navMap = { home: "/", moments: "/moments", writing: "/writing", links: "/links", weather: "/weather" };
+  var navMap = { home: "/", moments: "/moments", timeline: "/moments", writing: "/writing", links: "/links", weather: "/weather" };
   var want = navMap[page];
   document.querySelectorAll(".nav a").forEach(function (a) {
     var path = (a.getAttribute("href") || "").split(/[?#]/)[0] || "/";
@@ -4894,6 +4885,23 @@ function interceptLinks(e) {
       }
     }
 
+    /* 首屏只摆当天自己会走的两个数，不写提示，不写心情。 */
+    var facts = $("#splash-facts");
+    if (facts) {
+      var now = new Date();
+      var yr = String(now.getFullYear());
+      var yearWords = POSTS.reduce(function (s, x) {
+        return (x.date || "").slice(0, 4) === yr ? s + (wordCount(x) || 0) : s;
+      }, 0);
+      var latest = "";
+      POSTS.forEach(function (x) {
+        if ((x.date || "") > latest) latest = x.date || "";
+      });
+      var lastDay = latest ? new Date(latest.slice(0, 10) + "T00:00:00") : now;
+      var gap = Math.max(0, Math.floor((now - lastDay) / 86400000));
+      facts.textContent = "今年 " + yearWords.toLocaleString() + " 字 · 距上一篇 " + gap + " 天";
+    }
+
     var av = $("#splash-avatar");
     if (av) {
       av.innerHTML = SITE.avatar
@@ -5586,9 +5594,11 @@ function interceptLinks(e) {
         return;
       }
       if (e.target.closest("#tl-more")) {
-        tlShown += TL_STEP;
-        var main = $("#app-main");
-        if (main) main.innerHTML = timelineMainHtml();
+        var host = $("#app-main");
+        if (host) {
+          host.innerHTML = momentsMainHtml();
+          bindMoments(host);
+        }
       }
     });
     // 内页地址现在是 /writing 这种真实路径，不再靠 hash 判断要不要跑路由。
