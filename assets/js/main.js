@@ -1542,9 +1542,7 @@
         '<button class="g-chip" data-cat="' + esc(c) + '" aria-pressed="false">' + esc(c) +
         '<span class="count">' + counts[c] + "</span></button>";
     });
-    return '<p class="g-scale">' + listScaleText() +
-      ' · <a class="g-archlink" href="/archive">按年看</a></p>' +
-      '<div class="g-filters" id="g-filters">' + chips + "</div>" +
+    return '<div class="g-filters" id="g-filters">' + chips + "</div>" +
       '<div class="g-list" id="g-list"></div>';
   }
 
