@@ -32,3 +32,10 @@ _act.js
 
 # 本地临时抓取/截图用的目录（不该进仓，也不该上线）
 .tmp/
+
+# 口令与本地凭据禁止入库（历史里曾误提交 _push_cloud.py 到 public 仓库）
+_push_cloud.py
+*.dev.vars
+.env
+.env.*
+**/admin_pass.txt
