@@ -9,7 +9,8 @@
      DELETE /api/posts/:id     删文章（需口令）
      POST   /api/settings      { site } → 保存整站设置（需口令）
 
-   依赖：Pages 项目绑定 D1（变量名 DB）+ 环境变量 ADMIN_PASS（管理员口令）
+   依赖：Pages 项目绑定 D1（变量名 DB）。管理员口令的摘要存在 settings 表，
+        环境变量 ADMIN_PASS 只在摘要尚未写入时作过渡用。
    ============================================================ */
 
 const JSON_HEADERS = { "Content-Type": "application/json; charset=utf-8" };
@@ -89,8 +90,28 @@ async function initSchema(env) {
   _schemaReady = true;
 }
 
-function authorized(request, env) {
+/* 口令摘要存在 D1 的私有 key 里，公开读接口不会带出这一行。
+   摘要一旦写入，环境变量里那串旧值就不再参与判断。 */
+function hexOf(buf) {
+  return Array.from(new Uint8Array(buf)).map(function (b) {
+    return ("0" + b.toString(16)).slice(-2);
+  }).join("");
+}
+async function passShadow(env) {
+  const r = await env.DB.prepare(
+    "SELECT v FROM settings WHERE k='admin_pass_shadow'"
+  ).first();
+  const v = r && r.v ? String(r.v) : "";
+  return /^[0-9a-f]{64}$/.test(v) ? v : "";
+}
+async function digest(p) {
+  return hexOf(await crypto.subtle.digest("SHA-256", new TextEncoder().encode(p)));
+}
+async function authorized(request, env) {
   const p = request.headers.get("X-Admin-Pass") || "";
+  if (!p) return false;
+  const shadow = await passShadow(env);
+  if (shadow) return (await digest(p)) === shadow;
   return !!env.ADMIN_PASS && p === env.ADMIN_PASS;
 }
 
@@ -158,7 +179,13 @@ export async function onRequest(context) {
   // 登录
   if (method === "POST" && seg.length === 1 && seg[0] === "login") {
     const body = await request.json().catch(function () { return {}; });
-    if (env.ADMIN_PASS && body.pass === env.ADMIN_PASS) return json({ ok: true });
+    const pass = String(body.pass || "");
+    const shadow = await passShadow(env);
+    if (shadow) {
+      if ((await digest(pass)) === shadow) return json({ ok: true });
+    } else if (env.ADMIN_PASS && pass === env.ADMIN_PASS) {
+      return json({ ok: true });
+    }
     return json({ ok: false, error: "口令错误" }, 401);
   }
 
@@ -196,7 +223,7 @@ export async function onRequest(context) {
   }
 
   // 以下都需要管理员口令
-  if (!authorized(request, env)) return json({ error: "未授权" }, 401);
+  if (!(await authorized(request, env))) return json({ error: "未授权" }, 401);
 
   // 文章
   if (seg.length >= 1 && seg[0] === "posts") {
@@ -252,7 +279,7 @@ export async function onRequest(context) {
 
   // 删除评论（管理员口令）
   if (method === "DELETE" && seg.length === 2 && seg[0] === "comments") {
-    if (!authorized(request, env)) return json({ error: "未授权" }, 401);
+    if (!(await authorized(request, env))) return json({ error: "未授权" }, 401);
     const id = Number(seg[1]);
     await env.DB.prepare("DELETE FROM comments WHERE id=?").bind(id).run();
     return json({ ok: true });
@@ -265,6 +292,14 @@ export async function onRequest(context) {
     await env.DB.prepare(
       "INSERT INTO settings (k,v) VALUES ('site',?) ON CONFLICT(k) DO UPDATE SET v=excluded.v"
     ).bind(JSON.stringify(site)).run();
+    // 一次性写入口令摘要：只收 64 位十六进制，明文不出本机。
+    const shadow = typeof b.adminPassShadow === "string" ? b.adminPassShadow : "";
+    if (/^[0-9a-f]{64}$/.test(shadow)) {
+      await env.DB.prepare(
+        "INSERT INTO settings (k,v) VALUES ('admin_pass_shadow',?) ON CONFLICT(k) DO UPDATE SET v=excluded.v"
+      ).bind(shadow).run();
+      return json({ ok: true, shadow: "set" });
+    }
     return json({ ok: true });
   }
 
