@@ -12238,3 +12238,37 @@ html[data-skin="paper"][data-theme="dark"] .g-toc {
   color: #24211c !important;
 }
 html[data-skin="paper"][data-theme="dark"] .site-head { background: #f6f2e9 !important; }
+
+
+/* 纸样窄屏：单列，文章在前，诗笺与播放器在后 */
+@media (max-width: 760px) {
+  html[data-skin="paper"] .app {
+    grid-template-columns: minmax(0, 1fr) !important;
+    gap: 0 !important;
+    padding: 24px 16px 30px !important;
+    max-width: 100% !important;
+  }
+  html[data-skin="paper"] #app-main { order: 1; min-width: 0 !important; }
+  html[data-skin="paper"] #app-left { order: 2; margin-top: 26px; min-width: 0 !important; }
+  html[data-skin="paper"] .col { min-width: 0 !important; }
+  html[data-skin="paper"] .splash { padding: 84px 0 20px !important; }
+  html[data-skin="paper"] .splash-inner { padding: 0 16px !important; }
+  html[data-skin="paper"] .splash-title { font-size: 38px !important; }
+  html[data-skin="paper"] .splash-title::after {
+    width: 9px !important; height: 9px !important;
+    vertical-align: 7px !important; margin-left: 9px !important;
+  }
+  html[data-skin="paper"] .ft-lead h2 { font-size: 21px !important; }
+  html[data-skin="paper"] .ft-row { grid-template-columns: minmax(0, 1fr) !important; }
+  html[data-skin="paper"] .ft-mini { min-height: 0 !important; }
+  html[data-skin="paper"] .g-rec-body { grid-template-columns: minmax(0, 1fr) !important; gap: 10px !important; }
+  html[data-skin="paper"] .g-rec-items { grid-template-rows: none !important; }
+  html[data-skin="paper"] .g-tabs { overflow-x: auto !important; }
+  html[data-skin="paper"] .g-posth h2,
+  html[data-skin="paper"] .g-post h2 { font-size: 16px !important; }
+  html[data-skin="paper"] .paper-foot-line { padding-left: 16px !important; padding-right: 16px !important; }
+  html[data-skin="paper"] .site-foot,
+  html[data-skin="paper"] .site-head,
+  html[data-skin="paper"] .splash { max-width: 100vw !important; }
+  html[data-skin="paper"] body { overflow-x: hidden !important; }
+}
