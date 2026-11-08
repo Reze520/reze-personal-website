@@ -442,7 +442,7 @@ Cloudflare Pages 的自定义域名在 **Pages 项目 → Custom domains** 里�
 ## 七、SEO 与可发现性
 
 - `robots.txt`：允许抓取，指向 sitemap
-- `sitemap.xml`：**自动生成**，现在 86 条（9 个静态页 + 77 篇文章）。
+- `sitemap.xml`：**自动生成**，静态页与全部文章各一条。
   以前是手写的，写着写着就和线上对不上了 —— 老文章的 id 从 `huo-zhe` 这种手写 slug
   改成了数据库自增的 `post-74`，sitemap 里 59 条全是旧地址，点进去一律「没有找到这篇文章」。
   现在统一由 `tools/gen_feeds.py` 从线上内容生成，**别手改**。
@@ -515,6 +515,8 @@ reze-blog/
 ├── tools/              发布用的小脚本（注意：这层目录会随站点一起发布）
 │   ├── deploy.sh           一键提交 + 双推
 │   ├── gen_feeds.py        生成 sitemap.xml / feed.xml
+│   ├── gen_sources.py      从逐篇源文件生成参考源索引
+│   ├── gen_topics.py       从首屏元数据生成词条索引
 │   ├── build_changelog.py  md → changelog.html
 │   ├── subset_font.py      毛笔字体裁子集
 │   ├── add_song.py         加歌（转码 + 压封面 + 写播放列表）
@@ -566,6 +568,11 @@ python tools/build_changelog.py
 
 # 发新文之后跑一次：导出逐篇源文件，顺手把云端全文导回兜底、重生成首屏元数据
 python tools/export_content.py
+
+# 发新文、改了文章参考之后，重建两份索引数据（生成物带 ?v=，接着升版本号）
+python tools/gen_sources.py
+python tools/gen_topics.py
+python tools/bump_version.py 20261108j   # 换成当次的版本号
 
 # 诗笺加了新诗之后，重裁字体（否则新字会退回宋体，字形不一样）
 python tools/subset_font.py                      # 直接从线上取诗词

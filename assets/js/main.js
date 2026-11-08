@@ -1108,6 +1108,8 @@
     var counts = catCounts();
     var tabs =
       '<a class="g-tab" href="/archive">归档</a>' +
+      '<a class="g-tab" href="/sources">参考源</a>' +
+      '<a class="g-tab" href="/topics">词条</a>' +
       '<button class="g-tab" data-cat="全部" aria-pressed="true">全部<span class="n">' +
       POSTS.length + "</span></button>";
     Object.keys(counts).forEach(function (c) {
@@ -2540,7 +2542,9 @@ function archiveMainHtml() {
     .join("");
 
   return (
-    '<div class="arc-top"><p class="g-scale">' + listScaleText() + "</p>" +
+    '<div class="arc-top"><p class="g-scale">' + listScaleText() +
+    ' · <a class="g-archlink" href="/sources">参考源</a>' +
+    ' · <a class="g-archlink" href="/topics">词条</a></p>' +
     '<div class="arc-jump">' + jump + "</div></div>" + blocks
   );
 }
@@ -2556,6 +2560,133 @@ function bindArchive(root) {
 
 /* 时间线先只渲染最近几条，底部「加载更早」再往前翻。
    一页铺 22 条太长，分页又和这个版式不适配。 */
+/* ---------- 参考源 / 词条：两个按需装载的索引 ----------
+   两份数据各有两三百 KB，没必要让首屏为它们买单。直接打开 /sources、/topics
+   时文档里带了数据脚本；从站内点过去，由这里补一次，加载完再渲染。
+   资源地址跟 main.js 用同一个 ?v=，改数据跟着升版本就行。 */
+function auxAssetUrl(file) {
+  var cur = document.querySelector('script[src*="main.js"]');
+  var q = cur ? (String(cur.src).match(/[?&]v=[0-9a-z]+/) || [""])[0].replace(/^&/, "?") : "";
+  return "assets/js/" + file + q;
+}
+
+function loadAuxFiles(list, done) {
+  var i = 0;
+  function next() {
+    if (i >= list.length) { done(); return; }
+    var item = list[i++];
+    if (item[0] && window[item[0]]) { next(); return; }
+    var s = document.createElement("script");
+    s.src = auxAssetUrl(item[1]);
+    s.onload = s.onerror = function () { next(); };
+    document.head.appendChild(s);
+  }
+  next();
+}
+
+function ixRow(id, title, date, tail) {
+  var d = String(date || "");
+  var md = d ? d.slice(5, 7).replace(/^0/, "") + "." + d.slice(8, 10) : "";
+  return '<a class="arc-row" href="/p/' + encodeURIComponent(id) + '">' +
+    '<span class="arc-d">' + esc(md) + '</span>' +
+    '<span class="arc-t">' + esc(title) +
+    (tail ? '<span class="ix-tail">' + esc(tail) + '</span>' : "") +
+    '</span></a>';
+}
+
+function ixGroup(name, count, rows) {
+  return '<details class="ix-group"><summary class="arc-h">' +
+    '<span class="ix-name">' + esc(name) + '</span>' +
+    '<span class="arc-cnt">' + esc(count) + '</span></summary>' +
+    '<div class="arc-rows">' + rows + '</div></details>';
+}
+
+function sourcesMainHtml() {
+  var S = window.SOURCES || {};
+  var groups = S.groups || [];
+  var top = '<p class="g-scale"><b>' + (S.posts || 0) + '</b> 篇有参考 · <b>' +
+    (S.links || 0) + '</b> 条链接 · <b>' + (S.domains || 0) + '</b> 个域名</p>';
+  var links = '<div class="g-tabs">' +
+    '<a class="g-tab" href="/archive">归档</a>' +
+    '<a class="g-tab" href="/topics">词条</a></div>';
+  var blocks = groups.map(function (g) {
+    var rows = (g.p || []).map(function (p) {
+      return ixRow(p.i, p.t, p.d, p.n > 1 ? p.n + ' 条' : "");
+    }).join("");
+    return ixGroup(g.d, g.n + ' 条 · ' + g.c + ' 篇', rows);
+  }).join("");
+  var rest = (S.rest || []).map(function (d) {
+    return '<span class="ix-single">' + esc(d) + '</span>';
+  }).join("");
+  var tail = '<details class="ix-group"><summary class="arc-h">' +
+    '<span class="ix-name">只引一次的源</span>' +
+    '<span class="arc-cnt">' + (S.rest || []).length + ' 个</span></summary>' +
+    '<div class="ix-rest">' + rest + '</div></details>';
+  return top + links + blocks + tail;
+}
+
+function topicsMainHtml() {
+  var T = window.TOPIC_GROUPS || {};
+  var byId = {};
+  (POSTS || []).forEach(function (p) { byId[p.id] = p; });
+  var groups = (T.groups || []).map(function (g) {
+    return { t: g.t, p: (g.p || []).slice() };
+  });
+  var index = {};
+  groups.forEach(function (g, i) { index[g.t] = i; });
+  var ov = window.TOPICS_OVERRIDE || {};
+  Object.keys(ov).forEach(function (term) {
+    var g = index[term] >= 0 ? groups[index[term]] : null;
+    if (!g) {
+      g = { t: term, p: [] };
+      groups.push(g);
+      index[term] = groups.length - 1;
+    }
+    var seen = {};
+    g.p.forEach(function (p) { seen[p.i] = 1; });
+    (ov[term] || []).forEach(function (id) {
+      var p = byId[id];
+      if (p && !seen[id]) {
+        g.p.push({ i: p.id, t: p.title, d: p.date });
+        seen[id] = 1;
+      }
+    });
+    g.p.sort(function (a, b) { return String(b.d).localeCompare(String(a.d)); });
+  });
+  groups.sort(function (a, b) {
+    return b.p.length - a.p.length || String(a.t).localeCompare(String(b.t));
+  });
+  var pairs = groups.reduce(function (n, g) { return n + g.p.length; }, 0);
+  var top = '<p class="g-scale"><b>' + (T.posts || 0) + '</b> 篇 · <b>' +
+    groups.length + '</b> 个词 · <b>' + pairs + '</b> 条关联</p>';
+  var links = '<div class="g-tabs">' +
+    '<a class="g-tab" href="/archive">归档</a>' +
+    '<a class="g-tab" href="/sources">参考源</a></div>';
+  var blocks = groups.map(function (g) {
+    var rows = g.p.map(function (p) { return ixRow(p.i, p.t, p.d, ""); }).join("");
+    return ixGroup(g.t, g.p.length + ' 篇', rows);
+  }).join("");
+  return top + links + blocks;
+}
+
+function renderIndexPage(main, page) {
+  var src = page === "sources";
+  main.innerHTML = '<p class="g-scale">正在取回</p>';
+  var files = src
+    ? [["SOURCES", "sources.js"]]
+    : [["TOPIC_GROUPS", "topics.js"], ["TOPICS_OVERRIDE", "topics.override.js"]];
+  loadAuxFiles(files, function () {
+    var app = document.querySelector(".app");
+    if (!app || app.getAttribute("data-page") !== page) return;
+    var ok = src ? !!window.SOURCES : !!window.TOPIC_GROUPS;
+    if (!ok) {
+      main.innerHTML = '<div class="g-card"><div class="g-notice">加载失败</div></div>';
+      return;
+    }
+    main.innerHTML = src ? sourcesMainHtml() : topicsMainHtml();
+  });
+}
+
 var TL_STEP = 10;
 var tlShown = TL_STEP;
 
@@ -3119,6 +3250,8 @@ var PAGE_META = {
   weather: ["天气 · RezeのBlog", "几个城市的天气并列。"],
   timeline: ["站务 · RezeのBlog", "稿子与站点改动，按日期混排。"],
   about: ["关于这个站 · RezeのBlog", "关于本站：缘起、搭建方式与联系方式。"],
+  sources: ["参考源 · RezeのBlog", "各篇末尾引过的出处，按域名归并。"],
+  topics: ["词条 · RezeのBlog", "标签与标题聚出的词，一个词底下挂引过它的篇目。"],
   post: ["文章 · RezeのBlog", "RezeのBlog的个人博客。"]
 };
 var SITE_ORIGIN = "https://reze520.pages.dev";
@@ -3226,6 +3359,8 @@ function renderMain() {
   } else if (page === "archive") {
     main.innerHTML = archiveMainHtml();
     bindArchive(main);
+  } else if (page === "sources" || page === "topics") {
+    renderIndexPage(main, page);
   } else if (page === "about") {
     main.innerHTML = aboutHtml();
   } else if (page === "post") {

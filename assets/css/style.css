@@ -11561,3 +11561,50 @@ html {
 .app[data-page="timeline"] .g-moments > .g-pager {
   margin-top: auto;
 }
+
+
+/* ============================================================
+   36. 参考源 / 词条：两页共用的索引版式
+   组头沿用归档的细线，域名和词条不用大号衬线数字。折叠块默认收起，
+   展开后仍是归档那种一行一条的排法。
+   ============================================================ */
+.ix-group { margin: 0 0 2px; }
+.ix-group > summary.arc-h {
+  cursor: pointer;
+  list-style: none;
+  margin: 6px 0 0;
+  padding-bottom: 7px;
+}
+.ix-group > summary.arc-h::-webkit-details-marker { display: none; }
+.ix-group > summary.arc-h::after {
+  content: "+";
+  margin-left: auto;
+  font-family: var(--mono);
+  font-size: 13px;
+  color: var(--ink-3);
+}
+.ix-group[open] > summary.arc-h::after { content: "-"; }
+.ix-name {
+  font-size: 15px;
+  line-height: 1.5;
+  color: var(--ink);
+  word-break: break-all;
+}
+.ix-tail {
+  margin-left: 8px;
+  font-size: 11px;
+  color: var(--ink-3);
+  font-variant-numeric: tabular-nums;
+}
+.ix-rest {
+  padding: 10px 0 4px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 14px;
+}
+.ix-single {
+  font-size: 11.5px;
+  color: var(--ink-3);
+  font-family: var(--mono);
+  word-break: break-all;
+}
