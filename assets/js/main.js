@@ -1146,6 +1146,40 @@
     );
   }
 
+  /* 首页置顶区：只认 pinned 标记，和发布时间无关。第一篇放大成主卡，
+     其余最多三张小卡；置顶篇数变化时自动增减，不用改版式。 */
+  function featureBlockHtml(pins) {
+    var lead = pins[0];
+    var rest = pins.slice(1, 4);
+    var tags = (lead.tags || []).slice(0, 3).map(function (t) {
+      return "# " + esc(t);
+    }).join("  ");
+    var leadHtml =
+      '<a class="ft-lead" href="/p/' + encodeURIComponent(lead.id) + '">' +
+        '<div class="ft-lead-main">' +
+          '<div class="ft-lead-top"><span class="ft-idx">01</span><span class="pin">置顶</span></div>' +
+          "<h2>" + esc(lead.title) + "</h2>" +
+          '<p>' + esc(lead.excerpt) + "</p>" +
+          '<div class="ft-lead-meta"><span>' + fmtDate(lead.date) + "</span>" +
+            "<span>" + wordCount(lead).toLocaleString() + " 字</span>" +
+            (tags ? "<span>" + esc(tags) + "</span>" : "") +
+          "</div>" +
+        "</div>" +
+        '<div class="ft-lead-side"><span class="ft-big">01</span>' +
+          '<span class="ft-side-cat">' + esc(lead.cat) + "</span></div>" +
+      "</a>";
+    var rowHtml = rest.length
+      ? '<div class="ft-row">' + rest.map(function (q, i) {
+          return '<a class="ft-mini" href="/p/' + encodeURIComponent(q.id) + '">' +
+            '<span class="ft-idx">0' + (i + 2) + "</span>" +
+            "<h3>" + esc(q.title) + "</h3>" +
+            '<span class="ft-mini-meta">' + fmtDate(q.date) + " · " + esc(q.cat) + "</span>" +
+          "</a>";
+        }).join("") + "</div>"
+      : "";
+    return '<section class="ft-wrap">' + leadHtml + rowHtml + "</section>";
+  }
+
   /* ---------- 站务 / 导航 ---------- */
   /* 动态记稿子，时间线记站点改动，原本分成两页。这里按日期混成一列，
      「稿」与「站」只作标签，不解释、不改原文。 */
@@ -1439,9 +1473,22 @@
       var pages = Math.max(1, Math.ceil(list.length / PER));
       if (page >= pages) page = pages - 1;
       var slice = list.slice(page * PER, page * PER + PER);
-      listEl.innerHTML = (slice.length
-        ? slice.map(glassPostH).join("")
-        : '<div class="g-empty">这里还没有文章</div>') + buildPager(pages, page);
+      var feature = "";
+      var flow = slice;
+      /* 首页第一页、没开分类或标签筛选时，置顶几篇单独排成一组；
+         翻页、点分类之后回到原来的等权列表。 */
+      if (page === 0 && (!c || c === "全部") && !t) {
+        var pins = slice.filter(function (q) { return q.pinned; }).slice(0, 4);
+        if (pins.length) {
+          feature = featureBlockHtml(pins);
+          var used = {};
+          pins.forEach(function (q) { used[q.id] = 1; });
+          flow = slice.filter(function (q) { return !used[q.id]; });
+        }
+      }
+      listEl.innerHTML = feature + (flow.length
+        ? flow.map(glassPostH).join("")
+        : (feature ? "" : '<div class="g-empty">这里还没有文章</div>')) + buildPager(pages, page);
       Array.prototype.forEach.call(barEl.querySelectorAll(".g-tab[data-cat]"), function (b) {
         b.setAttribute("aria-pressed", String(!t && b.getAttribute("data-cat") === c));
       });
@@ -4344,11 +4391,18 @@ function interceptLinks(e) {
     return '<section class="g-rec-strip">' +
       '<div class="g-rec-hd"><span>今日一组</span>' +
       '<button type="button" data-rec-more="1">换一组</button></div>' +
-      '<p class="g-rec-from">从「' + esc(d.base.title) + "」延伸出去</p>" +
-      '<div class="g-rec-list">' + d.list.map(function (r) {
-        return '<a href="/p/' + encodeURIComponent(r.post.id) + '">' +
-          "<span>" + esc(r.post.title) + "</span><em>" + esc(r.reason) + "</em></a>";
-      }).join("") + "</div></section>";
+      '<div class="g-rec-body">' +
+        '<a class="g-rec-base" href="/p/' + encodeURIComponent(d.base.id) + '">' +
+          '<span class="rb-k">' + esc(d.base.cat) + "</span>" +
+          '<strong class="rb-t">' + esc(d.base.title) + "</strong>" +
+          '<span class="rb-m">' + fmtDate(d.base.date) + "</span>" +
+        "</a>" +
+        '<div class="g-rec-items">' + d.list.map(function (r, i) {
+          return '<a href="/p/' + encodeURIComponent(r.post.id) + '">' +
+            "<i>0" + (i + 1) + "</i><span>" + esc(r.post.title) + "</span>" +
+            "<em>" + esc(r.reason) + "</em></a>";
+        }).join("") + "</div>" +
+      "</div></section>";
   }
 
   /* 换一批 / 换一组：整页委托，重画后不用重新绑事件 */
