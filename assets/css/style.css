@@ -143,9 +143,9 @@
     Georgia, "Times New Roman", serif;
   --mono: "JetBrains Mono", "SF Mono", "Cascadia Code", Consolas, Menlo, monospace;
 
-  --wrap: 1200px;
+  --wrap: 1360px;
   --read: 700px;
-  --side-w: 276px;
+  --side-w: 252px;
   --gap-x: 34px;
 
   --ease: cubic-bezier(0.22, 0.61, 0.36, 1);

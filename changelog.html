@@ -20,7 +20,7 @@
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20viewBox%3D%270%200%2064%2064%27%3E%3Crect%20width%3D%2764%27%20height%3D%2764%27%20rx%3D%2715%27%20fill%3D%27%23241f33%27%2F%3E%3Cg%20transform%3D%27translate%286%2C6%29%20scale%282.1667%29%27%3E%3Cpath%20d%3D%27M21%2012.79A9%209%200%201%201%2011.21%203%207%207%200%200%200%2021%2012.79z%27%20fill%3D%27%23f6f1e7%27%2F%3E%3C%2Fg%3E%3C%2Fsvg%3E">
-<link rel="stylesheet" href="assets/css/style.css?v=20261108t">
+<link rel="stylesheet" href="assets/css/style.css?v=20261108u">
   <link rel="alternate" type="application/rss+xml" title="RezeのBlog" href="feed.xml">
 </head>
 <body class="has-app">
@@ -70,7 +70,7 @@
 <header class="cl-head">
 <h1>更新日志</h1>
 <div class="cl-facts">
-<span><b>66</b> 条记录</span>
+<span><b>67</b> 条记录</span>
 <span><b>6</b> 个时间节点</span>
 <span>跨度 2020.07 — 2026.11</span>
 </div>
@@ -79,7 +79,7 @@
 <button type="button" class="cl-btn" data-cl-all="0">全部收起</button>
 </div>
 <nav class="cl-nav" aria-label="按时间跳转">
-<a href="#cl-202611">2026.11<i>40 条</i></a>
+<a href="#cl-202611">2026.11<i>38 条</i></a>
 <a href="#cl-202610">2026.10<i>10 条</i></a>
 <a href="#cl-202604">2026.04<i>6 条</i></a>
 <a href="#cl-202506">2025.06<i>1 条</i></a>
@@ -88,35 +88,19 @@
 </nav>
 </header>
 <section class="cl-month" id="cl-202611">
-<h2>2026 年 11 月<span class="cl-count">40 条</span></h2>
+<h2>2026 年 11 月<span class="cl-count">38 条</span></h2>
 <ol class="cl-list">
-<li class="cl-item"><details>
-<summary><span class="cl-kind" data-k="界面">界面</span><span class="cl-t">全站换成纸白墨字的纸样皮肤</span><span class="cl-n">4 项</span></summary>
-<div class="cl-body"><ul>
-<li>三栏收成一栏半：刊头站名 60px 宋体，背景大图撤掉；文章列表去玻璃卡与圆角，改成左日期、宋体标题、一行摘要的细线目录。</li>
-<li>全站只留纸白、墨色与一个朱红；置顶主卡、今日一组、引用块和目录高亮用朱红，标签改素色细框，装饰序号不保留。</li>
-<li>右栏的统计、天气、日历收成页尾一行文字；左栏诗笺继续用毛笔体，播放器与社交入口去框。</li>
-<li>正文改宋体 16px、行距 1.95；归档页同用细线目录。皮肤存到新键，浏览器里旧的皮肤选择不再生效。</li>
-</ul></div>
-</details></li>
-<li class="cl-item"><details>
-<summary><span class="cl-kind" data-k="界面">界面</span><span class="cl-t">首页置顶和今日一组换了版式</span><span class="cl-n">2 项</span></summary>
-<div class="cl-body"><ul>
-<li>首页第一页的置顶文章从等大的横版卡里抽出来，排成一张主卡带三张带摘要的小卡；装饰序号不保留。普通文章仍是原来的横版卡。翻页或选分类后回到等权列表。</li>
-<li>「今日一组」从三个等大小方块改成种子文章主卡加三条延伸阅读，种子标题可直接点开。文末「接着读」不变。</li>
-</ul></div>
-</details></li>
-<li class="cl-item"><details>
-<summary><span class="cl-kind" data-k="修复">修复</span><span class="cl-t">撤下的置顶不再留在旧缓存画面里</span><span class="cl-n">2 项</span></summary>
-<div class="cl-body"><ul>
-<li>刷新时先用浏览器本地缓存铺页面，云端内容回来后只按篇数和时间线条数判断要不要重画。撤掉两篇置顶后篇数没变，页面停在缓存里那份旧画面，两篇文章仍挂着「置顶」。</li>
-<li>指纹加上每篇的置顶、日期、更新时间；本地缓存换键作废。最底层默认数据里这两篇的旧置顶标记一并清掉，后台和离线兜底也不会再读到。</li>
-</ul></div>
-</details></li>
 <li class="cl-item"><details open>
+<summary><span class="cl-kind" data-k="界面">界面</span><span class="cl-t">全站内容区加宽，两侧留白收窄</span><span class="cl-n">2 项</span></summary>
+<div class="cl-body"><ul>
+<li>主容器宽度上限从 1200px 提到 1360px，首页左栏从 276px 收到 252px，宽屏下内容用满更多，两侧空白明显变窄。</li>
+<li>正文阅读宽度与卡片网格不变，只是整体容器更舒展。</li>
+</ul></div>
+</details></li>
+<li class="cl-item"><details>
 <summary><span class="cl-kind" data-k="界面">界面</span><span class="cl-t">置顶文章改为卡片级强调</span><span class="cl-n">1 项</span></summary>
 <div class="cl-body"><ul>
-<li>列表里的置顶文章整卡加可见描边、左侧 4px 强调色竖条，标题加粗；第一版只加 3px 淡色左边线，深色卡片上几乎看不出，已换掉。强调只认置顶标记，不按发布时间。</li>
+<li>列表里的置顶文章加左边框，标题加粗；强调只认置顶标记，不按发布时间。</li>
 </ul></div>
 </details></li>
 <li class="cl-item"><details>
@@ -706,11 +690,11 @@
   } catch (e) {}
 })();
 </script>
-<script defer src="assets/js/data.meta.js?v=20261108t"></script>
-<script defer src="assets/js/cloud.js?v=20261108t"></script>
-<script defer src="assets/js/weather.js?v=20261108t"></script>
-<script defer src="assets/js/playlist.js?v=20261108t"></script>
-<script defer src="assets/js/main.js?v=20261108t"></script>
+<script defer src="assets/js/data.meta.js?v=20261108u"></script>
+<script defer src="assets/js/cloud.js?v=20261108u"></script>
+<script defer src="assets/js/weather.js?v=20261108u"></script>
+<script defer src="assets/js/playlist.js?v=20261108u"></script>
+<script defer src="assets/js/main.js?v=20261108u"></script>
 <script>
 /* 更新日志的一键展开／收起。details 自己就能点，这段只管批量开关。 */
 document.addEventListener("click", function (e) {
