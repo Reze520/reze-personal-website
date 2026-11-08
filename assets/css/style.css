@@ -11825,6 +11825,36 @@ html[data-skin="paper"] .splash-inner .g-social,
 html[data-skin="paper"] .splash-inner .social,
 html[data-skin="paper"] .splash-inner a[aria-label] { color: #5b554a !important; }
 
+/* 首屏社交图标：纸样下首屏内容整体左对齐，社交这排默认却居中，
+   四个圆按钮浮在正中间很违和。改成左对齐、去框、素色线性图标，
+   跟标题、标语同侧，弱化成一排安静的入口 */
+html[data-skin="paper"] .splash-social {
+  justify-content: flex-start !important;
+  gap: 20px !important;
+  margin-top: 24px !important;
+}
+html[data-skin="paper"] .splash-social a {
+  width: auto !important;
+  height: auto !important;
+  padding: 0 !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  color: #5b554a !important;
+}
+html[data-skin="paper"] .splash-social a:hover {
+  background: transparent !important;
+  border-color: transparent !important;
+  transform: none !important;
+  color: #a83226 !important;
+}
+html[data-skin="paper"] .splash-social svg {
+  width: 19px !important;
+  height: 19px !important;
+}
+
 /* 顶栏去掉胶囊与浮层 */
 html[data-skin="paper"] .site-head,
 html[data-skin="paper"] .site-head.is-stuck {
