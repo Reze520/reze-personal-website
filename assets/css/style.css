@@ -11025,6 +11025,7 @@ html {
 html:not([data-theme="dark"]) .ft-lead,
 html:not([data-theme="dark"]) .ft-mini,
 html:not([data-theme="dark"]) .g-rec-base { border-color: rgba(124, 92, 190, .42); }
+html:not([data-theme="dark"]) .ft-big { color: rgba(124, 92, 190, .34); }
 @media (max-width: 900px) {
   .ft-lead { grid-template-columns: minmax(0, 1fr) 96px; min-height: 0; }
   .ft-lead h2 { font-size: 20px; }
@@ -11037,6 +11038,8 @@ html:not([data-theme="dark"]) .g-rec-base { border-color: rgba(124, 92, 190, .42
   .g-rec-items { grid-template-rows: none; }
   .ft-lead { grid-template-columns: 1fr; }
   .ft-lead-side { display: none; }
+  .ft-mini { padding: 13px 15px; gap: 6px; }
+  .ft-mini h3 { -webkit-line-clamp: 1; }
 }
 
 /* ---------- 更新日志（changelog.html） ----------
