@@ -1045,7 +1045,7 @@
     var pin = p.pinned ? '<span class="pin">置顶</span>' : "";
 
     return (
-      '<article class="card' + (p.cover ? "" : " no-cover") + ' reveal" data-cat="' +
+      '<article class="card' + (p.cover ? "" : " no-cover") + (p.pinned ? " is-pinned" : "") + ' reveal" data-cat="' +
       esc(p.cat) +
       '" style="--cat-h:' + catHue(p.cat) + '">' +
       '<a href="/p/' +
@@ -1130,7 +1130,7 @@
       })
       .join("");
     return (
-      '<a class="g-posth' + (p.cover ? "" : " no-cover") + '" href="/p/' + encodeURIComponent(p.id) + '" style="--cat-h:' + catHue(p.cat) + '">' +
+      '<a class="g-posth' + (p.cover ? "" : " no-cover") + (p.pinned ? " is-pinned" : "") + '" href="/p/' + encodeURIComponent(p.id) + '" style="--cat-h:' + catHue(p.cat) + '">' +
       '<div class="info">' +
       '<div class="ttl"><span class="mark">' + ICONS.doc + "</span>" +
       "<h2>" + esc(p.title) + "</h2>" +
@@ -1510,7 +1510,7 @@
       })
       .join("");
     return (
-      '<a class="g-post" href="/p/' + encodeURIComponent(p.id) + '">' +
+      '<a class="g-post' + (p.pinned ? " is-pinned" : "") + '" href="/p/' + encodeURIComponent(p.id) + '">' +
       '<div class="top"><span>' + fmtDate(p.date) + "</span>" +
       '<span class="dot"></span><span class="cat">' + esc(p.cat) + "</span>" +
       (p.pinned ? '<span class="pin">置顶</span>' : "") +

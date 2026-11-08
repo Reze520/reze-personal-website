@@ -11608,3 +11608,17 @@ html {
   font-family: var(--mono);
   word-break: break-all;
 }
+
+/* 置顶文章：卡片级强调，只认 pinned 标记，与发布时间无关 */
+.g-posth.is-pinned,
+.g-post.is-pinned,
+.card.is-pinned {
+  border-left: 3px solid var(--g-accent);
+  background-image: linear-gradient(90deg,
+      color-mix(in srgb, var(--g-accent) 9%, transparent), transparent 42%);
+}
+.g-posth.is-pinned h2,
+.g-post.is-pinned h2,
+.card.is-pinned .card-title {
+  font-weight: 700;
+}
