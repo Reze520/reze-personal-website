@@ -11795,7 +11795,7 @@ html[data-skin="paper"] .splash {
 html[data-skin="paper"] .splash-inner {
   position: static !important;
   transform: none !important;
-  max-width: 1360px !important;
+  max-width: 1600px !important;
   margin: 0 auto !important;
   padding: 0 22px !important;
   text-align: left !important;
