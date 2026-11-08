@@ -4885,23 +4885,6 @@ function interceptLinks(e) {
       }
     }
 
-    /* 首屏只摆当天自己会走的两个数，不写提示，不写心情。 */
-    var facts = $("#splash-facts");
-    if (facts) {
-      var now = new Date();
-      var yr = String(now.getFullYear());
-      var yearWords = POSTS.reduce(function (s, x) {
-        return (x.date || "").slice(0, 4) === yr ? s + (wordCount(x) || 0) : s;
-      }, 0);
-      var latest = "";
-      POSTS.forEach(function (x) {
-        if ((x.date || "") > latest) latest = x.date || "";
-      });
-      var lastDay = latest ? new Date(latest.slice(0, 10) + "T00:00:00") : now;
-      var gap = Math.max(0, Math.floor((now - lastDay) / 86400000));
-      facts.textContent = "今年 " + yearWords.toLocaleString() + " 字 · 距上一篇 " + gap + " 天";
-    }
-
     var av = $("#splash-avatar");
     if (av) {
       av.innerHTML = SITE.avatar
