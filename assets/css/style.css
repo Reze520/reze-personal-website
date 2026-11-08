@@ -11614,8 +11614,6 @@ html {
 .g-post.is-pinned,
 .card.is-pinned {
   border-left: 3px solid var(--g-accent);
-  background-image: linear-gradient(90deg,
-      color-mix(in srgb, var(--g-accent) 9%, transparent), transparent 42%);
 }
 .g-posth.is-pinned h2,
 .g-post.is-pinned h2,
