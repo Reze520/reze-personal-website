@@ -24,6 +24,7 @@
   X-Robots-Tag: noindex, nofollow
 
 # 下面这些文件都带 ?v= 版本号，改文件必然换地址，可以放心 immutable
+# 字体不走 ?v=，改用内容哈希文件名；同理，改字库就必须换文件名
 /assets/css/*
   Cache-Control: public, max-age=31536000, immutable
 

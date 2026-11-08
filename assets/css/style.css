@@ -3839,9 +3839,10 @@ body.has-app .site-foot .brand .brand-mark {
 
 /* 公告卡 */
 /* 公告用的毛笔楷书：词牌显示更搭；自托管走 Pages，国内稳定加载 */
+/* /assets/fonts/* 发 immutable，字体文件名必须带内容哈希；改字库不换名，浏览器会一直用旧缓存 */
 @font-face {
   font-family: "Ma Shan Zheng";
-  src: url("/assets/fonts/mashanzheng.woff2") format("woff2");
+  src: url("/assets/fonts/mashanzheng.26f0bb6b4d29.woff2") format("woff2");
   font-weight: 400;
   font-display: swap;
 }
@@ -3851,7 +3852,7 @@ body.has-app .site-foot .brand .brand-mark {
   line-height: 1.95;
   letter-spacing: .3px;
   color: var(--g-text);
-  font-family: "Ma Shan Zheng", var(--serif);
+  font-family: "Ma Shan Zheng", "Kaiti SC", "STKaiti", "KaiTi", "楷体", var(--serif);
 }
 .g-notice.gn-swap {
   cursor: pointer;

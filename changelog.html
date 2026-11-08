@@ -20,7 +20,7 @@
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20viewBox%3D%270%200%2064%2064%27%3E%3Crect%20width%3D%2764%27%20height%3D%2764%27%20rx%3D%2715%27%20fill%3D%27%23241f33%27%2F%3E%3Cg%20transform%3D%27translate%286%2C6%29%20scale%282.1667%29%27%3E%3Cpath%20d%3D%27M21%2012.79A9%209%200%201%201%2011.21%203%207%207%200%200%200%2021%2012.79z%27%20fill%3D%27%23f6f1e7%27%2F%3E%3C%2Fg%3E%3C%2Fsvg%3E">
-<link rel="stylesheet" href="assets/css/style.css?v=20261108f">
+<link rel="stylesheet" href="assets/css/style.css?v=20261108g">
   <link rel="alternate" type="application/rss+xml" title="RezeのBlog" href="feed.xml">
 </head>
 <body class="has-app">
@@ -70,7 +70,7 @@
 <header class="cl-head">
 <h1>更新日志</h1>
 <div class="cl-facts">
-<span><b>61</b> 条记录</span>
+<span><b>62</b> 条记录</span>
 <span><b>6</b> 个时间节点</span>
 <span>跨度 2020.07 — 2026.11</span>
 </div>
@@ -79,7 +79,7 @@
 <button type="button" class="cl-btn" data-cl-all="0">全部收起</button>
 </div>
 <nav class="cl-nav" aria-label="按时间跳转">
-<a href="#cl-202611">2026.11<i>32 条</i></a>
+<a href="#cl-202611">2026.11<i>33 条</i></a>
 <a href="#cl-202610">2026.10<i>10 条</i></a>
 <a href="#cl-202604">2026.04<i>6 条</i></a>
 <a href="#cl-202506">2025.06<i>1 条</i></a>
@@ -88,9 +88,17 @@
 </nav>
 </header>
 <section class="cl-month" id="cl-202611">
-<h2>2026 年 11 月<span class="cl-count">32 条</span></h2>
+<h2>2026 年 11 月<span class="cl-count">33 条</span></h2>
 <ol class="cl-list">
 <li class="cl-item"><details open>
+<summary><span class="cl-kind" data-k="修复">修复</span><span class="cl-t">诗笺字体换内容哈希地址，浏览器不再抱住旧字库</span><span class="cl-n">3 项</span></summary>
+<div class="cl-body"><ul>
+<li>上一版把 393 字残字库换成 3918 字全量子库后，线上文件确实换了，但样式表里的字体地址没换。站点给 <code>/assets/fonts/*</code> 发的是一年 immutable 缓存头，浏览器按旧地址把残缺字库留着不重新请求，诗句里「到、穷、看、云」这些字仍回退成宋体，一张卡上两种字体混着。</li>
+<li>字体文件名改成带内容哈希，改字节必然换地址；旧地址留一份，兜住还缓存着旧样式表的浏览器。同时把中点「·」映到字库自带的圆点，落款「唐·王维」不再掉回系统字体。</li>
+<li>源字库没有的「挼、璟、蘋」与欢迎语里的日文假名、变音字母交给楷体兜底，比宋体更接近手写体。</li>
+</ul></div>
+</details></li>
+<li class="cl-item"><details>
 <summary><span class="cl-kind" data-k="修复">修复</span><span class="cl-t">清掉批量同步打在旧文上的更新时间</span><span class="cl-n">2 项</span></summary>
 <div class="cl-body"><ul>
 <li>11 篇 2020 至 2026 年的旧文 <code>updated</code> 都落在 11 月 6 日，那天在做全文导回仓库，正文没有改动。卡片与文章页因此显示「更新于 11 月 6 日」，feed 里这 11 篇也顶到最前，把几年前的稿子排成当天新文。</li>
@@ -647,10 +655,10 @@
   } catch (e) {}
 })();
 </script>
-<script defer src="assets/js/data.meta.js?v=20261108f"></script>
-<script defer src="assets/js/cloud.js?v=20261108f"></script>
-<script defer src="assets/js/weather.js?v=20261108f"></script>
-<script defer src="assets/js/main.js?v=20261108f"></script>
+<script defer src="assets/js/data.meta.js?v=20261108g"></script>
+<script defer src="assets/js/cloud.js?v=20261108g"></script>
+<script defer src="assets/js/weather.js?v=20261108g"></script>
+<script defer src="assets/js/main.js?v=20261108g"></script>
 <script>
 /* 更新日志的一键展开／收起。details 自己就能点，这段只管批量开关。 */
 document.addEventListener("click", function (e) {
