@@ -11613,7 +11613,8 @@ html {
 .g-posth.is-pinned,
 .g-post.is-pinned,
 .card.is-pinned {
-  border-left: 3px solid var(--g-accent);
+  border: 1px solid rgba(184, 161, 247, 0.55);
+  border-left: 4px solid var(--accent-glow);
 }
 .g-posth.is-pinned h2,
 .g-post.is-pinned h2,
