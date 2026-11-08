@@ -5235,11 +5235,11 @@ function interceptLinks(e) {
       document.body.appendChild(btn);
     }
 
-    // 列表区那颗「重试」按钮走这里
-    retryPlaylistHook = runPlaylistRescue;
-    if (playlistState === "loading") runPlaylistRescue();
+    // 列表区那颗「重试」按钮走这里（手动重试才给提示）
+    retryPlaylistHook = function () { runPlaylistRescue(true); };
+    if (playlistState === "loading") runPlaylistRescue(false);
 
-    function runPlaylistRescue() {
+    function runPlaylistRescue(manual) {
       if (playlistBusy) return;
       playlistBusy = true;
       playlistState = "loading";
@@ -5251,11 +5251,11 @@ function interceptLinks(e) {
           playlistState = "ok";
           if (playerIdx >= arr.length) playerIdx = 0;
           if (refreshTrackList) refreshTrackList(!asked);
-          showToast("歌单已恢复，" + arr.length + " 首。");
+          if (manual) showToast("歌单已恢复，" + arr.length + " 首。");
         } else {
           playlistState = "failed";
           if (refreshTrackList) refreshTrackList(false);
-          showToast("歌单加载失败。");
+          if (manual) showToast("歌单加载失败。");
         }
       });
     }
