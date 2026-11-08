@@ -72,7 +72,7 @@
 <header class="cl-head">
 <h1>更新日志</h1>
 <div class="cl-facts">
-<span><b>53</b> 条记录</span>
+<span><b>54</b> 条记录</span>
 <span><b>6</b> 个时间节点</span>
 <span>跨度 2020.07 — 2026.11</span>
 </div>
@@ -81,7 +81,7 @@
 <button type="button" class="cl-btn" data-cl-all="0">全部收起</button>
 </div>
 <nav class="cl-nav" aria-label="按时间跳转">
-<a href="#cl-202611">2026.11<i>24 条</i></a>
+<a href="#cl-202611">2026.11<i>25 条</i></a>
 <a href="#cl-202610">2026.10<i>10 条</i></a>
 <a href="#cl-202604">2026.04<i>6 条</i></a>
 <a href="#cl-202506">2025.06<i>1 条</i></a>
@@ -90,9 +90,16 @@
 </nav>
 </header>
 <section class="cl-month" id="cl-202611">
-<h2>2026 年 11 月<span class="cl-count">24 条</span></h2>
+<h2>2026 年 11 月<span class="cl-count">25 条</span></h2>
 <ol class="cl-list">
 <li class="cl-item"><details open>
+<summary><span class="cl-kind" data-k="基建">基建</span><span class="cl-t">源文件目录补上不索引响应头</span><span class="cl-n">2 项</span></summary>
+<div class="cl-body"><ul>
+<li><code>robots.txt</code> 早先屏蔽了 <code>/content/</code>，响应头还没跟上。<code>/tools/*</code> 与 <code>/admin.html</code> 都带 <code>X-Robots-Tag: noindex</code>，逐篇源文件没有。这次给 <code>/content/*</code> 补上同一条，361 份 md 即便被直接请求，也不会和文章页一起收成重复内容。</li>
+<li>只加响应头，文件路径与访问状态不变，前台与每周备份工作流都不读这个头。</li>
+</ul></div>
+</details></li>
+<li class="cl-item"><details>
 <summary><span class="cl-kind" data-k="基建">基建</span><span class="cl-t">331 篇文章有了逐篇源文件，内容备份不再靠人记</span><span class="cl-n">4 项</span></summary>
 <div class="cl-body"><ul>
 <li>云端 D1 是唯一可写源，仓库里原先只有塞在 JS 字符串里的兜底快照。新增 <code>tools/export_content.py</code>：拉一次云端全文，把每篇落成 <code>content/posts/&lt;id&gt;.md</code>，YAML frontmatter 存标题、日期、分类、标签，正文原样保留 HTML；同一份快照再喂给 <code>sync_content.py</code> 重写离线兜底与首屏元数据。发新文跑一条命令就够。</li>

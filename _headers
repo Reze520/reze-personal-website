@@ -12,9 +12,12 @@
 /*.html
   Cache-Control: public, max-age=0, must-revalidate
 
-# 后台和构建脚本会随仓库一起部署（Pages 部署整个仓库，没有排除目录的开关），
+# 后台、构建脚本和逐篇源文件会随仓库一起部署（Pages 部署整个仓库，没有排除目录的开关），
 # 代码里不含口令，只是不该被搜索引擎收进去
 /tools/*
+  X-Robots-Tag: noindex
+
+/content/*
   X-Robots-Tag: noindex
 
 /admin.html
