@@ -1157,7 +1157,7 @@
     var leadHtml =
       '<a class="ft-lead" href="/p/' + encodeURIComponent(lead.id) + '">' +
         '<div class="ft-lead-main">' +
-          '<div class="ft-lead-top"><span class="ft-idx">01</span><span class="pin">置顶</span></div>' +
+          '<div class="ft-lead-top"><span class="pin">置顶</span></div>' +
           "<h2>" + esc(lead.title) + "</h2>" +
           '<p>' + esc(lead.excerpt) + "</p>" +
           '<div class="ft-lead-meta"><span>' + fmtDate(lead.date) + "</span>" +
@@ -1165,14 +1165,12 @@
             (tags ? "<span>" + esc(tags) + "</span>" : "") +
           "</div>" +
         "</div>" +
-        '<div class="ft-lead-side"><span class="ft-big">01</span>' +
-          '<span class="ft-side-cat">' + esc(lead.cat) + "</span></div>" +
       "</a>";
     var rowHtml = rest.length
-      ? '<div class="ft-row">' + rest.map(function (q, i) {
+      ? '<div class="ft-row">' + rest.map(function (q) {
           return '<a class="ft-mini" href="/p/' + encodeURIComponent(q.id) + '">' +
-            '<span class="ft-idx">0' + (i + 2) + "</span>" +
             "<h3>" + esc(q.title) + "</h3>" +
+            '<p class="ft-excerpt">' + esc(q.excerpt) + "</p>" +
             '<span class="ft-mini-meta">' + fmtDate(q.date) + " · " + esc(q.cat) + "</span>" +
           "</a>";
         }).join("") + "</div>"

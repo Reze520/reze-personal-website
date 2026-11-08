@@ -10965,24 +10965,22 @@ html {
   white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
 }
 
-/* 首页置顶区：一张主卡带三张小卡，与下方文章流拉开主次 */
+/* 首页置顶区：一张主卡带三张带摘要的小卡，与下方文章流拉开主次 */
 .ft-wrap { display: grid; gap: 10px; margin: 0 0 14px; }
 .ft-lead {
-  display: grid; grid-template-columns: minmax(0, 1fr) 150px; min-height: 190px;
-  border-radius: 16px; overflow: hidden; text-decoration: none; color: inherit;
+  display: block; border-radius: 16px; text-decoration: none; color: inherit;
   background: linear-gradient(120deg, rgba(184, 161, 247, .16), rgba(184, 161, 247, .03) 60%, transparent), var(--glass);
   border: 1px solid rgba(184, 161, 247, .45);
+  border-left: 3px solid rgba(184, 161, 247, .85);
   box-shadow: var(--g-shadow);
 }
 .ft-lead:hover { border-color: rgba(184, 161, 247, .8); }
 .ft-lead-main {
-  padding: 22px 24px; min-width: 0;
-  display: flex; flex-direction: column; justify-content: center; gap: 10px;
+  padding: 22px 26px; display: flex; flex-direction: column; gap: 10px;
 }
 .ft-lead-top { display: flex; align-items: center; gap: 10px; }
-.ft-idx { font: 600 12px/1 var(--mono, monospace); letter-spacing: .18em; color: var(--accent); }
 .ft-lead h2 {
-  margin: 0; font-size: 25px; line-height: 1.42; font-weight: 700;
+  margin: 0; font-size: 24px; line-height: 1.45; font-weight: 700;
   letter-spacing: .01em; color: var(--ink);
 }
 .ft-lead p {
@@ -10993,54 +10991,46 @@ html {
   display: flex; gap: 14px; font-size: 11px; color: var(--ink-3);
   font-variant-numeric: tabular-nums; flex-wrap: wrap;
 }
-.ft-lead-side {
-  position: relative; display: grid; place-items: center;
-  background: radial-gradient(circle at 62% 38%, rgba(184, 161, 247, .30), rgba(184, 161, 247, .05) 62%, transparent 78%);
-  border-left: 1px solid rgba(184, 161, 247, .20);
-}
-.ft-big {
-  font: 700 62px/1 var(--mono, monospace); color: rgba(184, 161, 247, .42);
-  letter-spacing: -.06em;
-}
-.ft-side-cat {
-  position: absolute; bottom: 18px; font-size: 11px;
-  letter-spacing: .16em; color: var(--ink-3);
-}
-.ft-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+.ft-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
 .ft-mini {
-  display: flex; flex-direction: column; gap: 9px; padding: 16px 16px 15px;
-  border-radius: 13px; text-decoration: none; color: inherit;
-  background: var(--glass); border: 1px solid rgba(184, 161, 247, .28);
+  display: flex; flex-direction: column; gap: 10px; min-height: 150px;
+  padding: 18px 18px 16px; border-radius: 13px; text-decoration: none; color: inherit;
+  background: linear-gradient(145deg, rgba(184, 161, 247, .15), rgba(184, 161, 247, .03) 72%), var(--glass);
+  border: 1px solid rgba(184, 161, 247, .62);
+  border-left: 3px solid rgba(184, 161, 247, .9);
+  box-shadow: var(--g-shadow);
   transition: transform .25s ease, border-color .25s ease;
 }
-.ft-mini:hover { transform: translateY(-3px); border-color: rgba(184, 161, 247, .7); }
+.ft-mini:hover { transform: translateY(-3px); border-color: rgba(184, 161, 247, .9); }
 .ft-mini h3 {
-  margin: 0; font-size: 14px; line-height: 1.55; font-weight: 600; color: var(--ink);
+  margin: 0; font-size: 16px; line-height: 1.5; font-weight: 700; color: var(--ink);
+  display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
+}
+.ft-excerpt {
+  margin: 0; font-size: 12.5px; line-height: 1.7; color: var(--ink-2);
   display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
 }
 .ft-mini-meta {
-  margin-top: auto; font-size: 10.5px; color: var(--ink-3);
+  margin-top: auto; font-size: 11px; color: var(--ink-3);
   font-variant-numeric: tabular-nums;
 }
 html:not([data-theme="dark"]) .ft-lead,
 html:not([data-theme="dark"]) .ft-mini,
 html:not([data-theme="dark"]) .g-rec-base { border-color: rgba(124, 92, 190, .42); }
-html:not([data-theme="dark"]) .ft-big { color: rgba(124, 92, 190, .34); }
+html:not([data-theme="dark"]) .ft-lead,
+html:not([data-theme="dark"]) .ft-mini { border-left-color: rgba(124, 92, 190, .85); }
 @media (max-width: 900px) {
-  .ft-lead { grid-template-columns: minmax(0, 1fr) 96px; min-height: 0; }
-  .ft-lead h2 { font-size: 20px; }
-  .ft-big { font-size: 42px; }
+  .ft-lead h2 { font-size: 21px; }
   .ft-row { grid-template-columns: 1fr; }
   .g-rec-body { grid-template-columns: 1fr; }
 }
 @media (max-width: 760px) {
   .g-related-list .rl-r { display: none; }
   .g-rec-items { grid-template-rows: none; }
-  .ft-lead { grid-template-columns: 1fr; }
-  .ft-lead-side { display: none; }
-  .ft-mini { padding: 13px 15px; gap: 6px; }
+  .ft-mini { min-height: 0; padding: 14px 16px; gap: 7px; }
   .ft-mini h3 { -webkit-line-clamp: 1; }
 }
+
 
 /* ---------- 更新日志（changelog.html） ----------
    一条改动一个折叠块，默认只展开最新一条：整页从两万字降到一屏能扫完，
