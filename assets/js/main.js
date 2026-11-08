@@ -2563,44 +2563,86 @@ function archiveMainHtml() {
     })
     .join("");
 
-  var blocks = years
-    .map(function (y) {
-      var rows = byYear[y]
-        .map(function (p) {
-          var d = String(p.date || "");
-          var md = d.slice(5, 7).replace(/^0/, "") + "." + d.slice(8, 10);
-          return (
-            '<a class="arc-row" href="' + postHref(p) + '">' +
-            '<span class="arc-d">' + md + "</span>" +
-            '<span class="arc-t">' + esc(p.title || "") + "</span>" +
-            "</a>"
-          );
-        })
-        .join("");
-      return (
-        '<section class="arc-year" id="y' + y + '" data-y="' + y + '">' +
-        '<h2 class="arc-h"><span class="arc-num">' + y + "</span>" +
-        '<span class="arc-cnt">' + byYear[y].length + " 篇</span></h2>" +
-        '<div class="arc-rows">' + rows + "</div></section>"
-      );
-    })
-    .join("");
+  function yearBlock(y) {
+    var rows = byYear[y]
+      .map(function (p) {
+        var d = String(p.date || "");
+        var md = d.slice(5, 7).replace(/^0/, "") + "." + d.slice(8, 10);
+        return (
+          '<a class="arc-row" href="' + postHref(p) + '">' +
+          '<span class="arc-d">' + md + "</span>" +
+          '<span class="arc-t">' + esc(p.title || "") + "</span>" +
+          "</a>"
+        );
+      })
+      .join("");
+    return (
+      '<section class="arc-year" id="y' + y + '" data-y="' + y + '">' +
+      '<h2 class="arc-h"><span class="arc-num">' + y + "</span>" +
+      '<span class="arc-cnt">' + byYear[y].length + " 篇</span></h2>" +
+      '<div class="arc-rows">' + rows + "</div></section>"
+    );
+  }
+
+  /* 先列最近几年，其余放进隐藏容器，底部「加载更早」再成批展开；
+     首屏不再一次铺满七年，长页面收短。年份跳转仍可直达任一年（自动先展开）。 */
+  var ARC_INITIAL = 2;
+  var visYears = years.slice(0, ARC_INITIAL);
+  var hidYears = years.slice(ARC_INITIAL);
 
   return (
     '<div class="arc-top"><p class="g-scale">' + listScaleText() +
     ' · <a class="g-archlink" href="/sources">参考源</a>' +
     ' · <a class="g-archlink" href="/topics">词条</a></p>' +
-    '<div class="arc-jump">' + jump + "</div></div>" + blocks
+    '<div class="arc-jump">' + jump + "</div></div>" +
+    '<div class="arc-blocks" id="arc-blocks">' + visYears.map(yearBlock).join("") + "</div>" +
+    (hidYears.length
+      ? '<div class="arc-more" id="arc-more">' + hidYears.map(yearBlock).join("") + "</div>" +
+        '<div class="arc-morebtn"><button type="button" id="arc-load" class="pg-btn">加载更早的年份</button></div>'
+      : "")
   );
 }
 
 function bindArchive(root) {
+  var blocks = root.querySelector("#arc-blocks");
+  var moreWrap = root.querySelector("#arc-more");
+  var moreBtn = root.querySelector("#arc-load");
+
+  /* 把隐藏容器里、直到 sec（含）的年份依次移入可见区，并收掉已空的按钮。 */
+  function revealUpTo(sec) {
+    if (!moreWrap || !blocks || !sec) return;
+    while (moreWrap.firstElementChild && moreWrap.firstElementChild !== sec) {
+      blocks.appendChild(moreWrap.firstElementChild);
+    }
+    if (moreWrap.firstElementChild === sec) blocks.appendChild(sec);
+    if (!moreWrap.firstElementChild && moreBtn && moreBtn.parentNode) {
+      moreBtn.parentNode.remove();
+    }
+  }
+
   root.querySelectorAll(".arc-j").forEach(function (b) {
     b.addEventListener("click", function () {
-      var sec = root.querySelector('.arc-year[data-y="' + b.getAttribute("data-y") + '"]');
+      var y = b.getAttribute("data-y");
+      var sec = root.querySelector('.arc-year[data-y="' + y + '"]');
+      if (sec && moreWrap && sec.parentElement === moreWrap) {
+        revealUpTo(sec);
+        sec = root.querySelector('.arc-year[data-y="' + y + '"]');
+      }
       if (sec) sec.scrollIntoView({ behavior: "smooth", block: "start" });
     });
   });
+
+  if (moreBtn && moreWrap && blocks) {
+    var STEP = 2; // 每次展开两年
+    moreBtn.addEventListener("click", function () {
+      for (var k = 0; k < STEP && moreWrap.firstElementChild; k++) {
+        blocks.appendChild(moreWrap.firstElementChild);
+      }
+      if (!moreWrap.firstElementChild && moreBtn.parentNode) {
+        moreBtn.parentNode.remove();
+      }
+    });
+  }
 }
 
 /* 时间线先只渲染最近几条，底部「加载更早」再往前翻。

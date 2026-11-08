@@ -20,7 +20,7 @@
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20viewBox%3D%270%200%2064%2064%27%3E%3Crect%20width%3D%2764%27%20height%3D%2764%27%20rx%3D%2715%27%20fill%3D%27%23241f33%27%2F%3E%3Cg%20transform%3D%27translate%286%2C6%29%20scale%282.1667%29%27%3E%3Cpath%20d%3D%27M21%2012.79A9%209%200%201%201%2011.21%203%207%207%200%200%200%2021%2012.79z%27%20fill%3D%27%23f6f1e7%27%2F%3E%3C%2Fg%3E%3C%2Fsvg%3E">
-<link rel="stylesheet" href="assets/css/style.css?v=20261108v">
+<link rel="stylesheet" href="assets/css/style.css?v=20261108w">
   <link rel="alternate" type="application/rss+xml" title="RezeのBlog" href="feed.xml">
 </head>
 <body class="has-app">
@@ -70,7 +70,7 @@
 <header class="cl-head">
 <h1>更新日志</h1>
 <div class="cl-facts">
-<span><b>68</b> 条记录</span>
+<span><b>69</b> 条记录</span>
 <span><b>6</b> 个时间节点</span>
 <span>跨度 2020.07 — 2026.11</span>
 </div>
@@ -79,7 +79,7 @@
 <button type="button" class="cl-btn" data-cl-all="0">全部收起</button>
 </div>
 <nav class="cl-nav" aria-label="按时间跳转">
-<a href="#cl-202611">2026.11<i>39 条</i></a>
+<a href="#cl-202611">2026.11<i>40 条</i></a>
 <a href="#cl-202610">2026.10<i>10 条</i></a>
 <a href="#cl-202604">2026.04<i>6 条</i></a>
 <a href="#cl-202506">2025.06<i>1 条</i></a>
@@ -88,9 +88,16 @@
 </nav>
 </header>
 <section class="cl-month" id="cl-202611">
-<h2>2026 年 11 月<span class="cl-count">39 条</span></h2>
+<h2>2026 年 11 月<span class="cl-count">40 条</span></h2>
 <ol class="cl-list">
 <li class="cl-item"><details open>
+<summary><span class="cl-kind" data-k="修复">修复</span><span class="cl-t">归档页过长：首屏只列最近两年，其余「加载更早」展开</span><span class="cl-n">2 项</span></summary>
+<div class="cl-body"><ul>
+<li>归档页原本把全部约 360 篇文章按年一次性铺完，长页面难滚动。改为首屏先列最近两年，底部「加载更早的年份」每次再展开两年（年份跳转仍可直达任一年，自动先展开）。</li>
+<li>主容器 <code>.app</code> 上限 1480px → 1760px、首屏 <code>.splash-inner</code> 720px → 1100px、<code>--wrap</code> 1360px → 1600px：宽屏下内容用满更多，两侧留白收窄（之前提 <code>--wrap</code> 没生效，是因为所有页面走的是 <code>.app</code> 而非 <code>.shell</code>）。</li>
+</ul></div>
+</details></li>
+<li class="cl-item"><details>
 <summary><span class="cl-kind" data-k="修复">修复</span><span class="cl-t">纸样首屏社交图标去框并左对齐</span><span class="cl-n">2 项</span></summary>
 <div class="cl-body"><ul>
 <li>首屏社交图标默认是带圆底的白按钮并水平居中，而纸样下首屏内容整体左对齐，四个圆按钮孤零零浮在正中间，很违和。</li>
@@ -697,11 +704,11 @@
   } catch (e) {}
 })();
 </script>
-<script defer src="assets/js/data.meta.js?v=20261108v"></script>
-<script defer src="assets/js/cloud.js?v=20261108v"></script>
-<script defer src="assets/js/weather.js?v=20261108v"></script>
-<script defer src="assets/js/playlist.js?v=20261108v"></script>
-<script defer src="assets/js/main.js?v=20261108v"></script>
+<script defer src="assets/js/data.meta.js?v=20261108w"></script>
+<script defer src="assets/js/cloud.js?v=20261108w"></script>
+<script defer src="assets/js/weather.js?v=20261108w"></script>
+<script defer src="assets/js/playlist.js?v=20261108w"></script>
+<script defer src="assets/js/main.js?v=20261108w"></script>
 <script>
 /* 更新日志的一键展开／收起。details 自己就能点，这段只管批量开关。 */
 document.addEventListener("click", function (e) {

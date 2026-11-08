@@ -143,7 +143,7 @@
     Georgia, "Times New Roman", serif;
   --mono: "JetBrains Mono", "SF Mono", "Cascadia Code", Consolas, Menlo, monospace;
 
-  --wrap: 1360px;
+  --wrap: 1600px;
   --read: 700px;
   --side-w: 252px;
   --gap-x: 34px;
@@ -1889,7 +1889,7 @@ body::after {
   z-index: 2;
   text-align: center;
   padding: 105px 24px 90px;
-  max-width: 720px;
+  max-width: 1100px;
   width: 100%;
 }
 
@@ -2364,7 +2364,7 @@ body::after {
   display: grid;
   grid-template-columns: 248px minmax(0, 1fr) 264px;
   gap: 16px;
-  max-width: 1480px;
+  max-width: 1760px;
   margin: 0 auto;
   padding: 84px 22px 40px;
   align-items: start;
@@ -11505,6 +11505,9 @@ html:not([data-theme="dark"]) .ft-mini { border-left-color: rgba(124, 92, 190, .
   transition: color 0.18s var(--ease), border-color 0.18s var(--ease);
 }
 .arc-j:hover { color: var(--ink); border-color: var(--line-2); }
+
+.arc-more { display: none; }
+.arc-morebtn { text-align: center; padding: 26px 0 6px; }
 
 .arc-year {
   /* 一年一张纸。底色跟列表页的卡片同一套（--glass），但不加背景模糊：
