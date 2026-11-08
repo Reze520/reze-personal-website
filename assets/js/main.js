@@ -2619,8 +2619,7 @@ function archiveMainHtml() {
     );
   }
 
-  var newest = years[0];
-  var blocks = years.map(function (y) { return yearBlock(y, y === newest); }).join("");
+  var blocks = years.map(function (y) { return yearBlock(y, false); }).join("");
 
   return (
     '<div class="arc-top"><p class="g-scale">' + listScaleText() +
