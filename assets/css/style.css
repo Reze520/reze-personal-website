@@ -12089,6 +12089,16 @@ html[data-skin="paper"] .ix-group {
   box-shadow: none !important;
 }
 html[data-skin="paper"] .arc-h { color: #a83226 !important; }
+html[data-skin="paper"] .arc-year {
+  background: transparent !important;
+  background-image: none !important;
+  border: 0 !important;
+  border-bottom: 1px solid #ddd5c4 !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  color: #24211c !important;
+}
+html[data-skin="paper"] .arc-num { color: #24211c !important; }
 
 /* 页尾 */
 html[data-skin="paper"] .site-foot {
@@ -12152,6 +12162,21 @@ html[data-skin="paper"] body.has-app .site-head.is-over-hero .icon-btn {
   box-shadow: none !important;
 }
 html[data-skin="paper"] .icon-btn svg { color: #5b554a !important; }
+
+/* 顶栏「更多」下拉：深紫面板改成纸面 */
+html[data-skin="paper"] .nav-more-btn {
+  background: transparent !important; border: 0 !important; border-radius: 0 !important;
+  color: #5b554a !important; box-shadow: none !important;
+}
+html[data-skin="paper"] .nav-more-menu {
+  background: #fbf8f1 !important; border: 1px solid #d9d1c1 !important;
+  border-radius: 0 !important; box-shadow: none !important;
+}
+html[data-skin="paper"] .nav-more-menu a { background: transparent !important; color: #24211c !important; }
+html[data-skin="paper"] .nav-more-menu a:hover { background: #efe9dc !important; color: #a83226 !important; }
+
+/* 纸样下所有文字取消发光/投影阴影 */
+html[data-skin="paper"] * { text-shadow: none !important; }
 
 /* 左栏头像、播放器收成素面 */
 html[data-skin="paper"] .g-profile img,
