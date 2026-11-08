@@ -1139,7 +1139,7 @@
     return (
       '<div class="g-card" style="margin-bottom:14px">' +
       '<div class="g-card-head"><span class="t">' + ICONS.activity + "站务</span>" +
-      '<span class="more">' + list.length + " 条</span></div>" +
+      '<span class="more" id="m-count">' + list.length + " 条</span></div>" +
       '<div class="g-searchline">' + ICONS.search +
       '<input type="text" id="m-search" placeholder="搜索" autocomplete="off"></div></div>' +
       '<div class="g-moments" id="m-list"></div>'
@@ -1181,23 +1181,62 @@
   function bindMoments(root) {
     var listEl = root.querySelector("#m-list");
     var searchEl = root.querySelector("#m-search");
+    var countEl = root.querySelector("#m-count");
     if (!listEl) return;
     var all = siteFeed();
     var curQ = "";
+    var PER = 10;
+    var curPage = 0;
+    var curPages = 1;
 
     function paint() {
       var list = all.filter(function (m) {
         var hay = ((m.title || "") + " " + (m.text || "") + " " + (m.tags || []).join(" ")).toLowerCase();
         return !curQ || hay.indexOf(curQ) !== -1;
       });
-      listEl.innerHTML = list.length
-        ? list.map(momentMarkup).join("")
-        : '<div class="g-empty">没有找到相关记录</div>';
+      curPages = Math.max(1, Math.ceil(list.length / PER));
+      if (curPage >= curPages) curPage = curPages - 1;
+      if (curPage < 0) curPage = 0;
+      var slice = list.slice(curPage * PER, curPage * PER + PER);
+      listEl.innerHTML = (slice.length
+        ? slice.map(momentMarkup).join("")
+        : '<div class="g-empty">没有找到相关记录</div>') +
+        (list.length ? buildPager(curPages, curPage) : "");
+      if (countEl) countEl.textContent = list.length + " 条";
     }
+
+    function setPage(p) {
+      curPage = Math.max(0, Math.min(p, curPages - 1));
+      paint();
+      try { listEl.scrollIntoView({ behavior: "smooth", block: "start" }); } catch (err) {}
+    }
+
+    listEl.addEventListener("click", function (e) {
+      var t = e.target;
+      if (!t || !t.closest) return;
+      var b = t.closest(".pg-btn");
+      if (b && !b.classList.contains("disabled")) {
+        setPage(Number(b.getAttribute("data-p")) || 0);
+        return;
+      }
+      if (t.closest(".pg-go")) {
+        var inp = listEl.querySelector(".pg-input");
+        setPage((parseInt(inp && inp.value, 10) || 1) - 1);
+      }
+    });
+
+    listEl.addEventListener("keydown", function (e) {
+      if (e.key === "Enter" && e.target && e.target.classList &&
+          e.target.classList.contains("pg-input")) {
+        e.preventDefault();
+        setPage((parseInt(e.target.value, 10) || 1) - 1);
+      }
+    });
 
     if (searchEl)
       searchEl.addEventListener("input", function () {
         curQ = searchEl.value.trim().toLowerCase();
+        curPage = 0;
         paint();
       });
 
