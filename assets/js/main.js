@@ -107,6 +107,8 @@
       '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="2.5"/><circle cx="8.5" cy="9.5" r="1.5"/><path d="m21 16-5-5-6.5 7"/></svg>',
     book:
       '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4.5A2.5 2.5 0 0 1 6.5 2H20v20H6.5A2.5 2.5 0 0 0 4 24.5"/><path d="M4 4.5v16"/></svg>',
+    poem:
+      '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M5 6.5h14M5 12h10M5 17.5h13"/></svg>',
     play:
       '<svg viewBox="0 0 24 24" fill="currentColor" stroke="none"><path d="M8 5.2v13.6a1 1 0 0 0 1.52.85l10.5-6.8a1 1 0 0 0 0-1.7L9.52 4.35A1 1 0 0 0 8 5.2Z"/></svg>',
     pause:
@@ -1769,7 +1771,7 @@
     if (!bank.length) return "";
     var canSwap = bank.length > 1;
     return (
-      '<div class="g-card"><div class="g-card-head"><span class="t">' + ICONS.info + "诗笺</span></div>" +
+      '<div class="g-card g-poem"><div class="g-card-head"><span class="t">' + ICONS.poem + "诗笺</span></div>" +
       '<div class="g-notice' + (canSwap ? " gn-swap" : "") + '"' +
       (canSwap ? ' role="button" tabindex="0" title="换一首"' : "") +
       '><div class="gn-body">' + poemInner(bank[_poemIdx]) + "</div></div></div>"
