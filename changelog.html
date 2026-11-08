@@ -20,7 +20,7 @@
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20viewBox%3D%270%200%2064%2064%27%3E%3Crect%20width%3D%2764%27%20height%3D%2764%27%20rx%3D%2715%27%20fill%3D%27%23241f33%27%2F%3E%3Cg%20transform%3D%27translate%286%2C6%29%20scale%282.1667%29%27%3E%3Cpath%20d%3D%27M21%2012.79A9%209%200%201%201%2011.21%203%207%207%200%200%200%2021%2012.79z%27%20fill%3D%27%23f6f1e7%27%2F%3E%3C%2Fg%3E%3C%2Fsvg%3E">
-<link rel="stylesheet" href="assets/css/style.css?v=20261108c">
+<link rel="stylesheet" href="assets/css/style.css?v=20261108d">
   <link rel="alternate" type="application/rss+xml" title="RezeのBlog" href="feed.xml">
 </head>
 <body class="has-app">
@@ -70,7 +70,7 @@
 <header class="cl-head">
 <h1>更新日志</h1>
 <div class="cl-facts">
-<span><b>57</b> 条记录</span>
+<span><b>59</b> 条记录</span>
 <span><b>6</b> 个时间节点</span>
 <span>跨度 2020.07 — 2026.11</span>
 </div>
@@ -79,7 +79,7 @@
 <button type="button" class="cl-btn" data-cl-all="0">全部收起</button>
 </div>
 <nav class="cl-nav" aria-label="按时间跳转">
-<a href="#cl-202611">2026.11<i>28 条</i></a>
+<a href="#cl-202611">2026.11<i>30 条</i></a>
 <a href="#cl-202610">2026.10<i>10 条</i></a>
 <a href="#cl-202604">2026.04<i>6 条</i></a>
 <a href="#cl-202506">2025.06<i>1 条</i></a>
@@ -88,9 +88,24 @@
 </nav>
 </header>
 <section class="cl-month" id="cl-202611">
-<h2>2026 年 11 月<span class="cl-count">28 条</span></h2>
+<h2>2026 年 11 月<span class="cl-count">30 条</span></h2>
 <ol class="cl-list">
 <li class="cl-item"><details open>
+<summary><span class="cl-kind" data-k="界面">界面</span><span class="cl-t">站务页三列等高，每页十三条</span><span class="cl-n">2 项</span></summary>
+<div class="cl-body"><ul>
+<li>站务页中间一列原先在分页条处收住，左右侧栏还往下走一截。现在三列按最高的一列拉齐，分页条落在列底，翻到最后一页或搜出少量结果时也不会半截收住。</li>
+<li>每页从 10 条改成 13 条，74 条共 6 页。搜索结果沿用同一套分页。</li>
+</ul></div>
+</details></li>
+<li class="cl-item"><details>
+<summary><span class="cl-kind" data-k="功能">功能</span><span class="cl-t">欢迎页轮播与诗笺的句子池扩容</span><span class="cl-n">3 项</span></summary>
+<div class="cl-body"><ul>
+<li>欢迎页那行打字机原来 20 句，诗笺卡 39 首，随机起点与点击换一首都在这两个池子里转。现在各补 20 句与 28 首，轮播 40 句、诗笺 67 首。</li>
+<li>新补的覆盖诗经、楚辞、乐府、诸子散文、六朝笔记、唐宋诗文、元曲、明清格言、民谣农谚、现代白话，以及英、日、拉丁、德、意的短句与谚语。诗笺每条注明出处，欢迎页沿用无署名短句，取的都为公版原句。</li>
+<li>句子放在前端代码里，按文本去重后并进站设数据。云端站设、361 篇正文与欢迎页可见元素都没动。</li>
+</ul></div>
+</details></li>
+<li class="cl-item"><details>
 <summary><span class="cl-kind" data-k="界面">界面</span><span class="cl-t">站务页每页十条，诗笺卡换回毛笔楷书</span><span class="cl-n">2 项</span></summary>
 <div class="cl-body"><ul>
 <li>站务 74 条原先一次铺完。现在每页 10 条，用写作页同一套分页条：首尾、页码、跳页框都在。搜索结果同样分页，卡片头的条数随筛选变化。</li>
@@ -618,10 +633,10 @@
   } catch (e) {}
 })();
 </script>
-<script defer src="assets/js/data.meta.js?v=20261108c"></script>
-<script defer src="assets/js/cloud.js?v=20261108c"></script>
-<script defer src="assets/js/weather.js?v=20261108c"></script>
-<script defer src="assets/js/main.js?v=20261108c"></script>
+<script defer src="assets/js/data.meta.js?v=20261108d"></script>
+<script defer src="assets/js/cloud.js?v=20261108d"></script>
+<script defer src="assets/js/weather.js?v=20261108d"></script>
+<script defer src="assets/js/main.js?v=20261108d"></script>
 <script>
 /* 更新日志的一键展开／收起。details 自己就能点，这段只管批量开关。 */
 document.addEventListener("click", function (e) {

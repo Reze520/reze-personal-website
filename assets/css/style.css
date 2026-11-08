@@ -11535,3 +11535,24 @@ html {
   border-radius: inherit;
   background: hsl(var(--cat-h, 262) 52% 56% / 0.75);
 }
+
+/* ============================================================
+   站务页三列等高：中间一列原先在分页条处收住，左右侧栏还往下走一截。
+   只在站务页生效，其它页面版式不动。
+   ============================================================ */
+.app[data-page="moments"],
+.app[data-page="timeline"] {
+  align-items: stretch;
+}
+.app[data-page="moments"] > .col-main,
+.app[data-page="timeline"] > .col-main {
+  min-height: 0;
+}
+.app[data-page="moments"] .g-moments,
+.app[data-page="timeline"] .g-moments {
+  flex: 1 1 auto;
+}
+.app[data-page="moments"] .g-moments > .g-pager,
+.app[data-page="timeline"] .g-moments > .g-pager {
+  margin-top: auto;
+}

@@ -1185,7 +1185,7 @@
     if (!listEl) return;
     var all = siteFeed();
     var curQ = "";
-    var PER = 10;
+    var PER = 13;
     var curPage = 0;
     var curPages = 1;
 
@@ -1659,15 +1659,93 @@
     scheduleLunar();
   }
 
+  /* 站上自留的句子：后台整存 settings 会整块覆盖 SITE，这些句子每次读取时并回去。
+     诗笺每条带出处，欢迎页沿用原来的无署名短句，取的都为公版原句。 */
+  var EXTRA_LINES = [
+    "山高月小，水落石出。",
+    "此心安处是吾乡。",
+    "大漠孤烟直，长河落日圆。",
+    "悟已往之不谏，知来者之可追。",
+    "岁寒，然后知松柏之后凋也。",
+    "路漫漫其修远兮，吾将上下而求索。",
+    "清明前后，种瓜点豆。",
+    "良言一句三冬暖，恶语伤人六月寒。",
+    "一株是枣树，还有一株也是枣树。",
+    "不要人夸好颜色，只留清气满乾坤。",
+    "七転び八起き。",
+    "花より団子。",
+    "明日は明日の風が吹く。",
+    "Carpe diem.",
+    "Memento mori.",
+    "Veni, vidi, vici.",
+    "Ars longa, vita brevis.",
+    "Festina lente.",
+    "Übung macht den Meister.",
+    "Chi va piano, va sano e va lontano."
+  ];
+  var EXTRA_POEMS = [
+    {"t": "蒹葭苍苍，白露为霜。\n所谓伊人，在水一方。", "by": "《诗经·秦风·蒹葭》"},
+    {"t": "彼采葛兮，一日不见，\n如三月兮。", "by": "《诗经·王风·采葛》"},
+    {"t": "袅袅兮秋风，\n洞庭波兮木叶下。", "by": "屈原《九歌·湘夫人》"},
+    {"t": "敕勒川，阴山下。\n天似穹庐，笼盖四野。\n天苍苍，野茫茫，风吹草低见牛羊。", "by": "北朝民歌《敕勒歌》"},
+    {"t": "万里赴戎机，关山度若飞。\n朔气传金柝，寒光照铁衣。", "by": "北朝民歌《木兰诗》"},
+    {"t": "对酒当歌，人生几何！\n譬如朝露，去日苦多。", "by": "汉·曹操《短歌行》"},
+    {"t": "子在川上曰：\n逝者如斯夫，不舍昼夜。", "by": "《论语·子罕》"},
+    {"t": "北冥有鱼，其名为鲲。\n鲲之大，不知其几千里也。", "by": "《庄子·逍遥游》"},
+    {"t": "谢太傅寒雪日内集，与儿女讲论文义。\n俄而雪骤，公欣然曰：白雪纷纷何所似？\n兄子胡儿曰：撒盐空中差可拟。\n兄女曰：未若柳絮因风起。", "by": "南朝宋·刘义庆《世说新语·言语》"},
+    {"t": "落霞与孤鹜齐飞，\n秋水共长天一色。", "by": "唐·王勃《滕王阁序》"},
+    {"t": "春眠不觉晓，处处闻啼鸟。\n夜来风雨声，花落知多少。", "by": "唐·孟浩然《春晓》"},
+    {"t": "行到水穷处，坐看云起时。\n偶然值林叟，谈笑无还期。", "by": "唐·王维《终南别业》"},
+    {"t": "花间一壶酒，独酌无相亲。\n举杯邀明月，对影成三人。", "by": "唐·李白《月下独酌·其一》"},
+    {"t": "会当凌绝顶，\n一览众山小。", "by": "唐·杜甫《望岳》"},
+    {"t": "离离原上草，一岁一枯荣。\n野火烧不尽，春风吹又生。", "by": "唐·白居易《赋得古原草送别》"},
+    {"t": "沉舟侧畔千帆过，\n病树前头万木春。", "by": "唐·刘禹锡《酬乐天扬州初逢席上见赠》"},
+    {"t": "沧海月明珠有泪，\n蓝田日暖玉生烟。", "by": "唐·李商隐《锦瑟》"},
+    {"t": "元丰六年十月十二日夜，解衣欲睡，月色入户，欣然起行。\n庭下如积水空明，水中藻、荇交横，盖竹柏影也。\n何夜无月？何处无竹柏？但少闲人如吾两人者耳。", "by": "宋·苏轼《记承天寺夜游》"},
+    {"t": "山高月小，水落石出。\n曾日月之几何，而江山不可复识矣。", "by": "宋·苏轼《后赤壁赋》"},
+    {"t": "两情若是久长时，\n又岂在朝朝暮暮。", "by": "宋·秦观《鹊桥仙·纤云弄巧》"},
+    {"t": "二十四桥仍在，\n波心荡、冷月无声。", "by": "宋·姜夔《扬州慢·淮左名都》"},
+    {"t": "自送别，心难舍，\n一点相思几时绝？", "by": "元·关汉卿《四块玉·别情》"},
+    {"t": "孤村落日残霞，轻烟老树寒鸦，一点飞鸿影下。\n青山绿水，白草红叶黄花。", "by": "元·白朴《天净沙·秋》"},
+    {"t": "宠辱不惊，闲看庭前花开花落；\n去留无意，漫随天外云卷云舒。", "by": "明·洪应明《菜根谭》"},
+    {"t": "浩荡离愁白日斜，吟鞭东指即天涯。\n落红不是无情物，化作春泥更护花。", "by": "清·龚自珍《己亥杂诗·其五》"},
+    {"t": "一九二九不出手，三九四九冰上走。\n五九六九沿河看柳，七九河开，八九燕来。\n九九加一九，耕牛遍地走。", "by": "数九歌（北方民谣）"},
+    {"t": "良言一句三冬暖，\n恶语伤人六月寒。", "by": "《增广贤文》"},
+    {"t": "在我的后园，可以看见墙外有两株树，\n一株是枣树，还有一株也是枣树。", "by": "鲁迅《秋夜》"}
+  ];
+
+  function siteLines() {
+    var base = ((SITE.splash && SITE.splash.lines) || []).filter(Boolean);
+    var seen = {}, out = [];
+    base.concat(EXTRA_LINES).forEach(function (x) {
+      if (!x || seen[x]) return;
+      seen[x] = 1;
+      out.push(x);
+    });
+    return out;
+  }
+
+  function sitePoems() {
+    var base = (SITE.poems && SITE.poems.length)
+      ? SITE.poems
+      : (SITE.notice ? [SITE.notice] : []);
+    var seen = {}, out = [];
+    base.concat(EXTRA_POEMS).forEach(function (x) {
+      var t = (typeof x === "string") ? x : ((x && x.t) || "");
+      if (!t || seen[t]) return;
+      seen[t] = 1;
+      out.push(x);
+    });
+    return out;
+  }
+
   /* ---------- 诗笺：点击换一首 ----------
      原来每次进页面随机抽一条，抽到哪首全靠运气，想换也没办法。
      现在固定成一组，点卡片就往下顺一条，淡出淡入接上。 */
   var _poemBank = null, _poemSig = "", _poemIdx = 0;
 
   function poemBank() {
-    var src = (SITE.poems && SITE.poems.length)
-      ? SITE.poems
-      : (SITE.notice ? [SITE.notice] : []);
+    var src = sitePoems();
     var first = src.length ? (typeof src[0] === "string" ? src[0] : (src[0] && src[0].t) || "") : "";
     var sig = src.length + "|" + first;
     if (_poemBank && _poemSig === sig) return _poemBank;
@@ -4906,7 +4984,7 @@ function interceptLinks(e) {
 
     // 会打字、删除、换句的那一行
     var typingEl = $("#typing");
-    var lineList = (cfg.lines || []).filter(Boolean);
+    var lineList = siteLines();
     if (typingEl && lineList.length) startTyping(typingEl, lineList);
 
     var title = $("#splash-title");
