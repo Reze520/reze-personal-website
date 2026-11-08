@@ -11957,6 +11957,22 @@ html[data-skin="paper"] .g-toc {
 html[data-skin="paper"] .g-card + .g-card,
 html[data-skin="paper"] .g-posth + .g-posth { margin-top: 0 !important; }
 
+/* 玻璃皮肤给每张卡铺了一层 --card-scrim 底衬（伪元素）。纸样把卡片底改成
+   透明之后这层还留着：浅色下是一块发白的板子，深色下直接是一块深灰条，
+   筛选条尤其显眼。纸样整体不需要底衬，全部去掉。 */
+html[data-skin="paper"] .g-card::before,
+html[data-skin="paper"] .g-post::before,
+html[data-skin="paper"] .g-posth::before,
+html[data-skin="paper"] .g-moment::before,
+html[data-skin="paper"] .g-link::before,
+html[data-skin="paper"] .g-article::before,
+html[data-skin="paper"] .g-tabs::before,
+html[data-skin="paper"] .g-filters::before,
+html[data-skin="paper"] .g-searchline::before,
+html[data-skin="paper"] .side-block::before,
+html[data-skin="paper"] .profile::before,
+html[data-skin="paper"] .g-album figure::before { display: none !important; }
+
 /* 左栏：诗笺与播放器靠留白分区，不靠框 */
 html[data-skin="paper"] #app-left .g-card { padding: 16px 0 !important; }
 html[data-skin="paper"] #app-left .g-card h3,
