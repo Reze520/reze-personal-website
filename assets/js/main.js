@@ -53,6 +53,29 @@
   // 否则后台/云端的动态数据无法同步到这里的渲染。
   var POSTS = window.POSTS || [];
 
+  // 批量导回仓库时给多篇旧文打上同一个 updated，前台会显示成「更新于」，
+  // feed 也按它排序，把几年前的稿子顶到最前。同一天被五篇以上共用、且与
+  // 发布日期不同的 updated 视为同步戳，读取时抹掉；正文与云端数据都不动。
+  function stripBatchStamps(list) {
+    if (!Array.isArray(list) || list.length < 5) return;
+    var counts = {};
+    list.forEach(function (p) {
+      if (!p || !p.updated) return;
+      var u = String(p.updated).slice(0, 10);
+      var d = String(p.date || "").slice(0, 10);
+      if (!u || u === d) return;
+      counts[u] = (counts[u] || 0) + 1;
+    });
+    list.forEach(function (p) {
+      if (!p || !p.updated) return;
+      var u = String(p.updated).slice(0, 10);
+      var d = String(p.date || "").slice(0, 10);
+      if (u !== d && counts[u] >= 5) p.updated = "";
+    });
+  }
+
+  stripBatchStamps(POSTS);
+
   // 原地更新 SITE/POSTS（保持引用不变，页面所有渲染自动看到新数据）
   // keepContent：云端给的是轻量元数据（不带正文）时，别把已经取回的单篇正文冲掉
   function applyDataOver(site, posts, keepContent) {
@@ -71,6 +94,7 @@
             if (p && !p.content && oldBody[p.id]) p.content = oldBody[p.id];
           });
         }
+        stripBatchStamps(posts);
         window.POSTS.length = 0;
         posts.forEach(function (p) { window.POSTS.push(p); });
       }

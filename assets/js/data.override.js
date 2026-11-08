@@ -2029,7 +2029,7 @@ window.POSTS = [
     "id": "post-243",
     "title": "G20「19比1」背后：全世界为什么开始抵制中国出口",
     "date": "2026-10-31",
-    "updated": "2026-11-06",
+    "updated": "",
     "cat": "日常",
     "tags": [
       "经济",
@@ -2603,7 +2603,7 @@ window.POSTS = [
     "id": "post-354",
     "title": "人不生产的时候，还剩什么身份",
     "date": "2020-11-14",
-    "updated": "2026-11-06",
+    "updated": "",
     "cat": "读书",
     "tags": [
       "哲学",
@@ -2622,7 +2622,7 @@ window.POSTS = [
     "id": "post-353",
     "title": "半句诗怎么变成了签名",
     "date": "2023-09-15",
-    "updated": "2026-11-06",
+    "updated": "",
     "cat": "文史",
     "tags": [
       "诗词",
@@ -2641,7 +2641,7 @@ window.POSTS = [
     "id": "post-352",
     "title": "陶渊明有两副面孔，我们只留了一副",
     "date": "2021-11-19",
-    "updated": "2026-11-06",
+    "updated": "",
     "cat": "读书",
     "tags": [
       "文学",
@@ -2660,7 +2660,7 @@ window.POSTS = [
     "id": "post-351",
     "title": "打字可以，别发语音",
     "date": "2025-09-09",
-    "updated": "2026-11-06",
+    "updated": "",
     "cat": "日常",
     "tags": [
       "语言",
@@ -2755,7 +2755,7 @@ window.POSTS = [
     "id": "post-346",
     "title": "2023：进淄赶烤的四百八十万人次，后来去哪了",
     "date": "2023-05-12",
-    "updated": "2026-11-06",
+    "updated": "",
     "cat": "杂记",
     "tags": [
       "城市",
@@ -2774,7 +2774,7 @@ window.POSTS = [
     "id": "post-345",
     "title": "2020：地摊经济的「放」与「管」",
     "date": "2020-06-30",
-    "updated": "2026-11-06",
+    "updated": "",
     "cat": "杂记",
     "tags": [
       "社会",
@@ -2793,7 +2793,7 @@ window.POSTS = [
     "id": "post-344",
     "title": "1930：凯恩斯给「技术性失业」起了名字",
     "date": "2022-05-18",
-    "updated": "2026-11-06",
+    "updated": "",
     "cat": "文史",
     "tags": [
       "历史",
@@ -2812,7 +2812,7 @@ window.POSTS = [
     "id": "post-343",
     "title": "白居易把工资写进了诗里",
     "date": "2024-04-01",
-    "updated": "2026-11-06",
+    "updated": "",
     "cat": "文史",
     "tags": [
       "诗词",
@@ -2831,7 +2831,7 @@ window.POSTS = [
     "id": "post-342",
     "title": "两句唐诗，鲁迅和朱光潜吵了九十年",
     "date": "2025-05-16",
-    "updated": "2026-11-06",
+    "updated": "",
     "cat": "读书",
     "tags": [
       "文学",
@@ -7460,7 +7460,7 @@ window.POSTS = [
     "id": "post-74",
     "title": "当梗替你说话",
     "date": "2026-03-11",
-    "updated": "2026-11-06",
+    "updated": "",
     "cat": "杂记",
     "tags": [
       "语言",

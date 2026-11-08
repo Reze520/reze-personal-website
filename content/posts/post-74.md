@@ -2,7 +2,7 @@
 id: "post-74"
 title: "当梗替你说话"
 date: "2026-03-11"
-updated: "2026-11-06"
+updated: ""
 cat: "杂记"
 tags: ["语言", "社会", "劳动", "青年", "技术"]
 cover: ""
