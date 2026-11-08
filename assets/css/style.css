@@ -11506,31 +11506,68 @@ html:not([data-theme="dark"]) .ft-mini { border-left-color: rgba(124, 92, 190, .
 }
 .arc-j:hover { color: var(--ink); border-color: var(--line-2); }
 
-.arc-more { display: none; }
-.arc-morebtn { text-align: center; padding: 26px 0 6px; }
-
+/* 每个年份一个可折叠区块：默认收起，只留「年份 · N 篇」一行；点开才列该年文章。
+   2026 一年就有 126 篇，整页直铺会非常长，折叠后首屏只剩年份标题行。 */
 .arc-year {
-  /* 一年一张纸。底色跟列表页的卡片同一套（--glass），但不加背景模糊：
-     一张纸三四千像素高，blur 那么一大块在手机上会拖滚动。
-     不铺底的话，浅色主题下目录直接压在墙纸上，标题还能看，日期就糊了。 */
-  margin: 0 0 14px;
-  padding: 2px 22px 14px;
-  background: var(--glass);
-  border: 1px solid var(--line);
-  border-radius: 14px;
+  margin: 0;
+  padding: 0;
+  background: transparent;
+  border: 0;
+  border-bottom: 1px solid var(--line);
+  border-radius: 0;
   scroll-margin-top: 80px;
 }
 
-.arc-h {
+.arc-summary {
   display: flex;
   align-items: baseline;
   gap: 12px;
-  margin: 16px 0 2px;
-  padding: 0 0 10px;
-  border-bottom: 1px solid var(--line-2);
-  font-weight: 400;
+  margin: 0;
+  padding: 16px 2px;
+  cursor: pointer;
+  list-style: none;
+  -webkit-tap-highlight-color: transparent;
 }
-.arc-year:first-of-type .arc-h { margin-top: 12px; }
+.arc-summary::-webkit-details-marker { display: none; }
+.arc-summary::after {
+  content: "+";
+  margin-left: auto;
+  font-family: var(--mono);
+  font-size: 18px;
+  line-height: 1;
+  color: var(--ink-3);
+}
+.arc-year[open] > .arc-summary::after { content: "\2212"; }
+
+.arc-num {
+  font-family: var(--serif);
+  font-size: 30px;
+  line-height: 1;
+  letter-spacing: 0.01em;
+  color: var(--ink);
+  font-variant-numeric: tabular-nums;
+}
+.arc-cnt {
+  font-size: 11.5px;
+  color: var(--ink-3);
+  font-variant-numeric: tabular-nums;
+}
+
+.arc-rest[hidden] { display: none; }
+.arc-restbtn {
+  display: inline-block;
+  margin: 8px 0 18px;
+  padding: 8px 14px;
+  border: 1px dashed var(--glass-line, var(--line));
+  border-radius: 10px;
+  background: transparent;
+  color: var(--ink-2);
+  font: inherit;
+  font-size: 12.5px;
+  cursor: pointer;
+  transition: all 0.2s var(--ease);
+}
+.arc-restbtn:hover { color: var(--accent, var(--ink)); border-color: var(--line-2); }
 
 .arc-num {
   font-family: var(--serif);
@@ -11578,8 +11615,7 @@ html:not([data-theme="dark"]) .ft-mini { border-left-color: rgba(124, 92, 190, .
 .arc-row:hover .arc-d { color: var(--ink-2); }
 
 @media (max-width: 620px) {
-  .arc-year { padding: 2px 16px 12px; border-radius: 12px; }
-  .arc-h { margin-top: 14px; }
+  .arc-summary { padding: 14px 2px; }
   .arc-num { font-size: 26px; }
   .arc-row { grid-template-columns: 44px minmax(0, 1fr); gap: 10px; }
   .arc-t { font-size: 15px; }
@@ -12123,6 +12159,7 @@ html[data-skin="paper"] .ix-group {
   box-shadow: none !important;
 }
 html[data-skin="paper"] .arc-h { color: #a83226 !important; }
+html[data-skin="paper"] .arc-summary { color: #5b554a !important; }
 html[data-skin="paper"] .arc-year {
   background: transparent !important;
   background-image: none !important;
@@ -12132,7 +12169,8 @@ html[data-skin="paper"] .arc-year {
   box-shadow: none !important;
   color: #24211c !important;
 }
-html[data-skin="paper"] .arc-num { color: #24211c !important; }
+html[data-skin="paper"] .arc-num { color: #a83226 !important; }
+html[data-skin="paper"] .arc-cnt { color: #8b8375 !important; }
 
 /* 页尾 */
 html[data-skin="paper"] .site-foot {

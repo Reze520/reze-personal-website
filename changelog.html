@@ -20,7 +20,7 @@
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20viewBox%3D%270%200%2064%2064%27%3E%3Crect%20width%3D%2764%27%20height%3D%2764%27%20rx%3D%2715%27%20fill%3D%27%23241f33%27%2F%3E%3Cg%20transform%3D%27translate%286%2C6%29%20scale%282.1667%29%27%3E%3Cpath%20d%3D%27M21%2012.79A9%209%200%201%201%2011.21%203%207%207%200%200%200%2021%2012.79z%27%20fill%3D%27%23f6f1e7%27%2F%3E%3C%2Fg%3E%3C%2Fsvg%3E">
-<link rel="stylesheet" href="assets/css/style.css?v=20261108y">
+<link rel="stylesheet" href="assets/css/style.css?v=20261108z">
   <link rel="alternate" type="application/rss+xml" title="RezeのBlog" href="feed.xml">
 </head>
 <body class="has-app">
@@ -70,7 +70,7 @@
 <header class="cl-head">
 <h1>更新日志</h1>
 <div class="cl-facts">
-<span><b>70</b> 条记录</span>
+<span><b>71</b> 条记录</span>
 <span><b>6</b> 个时间节点</span>
 <span>跨度 2020.07 — 2026.11</span>
 </div>
@@ -79,7 +79,7 @@
 <button type="button" class="cl-btn" data-cl-all="0">全部收起</button>
 </div>
 <nav class="cl-nav" aria-label="按时间跳转">
-<a href="#cl-202611">2026.11<i>41 条</i></a>
+<a href="#cl-202611">2026.11<i>42 条</i></a>
 <a href="#cl-202610">2026.10<i>10 条</i></a>
 <a href="#cl-202604">2026.04<i>6 条</i></a>
 <a href="#cl-202506">2025.06<i>1 条</i></a>
@@ -88,9 +88,17 @@
 </nav>
 </header>
 <section class="cl-month" id="cl-202611">
-<h2>2026 年 11 月<span class="cl-count">41 条</span></h2>
+<h2>2026 年 11 月<span class="cl-count">42 条</span></h2>
 <ol class="cl-list">
 <li class="cl-item"><details open>
+<summary><span class="cl-kind" data-k="修复">修复</span><span class="cl-t">归档页改为年份折叠，彻底解决过长问题</span><span class="cl-n">3 项</span></summary>
+<div class="cl-body"><ul>
+<li>原来首屏平铺最近两年，但 2026 单独就有 126 篇，仍要滚很久。改为每个年份一个可折叠区块：默认收起，只留「年份 · N 篇」一行，点开才列该年文章；首屏只剩 7 个年份标题。</li>
+<li>单年超过 40 篇时先展示 40 行，余下由「展开剩余 N 篇」按钮释放。年份跳转点一下自动展开并滚过去。</li>
+<li>移除旧的「加载更早的年份」整页展开逻辑。</li>
+</ul></div>
+</details></li>
+<li class="cl-item"><details>
 <summary><span class="cl-kind" data-k="修复">修复</span><span class="cl-t">纸样首屏仍偏窄、社交图标残留阴影</span><span class="cl-n">2 项</span></summary>
 <div class="cl-body"><ul>
 <li>纸样段把首屏容器 <code>.splash-inner</code> 用 <code>!important</code> 钉在 <code>max-width:1000px</code>，把全局加宽全盖掉，纸样下首屏仍两侧大空。放开到 1600px，跟随主体铺满，不再成一条居中窄带。</li>
@@ -711,11 +719,11 @@
   } catch (e) {}
 })();
 </script>
-<script defer src="assets/js/data.meta.js?v=20261108y"></script>
-<script defer src="assets/js/cloud.js?v=20261108y"></script>
-<script defer src="assets/js/weather.js?v=20261108y"></script>
-<script defer src="assets/js/playlist.js?v=20261108y"></script>
-<script defer src="assets/js/main.js?v=20261108y"></script>
+<script defer src="assets/js/data.meta.js?v=20261108z"></script>
+<script defer src="assets/js/cloud.js?v=20261108z"></script>
+<script defer src="assets/js/weather.js?v=20261108z"></script>
+<script defer src="assets/js/playlist.js?v=20261108z"></script>
+<script defer src="assets/js/main.js?v=20261108z"></script>
 <script>
 /* 更新日志的一键展开／收起。details 自己就能点，这段只管批量开关。 */
 document.addEventListener("click", function (e) {

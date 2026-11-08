@@ -2584,65 +2584,72 @@ function archiveMainHtml() {
     );
   }
 
-  /* 先列最近几年，其余放进隐藏容器，底部「加载更早」再成批展开；
-     首屏不再一次铺满七年，长页面收短。年份跳转仍可直达任一年（自动先展开）。 */
-  var ARC_INITIAL = 2;
-  var visYears = years.slice(0, ARC_INITIAL);
-  var hidYears = years.slice(ARC_INITIAL);
+  /* 每个年份收成一个可折叠区块：默认收起，只留「年份 · N 篇」一行；点开才列该年文章。
+     2026 一年就有 126 篇，整页直铺会非常长，折叠后首屏只剩年份标题。
+     一年超过 ARC_CAP 篇时，先展示前 ARC_CAP 篇，余下放进隐藏容器，由「展开剩余」释放。 */
+  var ARC_CAP = 40;
+  function rowHtml(p) {
+    var d = String(p.date || "");
+    var md = d.slice(5, 7).replace(/^0/, "") + "." + d.slice(8, 10);
+    return (
+      '<a class="arc-row" href="' + postHref(p) + '">' +
+      '<span class="arc-d">' + md + "</span>" +
+      '<span class="arc-t">' + esc(p.title || "") + "</span>" +
+      "</a>"
+    );
+  }
+  function yearBlock(y, open) {
+    var arr = byYear[y];
+    var total = arr.length;
+    var head = arr.slice(0, ARC_CAP).map(rowHtml).join("");
+    var rest = "";
+    if (total > ARC_CAP) {
+      rest =
+        '<div class="arc-rest" hidden>' +
+        arr.slice(ARC_CAP).map(rowHtml).join("") +
+        '</div><button type="button" class="arc-restbtn" data-rest="y' + y + '">展开剩余 ' +
+        (total - ARC_CAP) + " 篇</button>";
+    }
+    return (
+      '<details class="arc-year" id="y' + y + '" data-y="' + y + '"' +
+      (open ? " open" : "") + ">" +
+      '<summary class="arc-summary"><span class="arc-num">' + y + "</span>" +
+      '<span class="arc-cnt">' + total + " 篇</span></summary>" +
+      '<div class="arc-rows">' + head + rest + "</div></details>"
+    );
+  }
+
+  var newest = years[0];
+  var blocks = years.map(function (y) { return yearBlock(y, y === newest); }).join("");
 
   return (
     '<div class="arc-top"><p class="g-scale">' + listScaleText() +
     ' · <a class="g-archlink" href="/sources">参考源</a>' +
     ' · <a class="g-archlink" href="/topics">词条</a></p>' +
     '<div class="arc-jump">' + jump + "</div></div>" +
-    '<div class="arc-blocks" id="arc-blocks">' + visYears.map(yearBlock).join("") + "</div>" +
-    (hidYears.length
-      ? '<div class="arc-more" id="arc-more">' + hidYears.map(yearBlock).join("") + "</div>" +
-        '<div class="arc-morebtn"><button type="button" id="arc-load" class="pg-btn">加载更早的年份</button></div>'
-      : "")
+    '<div class="arc-blocks" id="arc-blocks">' + blocks + "</div>"
   );
 }
 
 function bindArchive(root) {
-  var blocks = root.querySelector("#arc-blocks");
-  var moreWrap = root.querySelector("#arc-more");
-  var moreBtn = root.querySelector("#arc-load");
-
-  /* 把隐藏容器里、直到 sec（含）的年份依次移入可见区，并收掉已空的按钮。 */
-  function revealUpTo(sec) {
-    if (!moreWrap || !blocks || !sec) return;
-    while (moreWrap.firstElementChild && moreWrap.firstElementChild !== sec) {
-      blocks.appendChild(moreWrap.firstElementChild);
-    }
-    if (moreWrap.firstElementChild === sec) blocks.appendChild(sec);
-    if (!moreWrap.firstElementChild && moreBtn && moreBtn.parentNode) {
-      moreBtn.parentNode.remove();
-    }
-  }
-
   root.querySelectorAll(".arc-j").forEach(function (b) {
     b.addEventListener("click", function () {
       var y = b.getAttribute("data-y");
-      var sec = root.querySelector('.arc-year[data-y="' + y + '"]');
-      if (sec && moreWrap && sec.parentElement === moreWrap) {
-        revealUpTo(sec);
-        sec = root.querySelector('.arc-year[data-y="' + y + '"]');
+      var det = root.querySelector('.arc-year[data-y="' + y + '"]');
+      if (det) {
+        det.open = true;
+        det.scrollIntoView({ behavior: "smooth", block: "start" });
       }
-      if (sec) sec.scrollIntoView({ behavior: "smooth", block: "start" });
     });
   });
 
-  if (moreBtn && moreWrap && blocks) {
-    var STEP = 2; // 每次展开两年
-    moreBtn.addEventListener("click", function () {
-      for (var k = 0; k < STEP && moreWrap.firstElementChild; k++) {
-        blocks.appendChild(moreWrap.firstElementChild);
-      }
-      if (!moreWrap.firstElementChild && moreBtn.parentNode) {
-        moreBtn.parentNode.remove();
-      }
+  root.querySelectorAll(".arc-restbtn").forEach(function (btn) {
+    btn.addEventListener("click", function () {
+      var rest = btn.parentElement.querySelector(".arc-rest");
+      if (rest) rest.hidden = false;
+      btn.remove();
     });
-  }
+  });
 }
 
 /* 时间线先只渲染最近几条，底部「加载更早」再往前翻。
