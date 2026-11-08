@@ -5699,7 +5699,7 @@ function interceptLinks(e) {
      为什么要缓存：/site-data/content 是一整仿、一千多 KB，回包时快时慢。
      不缓存的话每次刷新都得等它，等不到就只能用 data.js 里的旧数据，
      刚发的文章就会成为「没有找到」。存一份在 localStorage，下次先用它铺页面。 */
-  var CONTENT_CACHE_KEY = "reze-content-cache-v1";
+  var CONTENT_CACHE_KEY = "reze-content-cache-v2";
   var CONTENT_CACHE_MAX = 3.6 * 1024 * 1024; // 大概 3.6MB，留余量给别的键
 
   function readContentCache() {
@@ -5730,10 +5730,18 @@ function interceptLinks(e) {
 
   /* 云端内容到达后，把「刚才没拿到」的那一页补画一遍。
      正常浏览时这里什么都不做，只有内容比首屏晚到或版本变了才动手。 */
-  /* 内容指纹：篇数 + 时间线条数。够用来判断「云端那份和刚才画的那份是不是同一份」，
-     不用把所有正文都比一遍。 */
+  /* 内容指纹：篇数 + 时间线条数 + 每篇的置顶、日期、更新时间。
+     只比篇数会漏掉「篇数没变但置顶状态变了」：旧缓存先铺页面，云端回来
+     数据换了却不重画，撤掉的置顶会一直挂在卡片上。 */
   function contentSig() {
-    return (window.POSTS || []).length + "|" + (((window.SITE && window.SITE.timeline) || []).length);
+    var ps = window.POSTS || [];
+    var h = 0;
+    for (var i = 0; i < ps.length; i++) {
+      var q = ps[i] || {};
+      var s = (q.id || "") + ":" + (q.pinned ? 1 : 0) + ":" + (q.date || "") + ":" + (q.updated || "");
+      for (var j = 0; j < s.length; j++) h = (h * 31 + s.charCodeAt(j)) | 0;
+    }
+    return ps.length + "|" + (((window.SITE && window.SITE.timeline) || []).length) + "|" + h;
   }
   var _bootSig = "";
 
