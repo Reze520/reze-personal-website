@@ -12460,3 +12460,58 @@ html[data-skin="paper"][data-theme="dark"] .site-head { background: #f6f2e9 !imp
   html[data-skin="paper"] .splash { max-width: 100vw !important; }
   html[data-skin="paper"] body { overflow-x: hidden !important; }
 }
+/* ---------- 发现 / 年度回顾 弹层 ---------- */
+.disc-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 18px;
+  border-bottom: 1px solid var(--line);
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--ink);
+}
+.disc-head .disc-x { display: block; }
+.disc-body {
+  max-height: 62vh;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding: 6px 18px 18px;
+}
+.disc-sec { margin-top: 14px; }
+.disc-sec h4 {
+  margin: 0 0 10px;
+  font-size: 12.5px;
+  font-weight: 600;
+  color: var(--ink-2);
+  letter-spacing: 0.04em;
+}
+.disc-sec .g-cats, .disc-sec .g-tagwrap { margin: 0; }
+.yr-body {
+  max-height: 64vh;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding: 14px 18px 18px;
+}
+.yr-sum { margin: 0 0 14px; font-size: 12.5px; color: var(--ink-2); }
+.yr-row {
+  display: grid;
+  grid-template-columns: 54px 52px 1fr 84px 64px;
+  align-items: center;
+  gap: 10px;
+  padding: 7px 0;
+  border-bottom: 1px solid var(--line);
+  font-size: 12.5px;
+  color: var(--ink);
+}
+.yr-row:last-child { border-bottom: none; }
+.yr-y { font-weight: 600; }
+.yr-n { color: var(--ink-2); }
+.yr-bar { height: 8px; background: var(--bg-alt); border-radius: 999px; overflow: hidden; }
+.yr-bar i { display: block; height: 100%; background: linear-gradient(90deg, var(--accent), var(--g-accent)); border-radius: 999px; }
+.yr-w { color: var(--ink-2); text-align: right; }
+.yr-top { color: var(--ink-3); text-align: right; }
+@media (max-width: 520px) {
+  .yr-row { grid-template-columns: 46px 46px 1fr 70px; }
+  .yr-top { display: none; }
+}

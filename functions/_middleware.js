@@ -13,6 +13,10 @@ const ORIGIN = "https://reze520.pages.dev";
 
 export async function onRequest(context) {
   const url = new URL(context.request.url);
+  /* /topics 词条页已撤，旧地址与旧缓存统一并到参考源页，别停在 404 */
+  if (url.pathname === "/topics" || url.pathname === "/topics/") {
+    return Response.redirect(ORIGIN + "/sources", 301);
+  }
   if (url.pathname !== "/post" && url.pathname !== "/post.html") return context.next();
 
   const id = url.searchParams.get("id");

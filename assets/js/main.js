@@ -2082,6 +2082,7 @@
       "</dl></div></div>";
 
     initMiniCal(right);
+    renderRecModules(right);
 
     // 右栏天气小卡：独立订阅，切城市时右栏也跟着变
     if (window.WX) {
@@ -3498,6 +3499,7 @@ function renderMain() {
   }
   armScrollRestore(page);
   postRouteFix();
+  renderRecModules();
   syncMeta(page, params);
 }
 
@@ -4689,6 +4691,9 @@ function interceptLinks(e) {
 
     // 站内视频卡：正文里写了 data-bvid 的，这里变成「点击才加载」
     mountVideos(host);
+    recordRead(p.id);
+    attachReadScroll(p.id);
+    restoreRead(p.id);
 
     // 详情页没有三栏，目录得自己长出来（宽屏落右栏、窄屏落正文上方）。
     // 标题少于 4 个的直接不生成，省得小文章也挂个目录。
@@ -4716,6 +4721,228 @@ function interceptLinks(e) {
 
     // 文章底部留言区已收起（长期 0 条，改用页脚 / 关于页的邮箱入口）
     // mountComments(host, p.id);
+  }
+
+  /* ---------- 阅读历史：续读 / 猜你喜欢 ---------- */
+  function getHistory() {
+    try {
+      var a = JSON.parse(STORAGE.get("reze_history") || "[]");
+      return Array.isArray(a) ? a : [];
+    } catch (e) { return []; }
+  }
+  function recordRead(id) {
+    if (!id) return;
+    var h = getHistory().filter(function (x) { return x !== id; });
+    h.unshift(id);
+    if (h.length > 24) h = h.slice(0, 24);
+    STORAGE.set("reze_history", JSON.stringify(h));
+  }
+  function readYMap() {
+    try {
+      var m = JSON.parse(STORAGE.get("reze_read_y") || "{}");
+      return m && typeof m === "object" ? m : {};
+    } catch (e) { return {}; }
+  }
+  function saveScroll(id, y) {
+    if (!id) return;
+    var m = readYMap();
+    m[id] = Math.max(0, Math.round(y) || 0);
+    STORAGE.set("reze_read_y", JSON.stringify(m));
+  }
+  function restoreRead(id) {
+    var y = readYMap()[id];
+    if (!y) return;
+    instantScrollTo(y);
+    requestAnimationFrame(function () { instantScrollTo(y); });
+    setTimeout(function () { instantScrollTo(y); }, 400);
+  }
+  function attachReadScroll(id) {
+    if (window.__readScroll) window.removeEventListener("scroll", window.__readScroll);
+    window.__readId = id;
+    var last = 0;
+    window.__readScroll = function () {
+      var now = Date.now();
+      if (now - last < 700) return;
+      last = now;
+      saveScroll(window.__readId, window.scrollY);
+    };
+    window.addEventListener("scroll", window.__readScroll, { passive: true });
+  }
+
+  /* 右栏「继续读 / 猜你喜欢」：基于本地阅读历史，不建画像、不上传 */
+  function renderRecModules(right) {
+    var box = right || $("#app-right");
+    if (!box) return;
+    var hist = getHistory();
+
+    var cont = document.getElementById("rec-continue");
+    if (!cont) {
+      cont = document.createElement("div");
+      cont.className = "g-card rec-continue";
+      cont.id = "rec-continue";
+      box.appendChild(cont);
+    }
+    if (!hist.length) {
+      cont.style.display = "none";
+    } else {
+      cont.style.display = "";
+      var cItems = hist.slice(0, 6).map(function (id) {
+        var p = postById(id);
+        if (!p) return "";
+        return '<li><a href="/p/' + encodeURIComponent(p.id) + '">' +
+          "<time>" + fmtDate(p.date) + "</time>" +
+          "<span>" + esc(p.title) + "</span></a></li>";
+      }).filter(Boolean).join("");
+      cont.innerHTML =
+        '<div class="g-card-head"><span class="t">' + ICONS.clock + "继续读</span></div>" +
+        (cItems ? '<ul class="g-feed">' + cItems + "</ul>"
+                 : '<div class="g-notice">还没有读过的文章</div>');
+    }
+
+    var guess = document.getElementById("rec-guess");
+    if (!guess) {
+      guess = document.createElement("div");
+      guess.className = "g-card rec-guess";
+      guess.id = "rec-guess";
+      box.appendChild(guess);
+    }
+    var seed = hist.length ? postById(hist[0]) : null;
+    var recs = seed ? relatedPosts(seed, 5).map(function (r) { return r.post; })
+                    : orderedPosts().slice(0, 5);
+    if (!recs.length) {
+      guess.style.display = "none";
+    } else {
+      guess.style.display = "";
+      var gItems = recs.map(function (p) {
+        return '<li><a href="/p/' + encodeURIComponent(p.id) + '">' +
+          '<span class="cat" style="--cat-h:' + catHue(p.cat) + '">' + ICONS.folder + esc(p.cat) + "</span>" +
+          "<span>" + esc(p.title) + "</span></a></li>";
+      }).join("");
+      guess.innerHTML =
+        '<div class="g-card-head"><span class="t">' + ICONS.activity + "猜你喜欢</span></div>" +
+        '<ul class="g-feed">' + gItems + "</ul>";
+    }
+  }
+
+  /* ---------- 发现 / 年度回顾 / 随机一篇 ---------- */
+  function openModal(id) {
+    var ov = document.getElementById(id);
+    if (!ov) return;
+    ov.classList.add("open");
+    document.body.style.overflow = "hidden";
+  }
+  function closeModal(ov) {
+    if (!ov) return;
+    ov.classList.remove("open");
+    document.body.style.overflow = "";
+  }
+
+  function buildDiscover() {
+    var cc = catCounts();
+    var tc = tagCounts();
+    var cats = Object.keys(cc).sort(function (a, b) { return cc[b] - cc[a]; });
+    var tags = Object.keys(tc).sort(function (a, b) { return tc[b] - tc[a]; });
+    var catHtml = cats.map(function (c) {
+      return '<a class="g-cat" href="/writing?cat=' + encodeURIComponent(c) + '">' +
+        ICONS.folder + esc(c) + '<span class="n">' + cc[c] + "</span></a>";
+    }).join("");
+    var tagHtml = tags.map(function (t) {
+      return '<a class="g-tag" href="/writing?tag=' + encodeURIComponent(t) + '" style="--tag-h:' +
+        tagHue(t) + '">#' + esc(t) + "</a>";
+    }).join("");
+    var box = document.getElementById("disc-overlay");
+    if (!box) {
+      box = document.createElement("div");
+      box.className = "search-overlay disc-overlay";
+      box.id = "disc-overlay";
+      box.innerHTML =
+        '<div class="search-box disc-box" role="dialog" aria-modal="true" aria-label="发现">' +
+        '<div class="disc-head"><span>发现</span><button class="search-clear disc-x" type="button" aria-label="关闭">×</button></div>' +
+        '<div class="disc-body"></div></div>';
+      document.body.appendChild(box);
+      box.addEventListener("click", function (e) { if (e.target === box) closeModal(box); });
+      var x = box.querySelector(".disc-x");
+      if (x) x.addEventListener("click", function () { closeModal(box); });
+    }
+    box.querySelector(".disc-body").innerHTML =
+      '<div class="disc-sec"><h4>按分类浏览</h4><div class="g-cats">' + catHtml + "</div></div>" +
+      '<div class="disc-sec"><h4>按标签浏览</h4><div class="g-tagwrap">' + tagHtml + "</div></div>";
+  }
+
+  function buildYearReview() {
+    var byYear = {};
+    POSTS.forEach(function (p) {
+      var y = String(p.date || "").slice(0, 4);
+      if (y.length !== 4) return;
+      if (!byYear[y]) byYear[y] = { n: 0, w: 0, cats: {} };
+      byYear[y].n++;
+      byYear[y].w += wordCount(p);
+      if (p.cat) byYear[y].cats[p.cat] = (byYear[y].cats[p.cat] || 0) + 1;
+    });
+    var years = Object.keys(byYear).sort();
+    var total = POSTS.length;
+    var words = POSTS.reduce(function (s, p) { return s + wordCount(p); }, 0);
+    var maxN = years.reduce(function (m, y) { return Math.max(m, byYear[y].n); }, 1);
+    var rows = years.slice().reverse().map(function (y) {
+      var d = byYear[y];
+      var top = Object.keys(d.cats).sort(function (a, b) { return d.cats[b] - d.cats[a]; })[0] || "—";
+      var pct = Math.round((d.n / maxN) * 100);
+      var wTxt = d.w >= 10000 ? (d.w / 10000).toFixed(1) + " 万字" : d.w + " 字";
+      return '<div class="yr-row"><span class="yr-y">' + y + '</span>' +
+        '<span class="yr-n">' + d.n + " 篇</span>" +
+        '<span class="yr-bar"><i style="width:' + pct + '%"></i></span>' +
+        '<span class="yr-w">' + wTxt + "</span>" +
+        '<span class="yr-top">' + esc(top) + "</span></div>";
+    }).join("");
+    var box = document.getElementById("yr-overlay");
+    if (!box) {
+      box = document.createElement("div");
+      box.className = "search-overlay yr-overlay";
+      box.id = "yr-overlay";
+      box.innerHTML =
+        '<div class="search-box yr-box" role="dialog" aria-modal="true" aria-label="年度回顾">' +
+        '<div class="disc-head"><span>年度回顾</span><button class="search-clear disc-x" type="button" aria-label="关闭">×</button></div>' +
+        '<div class="yr-body"></div></div>';
+      document.body.appendChild(box);
+      box.addEventListener("click", function (e) { if (e.target === box) closeModal(box); });
+      var x = box.querySelector(".disc-x");
+      if (x) x.addEventListener("click", function () { closeModal(box); });
+    }
+    var allW = words >= 10000 ? (words / 10000).toFixed(1) + " 万字" : words + " 字";
+    box.querySelector(".yr-body").innerHTML =
+      '<p class="yr-sum">' + total + " 篇　·　" + allW + "　·　" + years.length + " 个年度</p>" + rows;
+  }
+
+  function initExtras() {
+    var randomLink = document.querySelector(".js-random");
+    if (randomLink) {
+      randomLink.addEventListener("click", function (e) {
+        e.preventDefault();
+        var list = orderedPosts();
+        if (!list.length) return;
+        var p = list[Math.floor(Math.random() * list.length)];
+        location.href = "/p/" + encodeURIComponent(p.id);
+      });
+    }
+    var discLink = document.querySelector(".js-disc");
+    if (discLink) discLink.addEventListener("click", function (e) {
+      e.preventDefault(); buildDiscover(); openModal("disc-overlay");
+    });
+    var yrLink = document.querySelector(".js-yearrev");
+    if (yrLink) yrLink.addEventListener("click", function (e) {
+      e.preventDefault(); buildYearReview(); openModal("yr-overlay");
+    });
+    // 弹层里点分类 / 标签：先关弹层再跳转，SPA 内跳转时弹层不会自己消失
+    document.addEventListener("click", function (e) {
+      var a = e.target.closest && e.target.closest(".disc-overlay a, .yr-overlay a");
+      if (a) closeModal(a.closest(".search-overlay"));
+    });
+    document.addEventListener("keydown", function (e) {
+      if (e.key === "Escape") {
+        var ov = document.querySelector(".search-overlay.open");
+        if (ov) closeModal(ov);
+      }
+    });
   }
 
   /* ---------- 顶栏「更多」下拉 ---------- */
@@ -5265,7 +5492,15 @@ function interceptLinks(e) {
         media.innerHTML =
           '<video src="' + esc(cfg.video) + '" autoplay muted loop playsinline></video>';
       } else if (cfg.bg) {
-        media.style.backgroundImage = 'url("' + String(cfg.bg).replace(/"/g, "%22") + '")';
+        var bgUrl = String(cfg.bg).replace(/"/g, "%22");
+        media.style.backgroundImage = 'url("' + bgUrl + '")';
+        // 云端 setting 里记的图（如 bg.jpg）仓库里可能没有，加载失败就退回第一张首图
+        var probe = new Image();
+        probe.onerror = function () {
+          var fb = bgList()[0];
+          if (fb) media.style.backgroundImage = 'url("' + String(fb).replace(/"/g, "%22") + '")';
+        };
+        probe.src = bgUrl;
       }
       // 两者都没配时，保留 CSS 里的默认紫光背景，不隐藏
     }
@@ -5937,6 +6172,7 @@ function interceptLinks(e) {
       mountWriting,
       mountPost,
       mountSplash,
+      initExtras,
       initSplashHeader,
     ].forEach(
       function (fn) {
