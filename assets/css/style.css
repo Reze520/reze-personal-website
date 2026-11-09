@@ -6650,11 +6650,8 @@ body {
   margin-top: 14px;
 }
 
-/* ---------- 城市切换条（吸顶） ---------- */
+/* ---------- 城市切换条（随正文滚动） ---------- */
 .wx-bar {
-  position: sticky;
-  top: 64px;
-  z-index: 20;
   display: flex;
   align-items: center;
   gap: 10px;
