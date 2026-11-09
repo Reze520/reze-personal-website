@@ -13116,27 +13116,48 @@ html[data-lunar="off"] .g-cal-grid i.g-cal-sub {
 
 /* ============================================================
    首页页尾静态篇目清单
-   一行一条，复用归档页的 .arc-row / .ix-group；不引脚本，直接抓 HTML
-   就能拿到全部 /p/ 链接。材料数跟在标题下面，不另起一列。
+   整块默认收起，页尾只留一行数字；链接仍写在 HTML 里，爬虫直接抓得到。
+   展开后按年份再折一层，复用归档页的 .arc-row / .ix-group。
    ============================================================ */
 .all-list {
   width: min(100% - 32px, 1560px);
-  margin: 30px auto 0;
+  margin: 0 auto 10px;
 }
-.all-list-h {
-  font-size: 16px;
-  font-weight: 600;
-  color: var(--ink);
-  margin: 0 0 4px;
-}
-.all-list-stat {
-  margin: 0 0 10px;
-  font-family: var(--mono);
+.all-list > summary.all-list-h {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  padding: 8px 0;
+  cursor: pointer;
+  list-style: none;
   font-size: 12px;
+  font-weight: 400;
+  color: var(--ink-3);
+}
+.all-list > summary.all-list-h::-webkit-details-marker { display: none; }
+.all-list > summary.all-list-h::after {
+  content: "+";
+  margin-left: auto;
+  font-family: var(--mono);
+  font-size: 13px;
+  color: var(--ink-3);
+}
+.all-list[open] > summary.all-list-h::after { content: "-"; }
+.all-list-stat {
+  font-family: var(--mono);
+  font-size: 11px;
   color: var(--ink-3);
   font-variant-numeric: tabular-nums;
 }
-.all-list .arc-row { padding: 7px 0; }
+.all-list[open] > .ix-group:first-of-type { margin-top: 4px; }
+.all-list > .ix-group { margin: 0; }
+.all-list > .ix-group > summary.arc-h {
+  display: flex;
+  align-items: baseline;
+  margin: 0;
+  padding: 5px 0;
+}
+.all-list .arc-row { padding: 5px 0; }
 .all-mat {
   display: block;
   margin-top: 1px;
@@ -13151,5 +13172,5 @@ html[data-lunar="off"] .g-cal-grid i.g-cal-sub {
   color: var(--ink-3);
 }
 @media (max-width: 760px) {
-  .all-list { width: calc(100% - 24px); margin-top: 22px; }
+  .all-list { width: calc(100% - 24px); margin-bottom: 8px; }
 }

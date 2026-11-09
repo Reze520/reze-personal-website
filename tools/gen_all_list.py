@@ -6,7 +6,10 @@
 
 为什么用静态 HTML：首页与归档页的文章列表都由 main.js 渲染，直接抓
 HTML 时一条 /p/ 链接都没有，爬虫只能靠 sitemap 才知道文章地址。这段
-清单不依赖脚本，按年份折叠，行内顺带列出本篇贴过的视频、表格与参考条数。
+清单不依赖脚本，行内顺带列出本篇贴过的视频、表格与参考条数。
+
+整块默认收起，页尾只留一行数字；年份再折一层。链接仍在 HTML 里，
+<details> 是原生折叠，爬虫读得到，读者不必先看一整屏目录。
 
 用法：
     python tools/gen_all_list.py
@@ -119,19 +122,19 @@ def main():
     for year, date, row in rows:
         by_year.setdefault(year, []).append((date, row))
 
-    out = ['<section class="all-list" id="all-list" aria-label="全部篇目">',
-           '  <h2 class="all-list-h">全部篇目</h2>',
-           '  <p class="all-list-stat">%d 篇 · %d 个视频卡 · %d 张表 · %d 张配图</p>'
+    out = ['<details class="all-list" id="all-list" aria-label="全部篇目">',
+           '  <summary class="all-list-h">全部篇目'
+           '<span class="all-list-stat">%d 篇 · %d 个视频卡 · %d 张表 · %d 张配图</span></summary>'
            % (len(rows), total["video"], total["table"], total["image"])]
-    for n, year in enumerate(sorted(by_year, reverse=True)):
+    for year in sorted(by_year, reverse=True):
         items = sorted(by_year[year], key=lambda x: x[0], reverse=True)
-        out.append('  <details class="ix-group"%s>' % (" open" if n == 0 else ""))
+        out.append('  <details class="ix-group">')
         out.append('    <summary class="arc-h"><span class="ix-name">%s</span>'
                    '<span class="ix-tail">%d 篇</span></summary>' % (year, len(items)))
         for _, row in items:
             out.append(row)
         out.append("  </details>")
-    out.append("</section>")
+    out.append("</details>")
     block = "\n".join(out)
 
     with io.open(OUT, "rb") as f:
