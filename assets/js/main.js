@@ -3572,9 +3572,11 @@ function updateNavActive(page) {
   // 首页的 "/" 是任何地址的子串，那样每一页都会把「主页」点亮。
   var navMap = { home: "/", moments: "/moments", timeline: "/moments", writing: "/writing", links: "/links", weather: "/weather" };
   var want = navMap[page];
-  document.querySelectorAll(".nav a").forEach(function (a) {
-    var path = (a.getAttribute("href") || "").split(/[?#]/)[0] || "/";
-    if (want && path === want) a.setAttribute("aria-current", "page");
+  // 只给真正的页面链接判当前页：菜单里「随机一篇」「发现」这类 href="#"
+  // 以前拆成空串后回退成 "/"，首页会五项一起标成当前页，各自挂上顶栏的指示短线。
+  document.querySelectorAll(".nav > a, .nav-more-menu a.m-dupe").forEach(function (a) {
+    var path = (a.getAttribute("href") || "").split(/[?#]/)[0];
+    if (want && path && path === want) a.setAttribute("aria-current", "page");
     else a.removeAttribute("aria-current");
   });
 }
