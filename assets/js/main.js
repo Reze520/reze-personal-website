@@ -1654,13 +1654,18 @@
     if (!box) return;
     var titleEl = box.querySelector(".g-cal-title");
     var gridEl = box.querySelector(".g-cal-grid");
+    var selEl = box.querySelector(".g-cal-sel");
     var btnPrev = box.querySelector(".g-cal-prev");
     var btnNext = box.querySelector(".g-cal-next");
     var btnToday = box.querySelector(".g-cal-today");
+    var btnPrevYr = box.querySelector(".g-cal-prevyr");
+    var btnNextYr = box.querySelector(".g-cal-nextyr");
 
     var today = new Date();
     var y = today.getFullYear();
     var m = today.getMonth();
+    // 当前选中的日子（默认今天）。点格子改它，翻月不丢，只是不在当月时不亮。
+    var sel = { y: y, m: m, d: today.getDate() };
 
     function dayInfo(yy, mo, dd) {
       if (!window.Solar) return null;
@@ -1681,18 +1686,19 @@
       }
     }
 
+    function selText() {
+      var info = dayInfo(sel.y, sel.m + 1, sel.d);
+      var wd = "周" + "日一二三四五六".charAt(new Date(sel.y, sel.m, sel.d).getDay());
+      var lun = info ? (info.fest || info.lun) : "";
+      return sel.y + " 年 " + (sel.m + 1) + " 月 " + sel.d + " 日 " + wd +
+        (lun ? " · 农历 " + lun : "");
+    }
+
     function paint() {
       if (titleEl) titleEl.textContent = y + " 年 " + (m + 1) + " 月";
       var firstDow = new Date(y, m, 1).getDay();
       var days = new Date(y, m + 1, 0).getDate();
       var isNow = today.getFullYear() === y && today.getMonth() === m;
-
-      var posted = {};
-      POSTS.forEach(function (p) {
-        if (!p.date) return;
-        var d = new Date(p.date);
-        if (d.getFullYear() === y && d.getMonth() === m) posted[d.getDate()] = 1;
-      });
 
       var html = ["日", "一", "二", "三", "四", "五", "六"]
         .map(function (w) { return "<span>" + w + "</span>"; })
@@ -1704,24 +1710,35 @@
         var isFest = !!(info && info.fest);
         var cls = [];
         if (isNow && dd === today.getDate()) cls.push("today");
-        if (posted[dd]) cls.push("has");
+        if (sel.y === y && sel.m === m && sel.d === dd) cls.push("selected");
         html +=
-          '<b class="' + cls.join(" ") + '"' + (posted[dd] ? ' title="这天发过文章"' : "") + ">" +
+          '<b class="' + cls.join(" ") + '" data-d="' + dd + '">' +
           "<em>" + dd + "</em>" +
           (sub ? '<i class="g-cal-sub' + (isFest ? " is-fest" : "") + '">' + esc(sub) + "</i>" : "") +
           "</b>";
       }
       if (gridEl) gridEl.innerHTML = html;
+      if (selEl) selEl.textContent = selText();
     }
 
     if (btnPrev) btnPrev.onclick = function () { m--; if (m < 0) { m = 11; y--; } paint(); };
     if (btnNext) btnNext.onclick = function () { m++; if (m > 11) { m = 0; y++; } paint(); };
+    if (btnPrevYr) btnPrevYr.onclick = function () { y--; paint(); };
+    if (btnNextYr) btnNextYr.onclick = function () { y++; paint(); };
     if (btnToday) btnToday.onclick = function () {
       var t = new Date();
       y = t.getFullYear();
       m = t.getMonth();
       paint();
     };
+    if (gridEl) gridEl.addEventListener("click", function (e) {
+      var cell = e.target.closest ? e.target.closest("b[data-d]") : null;
+      if (!cell) return;
+      var dd = parseInt(cell.getAttribute("data-d"), 10);
+      if (!dd) return;
+      sel = { y: y, m: m, d: dd };
+      paint();
+    });
     paint();
 
     // 农历库闲时再取，取到后回调这里重画一次
@@ -2045,12 +2062,15 @@
       '<div class="g-card g-cal-card">' +
       '<div class="g-card-head"><span class="t">' + ICONS.cal + "日历</span>" +
       '<div class="g-cal-nav">' +
+      '<button type="button" class="g-cal-prevyr" aria-label="上一年">«</button>' +
       '<button type="button" class="g-cal-prev" aria-label="上个月">‹</button>' +
       '<button type="button" class="g-cal-today">今</button>' +
       '<button type="button" class="g-cal-next" aria-label="下个月">›</button>' +
+      '<button type="button" class="g-cal-nextyr" aria-label="下一年">»</button>' +
       "</div></div>" +
       '<div class="g-cal"><div class="g-cal-title"></div>' +
-      '<div class="g-cal-grid"></div></div></div>' +
+      '<div class="g-cal-grid"></div>' +
+      '<div class="g-cal-sel"></div></div></div>' +
       '<div class="g-card">' +
       '<div class="g-card-head"><span class="t">' + ICONS.info + "站点信息</span></div>" +
       '<div class="g-site"><dl>' +

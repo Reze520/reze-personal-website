@@ -205,9 +205,79 @@
     return cities[0] ? cities[0].id : "";
   }
   function cityById(id) {
+    if (state.geo && state.geo.id === id) return state.geo;
     var arr = state.cities;
     for (var i = 0; i < arr.length; i++) if (arr[i].id === id) return arr[i];
     return arr[0] || null;
+  }
+  // 自动定位城市总是排在最前（不写进 localStorage，每次来访重新取）
+  function allCities() {
+    return state.geo ? [state.geo].concat(state.cities) : state.cities;
+  }
+
+  /* ---------- 自动定位：按访问者 IP 显示其所在地天气 ----------
+     /geo 走 Cloudflare 边缘，由 request.cf 从访问者 IP 推出经纬度。
+     坐标本身就精确到点位，天气取的就是那一个点位，等价于县/区级精度。
+     地名先用 cf 给的 city/region，再用 Nominatim 反向地理编码补一个
+     中文县/市名（按坐标缓存，失败不影响天气，回退到 cf 地名）。 */
+  function geoCityName(d) {
+    var nm = (d.city && d.city.trim()) || (d.region && d.region.trim()) || (d.country || "");
+    return nm || "我的位置";
+  }
+  function initGeo() {
+    if (window.__wxGeoDone) return;
+    window.__wxGeoDone = true;
+    fetchJSON("/geo", 8000)
+      .then(function (d) {
+        if (!d || !d.ok || d.lat == null || d.lon == null) return;
+        state.geo = {
+          id: "__geo__",
+          name: geoCityName(d),
+          admin: d.region || d.country || "",
+          lat: d.lat,
+          lon: d.lon,
+          geo: true
+        };
+        if (!state.userChose) state.active = "__geo__";
+        paintAllGeo();
+        refineGeoName(state.geo);
+        ensureGeoData();
+      })
+      .catch(function () { /* 定位失败就用默认城市，不影响其它功能 */ });
+  }
+  // 首屏那次 load 可能还在飞：等它结束再补一次带定位的拉取，避免定位天气取不到
+  function ensureGeoData() {
+    if (state.loading) { setTimeout(ensureGeoData, 250); return; }
+    load(true);
+  }
+  function paintAllGeo() {
+    if ($("#wx-wrap")) repaintAll();
+    paintMini();
+  }
+  function refineGeoName(city) {
+    var ck = "reze-geo-name-" + Math.round(city.lat * 100) + "_" + Math.round(city.lon * 100);
+    try {
+      var cached = store(ck);
+      if (cached) { city.name = cached; paintAllGeo(); return; }
+    } catch (e) {}
+    fetchJSON(
+      "https://nominatim.openstreetmap.org/reverse?format=jsonv2&accept-language=zh-CN&lat=" +
+        city.lat + "&lon=" + city.lon,
+      5000
+    )
+      .then(function (d) {
+        var nm = pickCnName(d);
+        if (!nm) return;
+        try { store(ck, nm); } catch (e) {}
+        city.name = nm;
+        paintAllGeo();
+      })
+      .catch(function () {});
+  }
+  function pickCnName(d) {
+    var a = d && d.address;
+    if (!a) return "";
+    return a.county || a.city || a.town || a.village || a.state || (d.name || "");
   }
   // 香港 / 澳门 / 台湾按中国的地方来标
   function regionOf(r) {
@@ -239,6 +309,8 @@
     stale: false
   };
   state.active = activeId(state.cities);
+  state.geo = null;        // 自动定位城市 {id:"__geo__", name, admin, lat, lon, geo:true}
+  state.userChose = false; // 用户是否手动切过城市（切过就不再用定位覆盖）
 
   var cache = { key: "", time: 0, data: null };
 
@@ -312,7 +384,7 @@
     state.loading = true;
     state.error = "";
     notify("loading");
-    return fetchWeather(state.cities, force)
+    return fetchWeather(allCities(), force)
       .then(function (list) {
         state.data = list;
         state.updated = Date.now();
@@ -335,19 +407,24 @@
 
   function dataOf(city) {
     if (!state.data || !city) return null;
-    for (var i = 0; i < state.cities.length; i++) {
-      if (state.cities[i].id === city.id) return state.data[i] || null;
+    var all = allCities();
+    for (var i = 0; i < all.length; i++) {
+      if (all[i].id === city.id) return state.data[i] || null;
     }
     return null;
   }
 
   /* ---------- 渲染：城市条 ---------- */
   function barHtml() {
-    var chips = state.cities
+    var chips = allCities()
       .map(function (c) {
+        var isGeo = c.id === "__geo__";
         return (
           '<button class="wx-chip' + (c.id === state.active ? " on" : "") +
-          '" data-city="' + esc(c.id) + '">' + esc(c.name) + "</button>"
+          (isGeo ? " geo" : "") +
+          '" data-city="' + esc(c.id) + '">' + esc(c.name) +
+          (isGeo ? '<i class="wx-geodot" title="自动定位"></i>' : "") +
+          "</button>"
         );
       })
       .join("");
@@ -370,8 +447,9 @@
   /* ---------- 渲染：多城市小卡 ---------- */
   function miniRowHtml() {
     if (state.cities.length < 2) return "";
-    var cards = state.cities
+    var cards = allCities()
       .map(function (c) {
+        var isGeo = c.id === "__geo__";
         var d = dataOf(c);
         var cur = d && d.current;
         var day = d && d.daily;
@@ -383,7 +461,8 @@
         return (
           '<button class="wx-mini' + (c.id === state.active ? " on" : "") +
           '" data-city="' + esc(c.id) + '">' +
-          '<span class="n">' + esc(c.name) + "</span>" +
+          '<span class="n">' + esc(c.name) +
+          (isGeo ? '<i class="wx-geodot" title="自动定位"></i>' : "") + "</span>" +
           '<span class="i ' + cls + '">' + ico + "</span>" +
           '<span class="t">' + t + "</span>" +
           '<span class="r">' + lo + " / " + hi + "</span>" +
@@ -691,6 +770,7 @@
   /* ---------- 事件 ---------- */
   function setActive(id) {
     if (!cityById(id)) return;
+    state.userChose = true; // 手动切过城市后，不再用定位覆盖
     state.active = id;
     store(ACTIVE_KEY, id);
     repaintAll();
@@ -714,7 +794,7 @@
   }
 
   function addCity(lat, lon, name, region) {
-    if (state.cities.length >= MAX_CITIES) {
+    if (allCities().length >= MAX_CITIES) {
       toast("最多只能放 " + MAX_CITIES + " 个城市");
       return;
     }
@@ -788,6 +868,8 @@
   function bind(root) {
     if (!root || root.__wxBound) return;
     root.__wxBound = true;
+
+    initGeo();
 
     root.addEventListener("click", function (e) {
       var t = e.target.closest ? e.target : e.target.parentNode;
@@ -884,10 +966,12 @@
     if (!d || !d.current) return '<div class="wxm-fail">正在获取…</div>';
     var cur = d.current;
     var day = d.daily;
-    var tabs = state.cities
+    var tabs = allCities()
       .map(function (c) {
+        var isGeo = c.id === "__geo__";
         return (
           '<button class="wxm-dot' + (c.id === state.active ? " on" : "") +
+          (isGeo ? " geo" : "") +
           '" data-city="' + esc(c.id) + '" title="' + esc(c.name) + '" ' +
           'aria-label="' + esc(c.name) + '">' + esc(c.name.charAt(0)) + "</button>"
         );
@@ -922,6 +1006,7 @@
       if (d) setActive(d.getAttribute("data-city"));
     });
     paintMini();
+    initGeo();
     // 小卡单独订阅一份，主页面不在时也能跟着切
     // 右栏会被整块重画，用固定的引用去重，避免反复进页越挂越多
     if (window.__wxMiniFn) {

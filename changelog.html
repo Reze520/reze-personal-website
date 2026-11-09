@@ -20,7 +20,7 @@
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20viewBox%3D%270%200%2064%2064%27%3E%3Crect%20width%3D%2764%27%20height%3D%2764%27%20rx%3D%2715%27%20fill%3D%27%23241f33%27%2F%3E%3Cg%20transform%3D%27translate%286%2C6%29%20scale%282.1667%29%27%3E%3Cpath%20d%3D%27M21%2012.79A9%209%200%201%201%2011.21%203%207%207%200%200%200%2021%2012.79z%27%20fill%3D%27%23f6f1e7%27%2F%3E%3C%2Fg%3E%3C%2Fsvg%3E">
-<link rel="stylesheet" href="assets/css/style.css?v=20261109c">
+<link rel="stylesheet" href="assets/css/style.css?v=20261109d">
   <link rel="alternate" type="application/rss+xml" title="RezeのBlog" href="feed.xml">
 </head>
 <body class="has-app">
@@ -70,7 +70,7 @@
 <header class="cl-head">
 <h1>更新日志</h1>
 <div class="cl-facts">
-<span><b>73</b> 条记录</span>
+<span><b>74</b> 条记录</span>
 <span><b>6</b> 个时间节点</span>
 <span>跨度 2020.07 — 2026.11</span>
 </div>
@@ -79,7 +79,7 @@
 <button type="button" class="cl-btn" data-cl-all="0">全部收起</button>
 </div>
 <nav class="cl-nav" aria-label="按时间跳转">
-<a href="#cl-202611">2026.11<i>44 条</i></a>
+<a href="#cl-202611">2026.11<i>45 条</i></a>
 <a href="#cl-202610">2026.10<i>10 条</i></a>
 <a href="#cl-202604">2026.04<i>6 条</i></a>
 <a href="#cl-202506">2025.06<i>1 条</i></a>
@@ -88,9 +88,18 @@
 </nav>
 </header>
 <section class="cl-month" id="cl-202611">
-<h2>2026 年 11 月<span class="cl-count">44 条</span></h2>
+<h2>2026 年 11 月<span class="cl-count">45 条</span></h2>
 <ol class="cl-list">
 <li class="cl-item"><details open>
+<summary><span class="cl-kind" data-k="界面">界面</span><span class="cl-t">天气按访问者位置自动定位、日历可选中并切年月</span><span class="cl-n">4 项</span></summary>
+<div class="cl-body"><ul>
+<li>天气新增「自动定位」：新增 functions/geo.js，由 Cloudflare 边缘按访问者 IP 取经纬度（no-store，不跨用户缓存）；weather.js 拉到后把「我的位置」作为默认城市前置，坐标级精度等同县/区，地名先用 cf 的 city/region，再用 Nominatim 反向地理编码补中文县/市名（按坐标缓存，失败回退）。手动添加的城市照常切换。</li>
+<li>日历去掉「这天发过文章」的发文日强调，只看日期本身。</li>
+<li>日历格可点选任意一天，选中项在下方显示「年月日 周X · 农历 …」；导航新增 « » 切换年份，保留 ‹ › 月份与「今」。</li>
+<li>版本号 20261109d。</li>
+</ul></div>
+</details></li>
+<li class="cl-item"><details>
 <summary><span class="cl-kind" data-k="界面">界面</span><span class="cl-t">撤除「词条」索引页、后台改为纸样风</span><span class="cl-n">5 项</span></summary>
 <div class="cl-body"><ul>
 <li>移除 /topics 词条索引页：删 topics.html、assets/js/topics.js、assets/js/topics.override.js；首页分类栏、归档页底部、参考源页顶部的「词条」入口全部去掉（参考源页顶部改为仅「归档」入口）；PAGE_META、路由、topicsMainHtml 函数、renderIndexPage 的 topics 分支一并清理。</li>
@@ -741,11 +750,11 @@
   } catch (e) {}
 })();
 </script>
-<script defer src="assets/js/data.meta.js?v=20261109c"></script>
-<script defer src="assets/js/cloud.js?v=20261109c"></script>
-<script defer src="assets/js/weather.js?v=20261109c"></script>
-<script defer src="assets/js/playlist.js?v=20261109c"></script>
-<script defer src="assets/js/main.js?v=20261109c"></script>
+<script defer src="assets/js/data.meta.js?v=20261109d"></script>
+<script defer src="assets/js/cloud.js?v=20261109d"></script>
+<script defer src="assets/js/weather.js?v=20261109d"></script>
+<script defer src="assets/js/playlist.js?v=20261109d"></script>
+<script defer src="assets/js/main.js?v=20261109d"></script>
 <script>
 /* 更新日志的一键展开／收起。details 自己就能点，这段只管批量开关。 */
 document.addEventListener("click", function (e) {
