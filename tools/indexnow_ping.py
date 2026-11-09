@@ -27,6 +27,7 @@ ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 HOST = "reze520.pages.dev"
 ORIGIN = "https://" + HOST
 ENDPOINT = "https://api.indexnow.org/indexnow"
+BING_ENDPOINT = "https://www.bing.com/indexnow"
 INDEX_PAGES = ["/", "/writing", "/archive", "/sources"]
 MAX_URLS = 10000
 
@@ -72,7 +73,7 @@ def collect(args):
     return list(args.url), "命令行指定的地址"
 
 
-def ping(key, urls, dry_run):
+def ping(key, urls, dry_run, endpoint):
     urls = list(dict.fromkeys(u for u in urls if u.startswith(ORIGIN)))
     if not urls:
         raise SystemExit("没有可提交的地址")
@@ -84,7 +85,7 @@ def ping(key, urls, dry_run):
         "keyLocation": ORIGIN + "/" + key + ".txt",
         "urlList": urls,
     }
-    print("端点   %s" % ENDPOINT)
+    print("端点   %s" % endpoint)
     print("key     %s" % key)
     print("地址数 %d（%s）" % (len(urls), urls[0] + " … " + urls[-1]))
     if dry_run:
@@ -97,7 +98,7 @@ def ping(key, urls, dry_run):
     os.environ["no_proxy"] = "*"
     opener = urllib.request.build_opener(urllib.request.ProxyHandler({}))
     req = urllib.request.Request(
-        ENDPOINT, data=data,
+        endpoint, data=data,
         headers={"Content-Type": "application/json; charset=utf-8"},
         method="POST",
     )
@@ -116,7 +117,8 @@ def ping(key, urls, dry_run):
         print("已提交，Bing / Yandex 会自行安排抓取。")
         return 0
     if code == 403:
-        print("403：key 文件线上还读不到，或内容与文件名不符。等 Pages 部署完成后重试。")
+        print("403：站点验证还没同步完。key 文件刚上线时常见，等几分钟重试即可；"
+              "也可换 --endpoint %s，或在 Bing 站长平台的 IndexNow 页确认 key。" % BING_ENDPOINT)
     elif code == 429:
         print("429：超过当日配额，隔天再试，或改用 --url 只提交新篇。")
     return 1
@@ -129,13 +131,15 @@ def main():
     g.add_argument("--new", action="store_true", help="提交最近一次提交里变动的篇目")
     g.add_argument("--url", action="append", default=[], help="指定单个地址，可重复")
     ap.add_argument("--since", default="HEAD~1", help="--new 的对比起点，默认 HEAD~1")
+    ap.add_argument("--endpoint", default=ENDPOINT,
+                    help="提交端点，默认 api.indexnow.org（广播）；只给 Bing 可填 %s" % BING_ENDPOINT)
     ap.add_argument("--dry-run", action="store_true", help="只打印，不发送")
     args = ap.parse_args()
 
     key = find_key()
     urls, desc = collect(args)
     print("来源   %s" % desc)
-    return ping(key, urls, args.dry_run)
+    return ping(key, urls, args.dry_run, args.endpoint)
 
 
 if __name__ == "__main__":
