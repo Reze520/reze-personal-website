@@ -2753,7 +2753,62 @@ function timelineMainHtml() {
   return momentsMainHtml();
 }
 
+/* 数字转中文数词（用于关于页的统计，按你的规矩用中文数词）。
+   覆盖到亿级，本站用到的 361 / 129 / 7 / 172 这类都没问题。 */
+function numToCn(n) {
+  if (n === 0) return "零";
+  if (n < 0) return "负" + numToCn(-n);
+  var d = ["零", "一", "二", "三", "四", "五", "六", "七", "八", "九"];
+  var u = ["", "十", "百", "千"];
+  function four(num) {
+    var s = "", str = String(num), len = str.length, zero = false, i, digit, pos;
+    for (i = 0; i < len; i++) {
+      digit = +str.charAt(i);
+      pos = len - 1 - i;
+      if (digit === 0) { zero = true; }
+      else {
+        if (zero) { s += "零"; zero = false; }
+        s += d[digit] + u[pos];
+      }
+    }
+    return s;
+  }
+  var s = "";
+  if (n >= 100000000) {
+    s += four(Math.floor(n / 100000000)) + "亿";
+    n = n % 100000000;
+    if (n === 0) return s;
+    if (n < 10000000) s += "零";
+  }
+  if (n >= 10000) {
+    s += four(Math.floor(n / 10000)) + "万";
+    n = n % 10000;
+    if (n === 0) return s;
+    if (n < 1000) s += "零";
+  }
+  s += four(n);
+  return s.replace(/^一十/, "十");
+}
+
 function aboutHtml() {
+  // 站内统计从 POSTS 现算，发新文不用再回来手改这页
+  var posts = window.POSTS || [];
+  var postCount = posts.length;
+  var wordTotal = 0;
+  var catSet = {};
+  posts.forEach(function (p) {
+    if (p.words) wordTotal += p.words;
+    if (p.cat) catSet[p.cat] = (catSet[p.cat] || 0) + 1;
+  });
+  var CAT_ORDER = ["读书", "技术", "日常", "杂记", "文史", "电影", "类型文学"];
+  var cats = Object.keys(catSet);
+  var ordered = CAT_ORDER.filter(function (c) { return cats.indexOf(c) >= 0; })
+    .concat(cats.filter(function (c) { return CAT_ORDER.indexOf(c) < 0; }));
+  var catPhrase = ordered.join("、") + numToCn(ordered.length) + "类";
+  var wordWan = Math.round(wordTotal / 10000);
+  var statLine =
+    "目前" + numToCn(postCount) + "篇，约" + numToCn(wordWan) + "万字，分在" + catPhrase + "。";
+
   return (
     '<article class="g-article">' +
     '<h1>关于这个站</h1>' +
@@ -2761,7 +2816,7 @@ function aboutHtml() {
     '<p>这个站从 2020 年前后开始搭，中间推倒重来过几次。现在这一版是手写的 HTML、CSS 和原生 JavaScript，没有框架、没有构建工具，也没有打包流程，一堆静态文件挂在 Cloudflare Pages 上。</p>' +
     '<p>内容存在 Cloudflare D1，前台读构建时生成的静态元数据，后台通过接口读写；接口取不到时用仓库里的一份副本兜底。</p>' +
     '<h2>里面有什么</h2>' +
-    '<p>目前三百三十篇，约一百二十三万字，分在读书、技术、日常、杂记、文史、电影、类型文学七类。另有动态、导航两块，导航收了一百七十多个站点。</p>' +
+    '<p>' + statLine + '另有动态、导航两块，导航收了一百七十多个站点。</p>' +
     '<h2>没做的部分</h2>' +
     '<p>没有第三方统计脚本，页面不记录来源、停留时长和点击路径；推荐只按正文的相似度算，不建立用户画像；评论区长期空置，已经收起。</p>' +
     '<h2>联系</h2>' +
