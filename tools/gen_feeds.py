@@ -66,11 +66,12 @@ def main(path):
     for path_, freq, pri in STATIC_PAGES:
         out.append("  <url><loc>%s%s</loc><changefreq>%s</changefreq><priority>%s</priority></url>"
                    % (ORIGIN, path_, freq, pri))
+    # 站里的 date / updated 是篇内日期，不是发布或变更时间；写进 lastmod
+    # 会把刚上线的稿子报成多年未动，索性不写，让爬虫按自己的节奏判断。
     for p in posts:
-        d = parse_date(p.get("updated") or p.get("date"))
         loc = "%s/p/%s" % (ORIGIN, quote(str(p["id"])))
-        out.append("  <url><loc>%s</loc>%s<changefreq>yearly</changefreq><priority>0.8</priority></url>"
-                   % (esc(loc), "<lastmod>%s</lastmod>" % d.strftime("%Y-%m-%d") if d else ""))
+        out.append("  <url><loc>%s</loc><changefreq>yearly</changefreq><priority>0.8</priority></url>"
+                   % esc(loc))
     out.append("</urlset>")
     io.open(os.path.join(ROOT, "sitemap.xml"), "w", encoding="utf-8", newline="\n").write("\n".join(out) + "\n")
 

@@ -516,7 +516,7 @@ reze-blog/
 │   ├── deploy.sh           一键提交 + 双推
 │   ├── gen_feeds.py        生成 sitemap.xml / feed.xml
 │   ├── gen_sources.py      从逐篇源文件生成参考源索引
-│   ├── gen_topics.py       从首屏元数据生成词条索引
+│   ├── gen_all_list.py     从逐篇源文件生成首页静态篇目清单
 │   ├── build_changelog.py  md → changelog.html
 │   ├── subset_font.py      毛笔字体裁子集
 │   ├── add_song.py         加歌（转码 + 压封面 + 写播放列表）
@@ -569,10 +569,10 @@ python tools/build_changelog.py
 # 发新文之后跑一次：导出逐篇源文件，顺手把云端全文导回兜底、重生成首屏元数据
 python tools/export_content.py
 
-# 发新文、改了文章参考之后，重建两份索引数据（生成物带 ?v=，接着升版本号）
+# 发新文、改了文章参考之后，重建索引（生成物带 ?v=，接着升版本号）
 python tools/gen_sources.py
-python tools/gen_topics.py
-python tools/bump_version.py 20261108j   # 换成当次的版本号
+python tools/gen_all_list.py            # 首页页尾的静态篇目清单
+python tools/bump_version.py 20261109r  # 换成当次的版本号
 
 # 诗笺加了新诗之后，重裁字体（否则新字会退回宋体，字形不一样）
 python tools/subset_font.py                      # 直接从线上取诗词

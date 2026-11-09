@@ -20,7 +20,7 @@
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20viewBox%3D%270%200%2064%2064%27%3E%3Crect%20width%3D%2764%27%20height%3D%2764%27%20rx%3D%2715%27%20fill%3D%27%23241f33%27%2F%3E%3Cg%20transform%3D%27translate%286%2C6%29%20scale%282.1667%29%27%3E%3Cpath%20d%3D%27M21%2012.79A9%209%200%201%201%2011.21%203%207%207%200%200%200%2021%2012.79z%27%20fill%3D%27%23f6f1e7%27%2F%3E%3C%2Fg%3E%3C%2Fsvg%3E">
-<link rel="stylesheet" href="assets/css/style.css?v=20261109q">
+<link rel="stylesheet" href="assets/css/style.css?v=20261109r">
   <link rel="alternate" type="application/rss+xml" title="RezeのBlog" href="feed.xml">
 </head>
 <body class="has-app">
@@ -75,7 +75,7 @@
 <header class="cl-head">
 <h1>更新日志</h1>
 <div class="cl-facts">
-<span><b>84</b> 条记录</span>
+<span><b>85</b> 条记录</span>
 <span><b>6</b> 个时间节点</span>
 <span>跨度 2020.07 — 2026.11</span>
 </div>
@@ -84,7 +84,7 @@
 <button type="button" class="cl-btn" data-cl-all="0">全部收起</button>
 </div>
 <nav class="cl-nav" aria-label="按时间跳转">
-<a href="#cl-202611">2026.11<i>55 条</i></a>
+<a href="#cl-202611">2026.11<i>56 条</i></a>
 <a href="#cl-202610">2026.10<i>10 条</i></a>
 <a href="#cl-202604">2026.04<i>6 条</i></a>
 <a href="#cl-202506">2025.06<i>1 条</i></a>
@@ -93,9 +93,19 @@
 </nav>
 </header>
 <section class="cl-month" id="cl-202611">
-<h2>2026 年 11 月<span class="cl-count">55 条</span></h2>
+<h2>2026 年 11 月<span class="cl-count">56 条</span></h2>
 <ol class="cl-list">
 <li class="cl-item"><details open>
+<summary><span class="cl-kind" data-k="功能">功能</span><span class="cl-t">首页静态篇目清单与本篇材料</span><span class="cl-n">5 项</span></summary>
+<div class="cl-body"><ul>
+<li>首页页尾新增一份静态篇目清单，按年份折叠，364 条 <code>/p/</code> 链接直接写在 HTML 里，行内列出该篇的视频卡、表格、参考与配图数量。数据由 <code>tools/gen_all_list.py</code> 从 <code>content/posts/*.md</code> 生成，发新文后重跑一次。首页此前由脚本渲染列表，直接抓 HTML 时一条文章链接都没有，爬虫只能靠 sitemap。</li>
+<li>文章页标题下加一行本篇材料标签，服务端直出的那份同步带上，重绘前后一致。</li>
+<li>前台页面页尾补上 <code>feed.xml</code> 入口，原先只在 <code>&lt;head&gt;</code> 里声明。</li>
+<li>sitemap 去掉 <code>&lt;lastmod&gt;</code>：站里的 <code>date</code> 与 <code>updated</code> 是篇内日期，不是发布或变更时间，写进去会把刚上线的稿子报成多年未动。</li>
+<li>版本号 20261109r。</li>
+</ul></div>
+</details></li>
+<li class="cl-item"><details>
 <summary><span class="cl-kind" data-k="修复">修复</span><span class="cl-t">「更多」菜单条目下的短横</span><span class="cl-n">3 项</span></summary>
 <div class="cl-body"><ul>
 <li><code>updateNavActive()</code> 把 <code>href="#"</code> 拆成空串后回退成 <code>/</code>，首页时「随机一篇」「发现」「年度回顾」「收藏」「快捷键」五项一起被标成当前页，各自挂上顶栏那根 16px 指示短线。现在只给主导航与窄屏补位项判当前页，井号链接不参与。</li>
@@ -808,6 +818,7 @@
       <a href="/archive">归档</a>
       <a href="/about">关于</a>
       <a href="/changelog">更新日志</a>
+      <a href="/feed.xml">feed.xml</a>
       <a href="mailto:1806754672@qq.com">写信</a>
     </div>
   </div>
@@ -832,11 +843,11 @@
   } catch (e) {}
 })();
 </script>
-<script defer src="assets/js/data.meta.js?v=20261109q"></script>
-<script defer src="assets/js/cloud.js?v=20261109q"></script>
-<script defer src="assets/js/weather.js?v=20261109q"></script>
-<script defer src="assets/js/playlist.js?v=20261109q"></script>
-<script defer src="assets/js/main.js?v=20261109q"></script>
+<script defer src="assets/js/data.meta.js?v=20261109r"></script>
+<script defer src="assets/js/cloud.js?v=20261109r"></script>
+<script defer src="assets/js/weather.js?v=20261109r"></script>
+<script defer src="assets/js/playlist.js?v=20261109r"></script>
+<script defer src="assets/js/main.js?v=20261109r"></script>
 <script>
 /* 更新日志的一键展开／收起。details 自己就能点，这段只管批量开关。 */
 document.addEventListener("click", function (e) {

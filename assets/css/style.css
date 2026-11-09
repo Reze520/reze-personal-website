@@ -13113,3 +13113,43 @@ html[data-lunar="off"] .g-cal-sub,
 html[data-lunar="off"] .g-cal-grid i.g-cal-sub {
   display: none;
 }
+
+/* ============================================================
+   首页页尾静态篇目清单
+   一行一条，复用归档页的 .arc-row / .ix-group；不引脚本，直接抓 HTML
+   就能拿到全部 /p/ 链接。材料数跟在标题下面，不另起一列。
+   ============================================================ */
+.all-list {
+  width: min(100% - 32px, 1560px);
+  margin: 30px auto 0;
+}
+.all-list-h {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--ink);
+  margin: 0 0 4px;
+}
+.all-list-stat {
+  margin: 0 0 10px;
+  font-family: var(--mono);
+  font-size: 12px;
+  color: var(--ink-3);
+  font-variant-numeric: tabular-nums;
+}
+.all-list .arc-row { padding: 7px 0; }
+.all-mat {
+  display: block;
+  margin-top: 1px;
+  font-family: var(--mono);
+  font-size: 11px;
+  line-height: 1.5;
+  color: var(--ink-3);
+  font-variant-numeric: tabular-nums;
+}
+.g-meta .mat {
+  font-family: var(--mono);
+  color: var(--ink-3);
+}
+@media (max-width: 760px) {
+  .all-list { width: calc(100% - 24px); margin-top: 22px; }
+}

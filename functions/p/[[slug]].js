@@ -158,6 +158,23 @@ export async function onRequest(context) {
       const size = box ? ' width="' + box[0] + '" height="' + box[1] + '"' : "";
       return tag.replace(/^<img\s/i, '<img loading="lazy" decoding="async"' + size + " ");
     });
+    /* 与前端 mountPost 同口径：视频卡、表格、参考条目各数一遍。 */
+    const matBits = [];
+    const nVideo = (bodyRaw.match(/data-bvid\s*=/g) || []).length;
+    const nTable = (bodyRaw.match(/<table\b/gi) || []).length;
+    const mRef = /<h2[^>]*>[^<]*(?:参考|延伸)[^<]*<\/h2>/.exec(bodyRaw);
+    let nRef = 0;
+    if (mRef) {
+      let refTail = bodyRaw.slice(mRef.index + mRef[0].length);
+      const nx = /<h[12]\b/.exec(refTail);
+      if (nx) refTail = refTail.slice(0, nx.index);
+      nRef = (refTail.match(/<li\b/gi) || []).length;
+    }
+    if (nVideo) matBits.push("视频 " + nVideo);
+    if (nTable) matBits.push("表 " + nTable);
+    if (nRef) matBits.push("参考 " + nRef);
+    const mat = matBits.length ? '<span class="mat">' + matBits.join(" · ") + "</span>" : "";
+
     const ssr =
       '<article class="g-article no-cover" data-ssr="1">' +
       '<a class="back" href="/writing">← 返回文章列表</a>' +
@@ -166,6 +183,7 @@ export async function onRequest(context) {
       "<span>" + esc(String(row.date || "").replace(/-/g, ".")) + "</span>" +
       (row.cat ? '<span class="cat">' + esc(row.cat) + "</span>" : "") +
       "<span>" + words + " 字</span>" +
+      mat +
       "</div>" +
       '<div class="g-prose prose">' + body + "</div>" +
       "</article>";

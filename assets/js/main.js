@@ -4627,6 +4627,25 @@ function interceptLinks(e) {
 
     document.title = p.title + " · " + SITE.name;
 
+    /* 本篇材料：正文里已有的视频卡、表格、参考条目，标题下先摆一行。
+       服务端直出的那份同样带这行，重绘前后不跳。 */
+    var bodyHtml = String(p.content || "");
+    var matBits = [];
+    var nVideo = (bodyHtml.match(/data-bvid\s*=/g) || []).length;
+    var nTable = (bodyHtml.match(/<table\b/gi) || []).length;
+    var mRef = /<h2[^>]*>[^<]*(?:参考|延伸)[^<]*<\/h2>/.exec(bodyHtml);
+    var nRef = 0;
+    if (mRef) {
+      var refTail = bodyHtml.slice(mRef.index + mRef[0].length);
+      var nx = /<h[12]\b/.exec(refTail);
+      if (nx) refTail = refTail.slice(0, nx.index);
+      nRef = (refTail.match(/<li\b/gi) || []).length;
+    }
+    if (nVideo) matBits.push("视频 " + nVideo);
+    if (nTable) matBits.push("表 " + nTable);
+    if (nRef) matBits.push("参考 " + nRef);
+    var mat = matBits.length ? '<span class="mat">' + matBits.join(" · ") + "</span>" : "";
+
     var meta =
       '<div class="g-meta">' +
       "<span>" +
@@ -4647,6 +4666,7 @@ function interceptLinks(e) {
       ICONS.doc +
       wordCount(p).toLocaleString() +
       " 字</span>" +
+      mat +
       "</div>";
 
     var cover = p.cover
