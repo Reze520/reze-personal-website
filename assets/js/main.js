@@ -3900,8 +3900,10 @@ function goPage(hash) {
 }
 
 /* 正文编译在 HTML 里、SPA 没有渲染分支的页面。点到它们、或者从它们点出去，
-   都得交给浏览器整页跳转。加新静态页时把名字写进这个清单。 */
-var STATIC_PAGES = ["changelog"];
+   都得交给浏览器整页跳转。加新静态页时把名字写进这个清单。
+   toolbox：工具箱页是独立文档，自己不引 main.js，renderMain 里也没有它的分支。
+   漏写的话点导航只会 pushState 换地址、正文还是首页卡片流，必须刷新才到。 */
+var STATIC_PAGES = ["changelog", "toolbox"];
 
 function interceptLinks(e) {
   if (e.defaultPrevented || e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
