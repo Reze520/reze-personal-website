@@ -12793,23 +12793,42 @@ html[data-skin="paper"] .g-stats {
 }
 
 /* ---------- 日历：当天 ----------
-   今天那格原来是实底强调色 + 反色的公历数字。农历/节日那行 8.5px
-   压在朱红底上几乎看不见，看着像被下面那行盖住了。
-   改成「只描一圈、不加底」：朱红框把今天框出来，数字和农历都还是墨色。
-   选择器带 html[data-skin="paper"] 前缀，是为了压过前面那条
-   `html[data-skin="paper"] .g-cal-grid b.today … { color: var(--accent-ink) }`
-   —— 那条给的是纸白色，专为「实底反色」写的，现在底没了就成白字。 */
+   把整格的框线全部撤掉。原来「实底朱红」压住农历那行，改成描边后又变成
+   一个套住两行字的方章，都太重。现在只给公历数字垫一层同色的淡圆底：
+   不占布局、不碰农历行，格子本身保持透明，和周围日期一样平。
+   圆底用 currentColor + opacity，颜色自动跟随各皮肤的强调色，不用写死色值。
+   选中日原来也是一圈 2px 内描边，一并撤掉，只留数字下方一条细短线。 */
+.g-cal-grid b.today,
+.g-cal-grid b.selected,
+html[data-skin="paper"] .g-cal-grid b.today,
+html[data-skin="paper"] .g-cal-grid b.selected {
+  background: transparent;
+  box-shadow: none;
+}
 .g-cal-grid b.today,
 html[data-skin="paper"] .g-cal-grid b.today,
 html[data-skin="paper"] .g-cal-grid b.today span,
 html[data-skin="paper"] .g-cal-grid b.today i {
-  background: transparent;
-  box-shadow: inset 0 0 0 1.5px var(--g-accent);
   color: var(--ink);
 }
 .g-cal-grid b.today em {
+  position: relative;
+  isolation: isolate;
   color: var(--g-accent);
   font-weight: 600;
+}
+.g-cal-grid b.today em::before {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 21px;
+  height: 21px;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  background: currentColor;
+  opacity: 0.12;
+  z-index: -1;
 }
 .g-cal-grid b.today .g-cal-sub,
 html[data-skin="paper"] .g-cal-grid b.today .g-cal-sub,
@@ -12820,9 +12839,13 @@ html[data-skin="paper"] .g-cal-grid b.today .g-cal-sub,
 .g-cal-grid b.today .g-cal-sub.is-fest {
   color: var(--g-accent);
 }
-/* 今天又是选中的那天：一圈框已经说明白了，别再叠一层内描边 */
-.g-cal-grid b.today.selected {
-  box-shadow: inset 0 0 0 2px var(--g-accent);
+/* 选中但不是今天：数字下方一条短线，下方文字行已经写明了完整日期 */
+.g-cal-grid b.selected:not(.today) em {
+  color: var(--g-accent);
+  font-weight: 600;
+  border-bottom: 1px solid var(--g-accent);
+  border-radius: 1px;
+  padding-bottom: 1px;
 }
 
 /* ---------- 播放键 ----------
@@ -12861,16 +12884,27 @@ html[data-skin="paper"] .g-cal-grid b.today .g-cal-sub,
   margin-left: 0;
 }
 
+/* 纸样下的播放键跟同一行的循环 / 上一首 / 下一首 / 歌词一样，
+   是纯图标，没有框也没有底。问题不在圆角够不够，在于一行无框图标中间
+   夹了一个方框；把它磨成 3px 圆角仍然是个框。主次交给朱红与稍大的三角。 */
 html[data-skin="paper"] .ply-ctrl .ply-play {
+  width: 40px;
+  height: 40px;
   background: transparent !important;
-  border: 1px solid #bfb5a2 !important;
-  border-radius: 0 !important;
+  border: 0 !important;
+  border-radius: 50% !important;
+  box-shadow: none !important;
   color: #a83226 !important;
 }
+html[data-skin="paper"] .ply-ctrl .ply-play svg {
+  width: 20px;
+  height: 20px;
+}
 html[data-skin="paper"] .ply-ctrl .ply-play:hover {
-  background: #fbf8f1 !important;
-  border-color: #a83226 !important;
+  background: rgba(168, 50, 38, 0.07) !important;
+  border-color: transparent !important;
   color: #a83226 !important;
+  transform: none;
 }
 /* 深色主题里强调色是浅紫，细框同样成立，只把描边提亮一档 */
 :root[data-theme="dark"] .ply-ctrl .ply-play {
