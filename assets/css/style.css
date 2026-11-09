@@ -1512,13 +1512,12 @@ button {
 .icp {
   max-width: var(--wrap);
   margin: 0 auto;
-  padding: 16px 26px 26px;
+  padding: 0 26px 26px;
   font-size: 11.5px;
   color: var(--ink-3);
   display: flex;
   gap: 20px;
   flex-wrap: wrap;
-  border-top: 1px solid var(--line);
 }
 .icp a:hover {
   color: var(--ink);
@@ -12240,19 +12239,6 @@ html[data-skin="paper"] .g-rec-items span { color: #24211c !important; font-size
 html[data-skin="paper"] .g-rec-items em { color: #8b8375 !important; }
 html[data-skin="paper"] .g-rec-items a { border-color: #ddd5c4 !important; }
 
-/* 右栏的小组件合成页尾一行文字 */
-html:not([data-skin="paper"]) .paper-foot-line { display: none !important; }
-html[data-skin="paper"] .paper-foot-line {
-  display: block !important;
-  max-width: 1000px !important;
-  margin: 0 auto !important;
-  padding: 14px 22px 0 !important;
-  border-top: 1px solid #bfb5a2 !important;
-  font: 400 11.5px/1.9 var(--font-mono, monospace) !important;
-  color: #8b8375 !important;
-  letter-spacing: .06em !important;
-}
-
 /* 文章页 */
 html[data-skin="paper"] .post-app,
 html[data-skin="paper"] .g-article {
@@ -12504,7 +12490,6 @@ html[data-skin="paper"][data-theme="dark"] .site-head { background: #f6f2e9 !imp
   html[data-skin="paper"] .g-tabs { overflow-x: auto !important; }
   html[data-skin="paper"] .g-posth h2,
   html[data-skin="paper"] .g-post h2 { font-size: 16px !important; }
-  html[data-skin="paper"] .paper-foot-line { padding-left: 16px !important; padding-right: 16px !important; }
   html[data-skin="paper"] .site-foot,
   html[data-skin="paper"] .site-head,
   html[data-skin="paper"] .splash { max-width: 100vw !important; }
@@ -13144,9 +13129,12 @@ html[data-lunar="off"] .g-cal-grid i.g-cal-sub {
    展开后按年份再折一层，复用归档页的 .arc-row / .ix-group。
    ============================================================ */
 .all-list {
-  width: min(100% - 32px, 1560px);
-  margin: 0 auto 10px;
+  width: min(100% - 32px, var(--wrap));
+  box-sizing: border-box;
+  padding: 0 26px;
+  margin: 0 auto 4px;
 }
+.all-list + .site-foot { margin-top: 18px; }
 .all-list > summary.all-list-h {
   display: flex;
   align-items: baseline;

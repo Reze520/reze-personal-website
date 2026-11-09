@@ -6096,19 +6096,6 @@ function interceptLinks(e) {
     if (lun) root.setAttribute("data-lunar", lun === "off" ? "off" : "on");
   }
 
-  /* 纸样皮肤下，右栏小组件收成页尾一行文字 */
-  function paperFootLine() {
-    var root = document.documentElement;
-    if (root.getAttribute("data-skin") !== "paper") return;
-    var foot = document.querySelector(".site-foot");
-    if (!foot || document.querySelector(".paper-foot-line")) return;
-    var line = document.createElement("div");
-    line.className = "paper-foot-line";
-    var n = (window.POSTS || []).length;
-    line.textContent = (n ? n + " 篇　·　" : "") + "7 分类　·　手写 HTML / CSS，无框架";
-    foot.parentNode.insertBefore(line, foot);
-  }
-
   /* accent 的行内值与皮肤要对得上：
      淡紫那套把 --accent / --g-accent 内联写到 html 与 .app 上，纸样靠样式表
      的朱红顶。从淡紫切到纸样时把这两处行内值撤掉，纸样才收得回来；切回淡紫
@@ -6145,7 +6132,6 @@ function interceptLinks(e) {
         n.textContent = isPaper ? "纸样" : "淡紫版";
       });
     }
-    paperFootLine();
     syncSkinLabels();
 
     var themeBtn = $("#theme-btn");
