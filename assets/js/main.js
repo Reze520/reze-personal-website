@@ -923,6 +923,20 @@
     return Object.prototype.hasOwnProperty.call(TAG_HUE, t) ? TAG_HUE[t] : hueOf(t);
   }
 
+  /* ---------- 头像与一句话简介 ----------
+     头像换成了静态图：`assets/uploads/avatar.png`。老配置里 SITE.avatar 还指着
+     那张 GIF，这里把它顶掉 —— 后台「头像路径」留什么都不会再让动图回来，
+     要换图就改 data.js 里的 avatar，或者直接换 assets/uploads/avatar.png 这张。
+     简介只去掉末尾那一个句号：它下面就是三个数字，句号压在那里像把话说死了。 */
+  function avatarSrc() {
+    var a = String(SITE.avatar || "");
+    if (!a || /\.gif(\W|$)/i.test(a)) return "assets/uploads/avatar.png";
+    return a;
+  }
+  function bioText() {
+    return String(SITE.slogan || "").replace(/[。．.]+\s*$/, "");
+  }
+
   /* ---------- 侧栏 ---------- */
   function sidebarMarkup() {
     var cc = catCounts();
@@ -930,8 +944,8 @@
     var catNum = Object.keys(cc).length;
     var tagNum = Object.keys(tc).length;
 
-    var avatar = SITE.avatar
-      ? '<div class="avatar"><img src="' + esc(SITE.avatar) + '" alt="' + esc(SITE.name) + '"></div>'
+    var avatar = avatarSrc()
+      ? '<div class="avatar"><img src="' + esc(avatarSrc()) + '" alt="' + esc(SITE.name) + '"></div>'
       : '<div class="avatar"><span class="ph">蕾</span></div>';
 
     // 社交按钮：优先用 SITE.social 数组，没有就退回旧的 github + email 两个
@@ -998,7 +1012,7 @@
       esc(SITE.name) +
       "</p>" +
       '<p class="bio">' +
-      esc(SITE.slogan) +
+      esc(bioText()) +
       "</p>" +
       '<div class="stats">' +
       '<div><span class="n">' +
@@ -1909,8 +1923,10 @@
     });
 
     /* ---- 左栏 ---- */
+    /* 头像是静态图。GIF 那版留给淡紫皮肤，纸样下不动，换成同一张的静止帧：
+       动图挂在页首会把整页的重绘节奏拖住，纸样又只讲纸面，动的地方越少越好。 */
     var avatarHtml = SITE.avatar
-      ? '<img src="' + esc(SITE.avatar) + '" alt="' + esc(SITE.name) + '">'
+      ? '<img src="' + esc(avatarSrc()) + '" alt="' + esc(SITE.name) + '">'
       : '<span class="ph">' + esc((SITE.name || "蕾").charAt(0)) + "</span>";
 
     var socialHtml = (SITE.social || [])
@@ -1950,7 +1966,7 @@
     left.innerHTML =
       '<div class="g-card g-profile">' +
       '<div class="g-avatar">' + avatarHtml + "</div>" +
-      '<p class="g-bio">' + esc(SITE.slogan) + "</p>" +
+      '<p class="g-bio">' + esc(bioText()) + "</p>" +
       '<div class="g-social">' + socialHtml + "</div>" +
       '<div class="g-stats">' +
       "<div><span class='n'>" + POSTS.length + "</span><span class='k'>文章</span></div>" +
@@ -1995,7 +2011,8 @@
       '<div class="ply-ctrl">' +
       '<button id="p-loop" data-tip="循环播放">' + ICONS.loop + "</button>" +
       '<button id="p-back" data-tip="上一首">' + ICONS.skipBack + "</button>" +
-      '<button class="ply-play" id="p-play" data-tip="播放 / 暂停">' + ICONS.play + "</button>" +
+      '<button class="ply-play" id="p-play" data-tip="播放 / 暂停"><span class="ply-play-ico">' +
+      ICONS.play + "</span></button>" +
       '<button id="p-fwd" data-tip="下一首">' + ICONS.skipFwd + "</button>" +
       '<button id="p-lyricbox" data-tip="播放器歌词">' + ICONS.lyrics + "</button>" +
       "</div>" +
@@ -2116,7 +2133,12 @@
     function paintBtn() {
       var playing = audio && !audio.paused;
       var icon = playing ? ICONS.pause : ICONS.play;
-      if (playBtn) playBtn.innerHTML = icon;
+      /* 只换图标，不重写整个按钮：按钮本身还要当那个盒子的框用 */
+      if (playBtn) {
+        var icoBox = playBtn.querySelector(".ply-play-ico");
+        if (icoBox) icoBox.innerHTML = icon;
+        else playBtn.innerHTML = icon;
+      }
       if (coverEl) coverEl.classList.toggle("spinning", !!playing);
       if (eqEl) eqEl.classList.toggle("playing", !!playing);
     }
@@ -5461,63 +5483,99 @@ function interceptLinks(e) {
     });
   }
 
-  /* ---------- 外观设置面板 ---------- */
+  /* ---------- 外观设置面板 ----------
+     按皮肤分两套。淡紫那套是玻璃：背景亮度、主题色、卡片材质/浓度/颜色、
+     背景弱化、背景图——每一项都会在玻璃上直接起作用。
+     纸样那套反过来只留纸面能改的几项：主题色（朱红的深浅）、背景纸色、
+     版心宽度、手写字体开关、日期农历。
+     分组带 data-skin-set="paper"/"soft"，CSS 只显示当前皮肤那一套；
+     切皮肤时 syncSettingsSkin() 把另一套的按钮状态丢掉，免得按下
+     没有反应的选项还挂着高亮。 */
   function initSettings() {
     var btn = document.getElementById("set-btn");
     if (!btn || document.getElementById("set-overlay")) return;
 
+    var root = document.documentElement;
+
     var overlay = document.createElement("div");
     overlay.className = "set-overlay";
     overlay.id = "set-overlay";
-    overlay.innerHTML =
-      '<div class="set-panel">' +
-      "<h3>外观设置</h3>" +
-      '<p class="sub">改完立刻生效，会自动记住</p>' +
-      '<div class="set-group"><label>背景亮度<span class="lite-val" id="lite-val">100%</span></label>' +
+
+    var softHtml =
+      '<div class="set-group" data-skin-set="soft"><label>背景亮度<span class="lite-val" id="lite-val">100%</span></label>' +
       '<input type="range" class="lite-slider" id="lite" min="40" max="160" step="1" value="100"></div>' +
-      '<div class="set-group"><label>主题色</label>' +
+      '<div class="set-group" data-skin-set="soft"><label>主题色</label>' +
       '<input type="range" class="hue-slider" id="hue" min="0" max="360" step="1" value="215"></div>' +
-      '<div class="set-group"><label>配色预设</label>' +
+      '<div class="set-group" data-skin-set="soft"><label>配色预设</label>' +
       '<div class="preset-row" id="presets">' +
       '<button class="preset" data-h="215" style="background:#a8c6f7" title="海蓝"></button>' +
       '<button class="preset" data-h="280" style="background:#b8a1f7" title="紫罗兰"></button>' +
       '<button class="preset" data-h="330" style="background:#f0a3c8" title="樱粉"></button>' +
       '<button class="preset" data-h="160" style="background:#7fd6b0" title="薄荷"></button>' +
       "</div></div>" +
-      '<div class="set-group"><label>模式</label>' +
-      '<div class="seg" id="mode-seg">' +
-      '<button data-mode="light">浅色</button><button data-mode="dark">深色</button></div></div>' +
-      '<div class="set-group"><label>皮肤</label>' +
-      '<div class="seg" id="skin-seg">' +
-      '<button data-skin="soft">淡紫</button><button data-skin="paper">纸样</button></div></div>' +
-      '<div class="set-group"><label>卡片材质</label>' +
+      '<div class="set-group" data-skin-set="soft"><label>卡片材质</label>' +
       '<div class="seg" id="mat-seg">' +
       '<button data-mat="solid">纯色</button>' +
       '<button data-mat="translucent">半透明</button>' +
       '<button data-mat="frost">毛玻璃</button></div></div>' +
-      '<div class="set-group"><label>卡片浓度<span class="set-val" id="card-val">74%</span></label>' +
+      '<div class="set-group" data-skin-set="soft"><label>卡片浓度<span class="set-val" id="card-val">74%</span></label>' +
       '<input type="range" class="set-slider" id="card-alpha" min="70" max="100" step="1" value="74"></div>' +
-      '<div class="set-group"><label>卡片颜色</label>' +
+      '<div class="set-group" data-skin-set="soft"><label>卡片颜色</label>' +
       '<div class="preset-row" id="tint-row">' +
       '<button class="preset tint" data-tint="paper" style="background:#fffdf8" title="纸白"></button>' +
       '<button class="preset tint" data-tint="white" style="background:#ffffff" title="纯白"></button>' +
       '<button class="preset tint" data-tint="warm" style="background:#fcf6ea" title="暖米"></button>' +
       '<button class="preset tint" data-tint="cool" style="background:#f6f9fc" title="冷灰"></button>' +
       "</div></div>" +
-      '<div class="set-group"><label>背景弱化<span class="set-val" id="veil-val">50%</span></label>' +
+      '<div class="set-group" data-skin-set="soft"><label>背景弱化<span class="set-val" id="veil-val">50%</span></label>' +
       '<input type="range" class="set-slider" id="veil" min="0" max="100" step="1" value="50"></div>' +
-      '<div class="set-group"><label>背景图</label>' +
-      '<div class="bg-row" id="bg-row"></div>' +
-      "</div>" +
+      '<div class="set-group" data-skin-set="soft"><label>背景图</label>' +
+      '<div class="bg-row" id="bg-row"></div></div>';
+
+    // 纸样：纸面是纯色铺满的，没有背景图、没有玻璃卡片，
+    // 所以只留「纸的深浅 / 版心宽窄 / 字用不用手写体 / 日历显不显农历」。
+    var paperHtml =
+      '<div class="set-group" data-skin-set="paper"><label>纸面</label>' +
+      '<div class="preset-row" id="paper-row">' +
+      '<button class="preset" data-paper="warm" style="background:#f6f2e9" title="宣纸"></button>' +
+      '<button class="preset" data-paper="plain" style="background:#fbfaf6" title="素白"></button>' +
+      '<button class="preset" data-paper="rice" style="background:#f3ecd8" title="米黄"></button>' +
+      '<button class="preset" data-paper="cool" style="background:#f2f4f1" title="青白"></button>' +
+      "</div></div>" +
+      '<div class="set-group" data-skin-set="paper"><label>版心宽度<span class="set-val" id="wrap-val">标准</span></label>' +
+      '<div class="seg" id="wrap-seg">' +
+      '<button data-wrap="wide">宽</button><button data-wrap="std">标准</button><button data-wrap="narrow">窄</button>' +
+      "</div></div>" +
+      '<div class="set-group" data-skin-set="paper"><label>行距<span class="set-val" id="lead-val">1.9</span></label>' +
+      '<input type="range" class="set-slider" id="lead" min="17" max="22" step="1" value="19"></div>' +
+      '<div class="set-group" data-skin-set="paper"><label>手写字体</label>' +
+      '<div class="seg" id="hand-seg">' +
+      '<button data-hand="off">宋体</button><button data-hand="on">马善政</button></div>' +
+      '<p class="set-note">标题与诗笺换手写体，正文不变。</p></div>' +
+      '<div class="set-group" data-skin-set="paper"><label>日历</label>' +
+      '<div class="seg" id="lun-seg">' +
+      '<button data-lun="on">带农历</button><button data-lun="off">只看公历</button></div></div>';
+
+    overlay.innerHTML =
+      '<div class="set-panel">' +
+      "<h3>外观设置</h3>" +
+      '<p class="sub">改完立刻生效，会自动记住</p>' +
+      '<div class="set-group"><label>模式</label>' +
+      '<div class="seg" id="mode-seg">' +
+      '<button data-mode="light">浅色</button><button data-mode="dark">深色</button></div></div>' +
+      '<div class="set-group"><label>皮肤</label>' +
+      '<div class="seg" id="skin-seg">' +
+      '<button data-skin="soft">淡紫</button><button data-skin="paper">纸样</button></div></div>' +
+      softHtml +
+      paperHtml +
       "</div>";
     document.body.appendChild(overlay);
 
     var hue = overlay.querySelector("#hue");
-    var root = document.documentElement;
     var lite = overlay.querySelector("#lite");
     var liteVal = overlay.querySelector("#lite-val");
 
-    /* ---------- 背景亮度 ----------
+    /* ---------- 背景亮度（淡紫） ----------
        真亮度：直接给 .page-bg 上 filter: brightness(倍数)，整幅背景图一起
        变亮变暗，色彩关系和层次都保留 —— 这就是和「盖白幕」最本质的区别。
        40%–160%，100% 是原图。
@@ -5533,34 +5591,85 @@ function interceptLinks(e) {
       STORAGE.set("reze-bg-bright", String(n));
     }
 
+    function currentSkin() {
+      return root.getAttribute("data-skin") === "paper" ? "paper" : "soft";
+    }
+
+    /* 主题色只写给淡紫。纸样的朱红是样式表里 !important 钉死的四种纸本色相
+       （data-ph），这里一旦把 --g-accent 内联写到 .app / html 上，行内就压过了
+       样式表，日历当天那圈描边会跟着淡紫的蓝跑 —— 所以纸样下这一步整个跳过，
+       只留高亮同步。 */
     function applyHue(h) {
-      var bright = "hsl(" + h + ", 72%, 76%)";
-      var deep = "hsl(" + h + ", 62%, 52%)";
-      root.style.setProperty("--accent", deep);
-      Array.prototype.forEach.call(
-        document.querySelectorAll(".app, .post-app"),
-        function (el) {
-          el.style.setProperty("--g-accent", bright);
-        }
-      );
-      STORAGE.set("reze-hue", String(h));
-      if (hue) hue.value = h;
-      Array.prototype.forEach.call(overlay.querySelectorAll(".preset"), function (b) {
-        b.setAttribute("aria-pressed", String(Number(b.getAttribute("data-h")) === Number(h)));
+      var n = Math.max(0, Math.min(360, Math.round(Number(h) || 0)));
+      if (currentSkin() !== "paper") {
+        var bright = "hsl(" + n + ", 72%, 76%)";
+        var deep = "hsl(" + n + ", 62%, 52%)";
+        root.style.setProperty("--accent", deep);
+        Array.prototype.forEach.call(
+          document.querySelectorAll(".app, .post-app"),
+          function (el) {
+            el.style.setProperty("--g-accent", bright);
+          }
+        );
+      }
+      STORAGE.set("reze-hue", String(n));
+      if (hue) hue.value = n;
+      Array.prototype.forEach.call(overlay.querySelectorAll("#presets .preset"), function (b) {
+        b.setAttribute("aria-pressed", String(Number(b.getAttribute("data-h")) === n));
       });
+      // 纸样那几个色块同理，跟着同一圈色相走
+      Array.prototype.forEach.call(overlay.querySelectorAll("#paper-row .preset"), function (b) {
+        if (root.getAttribute("data-skin") !== "paper") return;
+        b.setAttribute("aria-pressed", String(Number(b.getAttribute("data-ph")) === n));
+      });
+    }
+
+    /* 纸样：朱红有四种常见的纸本色相，比拖一整条色环准得多 */
+    var PAPER_HUES = { vermilion: 5, ochre: 28, ink: 210, plum: 340 };
+    Array.prototype.forEach.call(overlay.querySelectorAll("#paper-row .preset"), function (b) {
+      b.setAttribute("data-ph", String(PAPER_HUES[b.getAttribute("data-paper")] || 5));
+    });
+
+    function currentSkin() {
+      return root.getAttribute("data-skin") === "paper" ? "paper" : "soft";
     }
 
     function syncSegs() {
       var dark = root.getAttribute("data-theme") === "dark";
-      var soft = root.getAttribute("data-skin") === "soft";
       var m = overlay.querySelector('#mode-seg [data-mode="dark"]');
       var l = overlay.querySelector('#mode-seg [data-mode="light"]');
       var s = overlay.querySelector('#skin-seg [data-skin="soft"]');
       var mi = overlay.querySelector('#skin-seg [data-skin="paper"]');
       if (m) m.setAttribute("aria-pressed", String(dark));
       if (l) l.setAttribute("aria-pressed", String(!dark));
-      if (s) s.setAttribute("aria-pressed", String(soft));
-      if (mi) mi.setAttribute("aria-pressed", String(!soft));
+      if (s) s.setAttribute("aria-pressed", String(currentSkin() === "soft"));
+      if (mi) mi.setAttribute("aria-pressed", String(currentSkin() === "paper"));
+    }
+
+    /* 切皮肤：把另一套里的按钮全部放掉高亮。
+       不这么做的话，淡紫里选的「毛玻璃」会一直是按下态，切到纸样后
+       那一组已经藏起来了看不出来；切回来时又是对的 —— 但面板一打开
+       如果先看到纸样那套，再从淡紫那套读，会出现两套同时高亮的假象。 */
+    function syncSettingsSkin() {
+      var skin = currentSkin();
+      overlay.setAttribute("data-skin", skin);
+      Array.prototype.forEach.call(overlay.querySelectorAll(".seg button, .preset"), function (b) {
+        var grp = b.closest ? b.closest("[data-skin-set]") : null;
+        if (!grp) return;
+        if (grp.getAttribute("data-skin-set") !== skin) b.setAttribute("aria-pressed", "false");
+      });
+      if (skin === "soft") {
+        syncSegs();
+        return;
+      }
+      // 纸样：把四组状态按存储值重新点亮
+      var pv = overlay.querySelector("#paper-row .preset[aria-pressed='true']");
+      if (!pv) {
+        var p = STORAGE.get("reze-paper-tone") || "warm";
+        Array.prototype.forEach.call(overlay.querySelectorAll("#paper-row .preset"), function (b) {
+          b.setAttribute("aria-pressed", String(b.getAttribute("data-paper") === p));
+        });
+      }
     }
 
     var savedHue = STORAGE.get("reze-hue");
@@ -5568,7 +5677,7 @@ function interceptLinks(e) {
     var savedLite = STORAGE.get("reze-bg-bright");
     applyLite(savedLite === null ? 100 : Number(savedLite));
 
-    /* ---------- 卡片材质 / 浓度 / 颜色 / 背景弱化 ----------
+    /* ---------- 卡片材质 / 浓度 / 颜色 / 背景弱化（淡紫） ----------
        四个开关共用 34 节那组变量：
          --card-filter 决定有没有模糊（纯色、半透明都是 none）
          --card-alpha  决定透多少
@@ -5679,7 +5788,87 @@ function interceptLinks(e) {
       if (veilVal) veilVal.textContent = curVeil + "%";
       if (veilEl) veilEl.value = curVeil;
     }
+
+    /* ---------- 纸样那几项 ----------
+       纸色只换底色，不动字色；版心和行距落在 --paper-wrap / --paper-lead
+       两个变量上，纸样的 html 规则里读它们，没设值时用标准值。
+       手写体是把 .splash-title / .g-bio / .g-notice 那一撮的 font-family
+       挂到 <html> 上，一条 data-hand="on" 就能整页切换。 */
+    var PAPER_TONES = {
+      warm: { bg: "#f6f2e9", alt: "#efe9dc", fill: "#fbf8f1" },
+      plain: { bg: "#fbfaf6", alt: "#f2f1ec", fill: "#ffffff" },
+      rice: { bg: "#f3ecd8", alt: "#eae1c8", fill: "#faf6e9" },
+      cool: { bg: "#f2f4f1", alt: "#e6ebe5", fill: "#fafbf9" },
+    };
+    var paperRow = overlay.querySelector("#paper-row");
+    var wrapSeg = overlay.querySelector("#wrap-seg");
+    var wrapVal = overlay.querySelector("#wrap-val");
+    var leadEl = overlay.querySelector("#lead");
+    var leadVal = overlay.querySelector("#lead-val");
+    var handSeg = overlay.querySelector("#hand-seg");
+    var lunSeg = overlay.querySelector("#lun-seg");
+
+    function applyPaperTone(key) {
+      if (!PAPER_TONES[key]) key = "warm";
+      root.setAttribute("data-paper", key);
+      if (paperRow) {
+        Array.prototype.forEach.call(paperRow.querySelectorAll(".preset"), function (b) {
+          b.setAttribute("aria-pressed", String(b.getAttribute("data-paper") === key));
+        });
+      }
+      STORAGE.set("reze-paper-tone", key);
+    }
+
+    function applyWrap(key) {
+      if (["wide", "std", "narrow"].indexOf(key) === -1) key = "std";
+      root.setAttribute("data-wrap", key);
+      if (wrapVal) wrapVal.textContent = key === "wide" ? "宽" : key === "narrow" ? "窄" : "标准";
+      if (wrapSeg) {
+        Array.prototype.forEach.call(wrapSeg.querySelectorAll("button"), function (b) {
+          b.setAttribute("aria-pressed", String(b.getAttribute("data-wrap") === key));
+        });
+      }
+      STORAGE.set("reze-paper-wrap", key);
+    }
+
+    function applyLead(v) {
+      var n = Math.max(17, Math.min(22, Math.round(Number(v) || 19)));
+      root.style.setProperty("--paper-lead", (n / 10).toFixed(1));
+      if (leadVal) leadVal.textContent = (n / 10).toFixed(1);
+      if (leadEl) leadEl.value = n;
+      STORAGE.set("reze-paper-lead", String(n));
+    }
+
+    function applyHand(on) {
+      var yes = on === "on";
+      root.setAttribute("data-hand", yes ? "on" : "off");
+      if (handSeg) {
+        Array.prototype.forEach.call(handSeg.querySelectorAll("button"), function (b) {
+          b.setAttribute("aria-pressed", String((b.getAttribute("data-hand") === "on") === yes));
+        });
+      }
+      STORAGE.set("reze-paper-hand", yes ? "on" : "off");
+    }
+
+    function applyLunar(on) {
+      var yes = on !== "off";
+      root.setAttribute("data-lunar", yes ? "on" : "off");
+      if (lunSeg) {
+        Array.prototype.forEach.call(lunSeg.querySelectorAll("button"), function (b) {
+          b.setAttribute("aria-pressed", String((b.getAttribute("data-lun") === "on") === yes));
+        });
+      }
+      STORAGE.set("reze-cal-lunar", yes ? "on" : "off");
+    }
+
+    applyPaperTone(STORAGE.get("reze-paper-tone") || root.getAttribute("data-paper") || "warm");
+    applyWrap(STORAGE.get("reze-paper-wrap") || "std");
+    var savedLead = STORAGE.get("reze-paper-lead");
+    applyLead(savedLead === null ? 19 : Number(savedLead));
+    applyHand(STORAGE.get("reze-paper-hand") || "off");
+    applyLunar(STORAGE.get("reze-cal-lunar") || "on");
     syncSegs();
+    syncSettingsSkin();
 
     hue.addEventListener("input", function () {
       applyHue(Number(hue.value));
@@ -5696,6 +5885,45 @@ function interceptLinks(e) {
       if (!b) return;
       applyHue(Number(b.getAttribute("data-h")));
     });
+
+    if (paperRow) {
+      paperRow.addEventListener("click", function (e) {
+        var b = e.target.closest(".preset");
+        if (!b) return;
+        // 色块一按两用：换纸色，顺带把朱红挪到对应的色相
+        applyPaperTone(b.getAttribute("data-paper"));
+        var ph = b.getAttribute("data-ph");
+        if (ph !== null) applyHue(Number(ph));
+        syncSettingsSkin();
+      });
+    }
+
+    if (wrapSeg) {
+      wrapSeg.addEventListener("click", function (e) {
+        var b = e.target.closest("button");
+        if (!b) return;
+        applyWrap(b.getAttribute("data-wrap"));
+      });
+    }
+    if (leadEl) {
+      leadEl.addEventListener("input", function () {
+        applyLead(leadEl.value);
+      });
+    }
+    if (handSeg) {
+      handSeg.addEventListener("click", function (e) {
+        var b = e.target.closest("button");
+        if (!b) return;
+        applyHand(b.getAttribute("data-hand"));
+      });
+    }
+    if (lunSeg) {
+      lunSeg.addEventListener("click", function (e) {
+        var b = e.target.closest("button");
+        if (!b) return;
+        applyLunar(b.getAttribute("data-lun"));
+      });
+    }
 
     overlay.querySelector("#mat-seg").addEventListener("click", function (e) {
       var b = e.target.closest("button");
@@ -5735,12 +5963,17 @@ function interceptLinks(e) {
     overlay.querySelector("#skin-seg").addEventListener("click", function (e) {
       var b = e.target.closest("button");
       if (!b) return;
-      root.setAttribute("data-skin", b.getAttribute("data-skin"));
-      STORAGE.set("reze-skin-v2", b.getAttribute("data-skin"));
+      var next = b.getAttribute("data-skin");
+      root.setAttribute("data-skin", next);
+      STORAGE.set("reze-skin-v2", next);
+      syncAccentVars(next);
       syncSegs();
+      syncSettingsSkin();
+      paintBgRow();
+      document.dispatchEvent(new CustomEvent("reze:skin"));
     });
 
-    /* ---- 背景图切换：缩略图点一下就换，选择记进 localStorage ---- */
+    /* ---- 背景图切换（淡紫）：缩略图点一下就换，选择记进 localStorage ---- */
     var bgRow = overlay.querySelector("#bg-row");
     var bgs = bgList();
 
@@ -5789,8 +6022,9 @@ function interceptLinks(e) {
 
     btn.addEventListener("click", function () {
       overlay.classList.add("open");
-      paintBgRow();
       syncSegs();
+      syncSettingsSkin();
+      if (currentSkin() === "soft") paintBgRow();
     });
     overlay.addEventListener("click", function (e) {
       if (e.target === overlay) overlay.classList.remove("open");
@@ -5798,14 +6032,34 @@ function interceptLinks(e) {
     document.addEventListener("keydown", function (e) {
       if (e.key === "Escape") overlay.classList.remove("open");
     });
+
+    // 顶栏那颗皮肤按钮也能切，面板开着时状态要跟着走
+    document.addEventListener("reze:skin", function () { syncSegs(); syncSettingsSkin(); });
   }
 
   /* ---------- 主题 / 皮肤 ---------- */
-  function initTheme() {
+  /* 纸样那几项在进站时就得生效：设置面板是按需打开才建的，
+     不能等用户点开面板才恢复纸色 / 版心 / 行距 / 手写体 / 农历。 */
+  function restorePaperPrefs() {
     var root = document.documentElement;
+    var tone = STORAGE.get("reze-paper-tone");
+    if (tone) root.setAttribute("data-paper", tone);
+    var wrap = STORAGE.get("reze-paper-wrap");
+    if (wrap) root.setAttribute("data-wrap", wrap);
+    var lead = STORAGE.get("reze-paper-lead");
+    if (lead !== null) {
+      var n = Math.max(17, Math.min(22, Math.round(Number(lead) || 19)));
+      root.style.setProperty("--paper-lead", (n / 10).toFixed(1));
+    }
+    var hand = STORAGE.get("reze-paper-hand");
+    if (hand) root.setAttribute("data-hand", hand === "on" ? "on" : "off");
+    var lun = STORAGE.get("reze-cal-lunar");
+    if (lun) root.setAttribute("data-lunar", lun === "off" ? "off" : "on");
+  }
 
   /* 纸样皮肤下，右栏小组件收成页尾一行文字 */
   function paperFootLine() {
+    var root = document.documentElement;
     if (root.getAttribute("data-skin") !== "paper") return;
     var foot = document.querySelector(".site-foot");
     if (!foot || document.querySelector(".paper-foot-line")) return;
@@ -5815,6 +6069,33 @@ function interceptLinks(e) {
     line.textContent = (n ? n + " 篇　·　" : "") + "7 分类　·　手写 HTML / CSS，无框架、无追踪";
     foot.parentNode.insertBefore(line, foot);
   }
+
+  /* accent 的行内值与皮肤要对得上：
+     淡紫那套把 --accent / --g-accent 内联写到 html 与 .app 上，纸样靠样式表
+     的朱红顶。从淡紫切到纸样时把这两处行内值撤掉，纸样才收得回来；切回淡紫
+     再按存着的色相写一遍。 */
+  function syncAccentVars(skin) {
+    var root = document.documentElement;
+    var els = document.querySelectorAll(".app, .post-app");
+    if (skin === "paper") {
+      root.style.removeProperty("--accent");
+      Array.prototype.forEach.call(els, function (el) {
+        el.style.removeProperty("--g-accent");
+      });
+      return;
+    }
+    var hue = STORAGE.get("reze-hue");
+    var n = Math.max(0, Math.min(360, Math.round(Number(hue === null ? 215 : hue) || 0)));
+    root.style.setProperty("--accent", "hsl(" + n + ", 62%, 52%)");
+    Array.prototype.forEach.call(els, function (el) {
+      el.style.setProperty("--g-accent", "hsl(" + n + ", 72%, 76%)");
+    });
+  }
+
+  function initTheme() {
+    var root = document.documentElement;
+    restorePaperPrefs();
+    syncAccentVars(root.getAttribute("data-skin") === "paper" ? "paper" : "soft");
 
     function syncSkinLabels() {
       var isPaper = root.getAttribute("data-skin") === "paper";
@@ -5846,6 +6127,9 @@ function interceptLinks(e) {
         root.setAttribute("data-skin", next);
         STORAGE.set("reze-skin-v2", next);
         syncSkinLabels();
+        syncAccentVars(next);
+        // 设置面板那一套要跟着换；面板没建出来时这个监听器不存在，无妨
+        document.dispatchEvent(new CustomEvent("reze:skin"));
       });
     }
 
@@ -6035,7 +6319,7 @@ function interceptLinks(e) {
     var av = $("#splash-avatar");
     if (av) {
       av.innerHTML = SITE.avatar
-        ? '<img src="' + esc(SITE.avatar) + '" alt="' + esc(SITE.name) + '">'
+        ? '<img src="' + esc(avatarSrc()) + '" alt="' + esc(SITE.name) + '">'
         : "<span>" + esc((SITE.name || "蕾").charAt(0)) + "</span>";
     }
 

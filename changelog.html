@@ -20,7 +20,7 @@
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20viewBox%3D%270%200%2064%2064%27%3E%3Crect%20width%3D%2764%27%20height%3D%2764%27%20rx%3D%2715%27%20fill%3D%27%23241f33%27%2F%3E%3Cg%20transform%3D%27translate%286%2C6%29%20scale%282.1667%29%27%3E%3Cpath%20d%3D%27M21%2012.79A9%209%200%201%201%2011.21%203%207%207%200%200%200%2021%2012.79z%27%20fill%3D%27%23f6f1e7%27%2F%3E%3C%2Fg%3E%3C%2Fsvg%3E">
-<link rel="stylesheet" href="assets/css/style.css?v=20261109j">
+<link rel="stylesheet" href="assets/css/style.css?v=20261109k">
   <link rel="alternate" type="application/rss+xml" title="RezeのBlog" href="feed.xml">
 </head>
 <body class="has-app">
@@ -75,7 +75,7 @@
 <header class="cl-head">
 <h1>更新日志</h1>
 <div class="cl-facts">
-<span><b>74</b> 条记录</span>
+<span><b>75</b> 条记录</span>
 <span><b>6</b> 个时间节点</span>
 <span>跨度 2020.07 — 2026.11</span>
 </div>
@@ -84,7 +84,7 @@
 <button type="button" class="cl-btn" data-cl-all="0">全部收起</button>
 </div>
 <nav class="cl-nav" aria-label="按时间跳转">
-<a href="#cl-202611">2026.11<i>45 条</i></a>
+<a href="#cl-202611">2026.11<i>46 条</i></a>
 <a href="#cl-202610">2026.10<i>10 条</i></a>
 <a href="#cl-202604">2026.04<i>6 条</i></a>
 <a href="#cl-202506">2025.06<i>1 条</i></a>
@@ -93,9 +93,22 @@
 </nav>
 </header>
 <section class="cl-month" id="cl-202611">
-<h2>2026 年 11 月<span class="cl-count">45 条</span></h2>
+<h2>2026 年 11 月<span class="cl-count">46 条</span></h2>
 <ol class="cl-list">
 <li class="cl-item"><details open>
+<summary><span class="cl-kind" data-k="界面">界面</span><span class="cl-t">首页头像改静态图、当天日期可读、播放键细框、设置按皮肤分两套</span><span class="cl-n">8 项</span></summary>
+<div class="cl-body"><ul>
+<li>头像换成 assets/uploads/avatar.png（600×600，量化到 192 色，114 KB），另留一张 256 的备用。原来那张 GIF 还在 assets/uploads/ 里没删，只是不再被引用：avatarSrc() 遇到 .gif 一律顶成静态图，SITE.avatar 写什么都不影响。头像盒从固定高度改成 aspect-ratio: 1/1，横图不再被裁脸。</li>
+<li>头像下面那句简介去掉末尾句号（bioText() 去尾标点，只改渲染、不改 data.js），纸样下重排了外边距与行距：字号 12px、行高 1.95、左右各留 6px，不再贴着左栏边缘顶出去。</li>
+<li>日历的当天原本是实底强调色 + 反色数字，农历那行 8.5px 压在底色上读不出来。改成透明底 + 1.5px 内描边：数字用强调色加粗，农历回到墨灰，节日那行仍走强调色。选中项描边加到 2px。</li>
+<li>播放键从 50px 实心圆（纸样下被压成方块）改成 46px 细框 + 18px 图标，纸样下是细线方框、淡紫下是细线圆。播放/暂停只换框里的图标，不再重写整个按钮。</li>
+<li>外观设置按皮肤分成两套，只显示对当前皮肤真正生效的项：模式与皮肤始终显示；淡紫保留背景亮度、主题色、配色预设、卡片材质、浓度、颜色、背景弱化、背景图八组；纸样新建纸面（宣纸/素白/米黄/青白四档纸色）、版心宽度（宽/标准/窄）、行距（1.7–2.2）、手写字体（宋体/马善政）、日历（带农历/只看公历）五组。切皮肤时另一套的按钮全部放掉高亮。</li>
+<li>纸样那五项在进站时由 restorePaperPrefs() 恢复，不用先点开设置面板；存储键分别是 reze-paper-tone、reze-paper-wrap、reze-paper-lead、reze-paper-hand、reze-cal-lunar。</li>
+<li>修掉一处颜色串皮：applyHue() 原来无条件把 --accent 与 --g-accent 内联写到 html 和 .app 上，纸样下靠样式表 !important 才能顶回朱红，行内值一经写入就压不过，日历当天那圈描边会跟成淡紫的蓝。现在按皮肤判断，纸样下不写行内变量，切换时由 syncAccentVars() 撤掉或补回。</li>
+<li>版本号 20261109k。</li>
+</ul></div>
+</details></li>
+<li class="cl-item"><details>
 <summary><span class="cl-kind" data-k="界面">界面</span><span class="cl-t">天气按访问者位置自动定位、日历可选中并切年月</span><span class="cl-n">4 项</span></summary>
 <div class="cl-body"><ul>
 <li>天气新增「自动定位」：新增 functions/geo.js，由 Cloudflare 边缘按访问者 IP 取经纬度（no-store，不跨用户缓存）；weather.js 拉到后把「我的位置」作为默认城市前置，坐标级精度等同县/区，地名先用 cf 的 city/region，再用 Nominatim 反向地理编码补中文县/市名（按坐标缓存，失败回退）。手动添加的城市照常切换。</li>
@@ -755,11 +768,11 @@
   } catch (e) {}
 })();
 </script>
-<script defer src="assets/js/data.meta.js?v=20261109j"></script>
-<script defer src="assets/js/cloud.js?v=20261109j"></script>
-<script defer src="assets/js/weather.js?v=20261109j"></script>
-<script defer src="assets/js/playlist.js?v=20261109j"></script>
-<script defer src="assets/js/main.js?v=20261109j"></script>
+<script defer src="assets/js/data.meta.js?v=20261109k"></script>
+<script defer src="assets/js/cloud.js?v=20261109k"></script>
+<script defer src="assets/js/weather.js?v=20261109k"></script>
+<script defer src="assets/js/playlist.js?v=20261109k"></script>
+<script defer src="assets/js/main.js?v=20261109k"></script>
 <script>
 /* 更新日志的一键展开／收起。details 自己就能点，这段只管批量开关。 */
 document.addEventListener("click", function (e) {

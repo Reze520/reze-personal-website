@@ -12754,3 +12754,305 @@ html[data-skin="paper"] .g-feed .cat {
   background: transparent !important;
   border: 0 !important;
 }
+
+/* ============================================================
+   头像 / 简介 / 日历当天 / 播放键 / 按皮肤分开的设置面板
+   ============================================================ */
+
+/* ---------- 左栏头像 ----------
+   静态图是 1:1 的，套在原来 190px 高的横幅里会被上下裁掉半张脸，
+   所以先退回方形：图本身就是头像，不用再裁。 */
+.g-avatar {
+  height: auto;
+  aspect-ratio: 1 / 1;
+}
+.g-avatar img {
+  object-position: center;
+}
+/* 白底是图片自带的，纸样那张描边会跟底色糊成一片，这里换成墨线 */
+html[data-skin="paper"] .g-profile .g-avatar img {
+  border: 1px solid #ddd5c4;
+}
+
+/* ---------- 简介 ----------
+   11.5px 的行高在纸样下只有 19.5px，两个标点挤在一起就换行，
+   第二行又被 15px 的段距顶到数字行下面，看着像错位。
+   这里把行高放开、左右留够、跟统计行之间留出固定间隙。 */
+html[data-skin="paper"] .g-bio {
+  margin: 8px 0 0;
+  padding: 0 6px;
+  font-size: 12px;
+  line-height: 1.95;
+  letter-spacing: 0.01em;
+}
+html[data-skin="paper"] .g-social {
+  padding: 12px 0 4px;
+}
+html[data-skin="paper"] .g-stats {
+  margin-top: 4px;
+}
+
+/* ---------- 日历：当天 ----------
+   今天那格原来是实底强调色 + 反色的公历数字。农历/节日那行 8.5px
+   压在朱红底上几乎看不见，看着像被下面那行盖住了。
+   改成「只描一圈、不加底」：朱红框把今天框出来，数字和农历都还是墨色。
+   选择器带 html[data-skin="paper"] 前缀，是为了压过前面那条
+   `html[data-skin="paper"] .g-cal-grid b.today … { color: var(--accent-ink) }`
+   —— 那条给的是纸白色，专为「实底反色」写的，现在底没了就成白字。 */
+.g-cal-grid b.today,
+html[data-skin="paper"] .g-cal-grid b.today,
+html[data-skin="paper"] .g-cal-grid b.today span,
+html[data-skin="paper"] .g-cal-grid b.today i {
+  background: transparent;
+  box-shadow: inset 0 0 0 1.5px var(--g-accent);
+  color: var(--ink);
+}
+.g-cal-grid b.today em {
+  color: var(--g-accent);
+  font-weight: 600;
+}
+.g-cal-grid b.today .g-cal-sub,
+html[data-skin="paper"] .g-cal-grid b.today .g-cal-sub,
+:root[data-theme="dark"] .g-cal-grid b.today .g-cal-sub {
+  color: var(--ink-3);
+  font-weight: 500;
+}
+.g-cal-grid b.today .g-cal-sub.is-fest {
+  color: var(--g-accent);
+}
+/* 今天又是选中的那天：一圈框已经说明白了，别再叠一层内描边 */
+.g-cal-grid b.today.selected {
+  box-shadow: inset 0 0 0 2px var(--g-accent);
+}
+
+/* ---------- 播放键 ----------
+   原来是一颗 50px 的实心圆，纸样下被压成 50px 的方块，压在五个细线
+   图标中间就是一块红板。改成「一方细框 + 居中的三角」，跟同一行的
+   循环、上一首、下一首一个重量；播放/暂停只换框里的图标。 */
+.ply-ctrl .ply-play {
+  width: 46px;
+  height: 46px;
+  border-radius: 50%;
+  background: transparent !important;
+  border: 1px solid color-mix(in srgb, var(--g-accent) 42%, transparent);
+  box-shadow: none !important;
+  color: var(--g-accent) !important;
+  display: grid;
+  place-items: center;
+}
+.ply-ctrl .ply-play:hover {
+  background: color-mix(in srgb, var(--g-accent) 8%, transparent) !important;
+  border-color: var(--g-accent);
+  color: var(--g-accent) !important;
+  transform: scale(1.06);
+}
+.ply-ctrl .ply-play-ico {
+  display: grid;
+  place-items: center;
+}
+.ply-ctrl .ply-play svg {
+  width: 18px;
+  height: 18px;
+  margin-left: 1px;
+}
+/* 暂停图标两侧对称，不用往右挪那 1px */
+.ply-play[aria-pressed="true"] .ply-play svg,
+.ply-play.is-playing svg {
+  margin-left: 0;
+}
+
+html[data-skin="paper"] .ply-ctrl .ply-play {
+  background: transparent !important;
+  border: 1px solid #bfb5a2 !important;
+  border-radius: 0 !important;
+  color: #a83226 !important;
+}
+html[data-skin="paper"] .ply-ctrl .ply-play:hover {
+  background: #fbf8f1 !important;
+  border-color: #a83226 !important;
+  color: #a83226 !important;
+}
+/* 深色主题里强调色是浅紫，细框同样成立，只把描边提亮一档 */
+:root[data-theme="dark"] .ply-ctrl .ply-play {
+  background: transparent !important;
+  color: var(--g-accent) !important;
+  border-color: color-mix(in srgb, var(--g-accent) 62%, transparent);
+}
+
+/* ---------- 设置面板：只显示当前皮肤真的能改的项 ----------
+   data-skin-set="paper" 的整组只在纸样下出现，其余组只在淡紫下出现。
+   切皮肤时 syncSettingsSkin() 同步一次，不重建面板。 */
+.set-group[data-skin-set] { display: none; }
+html[data-skin="paper"] .set-group[data-skin-set="paper"] { display: block; }
+html[data-skin="soft"] .set-group[data-skin-set="soft"] { display: block; }
+html:not([data-skin="paper"]) .set-group[data-skin-set="soft"] { display: block; }
+
+/* 纸样那一套：纸色、描边、墨色字，跟站内卡片同一套变量 */
+html[data-skin="paper"] .set-panel {
+  background: #fbf8f1 !important;
+  border: 1px solid #d9d1c1 !important;
+  border-radius: 3px !important;
+  box-shadow: none !important;
+  padding: 20px;
+}
+html[data-skin="paper"] .set-panel h3 { color: #24211c !important; font-size: 13.5px; letter-spacing: 0.04em; }
+html[data-skin="paper"] .set-panel .sub { color: #8b8375 !important; }
+html[data-skin="paper"] .set-group > label { color: #5b554a !important; }
+html[data-skin="paper"] .set-panel .seg button {
+  background: transparent !important;
+  border: 1px solid #d9d1c1 !important;
+  border-radius: 0 !important;
+  color: #5b554a !important;
+}
+html[data-skin="paper"] .set-panel .seg button[aria-pressed="true"] {
+  background: #efe9dc !important;
+  border-color: #a83226 !important;
+  color: #a83226 !important;
+}
+/* 纸样的几枚色块：纸白 / 宣纸黄 / 淡青 / 墨灰 */
+html[data-skin="paper"] .preset {
+  border-radius: 0 !important;
+  border-width: 1px;
+  border-color: #d9d1c1;
+}
+html[data-skin="paper"] .preset[aria-pressed="true"] {
+  border-color: #a83226;
+  box-shadow: inset 0 0 0 1px #a83226;
+}
+html[data-skin="paper"] .set-slider,
+html[data-skin="paper"] .lite-slider {
+  height: 3px;
+  border-radius: 0;
+  background: #e9e2d3;
+}
+html[data-skin="paper"] .hue-slider { border-radius: 0; }
+html[data-skin="paper"] .set-slider::-webkit-slider-thumb,
+html[data-skin="paper"] .lite-slider::-webkit-slider-thumb {
+  border-radius: 0;
+  width: 12px;
+  height: 12px;
+  background: #fbf8f1;
+  border: 1px solid #a83226;
+  box-shadow: none;
+}
+html[data-skin="paper"] .set-slider::-moz-range-thumb,
+html[data-skin="paper"] .lite-slider::-moz-range-thumb {
+  border-radius: 0;
+  background: #fbf8f1;
+  border: 1px solid #a83226;
+}
+html[data-skin="paper"] .set-panel .set-val,
+html[data-skin="paper"] .set-panel .lite-val { color: #8b8375 !important; }
+html[data-skin="paper"] .bg-thumb {
+  border-radius: 0;
+  border: 1px solid #d9d1c1;
+}
+html[data-skin="paper"] .bg-thumb.on { border-color: #a83226; box-shadow: none; }
+html[data-skin="paper"] .set-note { color: #8b8375 !important; }
+
+/* 分组里那行说明 */
+.set-note {
+  margin: 8px 0 0;
+  font-size: 10.5px;
+  line-height: 1.7;
+  color: var(--g-ink-3);
+}
+
+/* ============================================================
+   纸样那几个可调项：纸色 / 版心 / 行距 / 手写体 / 农历
+   ------------------------------------------------------------
+   都靠 <html> 上的一个属性或一个变量，进了站就直接生效，
+   不用等设置面板打开。没设过值时全部走默认（宣纸 + 标准版心 + 1.9）。
+   ============================================================ */
+
+/* 纸色：四档底色，只动「纸」这一层，字色、朱红都不动 */
+html[data-skin="paper"][data-paper="plain"] {
+  --bg: #fbfaf6 !important;
+  --bg-alt: #f2f1ec !important;
+  --panel: #ffffff !important;
+  --panel-2: #f4f3ee !important;
+  --g-fill: #ffffff !important;
+  --g-fill-2: #f4f3ee !important;
+  --g-fill-3: #ecebe4 !important;
+  --header-bg: #fbfaf6 !important;
+  --prose-code-bg: #f4f3ee !important;
+  --prose-pre-bg: #f4f3ee !important;
+}
+html[data-skin="paper"][data-paper="rice"] {
+  --bg: #f3ecd8 !important;
+  --bg-alt: #eae1c8 !important;
+  --panel: #faf6e9 !important;
+  --panel-2: #ede4cd !important;
+  --g-fill: #faf6e9 !important;
+  --g-fill-2: #ede4cd !important;
+  --g-fill-3: #e3d8bc !important;
+  --header-bg: #f3ecd8 !important;
+  --prose-code-bg: #eae1c8 !important;
+  --prose-pre-bg: #eae1c8 !important;
+}
+html[data-skin="paper"][data-paper="cool"] {
+  --bg: #f2f4f1 !important;
+  --bg-alt: #e6ebe5 !important;
+  --panel: #fafbf9 !important;
+  --panel-2: #e9eeea !important;
+  --g-fill: #fafbf9 !important;
+  --g-fill-2: #e9eeea !important;
+  --g-fill-3: #dfe6e0 !important;
+  --header-bg: #f2f4f1 !important;
+  --prose-code-bg: #e6ebe5 !important;
+  --prose-pre-bg: #e6ebe5 !important;
+}
+html[data-skin="paper"][data-paper="plain"] body,
+html[data-skin="paper"][data-paper="rice"] body,
+html[data-skin="paper"][data-paper="cool"] body {
+  background: var(--bg) !important;
+}
+html[data-skin="paper"][data-paper="plain"] .site-head,
+html[data-skin="paper"][data-paper="rice"] .site-head,
+html[data-skin="paper"][data-paper="cool"] .site-head { background: var(--bg) !important; }
+
+/* 版心：三档宽度。中栏吃掉剩余宽度，这里只动 app 的上限与左右内边距 */
+html[data-skin="paper"][data-wrap="wide"] .app {
+  max-width: 1760px !important;
+  padding-left: 40px !important;
+  padding-right: 40px !important;
+}
+html[data-skin="paper"][data-wrap="narrow"] .app {
+  max-width: 1180px !important;
+  padding-left: 26px !important;
+  padding-right: 26px !important;
+}
+html[data-skin="paper"][data-wrap="narrow"] #app-right { display: none !important; }
+html[data-skin="paper"][data-wrap="narrow"] .app {
+  grid-template-columns: 200px minmax(0, 1fr) !important;
+}
+
+/* 行距：--paper-lead 由设置写进 <html>，没写时 1.9 */
+html[data-skin="paper"] {
+  --paper-lead: 1.9;
+}
+html[data-skin="paper"] .g-prose p,
+html[data-skin="paper"] .g-prose li,
+html[data-skin="paper"] .g-notice,
+html[data-skin="paper"] .g-article p {
+  line-height: var(--paper-lead, 1.9) !important;
+}
+
+/* 手写体：关掉时标题回到宋体，诗笺回到正文的衬线 */
+html[data-skin="paper"][data-hand="off"] .g-poem,
+html[data-skin="paper"][data-hand="off"] .g-notice {
+  font-family: var(--serif) !important;
+}
+html[data-skin="paper"][data-hand="on"] .g-posth h2,
+html[data-skin="paper"][data-hand="on"] .g-post h2,
+html[data-skin="paper"][data-hand="on"] .g-article h1,
+html[data-skin="paper"][data-hand="on"] .splash-title {
+  font-family: "Ma Shan Zheng", "Kaiti SC", "KaiTi", "楷体", var(--serif) !important;
+  letter-spacing: 0.02em;
+}
+
+/* 农历：关掉后日历格子只剩公历数字，节日那行一并收起 */
+html[data-lunar="off"] .g-cal-sub,
+html[data-lunar="off"] .g-cal-grid i.g-cal-sub {
+  display: none;
+}
