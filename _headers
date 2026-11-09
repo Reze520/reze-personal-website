@@ -1,6 +1,6 @@
 # Cloudflare Pages 响应头
 # 只做两件事：补几个安全头，给带版本号的静态资源开长缓存。
-# 全站没有第三方脚本、没有内联样式表以外的东西，所以不需要 CSP。
+# 页面只引 Microsoft Clarity 一个第三方统计脚本，不加载其它外部库；未启用 CSP。
 
 /*
   X-Content-Type-Options: nosniff
