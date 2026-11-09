@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>在线工具箱 · RezeのBlog</title>
-<meta name="description" content="常用小工具：文本整理、编码转换、时间戳、JSON、正则测试、文本对比、密码生成、颜色转换、单位换算、文件哈希与图片压缩。全部在浏览器本地完成。">
+<meta name="description" content="常用小工具：文本整理、编码转换、时间戳、JSON、正则、文本对比、密码生成、颜色转换、单位换算、文件哈希、图片压缩、URL 解析、日期计算、JSON/CSV、进制转换、UUID 与金额大写。全部在浏览器本地完成。">
 <meta name="author" content="RezeのBlog">
 <meta name="theme-color" content="#14111d">
 <meta property="og:title" content="在线工具箱 · RezeのBlog">
@@ -12,7 +12,7 @@
 <meta property="og:url" content="https://reze520.pages.dev/toolbox">
 <link rel="canonical" href="https://reze520.pages.dev/toolbox">
 <meta property="og:site_name" content="RezeのBlog">
-<meta property="og:description" content="十一个顺手的小工具，打开就能用，不用下载也不用登录。">
+<meta property="og:description" content="十七个顺手的小工具，打开就能用，不用下载也不用登录。">
 <meta property="og:image" content="https://reze520.pages.dev/assets/uploads/share.jpg">
 <meta name="twitter:card" content="summary_large_image">
 <link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20viewBox%3D%270%200%2064%2064%27%3E%3Crect%20width%3D%2764%27%20height%3D%2764%27%20rx%3D%2715%27%20fill%3D%27%23241f33%27%2F%3E%3Cg%20transform%3D%27translate%286%2C6%29%20scale%282.1667%29%27%3E%3Cpath%20d%3D%27M21%2012.79A9%209%200%201%201%2011.21%203%207%207%200%200%200%2021%2012.79z%27%20fill%3D%27%23f6f1e7%27%2F%3E%3C%2Fg%3E%3C%2Fsvg%3E">
@@ -105,7 +105,7 @@ input.tb[type="file"]{padding:8px}
 <div class="tb-wrap" id="app-main">
   <div class="tb-head">
     <h1>在线工具箱</h1>
-    <p>十一个平时会顺手用到的小工具，点上面的标签切换。都是我自己写的，纯前端实现，计算全在浏览器里完成，输入的内容不会上传到云端，也不需要登录或安装。</p>
+    <p>十七个平时会顺手用到的小工具，点上面的标签切换。都是我自己写的，纯前端实现，计算全在浏览器里完成，输入的内容不会上传到云端，也不需要登录或安装。</p>
     <span class="tb-badge">纯前端 · 零依赖 · 断网也能用</span>
   </div>
 
@@ -121,6 +121,12 @@ input.tb[type="file"]{padding:8px}
     <button class="tb-tab" role="tab" data-tab="unit" aria-selected="false">单位换算</button>
     <button class="tb-tab" role="tab" data-tab="hash" aria-selected="false">文件哈希</button>
     <button class="tb-tab" role="tab" data-tab="img" aria-selected="false">图片压缩</button>
+    <button class="tb-tab" role="tab" data-tab="ut" aria-selected="false">URL 解析</button>
+    <button class="tb-tab" role="tab" data-tab="dt" aria-selected="false">日期计算</button>
+    <button class="tb-tab" role="tab" data-tab="cv" aria-selected="false">JSON/CSV</button>
+    <button class="tb-tab" role="tab" data-tab="bx" aria-selected="false">进制转换</button>
+    <button class="tb-tab" role="tab" data-tab="uid" aria-selected="false">UUID</button>
+    <button class="tb-tab" role="tab" data-tab="rmb" aria-selected="false">金额大写</button>
   </div>
 
   <section class="tb-panel is-active" id="p-text" role="tabpanel">
@@ -287,6 +293,76 @@ input.tb[type="file"]{padding:8px}
     <div class="tb-row"><select class="tb" id="im-fmt" style="width:auto"><option value="image/webp">WebP</option><option value="image/jpeg">JPEG</option><option value="image/png">PNG</option></select><button class="tb-btn primary" id="im-run">压缩</button><button class="tb-btn" id="im-dl" disabled>下载结果</button></div>
     <div class="tb-out" id="im-out">尚未选择图片</div>
     <div class="tb-row"><img id="im-preview" alt="压缩结果预览" style="max-width:100%;border-radius:var(--radius);display:none"></div>
+  </section>
+
+  <section class="tb-panel" id="p-ut" role="tabpanel">
+    <h2>URL 解析</h2>
+    <p class="tb-hint">粘贴一条链接，拆出协议、域名、端口、路径和每个查询参数（参数值会自动解码）。也可以对任意文本做 URL 编码或解码。</p>
+    <div class="tb-field"><label>链接或文本</label><textarea class="tb" id="ut-in" placeholder="https://example.com/a/b?id=1&amp;name=%E4%BD%A0%E5%A5%BD&amp;name=hi#top"></textarea></div>
+    <div class="tb-row"><button class="tb-btn primary" id="ut-parse">解析</button><button class="tb-btn" id="ut-enc">URL 编码</button><button class="tb-btn" id="ut-dec">URL 解码</button><button class="tb-btn" id="ut-clear">清空</button></div>
+    <pre class="tb-out" id="ut-out" style="max-height:320px">—</pre>
+    <div class="tb-row"><button class="tb-btn primary" data-copy="ut-out">复制结果</button></div>
+    <p class="tb-err" id="ut-err"></p>
+  </section>
+
+  <section class="tb-panel" id="p-dt" role="tabpanel">
+    <h2>日期计算</h2>
+    <p class="tb-hint">算两个日期隔多少天、中间有几个工作日，或者从某天往后（往前）推 N 天是哪一天。只算日期，不含时分秒。</p>
+    <div class="tb-grid">
+      <div class="tb-field"><label>起始日期</label><input class="tb" type="date" id="dt-a"></div>
+      <div class="tb-field"><label>结束日期</label><input class="tb" type="date" id="dt-b"></div>
+    </div>
+    <div class="tb-row"><button class="tb-btn primary" id="dt-diff">计算相差</button><button class="tb-btn" id="dt-today">起始填今天</button></div>
+    <div class="tb-out" id="dt-out" style="line-height:1.9">—</div>
+    <div class="tb-grid" style="margin-top:18px">
+      <div class="tb-field"><label>基准日期</label><input class="tb" type="date" id="dt-base"></div>
+      <div class="tb-field"><label>加几天（负数表示往前）</label><input class="tb" type="number" id="dt-n" value="30"></div>
+    </div>
+    <div class="tb-row"><button class="tb-btn primary" id="dt-add">推日期</button><button class="tb-btn" data-copy="dt-out2">复制结果</button></div>
+    <div class="tb-out" id="dt-out2">—</div>
+    <p class="tb-err" id="dt-err"></p>
+  </section>
+
+  <section class="tb-panel" id="p-cv" role="tabpanel">
+    <h2>JSON 与 CSV</h2>
+    <p class="tb-hint">JSON 得是对象数组（每项一条记录），转 CSV 时取所有字段的并集当表头。CSV 转 JSON 时第一行当表头，带引号的字段和换行都能正确解析。</p>
+    <div class="tb-field"><label>输入（JSON 数组或 CSV 文本）</label><textarea class="tb" id="cv-in" placeholder='[{"name":"张三","age":28},{"name":"李四","age":31}]'></textarea></div>
+    <div class="tb-row"><button class="tb-btn primary" id="cv-j2c">JSON → CSV</button><button class="tb-btn primary" id="cv-c2j">CSV → JSON</button><button class="tb-btn" id="cv-clear">清空</button></div>
+    <div class="tb-field"><label>结果</label><textarea class="tb" id="cv-out" readonly></textarea></div>
+    <div class="tb-row"><button class="tb-btn primary" data-copy="cv-out">复制结果</button><button class="tb-btn" id="cv-back">写回输入</button></div>
+    <p class="tb-err" id="cv-err"></p>
+  </section>
+
+  <section class="tb-panel" id="p-bx" role="tabpanel">
+    <h2>进制转换</h2>
+    <p class="tb-hint">二进制、八进制、十进制、十六进制互转，用大整数运算，几十位也不会丢精度。十六进制大小写都认。</p>
+    <div class="tb-grid">
+      <div class="tb-field"><label>数值</label><input class="tb" id="bx-in" placeholder="255"></div>
+      <div class="tb-field"><label>这是几进制</label><select class="tb" id="bx-base"><option value="10">十进制</option><option value="2">二进制</option><option value="8">八进制</option><option value="16">十六进制</option></select></div>
+    </div>
+    <div class="tb-row"><button class="tb-btn primary" id="bx-run">转换</button><button class="tb-btn" data-copy="bx-out">复制结果</button></div>
+    <div class="tb-out" id="bx-out" style="line-height:2">—</div>
+    <p class="tb-err" id="bx-err"></p>
+  </section>
+
+  <section class="tb-panel" id="p-uid" role="tabpanel">
+    <h2>UUID / 随机 ID</h2>
+    <p class="tb-hint">用浏览器自带的加密随机数生成，符合 RFC 4122 的 v4 格式。短 ID 适合当订单号、文件名后缀这类不需要全局唯一的场合。</p>
+    <div class="tb-grid">
+      <div class="tb-field"><label>生成数量</label><select class="tb" id="uid-count"><option>1</option><option selected>5</option><option>10</option><option>50</option></select></div>
+      <div class="tb-field"><label>短 ID 长度</label><input class="tb" type="number" id="uid-len" value="12" min="4" max="64"></div>
+    </div>
+    <div class="tb-row"><button class="tb-btn primary" id="uid-gen">生成 UUID</button><button class="tb-btn" id="uid-short">生成短 ID</button><button class="tb-btn" data-copy="uid-out">复制全部</button></div>
+    <textarea class="tb" id="uid-out" readonly style="min-height:140px"></textarea>
+  </section>
+
+  <section class="tb-panel" id="p-rmb" role="tabpanel">
+    <h2>金额大写</h2>
+    <p class="tb-hint">把数字金额写成中文大写，报账、开票、写合同的时候用得上。四舍五入到分，最大支持到万亿。</p>
+    <div class="tb-field"><label>金额</label><input class="tb" id="rmb-in" placeholder="1234.56"></div>
+    <div class="tb-row"><button class="tb-btn primary" id="rmb-run">转换</button><button class="tb-btn" data-copy="rmb-out">复制结果</button></div>
+    <div class="tb-out" id="rmb-out" style="font-size:17px">—</div>
+    <p class="tb-err" id="rmb-err"></p>
   </section>
 
   <p class="tb-note">所有工具都在本页内运行，不调用外部接口，也不保存你的输入。页面刷新即清空。</p>
@@ -819,6 +895,315 @@ input.tb[type="file"]{padding:8px}
     document.body.appendChild(a); a.click(); document.body.removeChild(a);
     setTimeout(function () { URL.revokeObjectURL(u); }, 2000);
   });
+
+  /* ---------- URL 解析 ---------- */
+  (function () {
+    var inp = $("#ut-in"), out = $("#ut-out"), err = $("#ut-err");
+    function fail(msg) { err.textContent = msg; }
+    $("#ut-parse").addEventListener("click", function () {
+      err.textContent = "";
+      var s = (inp.value || "").trim();
+      if (!s) { out.textContent = "—"; return; }
+      var u = null;
+      try { u = new URL(s); } catch (e) {
+        try { u = new URL("https://" + s); } catch (e2) { u = null; }
+      }
+      if (!u) { fail("这不像一条能解析的链接，可以补上 https:// 再试。"); out.textContent = "—"; return; }
+      var lines = [];
+      lines.push("协议　　" + u.protocol.replace(":", ""));
+      lines.push("主机　　" + u.hostname);
+      lines.push("端口　　" + (u.port || "未写（" + (u.protocol === "https:" ? 443 : 80) + "）"));
+      lines.push("路径　　" + (u.pathname || "/"));
+      lines.push("锚点　　" + (u.hash || "无"));
+      var keys = [];
+      u.searchParams.forEach(function (v, k) { if (keys.indexOf(k) < 0) keys.push(k); });
+      lines.push("查询参数　" + (keys.length ? keys.length + " 个" : "无"));
+      keys.forEach(function (k) {
+        u.searchParams.getAll(k).forEach(function (v) {
+          lines.push("　" + k + " = " + v);
+        });
+      });
+      out.textContent = lines.join("\n");
+    });
+    $("#ut-enc").addEventListener("click", function () {
+      err.textContent = "";
+      out.textContent = encodeURIComponent(inp.value || "") || "—";
+    });
+    $("#ut-dec").addEventListener("click", function () {
+      err.textContent = "";
+      try { out.textContent = decodeURIComponent((inp.value || "").replace(/\+/g, " ")) || "—"; }
+      catch (e) { fail("解码失败：文本里有不成对的 % 转义。"); }
+    });
+    $("#ut-clear").addEventListener("click", function () {
+      inp.value = ""; out.textContent = "—"; err.textContent = "";
+    });
+  })();
+
+  /* ---------- 日期计算 ---------- */
+  (function () {
+    var a = $("#dt-a"), b = $("#dt-b"), out = $("#dt-out");
+    var base = $("#dt-base"), num = $("#dt-n"), out2 = $("#dt-out2"), err = $("#dt-err");
+    var WD = ["日", "一", "二", "三", "四", "五", "六"];
+    function pd(v) {
+      if (!v) return null;
+      var p = v.split("-");
+      if (p.length !== 3) return null;
+      var d = new Date(Number(p[0]), Number(p[1]) - 1, Number(p[2]));
+      return isNaN(d.getTime()) ? null : d;
+    }
+    function fmt(d) {
+      var z = function (x) { return x < 10 ? "0" + x : "" + x; };
+      return d.getFullYear() + "-" + z(d.getMonth() + 1) + "-" + z(d.getDate()) + " 周" + WD[d.getDay()];
+    }
+    function dayNum(d) { return Math.round(new Date(d.getFullYear(), d.getMonth(), d.getDate()).getTime() / 86400000); }
+    function workdays(from, to) {
+      var sign = to.getTime() >= from.getTime() ? 1 : -1;
+      var s = sign > 0 ? from : to, e = sign > 0 ? to : from;
+      var cur = new Date(s.getFullYear(), s.getMonth(), s.getDate()), n = 0;
+      while (cur < e) {
+        cur.setDate(cur.getDate() + 1);
+        var w = cur.getDay();
+        if (w !== 0 && w !== 6) n++;
+      }
+      return n * sign;
+    }
+    function line(t) { return "<div>" + esc(t) + "</div>"; }
+    $("#dt-today").addEventListener("click", function () {
+      var t = new Date(), z = function (x) { return x < 10 ? "0" + x : "" + x; };
+      a.value = t.getFullYear() + "-" + z(t.getMonth() + 1) + "-" + z(t.getDate());
+      base.value = a.value;
+    });
+    $("#dt-diff").addEventListener("click", function () {
+      err.textContent = "";
+      var d1 = pd(a.value), d2 = pd(b.value);
+      if (!d1 || !d2) { err.textContent = "两个日期都要填。"; return; }
+      var diff = dayNum(d2) - dayNum(d1);
+      var abs = Math.abs(diff);
+      out.innerHTML = [
+        line("相隔 " + abs + " 天" + (diff < 0 ? "（结束早于起始）" : "")),
+        line("其中工作日 " + Math.abs(workdays(d1, d2)) + " 天，周末 " + (abs - Math.abs(workdays(d1, d2))) + " 天"),
+        line("约 " + (abs / 7).toFixed(1) + " 周，或 " + (abs / 30.44).toFixed(1) + " 个月"),
+        line("从 " + fmt(d1) + " 到 " + fmt(d2))
+      ].join("");
+    });
+    $("#dt-add").addEventListener("click", function () {
+      err.textContent = "";
+      var d = pd(base.value);
+      if (!d) { err.textContent = "先选一个基准日期。"; return; }
+      var n = parseInt(num.value, 10);
+      if (isNaN(n)) { err.textContent = "天数要填整数。"; return; }
+      var r = new Date(d.getFullYear(), d.getMonth(), d.getDate());
+      r.setDate(r.getDate() + n);
+      out2.innerHTML = [
+        line(fmt(d) + " 加 " + n + " 天 = " + fmt(r)),
+        line("该日期是当年的第 " + Math.ceil((dayNum(r) - dayNum(new Date(r.getFullYear(), 0, 1)) + 1)) + " 天")
+      ].join("");
+    });
+  })();
+
+  /* ---------- JSON 与 CSV ---------- */
+  (function () {
+    var inp = $("#cv-in"), out = $("#cv-out"), err = $("#cv-err");
+    function parseCSV(text) {
+      var rows = [], row = [], cur = "", q = false, i = 0;
+      while (i < text.length) {
+        var c = text.charAt(i);
+        if (q) {
+          if (c === '"') {
+            if (text.charAt(i + 1) === '"') { cur += '"'; i += 2; continue; }
+            q = false; i++; continue;
+          }
+          cur += c; i++; continue;
+        }
+        if (c === '"') { q = true; i++; continue; }
+        if (c === ",") { row.push(cur); cur = ""; i++; continue; }
+        if (c === "\r") { i++; continue; }
+        if (c === "\n") { row.push(cur); rows.push(row); row = []; cur = ""; i++; continue; }
+        cur += c; i++;
+      }
+      if (cur !== "" || row.length) { row.push(cur); rows.push(row); }
+      return rows;
+    }
+    function toCSV(rows) {
+      return rows.map(function (r) {
+        return r.map(function (v) {
+          var s = v === null || v === undefined ? "" : String(v);
+          return /[",\r\n]/.test(s) ? '"' + s.replace(/"/g, '""') + '"' : s;
+        }).join(",");
+      }).join("\r\n");
+    }
+    $("#cv-j2c").addEventListener("click", function () {
+      err.textContent = ""; out.value = "";
+      var data;
+      try { data = JSON.parse(inp.value); }
+      catch (e) { err.textContent = "JSON 解析失败：" + e.message; return; }
+      if (!Array.isArray(data)) { err.textContent = "要给一个数组，每项是一条记录。"; return; }
+      if (!data.length) { err.textContent = "数组是空的，没有可转的内容。"; return; }
+      var keys = [];
+      data.forEach(function (o) {
+        if (!o || typeof o !== "object" || Array.isArray(o)) return;
+        Object.keys(o).forEach(function (k) { if (keys.indexOf(k) < 0) keys.push(k); });
+      });
+      if (!keys.length) { err.textContent = "数组里得是对象，比如 [{\"name\":\"张三\"}]。"; return; }
+      var rows = [keys];
+      data.forEach(function (o) {
+        rows.push(keys.map(function (k) {
+          var v = o ? o[k] : "";
+          if (v && typeof v === "object") v = JSON.stringify(v);
+          return v;
+        }));
+      });
+      out.value = toCSV(rows);
+    });
+    $("#cv-c2j").addEventListener("click", function () {
+      err.textContent = ""; out.value = "";
+      var rows = parseCSV(inp.value || "");
+      if (!rows.length) { err.textContent = "没有读到内容。"; return; }
+      var head = rows[0];
+      var list = [];
+      for (var i = 1; i < rows.length; i++) {
+        if (rows[i].length === 1 && rows[i][0] === "") continue;
+        var o = {};
+        head.forEach(function (k, j) { o[k || ("列" + (j + 1))] = rows[i][j] === undefined ? "" : rows[i][j]; });
+        list.push(o);
+      }
+      out.value = JSON.stringify(list, null, 2);
+      if (!list.length) err.textContent = "只有表头，没有数据行。";
+    });
+    $("#cv-clear").addEventListener("click", function () {
+      inp.value = ""; out.value = ""; err.textContent = "";
+    });
+    $("#cv-back").addEventListener("click", function () {
+      if (out.value) { inp.value = out.value; out.value = ""; err.textContent = ""; }
+    });
+  })();
+
+  /* ---------- 进制转换 ---------- */
+  (function () {
+    var inp = $("#bx-in"), sel = $("#bx-base"), out = $("#bx-out"), err = $("#bx-err");
+    var DIG = "0123456789abcdefghijklmnopqrstuvwxyz";
+    function parseBig(s, base) {
+      s = String(s).trim().replace(/[\s_,]/g, "").toLowerCase();
+      var neg = false;
+      if (s.charAt(0) === "-") { neg = true; s = s.slice(1); }
+      if (s.slice(0, 2) === "0x" && base === 16) s = s.slice(2);
+      if (!s) return null;
+      var v = BigInt(0), b = BigInt(base);
+      for (var i = 0; i < s.length; i++) {
+        var d = DIG.indexOf(s.charAt(i));
+        if (d < 0 || d >= base) return null;
+        v = v * b + BigInt(d);
+      }
+      return neg ? -v : v;
+    }
+    $("#bx-run").addEventListener("click", function () {
+      err.textContent = "";
+      var base = Number(sel.value);
+      var v = parseBig(inp.value, base);
+      if (v === null) { err.textContent = "这个数值在 " + base + " 进制下不合法。"; out.textContent = "—"; return; }
+      var rows = [
+        ["二进制", v.toString(2)],
+        ["八进制", v.toString(8)],
+        ["十进制", v.toString(10)],
+        ["十六进制", v.toString(16)],
+        ["十六进制（大写）", v.toString(16).toUpperCase()]
+      ];
+      out.innerHTML = rows.map(function (r) {
+        return "<div>" + esc(r[0]) + "　<b>" + esc(r[1]) + "</b></div>";
+      }).join("");
+    });
+  })();
+
+  /* ---------- UUID / 随机 ID ---------- */
+  (function () {
+    var out = $("#uid-out"), count = $("#uid-count"), len = $("#uid-len");
+    function uuid4() {
+      var b = new Uint8Array(16);
+      crypto.getRandomValues(b);
+      b[6] = (b[6] & 0x0f) | 0x40;
+      b[8] = (b[8] & 0x3f) | 0x80;
+      var h = [];
+      for (var i = 0; i < 16; i++) h.push((b[i] + 256).toString(16).slice(1));
+      return h.slice(0, 4).join("") + "-" + h.slice(4, 6).join("") + "-" +
+        h.slice(6, 8).join("") + "-" + h.slice(8, 10).join("") + "-" + h.slice(10).join("");
+    }
+    $("#uid-gen").addEventListener("click", function () {
+      var n = Number(count.value) || 1, list = [];
+      for (var i = 0; i < n; i++) list.push(uuid4());
+      out.value = list.join("\n");
+    });
+    $("#uid-short").addEventListener("click", function () {
+      var n = Number(count.value) || 1;
+      var L = Number(len.value) || 12;
+      L = Math.max(4, Math.min(64, L));
+      var CH = "0123456789abcdefghijkmnpqrstuvwxyzABCDEFGHJKLMNPQRSTUVWXYZ";
+      var list = [];
+      for (var i = 0; i < n; i++) {
+        var buf = new Uint8Array(L);
+        crypto.getRandomValues(buf);
+        var s = "";
+        for (var j = 0; j < L; j++) s += CH.charAt(buf[j] % CH.length);
+        list.push(s);
+      }
+      out.value = list.join("\n");
+    });
+  })();
+
+  /* ---------- 金额大写 ---------- */
+  (function () {
+    var inp = $("#rmb-in"), out = $("#rmb-out"), err = $("#rmb-err");
+    var DIG = ["零", "壹", "贰", "叁", "肆", "伍", "陆", "柒", "捌", "玖"];
+    function intPart(n) {
+      if (n === 0) return "零";
+      var units = ["", "拾", "佰", "仟"];
+      var secUnits = ["", "万", "亿", "万亿"];
+      var str = String(n), secs = [];
+      while (str.length > 4) { secs.unshift(str.slice(-4)); str = str.slice(0, -4); }
+      secs.unshift(str);
+      var res = "";
+      for (var i = 0; i < secs.length; i++) {
+        var s = secs[i], part = "", pendingZero = false;
+        for (var j = 0; j < s.length; j++) {
+          var d = Number(s.charAt(j)), pos = s.length - 1 - j;
+          if (d === 0) { pendingZero = true; continue; }
+          if (pendingZero && part) part += "零";
+          part += DIG[d] + units[pos];
+          pendingZero = false;
+        }
+        if (part) {
+          if (res && s.charAt(0) === "0" && !/零$/.test(res)) res += "零";
+          res += part + secUnits[secs.length - 1 - i];
+        } else if (res) {
+          var rest = secs.slice(i + 1).join("");
+          if (/[1-9]/.test(rest) && !/零$/.test(res)) res += "零";
+        }
+      }
+      return res;
+    }
+    $("#rmb-run").addEventListener("click", function () {
+      err.textContent = "";
+      var raw = String(inp.value || "").replace(/[\s,，]/g, "");
+      if (!raw) { out.textContent = "—"; return; }
+      var num = Number(raw);
+      if (!isFinite(num)) { err.textContent = "这不是一个数字。"; out.textContent = "—"; return; }
+      if (Math.abs(num) >= 1e12) { err.textContent = "金额太大了，万亿以内才有意义。"; out.textContent = "—"; return; }
+      var neg = num < 0;
+      num = Math.abs(num);
+      var cents = Math.round(num * 100);
+      var yuan = Math.floor(cents / 100);
+      var jiao = Math.floor(cents / 10) % 10;
+      var fen = cents % 10;
+      var s = intPart(yuan) + "元";
+      if (jiao === 0 && fen === 0) s += "整";
+      else {
+        if (jiao > 0) s += DIG[jiao] + "角";
+        else if (fen > 0) s += "零";
+        if (fen > 0) s += DIG[fen] + "分";
+      }
+      out.textContent = (neg ? "负" : "") + s;
+      out.dataset.copyText = out.textContent;
+    });
+  })();
 })();
 </script>
 </body>
