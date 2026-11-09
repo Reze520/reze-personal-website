@@ -20,7 +20,7 @@
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20viewBox%3D%270%200%2064%2064%27%3E%3Crect%20width%3D%2764%27%20height%3D%2764%27%20rx%3D%2715%27%20fill%3D%27%23241f33%27%2F%3E%3Cg%20transform%3D%27translate%286%2C6%29%20scale%282.1667%29%27%3E%3Cpath%20d%3D%27M21%2012.79A9%209%200%201%201%2011.21%203%207%207%200%200%200%2021%2012.79z%27%20fill%3D%27%23f6f1e7%27%2F%3E%3C%2Fg%3E%3C%2Fsvg%3E">
-<link rel="stylesheet" href="assets/css/style.css?v=20261108ac">
+<link rel="stylesheet" href="assets/css/style.css?v=20261109c">
   <link rel="alternate" type="application/rss+xml" title="RezeのBlog" href="feed.xml">
 </head>
 <body class="has-app">
@@ -70,7 +70,7 @@
 <header class="cl-head">
 <h1>更新日志</h1>
 <div class="cl-facts">
-<span><b>72</b> 条记录</span>
+<span><b>73</b> 条记录</span>
 <span><b>6</b> 个时间节点</span>
 <span>跨度 2020.07 — 2026.11</span>
 </div>
@@ -79,7 +79,7 @@
 <button type="button" class="cl-btn" data-cl-all="0">全部收起</button>
 </div>
 <nav class="cl-nav" aria-label="按时间跳转">
-<a href="#cl-202611">2026.11<i>43 条</i></a>
+<a href="#cl-202611">2026.11<i>44 条</i></a>
 <a href="#cl-202610">2026.10<i>10 条</i></a>
 <a href="#cl-202604">2026.04<i>6 条</i></a>
 <a href="#cl-202506">2025.06<i>1 条</i></a>
@@ -88,9 +88,19 @@
 </nav>
 </header>
 <section class="cl-month" id="cl-202611">
-<h2>2026 年 11 月<span class="cl-count">43 条</span></h2>
+<h2>2026 年 11 月<span class="cl-count">44 条</span></h2>
 <ol class="cl-list">
 <li class="cl-item"><details open>
+<summary><span class="cl-kind" data-k="界面">界面</span><span class="cl-t">撤除「词条」索引页、后台改为纸样风</span><span class="cl-n">5 项</span></summary>
+<div class="cl-body"><ul>
+<li>移除 /topics 词条索引页：删 topics.html、assets/js/topics.js、assets/js/topics.override.js；首页分类栏、归档页底部、参考源页顶部的「词条」入口全部去掉（参考源页顶部改为仅「归档」入口）；PAGE_META、路由、topicsMainHtml 函数、renderIndexPage 的 topics 分支一并清理。</li>
+<li>文章页的「相关推荐」基于写死的 TOPICS 主题数组与每篇自身标签计算，不依赖 topics 数据，保留不受影响。</li>
+<li>后台 admin.html 从淡紫圆角旧风改成纸样风（纸白底、墨字、朱红强调、细线），登录页渐变也从深紫改为纸色。</li>
+<li>sitemap.xml 与生成器 gen_feeds.py 同步去掉 /topics 静态条目。</li>
+<li>版本号 20261109c。</li>
+</ul></div>
+</details></li>
+<li class="cl-item"><details>
 <summary><span class="cl-kind" data-k="界面">界面</span><span class="cl-t">纸样改成三栏，恢复被藏起来的卡片，正文放开到满宽</span><span class="cl-n">7 项</span></summary>
 <div class="cl-body"><ul>
 <li>之前把宽度都加在 <code>.app</code> 的基础值上，纸样段用 <code>!important</code> 把它钉在 1000px，所以新界面一点没动、还是窄：主栏只有 716px，两侧大块空白。</li>
@@ -731,11 +741,11 @@
   } catch (e) {}
 })();
 </script>
-<script defer src="assets/js/data.meta.js?v=20261108ac"></script>
-<script defer src="assets/js/cloud.js?v=20261108ac"></script>
-<script defer src="assets/js/weather.js?v=20261108ac"></script>
-<script defer src="assets/js/playlist.js?v=20261108ac"></script>
-<script defer src="assets/js/main.js?v=20261108ac"></script>
+<script defer src="assets/js/data.meta.js?v=20261109c"></script>
+<script defer src="assets/js/cloud.js?v=20261109c"></script>
+<script defer src="assets/js/weather.js?v=20261109c"></script>
+<script defer src="assets/js/playlist.js?v=20261109c"></script>
+<script defer src="assets/js/main.js?v=20261109c"></script>
 <script>
 /* 更新日志的一键展开／收起。details 自己就能点，这段只管批量开关。 */
 document.addEventListener("click", function (e) {

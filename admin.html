@@ -7,19 +7,19 @@
 <meta name="description" content="RezeのBlog的个人博客。">
 <title>内容管理 · RezeのBlog</title>
 <style>
-  :root { --accent:#7c6cf0; --bg:#f5f4f8; --panel:#fff; --line:#e6e4ef; --ink:#24212e; --ink2:#7a7588; }
+  :root { --accent:#a83226; --bg:#f6f2ea; --panel:#fffdf8; --line:#e3dccd; --ink:#3a352c; --ink2:#8b8375; }
   * { box-sizing: border-box; }
   body { margin:0; font-family:-apple-system,"PingFang SC","Microsoft YaHei",sans-serif; background:var(--bg); color:var(--ink); }
   a { color:var(--accent); }
   button { font-family:inherit; }
 
-  .gate { position:fixed; inset:0; display:grid; place-items:center; background:linear-gradient(160deg,#1b1830,#332c55); color:#fff; }
-  .gate .box { width:min(380px,90vw); background:rgba(255,255,255,.07); border:1px solid rgba(255,255,255,.14); border-radius:16px; padding:30px; }
+  .gate { position:fixed; inset:0; display:grid; place-items:center; background:linear-gradient(160deg,#f1ebde,#e6ddca); color:var(--ink); }
+  .gate .box { width:min(380px,90vw); background:var(--panel); border:1px solid var(--line); border-radius:14px; padding:30px; box-shadow:0 10px 30px rgba(58,53,44,.08); }
   .gate h1 { margin:0 0 6px; font-size:20px; }
-  .gate p { margin:0 0 18px; color:rgba(255,255,255,.62); font-size:13px; line-height:1.7; }
-  .gate input { width:100%; padding:11px 13px; border-radius:10px; border:1px solid rgba(255,255,255,.2); background:rgba(0,0,0,.2); color:#fff; font-size:14px; margin-bottom:12px; }
-  .gate input::placeholder { color:rgba(255,255,255,.4); }
-  .gate .err { color:#ffb4b4; font-size:13px; margin-top:12px; min-height:18px; }
+  .gate p { margin:0 0 18px; color:var(--ink2); font-size:13px; line-height:1.7; }
+  .gate input { width:100%; padding:11px 13px; border-radius:10px; border:1px solid var(--line); background:#fff; color:var(--ink); font-size:14px; margin-bottom:12px; }
+  .gate input::placeholder { color:#b3a997; }
+  .gate .err { color:#c0392b; font-size:13px; margin-top:12px; min-height:18px; }
 
   header.top { position:sticky; top:0; z-index:10; background:var(--panel); border-bottom:1px solid var(--line); padding:0 20px; height:58px; display:flex; align-items:center; justify-content:space-between; }
   header.top .t { font-weight:700; }
@@ -27,7 +27,7 @@
 
   .tabs { display:flex; gap:8px; padding:14px 20px 0; }
   .tabs button { padding:9px 18px; border-radius:10px 10px 0 0; border:1px solid var(--line); border-bottom:none; background:transparent; cursor:pointer; font-size:14px; color:var(--ink2); }
-  .tabs button.on { background:var(--panel); color:var(--ink); font-weight:600; }
+  .tabs button.on { background:var(--panel); color:var(--ink); font-weight:600; box-shadow:inset 0 -2px 0 var(--accent); }
 
   main { padding:0 20px 80px; max-width:1000px; }
   section { display:none; }
@@ -41,8 +41,8 @@
   .card .r { display:flex; align-items:center; gap:10px; }
   .card .title { font-weight:600; flex:1; min-width:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
   .card .meta { color:var(--ink2); font-size:12px; margin-top:4px; }
-  .badge { font-size:11px; padding:2px 8px; border-radius:20px; background:#efeaff; color:var(--accent); }
-  .badge.pin { background:#fff1e6; color:#e07b00; }
+  .badge { font-size:11px; padding:2px 8px; border-radius:20px; background:#f3e7e3; color:var(--accent); }
+  .badge.pin { background:#f6ecdc; color:#b3791a; }
   .card .ops button { margin-left:6px; }
 
   button.btn { padding:8px 14px; border-radius:9px; border:1px solid var(--line); background:var(--panel); cursor:pointer; font-size:13px; color:var(--ink); }
@@ -50,12 +50,12 @@
   button.btn.primary { background:var(--accent); border-color:var(--accent); color:#fff; }
   button.btn.primary:hover { color:#fff; opacity:.92; }
   button.btn.big { padding:12px 22px; font-size:15px; width:100%; }
-  button.btn.danger { color:#d23a3a; }
-  button.btn.danger:hover { border-color:#d23a3a; }
+  button.btn.danger { color:#c0392b; }
+  button.btn.danger:hover { border-color:#c0392b; }
 
-  .mask { position:fixed; inset:0; background:rgba(20,16,32,.5); z-index:50; display:none; align-items:flex-start; justify-content:center; padding:30px 14px; overflow:auto; }
+  .mask { position:fixed; inset:0; background:rgba(58,53,44,.42); z-index:50; display:none; align-items:flex-start; justify-content:center; padding:30px 14px; overflow:auto; }
   .mask.on { display:flex; }
-  .panel { width:min(720px,100%); background:var(--panel); border-radius:14px; padding:22px; }
+  .panel { width:min(720px,100%); background:var(--panel); border-radius:14px; border:1px solid var(--line); padding:22px; box-shadow:0 16px 40px rgba(58,53,44,.16); }
   .panel h3 { margin:0 0 16px; }
   .f { margin-bottom:14px; }
   .f label { display:block; font-size:13px; color:var(--ink2); margin-bottom:6px; }
@@ -68,14 +68,14 @@
   .f .chk input { width:auto; }
   .panel .foot { display:flex; justify-content:flex-end; gap:10px; margin-top:6px; }
 
-  .toast { position:fixed; left:50%; bottom:30px; transform:translateX(-50%); background:#241f33; color:#fff; padding:11px 18px; border-radius:10px; font-size:13px; opacity:0; pointer-events:none; transition:opacity .25s; z-index:99; }
+  .toast { position:fixed; left:50%; bottom:30px; transform:translateX(-50%); background:#3a352c; color:#fff; padding:11px 18px; border-radius:10px; font-size:13px; opacity:0; pointer-events:none; transition:opacity .25s; z-index:99; }
   .toast.on { opacity:1; }
   .empty { color:var(--ink2); text-align:center; padding:40px 0; font-size:13px; }
   .loading { text-align:center; color:var(--ink2); padding:40px 0; }
   .tag-chips { display:flex; flex-wrap:wrap; gap:6px; margin-bottom:8px; }
-  .tag-chips .tc { font-size:12px; padding:4px 10px; border-radius:20px; border:1px solid var(--line); cursor:pointer; user-select:none; background:#f7f6fb; color:var(--ink2); }
+  .tag-chips .tc { font-size:12px; padding:4px 10px; border-radius:20px; border:1px solid var(--line); cursor:pointer; user-select:none; background:#fbf8f1; color:var(--ink2); }
   .tag-chips .tc.on { background:var(--accent); border-color:var(--accent); color:#fff; }
-</style>
+
   <link rel="alternate" type="application/rss+xml" title="RezeのBlog" href="feed.xml">
 </head>
 <body>
@@ -223,8 +223,8 @@
 
 <div class="toast" id="toast"></div>
 
-<script src="assets/js/data.js?v=20261108ac"></script>
-<script src="assets/js/cloud.js?v=20261108ac"></script>
+<script src="assets/js/data.js?v=20261109c"></script>
+<script src="assets/js/cloud.js?v=20261109c"></script>
 <script>
 (function () {
   var state = { site: {}, posts: [], events: [] };

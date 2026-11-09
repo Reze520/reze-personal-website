@@ -1109,7 +1109,6 @@
     var tabs =
       '<a class="g-tab" href="/archive">归档</a>' +
       '<a class="g-tab" href="/sources">参考源</a>' +
-      '<a class="g-tab" href="/topics">词条</a>' +
       '<button class="g-tab" data-cat="全部" aria-pressed="true">全部<span class="n">' +
       POSTS.length + "</span></button>";
     Object.keys(counts).forEach(function (c) {
@@ -2621,8 +2620,7 @@ function archiveMainHtml() {
 
   return (
     '<div class="arc-top"><p class="g-scale">' + listScaleText() +
-    ' · <a class="g-archlink" href="/sources">参考源</a>' +
-    ' · <a class="g-archlink" href="/topics">词条</a></p>' +
+    ' · <a class="g-archlink" href="/sources">参考源</a></p>' +
     '<div class="arc-jump">' + jump + "</div></div>" +
     '<div class="arc-blocks" id="arc-blocks">' + blocks + "</div>"
   );
@@ -2651,8 +2649,8 @@ function bindArchive(root) {
 
 /* 时间线先只渲染最近几条，底部「加载更早」再往前翻。
    一页铺 22 条太长，分页又和这个版式不适配。 */
-/* ---------- 参考源 / 词条：两个按需装载的索引 ----------
-   两份数据各有两三百 KB，没必要让首屏为它们买单。直接打开 /sources、/topics
+/* ---------- 参考源：按需装载的索引 ----------
+   数据有两三百 KB，没必要让首屏为它买单。直接打开 /sources
    时文档里带了数据脚本；从站内点过去，由这里补一次，加载完再渲染。
    资源地址跟 main.js 用同一个 ?v=，改数据跟着升版本就行。 */
 function auxAssetUrl(file) {
@@ -2698,8 +2696,7 @@ function sourcesMainHtml() {
   var top = '<p class="g-scale"><b>' + (S.posts || 0) + '</b> 篇有参考 · <b>' +
     (S.links || 0) + '</b> 条链接 · <b>' + (S.domains || 0) + '</b> 个域名</p>';
   var links = '<div class="g-tabs">' +
-    '<a class="g-tab" href="/archive">归档</a>' +
-    '<a class="g-tab" href="/topics">词条</a></div>';
+    '<a class="g-tab" href="/archive">归档</a></div>';
   var blocks = groups.map(function (g) {
     var rows = (g.p || []).map(function (p) {
       return ixRow(p.i, p.t, p.d, p.n > 1 ? p.n + ' 条' : "");
@@ -2716,65 +2713,16 @@ function sourcesMainHtml() {
   return top + links + blocks + tail;
 }
 
-function topicsMainHtml() {
-  var T = window.TOPIC_GROUPS || {};
-  var byId = {};
-  (POSTS || []).forEach(function (p) { byId[p.id] = p; });
-  var groups = (T.groups || []).map(function (g) {
-    return { t: g.t, p: (g.p || []).slice() };
-  });
-  var index = {};
-  groups.forEach(function (g, i) { index[g.t] = i; });
-  var ov = window.TOPICS_OVERRIDE || {};
-  Object.keys(ov).forEach(function (term) {
-    var g = index[term] >= 0 ? groups[index[term]] : null;
-    if (!g) {
-      g = { t: term, p: [] };
-      groups.push(g);
-      index[term] = groups.length - 1;
-    }
-    var seen = {};
-    g.p.forEach(function (p) { seen[p.i] = 1; });
-    (ov[term] || []).forEach(function (id) {
-      var p = byId[id];
-      if (p && !seen[id]) {
-        g.p.push({ i: p.id, t: p.title, d: p.date });
-        seen[id] = 1;
-      }
-    });
-    g.p.sort(function (a, b) { return String(b.d).localeCompare(String(a.d)); });
-  });
-  groups.sort(function (a, b) {
-    return b.p.length - a.p.length || String(a.t).localeCompare(String(b.t));
-  });
-  var pairs = groups.reduce(function (n, g) { return n + g.p.length; }, 0);
-  var top = '<p class="g-scale"><b>' + (T.posts || 0) + '</b> 篇 · <b>' +
-    groups.length + '</b> 个词 · <b>' + pairs + '</b> 条关联</p>';
-  var links = '<div class="g-tabs">' +
-    '<a class="g-tab" href="/archive">归档</a>' +
-    '<a class="g-tab" href="/sources">参考源</a></div>';
-  var blocks = groups.map(function (g) {
-    var rows = g.p.map(function (p) { return ixRow(p.i, p.t, p.d, ""); }).join("");
-    return ixGroup(g.t, g.p.length + ' 篇', rows);
-  }).join("");
-  return top + links + blocks;
-}
-
 function renderIndexPage(main, page) {
-  var src = page === "sources";
   main.innerHTML = '<p class="g-scale">正在取回</p>';
-  var files = src
-    ? [["SOURCES", "sources.js"]]
-    : [["TOPIC_GROUPS", "topics.js"], ["TOPICS_OVERRIDE", "topics.override.js"]];
-  loadAuxFiles(files, function () {
+  loadAuxFiles([["SOURCES", "sources.js"]], function () {
     var app = document.querySelector(".app");
     if (!app || app.getAttribute("data-page") !== page) return;
-    var ok = src ? !!window.SOURCES : !!window.TOPIC_GROUPS;
-    if (!ok) {
+    if (!window.SOURCES) {
       main.innerHTML = '<div class="g-card"><div class="g-notice">加载失败</div></div>';
       return;
     }
-    main.innerHTML = src ? sourcesMainHtml() : topicsMainHtml();
+    main.innerHTML = sourcesMainHtml();
   });
 }
 
@@ -3342,7 +3290,6 @@ var PAGE_META = {
   timeline: ["站务 · RezeのBlog", "稿子与站点改动，按日期混排。"],
   about: ["关于这个站 · RezeのBlog", "关于本站：缘起、搭建方式与联系方式。"],
   sources: ["参考源 · RezeのBlog", "各篇末尾引过的出处，按域名归并。"],
-  topics: ["词条 · RezeのBlog", "标签与标题聚出的词，一个词底下挂引过它的篇目。"],
   post: ["文章 · RezeのBlog", "RezeのBlog的个人博客。"]
 };
 var SITE_ORIGIN = "https://reze520.pages.dev";
@@ -3450,7 +3397,7 @@ function renderMain() {
   } else if (page === "archive") {
     main.innerHTML = archiveMainHtml();
     bindArchive(main);
-  } else if (page === "sources" || page === "topics") {
+  } else if (page === "sources") {
     renderIndexPage(main, page);
   } else if (page === "about") {
     main.innerHTML = aboutHtml();
