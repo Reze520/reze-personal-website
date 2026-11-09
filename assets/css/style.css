@@ -13189,3 +13189,32 @@ html[data-lunar="off"] .g-cal-grid i.g-cal-sub {
 @media (max-width: 760px) {
   .all-list { width: calc(100% - 24px); margin-bottom: 8px; }
 }
+
+/* ============================================================
+   猜你喜欢：短页面上搬到中栏的那一版
+   「继续读 / 猜你喜欢」默认都挂在右栏。遇上归档、关于、天气这种正文只有
+   一屏的页面，右栏能堆到 1900px，中栏底下就空出一大片白，一边挤一边空。
+   main.js 量完两栏高度会把这张卡搬到中栏、给它加 .rec-guess-wide 并把
+   .app 标成 has-rec-wide：中栏被撑到和最长那栏等高，卡片贴到页面底部，
+   空白留在正文和卡片之间，页面最底下那一排就不会只剩右边有东西。
+   条目按 240px 自动分列，宽屏三列、平板两列、手机一列。
+   ============================================================ */
+.app.has-rec-wide > .col-main {
+  align-self: stretch;
+}
+.app.has-rec-wide .rec-guess-wide {
+  margin-top: auto;
+}
+.g-card.rec-guess-wide .g-card-head {
+  padding: 16px 18px 10px;
+}
+.g-card.rec-guess-wide .g-feed {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  column-gap: 26px;
+  padding: 2px 18px 12px;
+}
+.g-card.rec-guess-wide .g-feed li {
+  padding: 11px 0;
+  font-size: 12.5px;
+}

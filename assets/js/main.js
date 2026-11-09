@@ -5403,6 +5403,48 @@ function interceptLinks(e) {
         '<div class="g-card-head"><span class="t">' + ICONS.activity + "猜你喜欢</span></div>" +
         '<ul class="g-feed">' + gItems + "</ul>";
     }
+    placeRecModules();
+  }
+
+  /* 「继续读」和「猜你喜欢」默认都挂在右栏。中栏内容长的时候没问题，
+     但归档、关于、天气这类页正文只有一屏，右栏能堆到 1900px，
+     中栏底下就空出一大片，看着一边挤、一边空。
+     这里量两栏的实际高度，右栏明显高过中栏时把「猜你喜欢」搬到中栏，
+     贴在中栏底部（.app.has-rec-wide 让栏位等高，卡片 margin-top:auto），
+     页面底部那一排就不会只压在右边。换回长页面时自动放回右栏。
+     量高度时先扣掉卡片自己，免得搬过去之后中栏变高又搬回来，来回横跳。 */
+  function placeRecModules() {
+    var main = $("#app-main");
+    var right = $("#app-right");
+    var app = document.querySelector(".app");
+    var guess = document.getElementById("rec-guess");
+    if (!main || !right || !app || !guess) return;
+    if (guess.style.display === "none") return;
+
+    /* 先退回自然高度再量：stretch 之后中栏会被拉成和右栏一样高，量出来永远「齐平」，
+       判定就会来回翻。量完再按结论挂回去。 */
+    var stretched = app.classList.contains("has-rec-wide");
+    if (stretched) app.classList.remove("has-rec-wide");
+    var gap = 16;
+    var gh = (guess.offsetHeight || 0) + gap;
+    var inMain = guess.parentNode === main;
+    var mainH = (main.offsetHeight || 0) - (inMain ? gh : 0);
+    var rightH = (right.offsetHeight || 0) - (inMain ? 0 : gh);
+    var move = rightH - mainH > 320;
+
+    if (move) {
+      if (!inMain) {
+        guess.classList.add("rec-guess-wide");
+        main.appendChild(guess);
+      }
+      app.classList.add("has-rec-wide");
+    } else {
+      if (inMain) {
+        guess.classList.remove("rec-guess-wide");
+        right.appendChild(guess);
+      }
+      app.classList.remove("has-rec-wide");
+    }
   }
 
   /* ---------- 发现 / 年度回顾 / 随机一篇 ---------- */
