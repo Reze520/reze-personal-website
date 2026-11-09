@@ -506,7 +506,8 @@
     var metrics = [
       ["体感", round(cur.apparent_temperature) + "°"],
       ["湿度", round(cur.relative_humidity_2m) + "%"],
-      ["风", windText(cur.wind_speed_10m, cur.wind_direction_10m)],
+      ["风", windDir(cur.wind_direction_10m), "wind",
+       (Number(cur.wind_speed_10m) || 0).toFixed(0) + " km/h"],
       ["降水", (Number(cur.precipitation) || 0).toFixed(1) + " mm"],
       ["紫外线", today.uv == null ? "—" : String(round(today.uv))],
       ["气压", round(cur.surface_pressure) + " hPa"],
@@ -514,8 +515,12 @@
       ["日落", today.sunset || "—"]
     ]
       .map(function (m) {
-        return '<div class="wx-m"><span class="k">' + m[0] + '</span><span class="v">' +
-          esc(m[1]) + "</span></div>";
+        var v = m[2] === "wind"
+          ? '<span class="dir">' + esc(m[1]) + '</span><span class="spd">' + esc(m[3]) + "</span>"
+          : esc(m[1]);
+        return '<div class="wx-m' + (m[2] ? " wx-m-" + m[2] : "") +
+          '"><span class="k">' + m[0] + '</span><span class="v">' +
+          v + "</span></div>";
       })
       .join("");
 
@@ -540,11 +545,10 @@
     );
   }
 
-  function windText(speed, deg) {
+  function windDir(deg) {
     var dirs = ["北", "东北偏北", "东北", "东北偏东", "东", "东南偏东", "东南", "东南偏南",
                 "南", "西南偏南", "西南", "西南偏西", "西", "西北偏西", "西北", "西北偏北"];
-    var d = dirs[Math.round(((Number(deg) || 0) % 360) / 22.5) % 16];
-    return d + "风 " + (Number(speed) || 0).toFixed(0) + " km/h";
+    return dirs[Math.round(((Number(deg) || 0) % 360) / 22.5) % 16] + "风";
   }
 
   /* ---------- 渲染：逐小时 ---------- */
