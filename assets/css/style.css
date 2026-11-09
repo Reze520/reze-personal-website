@@ -11692,8 +11692,11 @@ html:not([data-theme="dark"]) .ft-mini { border-left-color: rgba(124, 92, 190, .
 }
 
 /* ============================================================
-   站务页三列等高：中间一列原先在分页条处收住，左右侧栏还往下走一截。
-   只在站务页生效，其它页面版式不动。
+   站务页：分页条紧跟最后一条记录。
+   早先为了「三列等高」把列表容器拉成 flex:1，再给分页条 margin-top:auto，
+   右栏只要比主栏长，分页条就被钉到列底，条目和分页之间空出半屏
+   （实测 524px），滚动到那里像内容丢了。列高交给侧栏，主栏按自己的
+   内容收口；三列仍 stretch，分栏线不断。只在站务页生效。
    ============================================================ */
 .app[data-page="moments"],
 .app[data-page="timeline"] {
@@ -11705,11 +11708,11 @@ html:not([data-theme="dark"]) .ft-mini { border-left-color: rgba(124, 92, 190, .
 }
 .app[data-page="moments"] .g-moments,
 .app[data-page="timeline"] .g-moments {
-  flex: 1 1 auto;
+  flex: 0 0 auto;
 }
 .app[data-page="moments"] .g-moments > .g-pager,
 .app[data-page="timeline"] .g-moments > .g-pager {
-  margin-top: auto;
+  margin-top: 16px;
 }
 
 

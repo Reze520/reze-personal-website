@@ -1220,8 +1220,8 @@
   }
 
   function momentMarkup(m) {
-    var av = SITE.avatar
-      ? '<img src="' + esc(SITE.avatar) + '" alt="">'
+    var av = avatarSrc()
+      ? '<img src="' + esc(avatarSrc()) + '" alt="">'
       : "<span>" + esc((SITE.name || "蕾").charAt(0)) + "</span>";
     var pics = (m.images || []).length
       ? '<div class="pics">' +
