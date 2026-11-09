@@ -12232,7 +12232,12 @@ html[data-skin="paper"] .post-title {
 html[data-skin="paper"] .g-prose,
 html[data-skin="paper"] .g-prose p,
 html[data-skin="paper"] .g-prose li {
-  font: 400 16px/1.95 "Songti SC", "Source Han Serif SC", SimSun, serif !important;
+  /* 字号走 --prose-fs，纸张页脚栏的字号控件才改得动正文；
+     行高跟着字号按比例走，不和字号一起写死 */
+  font-family: "Songti SC", "Source Han Serif SC", SimSun, serif;
+  font-weight: 400;
+  font-size: var(--prose-fs);
+  line-height: 1.95;
   color: #24211c !important;
 }
 html[data-skin="paper"] .g-prose h2,
@@ -12514,4 +12519,208 @@ html[data-skin="paper"][data-theme="dark"] .site-head { background: #f6f2e9 !imp
 @media (max-width: 520px) {
   .yr-row { grid-template-columns: 46px 46px 1fr 70px; }
   .yr-top { display: none; }
+}
+
+/* ============================================================
+   文章工具栏：字号 / 收藏 / 复制 / 打印
+   ============================================================ */
+.g-tools {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  margin: 26px 0 6px;
+  padding: 10px 0 0;
+  border-top: 1px solid var(--line);
+  font-size: 12.5px;
+  color: var(--ink-2);
+}
+.g-tools .fs-grp {
+  display: inline-flex;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-pill);
+  overflow: hidden;
+}
+.g-tools .fs-btn {
+  appearance: none;
+  border: 0;
+  background: transparent;
+  color: var(--ink-2);
+  font: inherit;
+  font-size: 12.5px;
+  padding: 4px 10px;
+  cursor: pointer;
+  border-right: 1px solid var(--line);
+}
+.g-tools .fs-btn:last-child { border-right: 0; }
+.g-tools .fs-btn:hover { color: var(--ink); background: var(--bg-alt); }
+.g-tools .fs-btn.on {
+  color: var(--accent-ink);
+  background: var(--accent);
+}
+.g-tools .tools-btn {
+  appearance: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  border: 1px solid var(--line);
+  background: transparent;
+  color: var(--ink-2);
+  font: inherit;
+  font-size: 12.5px;
+  padding: 4px 11px;
+  border-radius: var(--radius-pill);
+  cursor: pointer;
+}
+.g-tools .tools-btn svg { width: 14px; height: 14px; }
+.g-tools .tools-btn:hover { color: var(--ink); border-color: var(--line-2); }
+.g-tools .tools-btn.on {
+  color: var(--ink);
+  border-color: var(--accent);
+  background: var(--bg-alt);
+}
+
+/* ============================================================
+   轻提示
+   ============================================================ */
+.g-toast {
+  position: fixed;
+  left: 50%;
+  bottom: 34px;
+  transform: translateX(-50%) translateY(10px);
+  z-index: 9999;
+  max-width: 80vw;
+  padding: 9px 18px;
+  font-size: 13px;
+  color: var(--ink);
+  background: var(--bg);
+  border: 1px solid var(--line-2);
+  border-radius: var(--radius-pill);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.14);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
+.g-toast.in { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+/* ============================================================
+   收藏夹 / 快捷键面板
+   ============================================================ */
+.saved-list { list-style: none; margin: 0; padding: 0; }
+.saved-list li {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 9px 2px;
+  border-bottom: 1px solid var(--line);
+}
+.saved-list li:last-child { border-bottom: 0; }
+.saved-list a {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  flex: 1;
+  min-width: 0;
+  text-decoration: none;
+  color: var(--ink);
+}
+.saved-list a .t {
+  font-size: 14px;
+  line-height: 1.5;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.saved-list a:hover .t { text-decoration: underline; text-underline-offset: 3px; }
+.saved-list a .d { font-size: 12px; color: var(--ink-3); }
+.saved-list .del {
+  appearance: none;
+  border: 0;
+  background: transparent;
+  color: var(--ink-3);
+  font-size: 18px;
+  line-height: 1;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  cursor: pointer;
+}
+.saved-list .del:hover { color: var(--ink); background: var(--bg-alt); }
+.saved-empty { margin: 18px 2px; font-size: 13px; color: var(--ink-3); }
+.saved-foot {
+  margin-top: 14px;
+  padding-top: 12px;
+  border-top: 1px solid var(--line);
+  font-size: 12.5px;
+}
+.saved-foot a { color: var(--ink-2); text-decoration: none; }
+.saved-foot a:hover { color: var(--ink); text-decoration: underline; text-underline-offset: 3px; }
+
+.keys-list {
+  display: grid;
+  grid-template-columns: 148px 1fr;
+  gap: 10px 16px;
+  margin: 4px 0 0;
+  font-size: 13.5px;
+}
+.keys-list dt { margin: 0; }
+.keys-list dd { margin: 0; color: var(--ink-2); }
+.keys-list kbd {
+  display: inline-block;
+  font-family: inherit;
+  font-size: 12px;
+  padding: 2px 7px;
+  color: var(--ink);
+  background: var(--bg-alt);
+  border: 1px solid var(--line-2);
+  border-bottom-width: 2px;
+  border-radius: 4px;
+}
+@media (max-width: 520px) {
+  .keys-list { grid-template-columns: 108px 1fr; gap: 9px 12px; }
+  .g-tools .tools-btn .lab { display: none; }
+}
+
+/* ============================================================
+   归档页热度条
+   ============================================================ */
+.arc-row { position: relative; }
+/* 一年一条：挂在当年第一行底部，宽度＝该年篇数占最旺年份的比例。
+   2.5% 处起笔避开年份数字正下方，落在行高内侧底部；行底那条灰色分界线就是刻度轴。
+   用伪元素：.arc-row 是 grid，子元素会被排进隐式行。 */
+.arc-row.has-heat::after {
+  content: "";
+  position: absolute;
+  left: 2.5%;
+  bottom: 0;
+  z-index: 2;
+  width: var(--heat, 10%);
+  height: 3px;
+  background: var(--accent);
+  opacity: 0.55;
+  border-radius: 2px;
+  pointer-events: none;
+}
+.arc-row.has-heat:hover::after { opacity: 0.8; }
+
+/* ============================================================
+   右栏「今日」卡
+   ============================================================ */
+.today-card .today-body { padding: 2px 2px 4px; }
+.today-card .today-date {
+  font-size: 20px;
+  letter-spacing: 0.02em;
+  color: var(--ink);
+  font-variant-numeric: tabular-nums;
+}
+.today-card .today-lunar {
+  margin-top: 4px;
+  font-size: 12.5px;
+  color: var(--ink-2);
+  line-height: 1.6;
+}
+.today-card .today-gap {
+  margin-top: 6px;
+  font-size: 12px;
+  color: var(--ink-3);
 }

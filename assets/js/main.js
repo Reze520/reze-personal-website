@@ -2083,6 +2083,7 @@
 
     initMiniCal(right);
     renderRecModules(right);
+    mountTodayCard(right);
 
     // 右栏天气小卡：独立订阅，切城市时右栏也跟着变
     if (window.WX) {
@@ -2664,6 +2665,9 @@ function bindArchive(root) {
       var rest = btn.parentElement.querySelector(".arc-rest");
       if (rest) rest.hidden = false;
       btn.remove();
+      /* 多出来的行里可能有该年头一条（年份块没展开时条画在第 1 行，
+         展开后仍在第 1 行），但总数变了，比例要重算。 */
+      if (window.__rezeRedrawHeat) window.__rezeRedrawHeat();
     });
   });
 }
@@ -3473,6 +3477,7 @@ function renderMain() {
   } else if (page === "archive") {
     main.innerHTML = archiveMainHtml();
     bindArchive(main);
+    decorateArchiveHeat();
   } else if (page === "sources") {
     renderIndexPage(main, page);
   } else if (page === "about") {
@@ -4694,6 +4699,8 @@ function interceptLinks(e) {
     recordRead(p.id);
     attachReadScroll(p.id);
     restoreRead(p.id);
+    applyReadFs(readFsIndex());
+    buildPostTools(p);
 
     // 详情页没有三栏，目录得自己长出来（宽屏落右栏、窄屏落正文上方）。
     // 标题少于 4 个的直接不生成，省得小文章也挂个目录。
@@ -4721,6 +4728,444 @@ function interceptLinks(e) {
 
     // 文章底部留言区已收起（长期 0 条，改用页脚 / 关于页的邮箱入口）
     // mountComments(host, p.id);
+  }
+
+
+  /* ---------- 文章页工具栏：字号 / 收藏 / 复制 / 打印 ----------
+     只碰正文容器的 --read-fs，不改任何字号写死的组件。字号偏好存本地，
+     跨文章、跨会话沿用。 */
+  var FS_STEPS = [16, 17.5, 19, 21];
+  var FS_NAMES = ["小", "中", "大", "特大"];
+  /* 没存过就用最小一档：正文默认 16px，跟改动前的观感一致。
+     存过的值越界（改过档位表）也回最小一档，不去猜用户想要哪一档。 */
+  function readFsIndex() {
+    var raw = STORAGE.get("reze_read_fs");
+    if (raw === null || raw === "") return 0;
+    var v = Number(raw);
+    return v >= 0 && v < FS_STEPS.length ? v : 0;
+  }
+  function applyReadFs(i) {
+    var root = document.documentElement;
+    // 正文字号本来就走 --prose-fs，这里直接改它，不去另起一套变量
+    root.style.setProperty("--prose-fs", FS_STEPS[i] + "px");
+    STORAGE.set("reze_read_fs", String(i));
+    var btns = document.querySelectorAll(".g-tools .fs-btn");
+    for (var k = 0; k < btns.length; k++) {
+      btns[k].classList.toggle("on", Number(btns[k].getAttribute("data-fs")) === i);
+    }
+  }
+
+  /* 收藏：只存 id 与时间，不存正文，不占本地空间 */
+  function getSaved() {
+    try {
+      var a = JSON.parse(STORAGE.get("reze_saved") || "[]");
+      return Array.isArray(a) ? a : [];
+    } catch (e) {
+      return [];
+    }
+  }
+  function isSaved(id) {
+    var a = getSaved();
+    for (var i = 0; i < a.length; i++) if (a[i].id === id) return true;
+    return false;
+  }
+  function toggleSave(id) {
+    var a = getSaved();
+    var hit = -1;
+    for (var i = 0; i < a.length; i++) if (a[i].id === id) { hit = i; break; }
+    if (hit >= 0) a.splice(hit, 1);
+    else a.unshift({ id: id, t: Date.now() });
+    STORAGE.set("reze_saved", JSON.stringify(a.slice(0, 200)));
+    return hit < 0;
+  }
+  function syncSaveBtn(on) {
+    var b = document.querySelector(".g-tools .save-btn");
+    if (!b) return;
+    b.classList.toggle("on", !!on);
+    var lab = b.querySelector(".lab");
+    if (lab) lab.textContent = on ? "已收藏" : "收藏";
+    b.setAttribute("aria-pressed", on ? "true" : "false");
+  }
+
+  function toastMsg(msg) {
+    var t = document.createElement("div");
+    t.className = "g-toast";
+    t.textContent = msg;
+    document.body.appendChild(t);
+    requestAnimationFrame(function () { t.classList.add("in"); });
+    setTimeout(function () {
+      t.classList.remove("in");
+      setTimeout(function () { if (t.parentNode) t.parentNode.removeChild(t); }, 260);
+    }, 1600);
+  }
+
+  function buildPostTools(p) {
+    var host = document.querySelector(".g-article");
+    if (!host || host.querySelector(".g-tools")) return;
+    var fsHtml = FS_STEPS.map(function (v, i) {
+      return '<button type="button" class="fs-btn' + (i === readFsIndex() ? " on" : "") +
+        '" data-fs="' + i + '" title="字号 ' + FS_NAMES[i] + '">' + FS_NAMES[i] + "</button>";
+    }).join("");
+    var saved = isSaved(p.id);
+    var box = document.createElement("div");
+    box.className = "g-tools";
+    box.innerHTML =
+      '<div class="tools-grp fs-grp" role="group" aria-label="正文字号">' + fsHtml + "</div>" +
+      '<button type="button" class="tools-btn save-btn' + (saved ? " on" : "") +
+      '" aria-pressed="' + (saved ? "true" : "false") + '">' + ICONS.book +
+      '<span class="lab">' + (saved ? "已收藏" : "收藏") + "</span></button>" +
+      '<button type="button" class="tools-btn copy-btn">' + ICONS.note +
+      "<span class=\"lab\">复制链接</span></button>" +
+      '<button type="button" class="tools-btn print-btn">' + ICONS.doc +
+      "<span class=\"lab\">打印</span></button>";
+    /* 位置：正文之后、文末标签之前。原先 appendChild 会落到「接着读」之后，
+       读起来像是被夹在推荐块里；锚到 .g-article-foot 前面更稳。 */
+    var foot = host.querySelector(".g-article-foot");
+    if (foot && foot.parentNode === host) host.insertBefore(box, foot);
+    else host.appendChild(box);
+
+    box.addEventListener("click", function (e) {
+      var fs = e.target.closest ? e.target.closest(".fs-btn") : null;
+      if (fs) {
+        applyReadFs(Number(fs.getAttribute("data-fs")));
+        return;
+      }
+      var sb = e.target.closest ? e.target.closest(".save-btn") : null;
+      if (sb) {
+        var on = toggleSave(p.id);
+        syncSaveBtn(on);
+        toastMsg(on ? "已收进收藏" : "已移出收藏");
+        return;
+      }
+      var cb = e.target.closest ? e.target.closest(".copy-btn") : null;
+      if (cb) {
+        var url = location.origin + postHref(p.id);
+        var done = function () { toastMsg("链接已复制"); };
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          navigator.clipboard.writeText(url).then(done, function () { toastMsg("复制失败"); });
+        } else {
+          var ta = document.createElement("textarea");
+          ta.value = url;
+          ta.style.position = "fixed";
+          ta.style.opacity = "0";
+          document.body.appendChild(ta);
+          ta.select();
+          try { document.execCommand("copy"); done(); } catch (err) { toastMsg("复制失败"); }
+          document.body.removeChild(ta);
+        }
+        return;
+      }
+      var pb = e.target.closest ? e.target.closest(".print-btn") : null;
+      if (pb) window.print();
+    });
+  }
+
+  /* ---------- 我的收藏 ---------- */
+  function buildSavedPanel() {
+    var a = getSaved();
+    var rows = "";
+    for (var i = 0; i < a.length; i++) {
+      var post = postById(a[i].id);
+      if (!post) continue;
+      rows +=
+        '<li><a href="' + postHref(post.id) + '">' +
+        '<span class="t">' + esc(post.title) + "</span>" +
+        '<span class="d">' + fmtDate(post.date) + " · " + esc(post.cat || "") + "</span></a>" +
+        '<button type="button" class="del" data-id="' + esc(post.id) + '" aria-label="移出收藏">×</button></li>';
+    }
+    var body = document.getElementById("saved-body");
+    if (!body) return;
+    body.innerHTML = rows
+      ? '<ul class="saved-list">' + rows + "</ul>"
+      : '<p class="saved-empty">还没有收藏。</p>';
+    var dels = body.querySelectorAll(".del");
+    for (var k = 0; k < dels.length; k++) {
+      dels[k].addEventListener("click", function (e) {
+        e.preventDefault();
+        toggleSave(this.getAttribute("data-id"));
+        buildSavedPanel();
+      });
+    }
+  }
+  function openSaved() {
+    buildSavedPanel();
+    openModal("saved-overlay");
+  }
+  function initSaved() {
+    // 两个弹层按发现/年度回顾同一套外壳生成，风格不另起一套
+    if (!document.getElementById("saved-overlay")) {
+      var so = document.createElement("div");
+      so.className = "search-overlay saved-overlay";
+      so.id = "saved-overlay";
+      so.innerHTML =
+        '<div class="search-box disc-box" role="dialog" aria-modal="true" aria-label="我的收藏">' +
+        '<div class="disc-head"><span>我的收藏</span>' +
+        '<button class="search-clear disc-x" type="button" aria-label="关闭">×</button></div>' +
+        '<div class="disc-body"><div id="saved-body"></div>' +
+        '<div class="saved-foot"><a href="#" class="js-saved-export">导出为 Markdown</a></div>' +
+        "</div></div>";
+      document.body.appendChild(so);
+      so.addEventListener("click", function (e) { if (e.target === so) closeModal(so); });
+      var sx = so.querySelector(".disc-x");
+      if (sx) sx.addEventListener("click", function () { closeModal(so); });
+    }
+    if (!document.getElementById("keys-overlay")) {
+      var ko = document.createElement("div");
+      ko.className = "search-overlay keys-overlay";
+      ko.id = "keys-overlay";
+      var K = [
+        ["Ctrl / ⌘ + K", "搜索"],
+        ["/", "打开搜索"],
+        ["?", "这张表"],
+        ["s", "收藏当前文章"],
+        ["t", "跳到目录"],
+        ["g 然后 h", "回首页"],
+        ["Esc", "关闭弹层"],
+      ];
+      ko.innerHTML =
+        '<div class="search-box disc-box" role="dialog" aria-modal="true" aria-label="快捷键">' +
+        '<div class="disc-head"><span>快捷键</span>' +
+        '<button class="search-clear disc-x" type="button" aria-label="关闭">×</button></div>' +
+        '<div class="disc-body"><dl class="keys-list">' +
+        K.map(function (r) { return "<dt><kbd>" + r[0] + "</kbd></dt><dd>" + r[1] + "</dd>"; }).join("") +
+        "</dl></div></div>";
+      document.body.appendChild(ko);
+      ko.addEventListener("click", function (e) { if (e.target === ko) closeModal(ko); });
+      var kx = ko.querySelector(".disc-x");
+      if (kx) kx.addEventListener("click", function () { closeModal(ko); });
+    }
+    var links = document.querySelectorAll(".js-saved");
+    for (var i = 0; i < links.length; i++) {
+      links[i].addEventListener("click", function (e) {
+        e.preventDefault();
+        openSaved();
+      });
+    }
+    var keys = document.querySelectorAll(".js-keys");
+    for (var j = 0; j < keys.length; j++) {
+      keys[j].addEventListener("click", function (e) {
+        e.preventDefault();
+        openModal("keys-overlay");
+      });
+    }
+    var dl = document.querySelector(".js-saved-export");
+    if (dl) dl.addEventListener("click", function (e) {
+      e.preventDefault();
+      var a = getSaved();
+      if (!a.length) { toastMsg("收藏夹是空的"); return; }
+      var lines = a.map(function (x) {
+        var post = postById(x.id);
+        if (!post) return "";
+        return "- [" + post.title + "](https://reze520.pages.dev" + postHref(post.id) + ")";
+      }).filter(Boolean);
+      var blob = new Blob(["# 收藏\n\n" + lines.join("\n") + "\n"], { type: "text/markdown;charset=utf-8" });
+      var url = URL.createObjectURL(blob);
+      var link = document.createElement("a");
+      link.href = url;
+      link.download = "reze-收藏.md";
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      setTimeout(function () { URL.revokeObjectURL(url); }, 2000);
+    });
+  }
+
+  /* ---------- 键盘快捷键 ----------
+     只在没有输入焦点时接管，避免打断搜索框与留言框的输入。
+     列表本身不挂全局快捷键，j/k 只在文章页里翻上一篇/下一篇。 */
+  function inField(el) {
+    if (!el) return false;
+    var t = (el.tagName || "").toUpperCase();
+    return t === "INPUT" || t === "TEXTAREA" || t === "SELECT" || el.isContentEditable;
+  }
+  function initShortcuts() {
+    var help = document.getElementById("keys-overlay");
+    document.addEventListener("keydown", function (e) {
+      if (inField(e.target) || e.ctrlKey || e.metaKey || e.altKey) return;
+      var k = e.key;
+      /* Shift+/ 在部分键盘布局与输入法下 e.key 报的是 "/"，两个都收 */
+      if (k === "?" || (k === "/" && e.shiftKey)) {
+        e.preventDefault();
+        if (help) openModal("keys-overlay");
+        return;
+      }
+      if (k === "Escape") {
+        /* Esc 归这里管：弹层开着先收弹层。别指望弹层自己接——它盖在页面上，
+           焦点却常留在 body，按键到不了它那儿。 */
+        var openOv = document.querySelector(".search-overlay.open");
+        if (openOv) { e.preventDefault(); closeModal(openOv); }
+        return;
+      }
+      if (k === "g") {
+        __gKeyAt = Date.now();
+        return;
+      }
+      if (k === "h" && Date.now() - __gKeyAt < 900) {
+        e.preventDefault();
+        location.href = "/";
+        return;
+      }
+      if (k === "s" && document.querySelector(".save-btn")) {
+        var sb = document.querySelector(".save-btn");
+        if (sb) { e.preventDefault(); sb.click(); }
+        return;
+      }
+      if (k === "t") {
+        var toc = document.querySelector(".g-toc a, #app-right .g-toc a");
+        if (toc) { e.preventDefault(); toc.scrollIntoView({ behavior: "smooth", block: "start" }); return; }
+        /* 详情节另有自己的目录块；列表页的目录在右栏，窄屏下右栏整列收起，没有抽屉可开，就不再兜 */
+        return;
+      }
+      if (k === "/" ) {
+        var sbtn = document.getElementById("search-btn");
+        if (sbtn) { e.preventDefault(); sbtn.click(); }
+        return;
+      }
+    });
+  }
+  var __gKeyAt = 0;
+
+  /* ---------- 归档热度条 ----------
+     按年统计篇数，在归档页每行标题旁给出相对长度条。不写数字以外的东西。 */
+  function yearHeatHtml(list) {
+    var by = {};
+    var max = 0;
+    for (var i = 0; i < list.length; i++) {
+      var y = String(list[i].date || "").slice(0, 4);
+      if (!y) continue;
+      by[y] = (by[y] || 0) + 1;
+      if (by[y] > max) max = by[y];
+    }
+    return by;
+  }
+  function decorateArchiveHeat() {
+    /* 年份块超过 40 篇时余下的行装在 .arc-rest[hidden] 里。那些行宽高为 0，
+       把条画进去就是白画 —— 2020/2021/2022 年头几条条就这么丢的。
+       只在已展开的行里算，展开剩余时再重建一次。 */
+    var rows = [].slice.call(document.querySelectorAll("#app-main .arc-row")).filter(function (r) {
+      return !r.closest(".arc-rest[hidden]");
+    });
+    if (!rows.length) return;
+
+    /* 归档版式里年份写在每个 .arc-year 的 data-y 上，行里只有月日，
+       所以按所在年份块归组，而不是去行里找四位数。 */
+    function yearOfRow(row) {
+      var blk = row.closest ? row.closest(".arc-year, section[id^='y']") : null;
+      if (!blk) return "";
+      var y = (blk.getAttribute("data-y") || "").trim();
+      if (!/^\d{4}$/.test(y)) {
+        var n = blk.querySelector(".arc-num");
+        y = n ? (n.textContent || "").trim() : "";
+      }
+      return /^\d{4}$/.test(y) ? y : "";
+    }
+
+    /* 篇数取年份块标题上的 .arc-cnt（真实总数），不去数渲染出来的行。
+       年块超过 40 篇时余下的行在 .arc-rest[hidden] 里，数行会把 2026 的 126 篇当成 40 篇，
+       于是满条变成 85%，比例全错。 */
+    var counts = {};
+    var max = 0;
+    var blocks = document.querySelectorAll("#app-main .arc-year");
+    for (var b = 0; b < blocks.length; b++) {
+      var yb = (blocks[b].getAttribute("data-y") || "").trim();
+      if (!/^\d{4}$/.test(yb)) continue;
+      var cntEl = blocks[b].querySelector(".arc-cnt");
+      var n = cntEl ? parseInt((cntEl.textContent || "").replace(/[^\d]/g, ""), 10) : 0;
+      if (!n) {
+        /* 没有计数标签时只能数行，算个保底 */
+        for (var q = 0; q < rows.length; q++) if (yearOfRow(rows[q]) === yb) n++;
+      }
+      counts[yb] = n;
+      if (n > max) max = n;
+    }
+    if (!max) return;
+    /* 一年一条就够：同一年里三十几行条条等长，重复的刻度不传递任何信息。
+       用「这个年块已画过没」判断，不靠 previousElementSibling：年块超过 40 篇时
+       前 40 行在 .arc-rows 里、余下在 .arc-rest 里，两个容器一展开就不是兄弟了，
+       41 行的 previousElementSibling 是 null，于是该年多画一条。 */
+    var drawn = {};
+    for (var j = 0; j < rows.length; j++) {
+      var y2 = yearOfRow(rows[j]);
+      if (!y2 || !counts[y2] || drawn[y2]) continue;
+      drawn[y2] = 1;
+      if (rows[j].classList.contains("has-heat")) continue;
+      var pct = Math.max(8, Math.round((counts[y2] / max) * 100));
+      /* 用伪元素而不用子元素：.arc-row 是 grid，第三个子项会被排进隐式行，
+         绘制被网格层叠吃掉。伪元素绝对定位不参与布局。 */
+      rows[j].classList.add("has-heat");
+      rows[j].style.setProperty("--heat", pct + "%");
+      rows[j].setAttribute("data-heat", y2 + " 年共 " + counts[y2] + " 篇");
+    }
+  }
+  /* 「展开剩余」把隐藏行放出来后，新露出的第一行还没条，重算一次。
+     旧条先清，否则比例会按新总数变而旧条不动。 */
+  function clearArchiveHeat() {
+    var old = document.querySelectorAll("#app-main .has-heat");
+    for (var i = 0; i < old.length; i++) {
+      old[i].classList.remove("has-heat");
+      old[i].style.removeProperty("--heat");
+      old[i].removeAttribute("data-heat");
+    }
+  }
+  window.__rezeRedrawHeat = function () {
+    clearArchiveHeat();
+    decorateArchiveHeat();
+  };
+
+  /* ---------- 右栏「今日」卡：农历 / 节气 / 距上次更新 ----------
+     农历库是闲时才取的（443KB），取到前先只画公历与间隔天数。 */
+  function todayCardHtml() {
+    var now = new Date();
+    var pad = function (n) { return (n < 10 ? "0" : "") + n; };
+    var iso = now.getFullYear() + "-" + pad(now.getMonth() + 1) + "-" + pad(now.getDate());
+    var last = byDateList()[0];
+    var gap = "";
+    if (last) {
+      var d0 = new Date(String(last.date).replace(/\./g, "-") + "T00:00:00");
+      var d1 = new Date(iso + "T00:00:00");
+      var n = Math.round((d1 - d0) / 86400000);
+      gap = n <= 0 ? "今天有更新" : "距上次更新 " + n + " 天";
+    }
+    return (
+      '<div class="g-card today-card">' +
+      '<div class="g-card-head"><span class="t">' + ICONS.sun + "今日</span></div>" +
+      '<div class="today-body">' +
+      '<div class="today-date">' + iso.replace(/-/g, ".") + "</div>" +
+      '<div class="today-lunar" data-lunar>' +
+      (window.Solar ? lunarLine(now) : "农历取回中…") + "</div>" +
+      '<div class="today-gap">' + gap + "</div></div></div>"
+    );
+  }
+  function lunarLine(d) {
+    try {
+      var s = window.Solar.fromDate(d);
+      var lun = s.getLunar();
+      var parts = [];
+      parts.push("农历" + lun.getMonthInChinese() + "月" + lun.getDayInChinese());
+      var jq = lun.getJieQi();
+      if (jq) parts.push(jq);
+      var f = (s.getFestivals() || []).concat(lun.getFestivals() || []);
+      if (f.length) parts.push(f[0]);
+      return parts.join(" · ");
+    } catch (e) {
+      return "";
+    }
+  }
+  function mountTodayCard(right) {
+    if (!right) return;
+    var wrap = document.createElement("div");
+    wrap.innerHTML = todayCardHtml();
+    var card = wrap.firstChild;
+    right.insertBefore(card, right.firstChild);
+    // 农历库是闲时才取，挂到日历的重绘钩子上：库到了这里顺带把农历补上
+    if (!window.Solar) {
+      var prevRepaint = window.__rezeRepaintCal;
+      window.__rezeRepaintCal = function () {
+        if (typeof prevRepaint === "function") prevRepaint();
+        var box = card.querySelector && card.querySelector("[data-lunar]");
+        if (box && window.Solar) box.textContent = lunarLine(new Date()) || "";
+      };
+    }
   }
 
   /* ---------- 阅读历史：续读 / 猜你喜欢 ---------- */
@@ -5773,6 +6218,7 @@ function interceptLinks(e) {
     var trigger = document.createElement("button");
     trigger.type = "button";
     trigger.className = "icon-btn";
+    trigger.id = "search-btn";
     trigger.setAttribute("aria-label", "搜索文章");
     trigger.setAttribute("data-tip", "搜索 Ctrl+K");
     trigger.innerHTML = ICONS.search;
@@ -6173,6 +6619,8 @@ function interceptLinks(e) {
       mountPost,
       mountSplash,
       initExtras,
+      initSaved,
+      initShortcuts,
       initSplashHeader,
     ].forEach(
       function (fn) {
