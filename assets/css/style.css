@@ -5188,8 +5188,11 @@ html::after {
   transition: all 0.24s var(--ease);
   z-index: 70;
 }
+/* 触屏和 iOS Safari 上点 button 不一定给焦点，:focus-within 落空，
+   所以点击展开改由 JS 切 .open 承担，这里补上对应规则。 */
 .nav-more:hover .nav-more-menu,
-.nav-more:focus-within .nav-more-menu {
+.nav-more:focus-within .nav-more-menu,
+.nav-more.open .nav-more-menu {
   opacity: 1;
   visibility: visible;
   transform: none;
