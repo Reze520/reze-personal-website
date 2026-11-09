@@ -12807,11 +12807,13 @@ html[data-skin="paper"] .g-stats {
 }
 
 /* ---------- 日历：当天 ----------
-   把整格的框线全部撤掉。原来「实底朱红」压住农历那行，改成描边后又变成
-   一个套住两行字的方章，都太重。现在只给公历数字垫一层同色的淡圆底：
-   不占布局、不碰农历行，格子本身保持透明，和周围日期一样平。
-   圆底用 currentColor + opacity，颜色自动跟随各皮肤的强调色，不用写死色值。
-   选中日原来也是一圈 2px 内描边，一并撤掉，只留数字下方一条细短线。 */
+   整格的框线全部撤掉：实底朱红会压住农历那行，描边又变成一个套住两行字
+   的方章。今天只给公历数字垫一层淡圆底，不占布局、不碰农历行，格子保持
+   透明，和周围日期一样平。
+   红色整块让给节日文字。一屏里万圣节、立冬、小雪、感恩节已经四处朱红，
+   今天的数字再用强调色就过密，改回正文墨色加粗，靠圆底和字重区分。
+   圆底用 currentColor + opacity，跟着文字色走，两套皮肤与深浅主题都不用
+   另写色值。选中日的下划线也一并改成墨灰，日历里唯一带色的只有节日。 */
 .g-cal-grid b.today,
 .g-cal-grid b.selected,
 html[data-skin="paper"] .g-cal-grid b.today,
@@ -12828,8 +12830,8 @@ html[data-skin="paper"] .g-cal-grid b.today i {
 .g-cal-grid b.today em {
   position: relative;
   isolation: isolate;
-  color: var(--g-accent);
-  font-weight: 600;
+  color: var(--ink);
+  font-weight: 700;
 }
 .g-cal-grid b.today em::before {
   content: "";
@@ -12853,11 +12855,11 @@ html[data-skin="paper"] .g-cal-grid b.today .g-cal-sub,
 .g-cal-grid b.today .g-cal-sub.is-fest {
   color: var(--g-accent);
 }
-/* 选中但不是今天：数字下方一条短线，下方文字行已经写明了完整日期 */
+/* 选中但不是今天：数字下方一条墨灰短线，下方文字行已经写明了完整日期 */
 .g-cal-grid b.selected:not(.today) em {
-  color: var(--g-accent);
+  color: var(--ink);
   font-weight: 600;
-  border-bottom: 1px solid var(--g-accent);
+  border-bottom: 1px solid var(--ink-3);
   border-radius: 1px;
   padding-bottom: 1px;
 }

@@ -924,17 +924,28 @@
   }
 
   /* ---------- 头像与一句话简介 ----------
-     头像换成了静态图：`assets/uploads/avatar.png`。老配置里 SITE.avatar 还指着
-     那张 GIF，这里把它顶掉 —— 后台「头像路径」留什么都不会再让动图回来，
-     要换图就改 data.js 里的 avatar，或者直接换 assets/uploads/avatar.png 这张。
+     纸样（新界面）用静止帧 assets/uploads/avatar.png；淡紫与极简（旧界面）
+     继续放 SITE.avatar 指的那张 GIF。动图挂在页首会拖住整页重绘，纸样只讲
+     纸面，动的地方越少越好；旧界面原本就有那张动图，留着不动。
+     皮肤在 <head> 的内联脚本里已经写好，渲染时读到的即是最终值。
      简介只去掉末尾那一个句号：它下面就是三个数字，句号压在那里像把话说死了。 */
   function avatarSrc() {
     var a = String(SITE.avatar || "");
+    if (document.documentElement.getAttribute("data-skin") !== "paper") return a;
     if (!a || /\.gif(\W|$)/i.test(a)) return "assets/uploads/avatar.png";
     return a;
   }
   function bioText() {
     return String(SITE.slogan || "").replace(/[。．.]+\s*$/, "");
+  }
+  /* 切皮肤不重渲染 DOM，已经挂出去的头像要跟着换一次 src。
+     图片本身带 data-av：左右栏、首屏、站务条目都算在内。 */
+  function syncAvatar() {
+    var src = avatarSrc();
+    if (!src) return;
+    Array.prototype.forEach.call(document.querySelectorAll("img[data-av]"), function (im) {
+      if (im.getAttribute("src") !== src) im.setAttribute("src", src);
+    });
   }
 
   /* ---------- 侧栏 ---------- */
@@ -945,7 +956,7 @@
     var tagNum = Object.keys(tc).length;
 
     var avatar = avatarSrc()
-      ? '<div class="avatar"><img src="' + esc(avatarSrc()) + '" alt="' + esc(SITE.name) + '"></div>'
+      ? '<div class="avatar"><img data-av src="' + esc(avatarSrc()) + '" alt="' + esc(SITE.name) + '"></div>'
       : '<div class="avatar"><span class="ph">蕾</span></div>';
 
     // 社交按钮：优先用 SITE.social 数组，没有就退回旧的 github + email 两个
@@ -1221,7 +1232,7 @@
 
   function momentMarkup(m) {
     var av = avatarSrc()
-      ? '<img src="' + esc(avatarSrc()) + '" alt="">'
+      ? '<img data-av src="' + esc(avatarSrc()) + '" alt="">'
       : "<span>" + esc((SITE.name || "蕾").charAt(0)) + "</span>";
     var pics = (m.images || []).length
       ? '<div class="pics">' +
@@ -1923,10 +1934,10 @@
     });
 
     /* ---- 左栏 ---- */
-    /* 头像是静态图。GIF 那版留给淡紫皮肤，纸样下不动，换成同一张的静止帧：
-       动图挂在页首会把整页的重绘节奏拖住，纸样又只讲纸面，动的地方越少越好。 */
+    /* 头像按皮肤分流：纸样用静止帧，淡紫与极简留着 GIF。
+       切皮肤时由 syncAvatar() 换 src，这里不重渲染。 */
     var avatarHtml = SITE.avatar
-      ? '<img src="' + esc(avatarSrc()) + '" alt="' + esc(SITE.name) + '">'
+      ? '<img data-av src="' + esc(avatarSrc()) + '" alt="' + esc(SITE.name) + '">'
       : '<span class="ph">' + esc((SITE.name || "蕾").charAt(0)) + "</span>";
 
     var socialHtml = (SITE.social || [])
@@ -6096,6 +6107,9 @@ function interceptLinks(e) {
     var root = document.documentElement;
     restorePaperPrefs();
     syncAccentVars(root.getAttribute("data-skin") === "paper" ? "paper" : "soft");
+    syncAvatar();
+    /* 设置面板是按需建的，头像同步不能挂在它那个监听器上 */
+    document.addEventListener("reze:skin", syncAvatar);
 
     function syncSkinLabels() {
       var isPaper = root.getAttribute("data-skin") === "paper";
@@ -6319,7 +6333,7 @@ function interceptLinks(e) {
     var av = $("#splash-avatar");
     if (av) {
       av.innerHTML = SITE.avatar
-        ? '<img src="' + esc(avatarSrc()) + '" alt="' + esc(SITE.name) + '">'
+        ? '<img data-av src="' + esc(avatarSrc()) + '" alt="' + esc(SITE.name) + '">'
         : "<span>" + esc((SITE.name || "蕾").charAt(0)) + "</span>";
     }
 
