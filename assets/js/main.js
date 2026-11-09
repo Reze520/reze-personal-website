@@ -1278,10 +1278,12 @@
         var hay = ((m.title || "") + " " + (m.text || "") + " " + (m.tags || []).join(" ")).toLowerCase();
         return !curQ || hay.indexOf(curQ) !== -1;
       });
-      curPages = Math.max(1, Math.ceil(list.length / PER));
+      curPages = Math.max(1, Math.floor(list.length / PER));
       if (curPage >= curPages) curPage = curPages - 1;
       if (curPage < 0) curPage = 0;
-      var slice = list.slice(curPage * PER, curPage * PER + PER);
+      var from = curPage * PER;
+      var to = curPage === curPages - 1 ? list.length : from + PER;
+      var slice = list.slice(from, to);
       listEl.innerHTML = (slice.length
         ? slice.map(momentMarkup).join("")
         : '<div class="g-empty">没有找到相关记录</div>') +
@@ -1492,9 +1494,11 @@
         var okTag = !t || (p.tags || []).indexOf(t) !== -1;
         return okCat && okTag;
       });
-      var pages = Math.max(1, Math.ceil(list.length / PER));
+      var pages = Math.max(1, Math.floor(list.length / PER));
       if (page >= pages) page = pages - 1;
-      var slice = list.slice(page * PER, page * PER + PER);
+      var start = page * PER;
+      var end = page === pages - 1 ? list.length : start + PER;
+      var slice = list.slice(start, end);
       var feature = "";
       var flow = slice;
       /* 首页第一页、没开分类或标签筛选时，置顶几篇单独排成一组；
@@ -1608,9 +1612,11 @@
         var okTag = !t || (p.tags || []).indexOf(t) !== -1;
         return okCat && okTag;
       });
-      var pages = Math.max(1, Math.ceil(list.length / PER));
+      var pages = Math.max(1, Math.floor(list.length / PER));
       if (page >= pages) page = pages - 1;
-      var slice = list.slice(page * PER, page * PER + PER);
+      var start = page * PER;
+      var end = page === pages - 1 ? list.length : start + PER;
+      var slice = list.slice(start, end);
       listEl.innerHTML = (slice.length
         ? slice.map(glassPostMarkup).join("")
         : '<div class="g-empty">这里还没有文章</div>') + buildPager(pages, page);
@@ -6099,7 +6105,7 @@ function interceptLinks(e) {
     var line = document.createElement("div");
     line.className = "paper-foot-line";
     var n = (window.POSTS || []).length;
-    line.textContent = (n ? n + " 篇　·　" : "") + "7 分类　·　手写 HTML / CSS，无框架、无追踪";
+    line.textContent = (n ? n + " 篇　·　" : "") + "7 分类　·　手写 HTML / CSS，无框架";
     foot.parentNode.insertBefore(line, foot);
   }
 
