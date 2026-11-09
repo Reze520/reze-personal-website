@@ -579,6 +579,16 @@ python tools/subset_font.py                      # 直接从线上取诗词
 python tools/subset_font.py /tmp/content.json     # 或者用本地快照
 ```
 
+页面部署上线之后，把变动的地址交给 IndexNow（Bing、Yandex 等参与引擎会尽快抓取）：
+
+```bash
+python tools/indexnow_ping.py --new      # 最近一次提交里变动的篇目
+python tools/indexnow_ping.py --all      # 首次或改版后，提交 sitemap 的全部地址
+python tools/indexnow_ping.py --url https://reze520.pages.dev/p/post-386
+```
+
+根目录的 `<key>.txt` 是 IndexNow 的公开验证文件，文件名与内容一致，别删。`--dry-run` 只打印不发送，脚本走直连、不经本机代理。网站地图仍需在 Bing 站长平台里单独提交一次，两者不是一回事。
+
 这几个脚本都只动生成物，不改源文件，跑完看一眼 diff 再提交就行。内容备份另有每周一次的自动任务（.github/workflows/content-backup.yml），忘了手动跑也会把 content/posts/ 补齐；它只提交 content/posts 的 diff，不动前台文件；Pages 会跟着重新部署一次，页面内容不变。
 
 ---

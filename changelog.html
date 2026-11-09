@@ -83,7 +83,7 @@ y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
 <header class="cl-head">
 <h1>更新日志</h1>
 <div class="cl-facts">
-<span><b>87</b> 条记录</span>
+<span><b>88</b> 条记录</span>
 <span><b>6</b> 个时间节点</span>
 <span>跨度 2020.07 — 2026.11</span>
 </div>
@@ -92,7 +92,7 @@ y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
 <button type="button" class="cl-btn" data-cl-all="0">全部收起</button>
 </div>
 <nav class="cl-nav" aria-label="按时间跳转">
-<a href="#cl-202611">2026.11<i>58 条</i></a>
+<a href="#cl-202611">2026.11<i>59 条</i></a>
 <a href="#cl-202610">2026.10<i>10 条</i></a>
 <a href="#cl-202604">2026.04<i>6 条</i></a>
 <a href="#cl-202506">2025.06<i>1 条</i></a>
@@ -101,9 +101,17 @@ y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
 </nav>
 </header>
 <section class="cl-month" id="cl-202611">
-<h2>2026 年 11 月<span class="cl-count">58 条</span></h2>
+<h2>2026 年 11 月<span class="cl-count">59 条</span></h2>
 <ol class="cl-list">
 <li class="cl-item"><details open>
+<summary><span class="cl-kind" data-k="基建">基建</span><span class="cl-t">接入 IndexNow</span><span class="cl-n">3 项</span></summary>
+<div class="cl-body"><ul>
+<li>仓库根目录放一份 32 位十六进制的 key 文件，文件名与内容一致，供 Bing / Yandex 校验站点归属；<code>tools/indexnow_ping.py</code> 从 <code>sitemap.xml</code> 或最近一次提交里变动的篇目取地址，POST 到 <code>api.indexnow.org</code>。</li>
+<li>首次部署后全量提交一次 sitemap 的 374 条地址；之后发新文只提交变动篇目与首页、写作、归档、来源四个索引页。脚本走直连、不经本机代理，<code>--dry-run</code> 可离线预演。</li>
+<li>网站地图仍需在 Bing 站长平台单独提交，IndexNow 不替代它。</li>
+</ul></div>
+</details></li>
+<li class="cl-item"><details>
 <summary><span class="cl-kind" data-k="基建">基建</span><span class="cl-t">接入访客行为统计</span><span class="cl-n">2 项</span></summary>
 <div class="cl-body"><ul>
 <li>10 个手写页面与更新日志页的 <code>&lt;head&gt;</code> 加入 Microsoft Clarity 脚本；文章页服务端直出直接拿 <code>post.html</code> 当壳，改这一处就覆盖 364 篇。后台与 404 页不加载。</li>
