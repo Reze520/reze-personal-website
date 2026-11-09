@@ -11866,14 +11866,6 @@ html[data-skin="paper"] .splash-title {
   margin: 0 !important;
   text-shadow: none !important;
 }
-html[data-skin="paper"] .splash-title::after {
-  content: "";
-  display: inline-block;
-  width: 13px; height: 13px;
-  margin-left: 14px;
-  background: #a83226;
-  vertical-align: 12px;
-}
 html[data-skin="paper"] .splash-typing {
   font: 400 14px/1.8 "Songti SC", "Source Han Serif SC", SimSun, serif !important;
   color: #5b554a !important;
@@ -12454,10 +12446,6 @@ html[data-skin="paper"][data-theme="dark"] .site-head { background: #f6f2e9 !imp
   html[data-skin="paper"] .splash { padding: 84px 0 20px !important; }
   html[data-skin="paper"] .splash-inner { padding: 0 16px !important; }
   html[data-skin="paper"] .splash-title { font-size: 38px !important; }
-  html[data-skin="paper"] .splash-title::after {
-    width: 9px !important; height: 9px !important;
-    vertical-align: 7px !important; margin-left: 9px !important;
-  }
   html[data-skin="paper"] .ft-lead h2 { font-size: 21px !important; }
   html[data-skin="paper"] .ft-row { grid-template-columns: minmax(0, 1fr) !important; }
   html[data-skin="paper"] .ft-mini { min-height: 0 !important; }
