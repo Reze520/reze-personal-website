@@ -4384,8 +4384,12 @@ function interceptLinks(e) {
     _relCache = { sig: sig, inv: inv, docs: docs };
     return _relCache;
   }
-  function relatedPosts(p, limit) {
+  /* opts.exclude：结果里剔掉这些 id（猜你喜欢要把刚读的那几篇挡在外面）。
+     opts.src：来源是几篇文章时，只认「被不止一篇提到」的候选，同标签权重也按篇数加，
+     这样不会因为其中一篇标签特别多就把推荐全带偏。 */
+  function relatedPosts(p, limit, opts) {
     if (!p) return [];
+    var exclude = (opts && opts.exclude) || {};
     var C = buildRelIndex(), self = -1;
     for (var i = 0; i < C.docs.length; i++) {
       if (C.docs[i].p.id === p.id) { self = i; break; }
@@ -4399,13 +4403,14 @@ function interceptLinks(e) {
       });
     });
     var pYear = parseInt((p.date || "0").slice(0, 4), 10) || 0;
+    var tagW = (opts && opts.src) ? opts.src : 1;
     var selfTopics = C.docs[self].topics || [];
     C.docs.forEach(function (d, i) {
       if (i === self) return;
       var s = scores[i] || 0;
       var common = (d.p.tags || []).filter(function (t) { return tags.indexOf(t) !== -1; });
       var shared = (d.topics || []).filter(function (t) { return selfTopics.indexOf(t) !== -1; });
-      if (common.length) s += 0.32 * common.length;
+      if (common.length) s += 0.32 * common.length * tagW;
       if (shared.length) s += 0.22 * shared.length;
       if (d.p.cat && d.p.cat === p.cat) s += 0.05;
       var dy = Math.abs((parseInt((d.p.date || "0").slice(0, 4), 10) || 0) - pYear);
@@ -4422,7 +4427,10 @@ function interceptLinks(e) {
         : (shared.length ? "都在谈「" + TOPICS[shared[0]].n + "」"
           : (d.p.cat && d.p.cat === p.cat ? "同在「" + d.p.cat + "」" : "话题相近"));
       return { post: d.p, score: scores[i], reason: reason };
-    }).filter(function (x) { return x.score > 0.012; })
+    }).filter(function (x) {
+      if (exclude[x.post.id]) return false;
+      return x.score > 0.012;
+    })
       .sort(function (a, b) { return b.score - a.score; })
       .slice(0, limit || 12);
   }
@@ -5251,16 +5259,64 @@ function interceptLinks(e) {
       guess.id = "rec-guess";
       box.appendChild(guess);
     }
-    var seed = hist.length ? postById(hist[0]) : null;
-    var recs = seed ? relatedPosts(seed, 5).map(function (r) { return r.post; })
-                    : orderedPosts().slice(0, 5);
+    /* 不只拿最后一篇当种子：一个人连着读的几篇合起来才说明他这两天在看什么。
+       最近 3 篇各出候选，同篇累加分数，被不止一篇提到才算数；
+       已经读过的挡掉，同一分类最多两条。 */
+    var seeds = [], seen = {};
+    for (var hi = 0; hi < hist.length && seeds.length < 3; hi++) {
+      var hp = postById(hist[hi]);
+      if (hp) seeds.push(hp);
+    }
+    seen = {};
+    seeds.forEach(function (sp) { seen[sp.id] = 1; });
+    var pool = {}, poolN = {};
+    seeds.forEach(function (sp) {
+      relatedPosts(sp, 12, { exclude: seen, src: 1 }).forEach(function (r) {
+        if (!pool[r.post.id]) { pool[r.post.id] = { post: r.post, score: 0 }; poolN[r.post.id] = 0; }
+        pool[r.post.id].score += r.score;
+        poolN[r.post.id]++;
+      });
+    });
+    var recs = [];
+    /* 同一分类最多两条只管「相关推荐」这一段。放到最后统一剪会误伤兜底补进来的条目：
+       三篇种子都属「读书」时，补满的那几条也同属「读书」，一剪又只剩两条。 */
+    var catUsed = {};
+    if (seeds.length > 1) {
+      Object.keys(pool)
+        .filter(function (k) { return poolN[k] > 1; })
+        .sort(function (a, b) { return pool[b].score - pool[a].score; })
+        .forEach(function (k) {
+          var c2 = pool[k].post.cat || "";
+          if ((catUsed[c2] || 0) >= 2) return;
+          catUsed[c2] = (catUsed[c2] || 0) + 1;
+          recs.push(pool[k].post);
+        });
+    }
+    /* 交集不够时按票数补满：读完三篇同一分类，交集只剩下同分类的两篇，
+       不补的话卡片只剩两条，看着像坏了。forEach 里 return 只是跳过本次，
+       不是跳出整个循环，所以这里写 continue 语义是安全的。 */
+    var have = {};
+    recs.forEach(function (p) { have[p.id] = 1; });
+    Object.keys(pool)
+      .sort(function (a, b) { return pool[b].score - pool[a].score; })
+      .forEach(function (k) {
+        if (recs.length >= 5 || have[k]) return;
+        recs.push(pool[k].post); have[k] = 1;
+      });
+    /* 还不足就退到最近更新，保证卡片永远是 5 条 */
+    orderedPosts().forEach(function (p) {
+      if (recs.length >= 5 || seen[p.id]) return;
+      for (var ci = 0; ci < recs.length; ci++) if (recs[ci].id === p.id) return;
+      recs.push(p);
+    });
+    recs = recs.slice(0, 5);
     if (!recs.length) {
       guess.style.display = "none";
     } else {
       guess.style.display = "";
       var gItems = recs.map(function (p) {
         return '<li><a href="/p/' + encodeURIComponent(p.id) + '">' +
-          '<span class="cat" style="--cat-h:' + catHue(p.cat) + '">' + ICONS.folder + esc(p.cat) + "</span>" +
+          '<span class="cat" style="--cat-h:' + catHue(p.cat) + '">' + esc(p.cat) + "</span>" +
           "<span>" + esc(p.title) + "</span></a></li>";
       }).join("");
       guess.innerHTML =

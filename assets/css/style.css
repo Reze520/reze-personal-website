@@ -12724,3 +12724,33 @@ html[data-skin="paper"][data-theme="dark"] .site-head { background: #f6f2e9 !imp
   font-size: 12px;
   color: var(--ink-3);
 }
+
+/* ---------- 猜你喜欢：分类徽标
+   徽标里原本塞了一个 13px 的文件夹图标，但 .g-feed 没给 svg 定尺寸，
+   图标按 viewBox 撑成 204x204，比整栏还宽，分类文字被挤到零宽。
+   现在只留文字：小号、一行、超长省略，跟「继续读」的日期行一个重量。 */
+.g-feed .cat {
+  display: block;
+  max-width: 100%;
+  margin-bottom: 3px;
+  padding: 0;
+  border: 0;
+  background: none;
+  font-size: 10.5px;
+  line-height: 1.6;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  color: hsl(var(--cat-h, 262) 40% 45%);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  vertical-align: top;
+}
+[data-theme="dark"] .g-feed .cat {
+  color: hsl(var(--cat-h, 262) 55% 72%);
+}
+html[data-skin="paper"] .g-feed .cat {
+  color: #857b68 !important;
+  background: transparent !important;
+  border: 0 !important;
+}
