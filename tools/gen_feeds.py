@@ -33,6 +33,7 @@ STATIC_PAGES = [
     ("/about", "monthly", "0.6"),
     ("/changelog", "monthly", "0.5"),
     ("/sources", "monthly", "0.5"),
+    ("/toolbox", "monthly", "0.6"),
 ]
 
 

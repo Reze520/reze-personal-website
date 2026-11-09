@@ -1,0 +1,811 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="light" data-skin="paper">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>在线工具箱 · RezeのBlog</title>
+<meta name="description" content="常用小工具：文本整理、编码转换、时间戳、JSON、正则测试、文本对比、密码生成、颜色转换、单位换算、文件哈希与图片压缩。全部在浏览器本地完成。">
+<meta name="author" content="RezeのBlog">
+<meta name="theme-color" content="#14111d">
+<meta property="og:title" content="在线工具箱 · RezeのBlog">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://reze520.pages.dev/toolbox">
+<link rel="canonical" href="https://reze520.pages.dev/toolbox">
+<meta property="og:site_name" content="RezeのBlog">
+<meta property="og:description" content="十一个顺手的小工具，打开就能用，不用下载也不用登录。">
+<meta property="og:image" content="https://reze520.pages.dev/assets/uploads/share.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20viewBox%3D%270%200%2064%2064%27%3E%3Crect%20width%3D%2764%27%20height%3D%2764%27%20rx%3D%2715%27%20fill%3D%27%23241f33%27%2F%3E%3Cg%20transform%3D%27translate%286%2C6%29%20scale%282.1667%29%27%3E%3Cpath%20d%3D%27M21%2012.79A9%209%200%201%201%2011.21%203%207%207%200%200%200%2021%2012.79z%27%20fill%3D%27%23f6f1e7%27%2F%3E%3C%2Fg%3E%3C%2Fsvg%3E">
+<link rel="stylesheet" href="assets/css/style.css?v=20261109x">
+<link rel="alternate" type="application/rss+xml" title="RezeのBlog" href="feed.xml">
+<!-- 这一页刻意不加载统计脚本：工具的输入内容不该离开浏览器 -->
+
+<style>
+.tb-wrap{max-width:1060px;margin:0 auto;padding:30px 20px 70px;color:var(--ink)}
+.tb-head h1{font-size:clamp(26px,4vw,36px);margin:0 0 10px;letter-spacing:.02em}
+.tb-head p{color:var(--ink-2);margin:0;line-height:1.85;font-size:14px}
+.tb-badge{display:inline-block;margin-top:14px;padding:5px 12px;border:1px solid var(--line);border-radius:var(--radius-pill);font-size:12px;color:var(--ink-2);background:var(--panel-2)}
+.tb-tabs{display:flex;gap:8px;overflow-x:auto;padding:22px 0 14px;scrollbar-width:thin}
+.tb-tab{flex:0 0 auto;font:inherit;font-size:13px;padding:8px 15px;border:1px solid var(--line);border-radius:var(--radius-pill);background:var(--panel);color:var(--ink-2);cursor:pointer;white-space:nowrap}
+.tb-tab:hover{border-color:var(--line-2)}
+.tb-tab[aria-selected="true"]{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
+.tb-panel{display:none;background:var(--panel);border:var(--card-border,1px solid var(--line));border-radius:var(--radius-lg);padding:22px;box-shadow:var(--shadow)}
+.tb-panel.is-active{display:block}
+.tb-panel h2{font-size:19px;margin:0 0 6px}
+.tb-hint{color:var(--ink-3);font-size:13px;line-height:1.8;margin:0 0 16px}
+.tb-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.tb-field{display:flex;flex-direction:column;gap:6px;min-width:0}
+.tb-field>label{font-size:13px;color:var(--ink-2)}
+textarea.tb,input.tb,select.tb{width:100%;box-sizing:border-box;font:inherit;font-size:14px;color:var(--ink);background:var(--bg-alt);border:1px solid var(--line);border-radius:var(--radius);padding:10px 12px;outline:none}
+textarea.tb{min-height:140px;resize:vertical;line-height:1.65;font-family:ui-monospace,SFMono-Regular,Consolas,"Courier New",monospace}
+textarea.tb:focus,input.tb:focus,select.tb:focus{border-color:var(--line-2)}
+input.tb[type="range"]{padding:0;accent-color:var(--accent)}
+input.tb[type="color"]{padding:4px;cursor:pointer}
+input.tb[type="file"]{padding:8px}
+.tb-row{display:flex;flex-wrap:wrap;gap:8px;margin:12px 0;align-items:center}
+.tb-btn{font:inherit;font-size:13px;padding:8px 14px;border:1px solid var(--line);border-radius:var(--radius);background:var(--panel-2);color:var(--ink);cursor:pointer}
+.tb-btn:hover{border-color:var(--line-2)}
+.tb-btn.primary{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
+.tb-btn:disabled{opacity:.45;cursor:not-allowed}
+.tb-out{background:var(--bg-alt);border:1px solid var(--line);border-radius:var(--radius);padding:12px;font-family:ui-monospace,SFMono-Regular,Consolas,"Courier New",monospace;font-size:13px;white-space:pre-wrap;word-break:break-word;line-height:1.7;min-height:44px;margin:0;overflow:auto}
+.tb-stats{display:flex;flex-wrap:wrap;gap:8px;margin:12px 0}
+.tb-stat{background:var(--panel-2);border:1px solid var(--line);border-radius:var(--radius);padding:6px 10px;font-size:12px;color:var(--ink-2)}
+.tb-stat b{color:var(--ink);font-size:14px;margin-left:5px}
+.tb-check{display:inline-flex;align-items:center;gap:5px;font-size:13px;color:var(--ink-2);cursor:pointer}
+.tb-check input{accent-color:var(--accent)}
+.tb-err{color:#c0392b;font-size:13px;min-height:18px;margin:8px 0 0}
+.tb-out mark{background:rgba(255,210,0,.5);color:inherit;border-radius:2px}
+.tb-diff .add{color:#1a7f4b;background:rgba(26,127,75,.08)}
+.tb-diff .del{color:#c0392b;background:rgba(192,57,43,.08)}
+.tb-swatch{width:100%;height:48px;border-radius:var(--radius);border:1px solid var(--line)}
+.tb-note{color:var(--ink-3);font-size:12px;line-height:1.8;margin:20px 0 0;text-align:center}
+:root[data-theme="dark"] .tb-diff .add{color:#8bd5a6}
+:root[data-theme="dark"] .tb-diff .del{color:#f19a9a}
+:root[data-theme="dark"] .tb-err{color:#f19a9a}
+@media(max-width:760px){.tb-grid{grid-template-columns:1fr}.tb-wrap{padding:22px 14px 50px}.tb-panel{padding:16px}}
+</style>
+</head>
+<body class="has-app">
+<a class="skip-link" href="#app-main">跳到正文</a>
+<div class="page-bg" id="page-bg"></div>
+
+<header class="site-head">
+  <div class="head-inner">
+    <a class="brand" href="/">
+      <span class="brand-mark" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" fill="currentColor"/></svg></span>
+      RezeのBlog
+    </a>
+    <nav class="nav">
+      <a href="/" data-tip="返回首页"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="m3 10.2 9-7.2 9 7.2V20a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><path d="M9.5 22v-7.5h5V22"/></svg><span>主页</span></a>
+      <a href="/moments" data-tip="站务记录"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v3.6M12 17.4V21M3 12h3.6M17.4 12H21M5.8 5.8l2.5 2.5M15.7 15.7l2.5 2.5M18.2 5.8l-2.5 2.5M8.3 15.7l-2.5 2.5"/></svg><span>站务</span></a>
+      <a href="/writing" data-tip="全部文章"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/></svg><span>文章</span></a>
+      <a href="/weather" data-tip="多城市天气"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4.1"/><path d="M12 2.6v2.3M12 19.1v2.3M2.6 12h2.3M19.1 12h2.3M5.2 5.2l1.7 1.7M17.1 17.1l1.7 1.7M18.8 5.2l-1.7 1.7M6.9 17.1l-1.7 1.7"/></svg><span>天气</span></a>
+      <a href="/links" data-tip="常用网站"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="m15.6 8.4-2.1 5.1-5.1 2.1 2.1-5.1z"/></svg><span>导航</span></a>
+      <a href="/toolbox" aria-current="page" data-tip="在线工具箱"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a4.5 4.5 0 0 0-5.8 5.8L3 18a2.1 2.1 0 0 0 3 3l5.9-5.9a4.5 4.5 0 0 0 5.8-5.8l-2.8 2.8-2.5-2.5z"/></svg><span>工具箱</span></a>
+      <div class="nav-more">
+        <button class="nav-more-btn" type="button" data-tip="其它页面"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg><span>更多</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="chev"><path d="m6 9 6 6 6-6"/></svg></button>
+        <div class="nav-more-menu">
+          <a href="/" class="m-dupe">主页</a>
+          <a href="/moments" class="m-dupe">站务</a>
+          <a href="/writing" class="m-dupe">文章</a>
+          <a href="/weather" class="m-dupe">天气</a>
+          <a href="/links" class="m-dupe">导航</a>
+          <a href="/toolbox" class="m-dupe">工具箱</a>
+          <a href="/archive">归档</a>
+          <a href="/about">关于</a>
+        </div>
+      </div>
+    </nav>
+    <div class="head-tools">
+      <button class="icon-btn" id="theme-btn" data-tip="深浅色" aria-label="切换深浅色"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg></button>
+    </div>
+  </div>
+</header>
+
+<div class="tb-wrap" id="app-main">
+  <div class="tb-head">
+    <h1>在线工具箱</h1>
+    <p>十一个平时会顺手用到的小工具，点上面的标签切换。所有计算都在你的浏览器里完成，输入内容不会上传到任何服务器，也不需要登录或安装。</p>
+    <span class="tb-badge">纯前端 · 零依赖 · 断网也能用</span>
+  </div>
+
+  <div class="tb-tabs" role="tablist">
+    <button class="tb-tab" role="tab" data-tab="text" aria-selected="true">文本整理</button>
+    <button class="tb-tab" role="tab" data-tab="encode" aria-selected="false">编码转换</button>
+    <button class="tb-tab" role="tab" data-tab="time" aria-selected="false">时间戳</button>
+    <button class="tb-tab" role="tab" data-tab="json" aria-selected="false">JSON</button>
+    <button class="tb-tab" role="tab" data-tab="regex" aria-selected="false">正则测试</button>
+    <button class="tb-tab" role="tab" data-tab="diff" aria-selected="false">文本对比</button>
+    <button class="tb-tab" role="tab" data-tab="pwd" aria-selected="false">密码生成</button>
+    <button class="tb-tab" role="tab" data-tab="color" aria-selected="false">颜色转换</button>
+    <button class="tb-tab" role="tab" data-tab="unit" aria-selected="false">单位换算</button>
+    <button class="tb-tab" role="tab" data-tab="hash" aria-selected="false">文件哈希</button>
+    <button class="tb-tab" role="tab" data-tab="img" aria-selected="false">图片压缩</button>
+  </div>
+
+  <section class="tb-panel is-active" id="p-text" role="tabpanel">
+    <h2>文本统计与整理</h2>
+    <p class="tb-hint">粘贴一段文字，先看统计，再按需要处理。结果写在下面，原文不动；想接着处理可以写回输入框。</p>
+    <textarea class="tb" id="tx-in" placeholder="把文本粘贴到这里…"></textarea>
+    <div class="tb-stats" id="tx-stats"></div>
+    <div class="tb-row">
+      <button class="tb-btn" data-tx="noempty">去空行</button>
+      <button class="tb-btn" data-tx="trim">去首尾空格</button>
+      <button class="tb-btn" data-tx="dedup">去重行</button>
+      <button class="tb-btn" data-tx="sort">排序行</button>
+      <button class="tb-btn" data-tx="number">加序号</button>
+      <button class="tb-btn" data-tx="lower">转小写</button>
+      <button class="tb-btn" data-tx="upper">转大写</button>
+    </div>
+    <div class="tb-field"><label>处理结果</label><textarea class="tb" id="tx-out" readonly></textarea></div>
+    <div class="tb-row"><button class="tb-btn primary" data-copy="tx-out">复制结果</button><button class="tb-btn" id="tx-back">写回输入框</button><button class="tb-btn" id="tx-clear">清空</button></div>
+  </section>
+
+  <section class="tb-panel" id="p-encode" role="tabpanel">
+    <h2>编码转换</h2>
+    <p class="tb-hint">Base64、URL、Unicode 转义、HTML 实体。中文按 UTF-8 处理，不会乱码。</p>
+    <div class="tb-field"><label>原文 / 待解码内容</label><textarea class="tb" id="en-in"></textarea></div>
+    <div class="tb-row">
+      <button class="tb-btn" data-en="b64e">Base64 编码</button>
+      <button class="tb-btn" data-en="b64d">Base64 解码</button>
+      <button class="tb-btn" data-en="urle">URL 编码</button>
+      <button class="tb-btn" data-en="urld">URL 解码</button>
+      <button class="tb-btn" data-en="unie">转 Unicode 转义</button>
+      <button class="tb-btn" data-en="unid">还原 Unicode</button>
+      <button class="tb-btn" data-en="htmle">HTML 实体编码</button>
+      <button class="tb-btn" data-en="htmld">HTML 实体解码</button>
+    </div>
+    <div class="tb-field"><label>结果</label><textarea class="tb" id="en-out" readonly></textarea></div>
+    <div class="tb-row"><button class="tb-btn primary" data-copy="en-out">复制结果</button><button class="tb-btn" id="en-swap">结果写回输入</button></div>
+    <p class="tb-err" id="en-err"></p>
+  </section>
+
+  <section class="tb-panel" id="p-time" role="tabpanel">
+    <h2>时间戳转换</h2>
+    <p class="tb-hint">秒和毫秒自动识别。日期按你电脑的本地时区换算，同时给出 UTC。</p>
+    <div class="tb-grid">
+      <div class="tb-field"><label>当前时间戳（秒）</label><input class="tb" id="tm-now-s" readonly></div>
+      <div class="tb-field"><label>当前时间戳（毫秒）</label><input class="tb" id="tm-now-ms" readonly></div>
+    </div>
+    <div class="tb-row"><button class="tb-btn" id="tm-refresh">刷新当前时间</button><button class="tb-btn" data-copy="tm-now-s">复制秒</button><button class="tb-btn" data-copy="tm-now-ms">复制毫秒</button></div>
+    <div class="tb-grid" style="margin-top:18px">
+      <div class="tb-field"><label>时间戳 → 日期</label><input class="tb" id="tm-ts" placeholder="例如 1735689600"><div class="tb-out" id="tm-from">—</div></div>
+      <div class="tb-field"><label>日期 → 时间戳</label><input class="tb" type="datetime-local" id="tm-date" step="1"><div class="tb-out" id="tm-to-s">—</div><div class="tb-out" id="tm-to-ms" style="margin-top:8px">—</div></div>
+    </div>
+    <div class="tb-row"><button class="tb-btn primary" data-copy="tm-to-s">复制秒</button><button class="tb-btn" data-copy="tm-to-ms">复制毫秒</button><button class="tb-btn" id="tm-now">用当前时间填入</button></div>
+    <p class="tb-err" id="tm-err"></p>
+  </section>
+
+  <section class="tb-panel" id="p-json" role="tabpanel">
+    <h2>JSON 格式化</h2>
+    <p class="tb-hint">格式化、压缩、校验。解析失败会告诉你大概在第几个字符出错。</p>
+    <div class="tb-field"><label>JSON 文本</label><textarea class="tb" id="js-in" placeholder='{"hello":"world"}'></textarea></div>
+    <div class="tb-row"><button class="tb-btn primary" data-js="pretty">格式化</button><button class="tb-btn" data-js="minify">压缩</button><button class="tb-btn" data-js="check">校验</button><button class="tb-btn" id="js-clear">清空</button></div>
+    <div class="tb-field"><label>结果</label><textarea class="tb" id="js-out" readonly></textarea></div>
+    <div class="tb-row"><button class="tb-btn primary" data-copy="js-out">复制结果</button></div>
+    <p class="tb-err" id="js-err"></p>
+  </section>
+
+  <section class="tb-panel" id="p-regex" role="tabpanel">
+    <h2>正则测试</h2>
+    <p class="tb-hint">边写边看匹配结果。表达式不用写两边的斜杠，标志按需勾选，最多列出 200 处匹配。</p>
+    <div class="tb-grid">
+      <div class="tb-field"><label>表达式</label><input class="tb" id="re-pat" placeholder="\b\w+@\w+\.\w+\b"></div>
+      <div class="tb-field"><label>标志</label>
+        <div class="tb-row" id="re-flags" style="margin:0">
+          <label class="tb-check"><input type="checkbox" value="i" checked> i 忽略大小写</label>
+          <label class="tb-check"><input type="checkbox" value="g" checked> g 全局</label>
+          <label class="tb-check"><input type="checkbox" value="m"> m 多行</label>
+          <label class="tb-check"><input type="checkbox" value="s"> s 点号匹配换行</label>
+        </div>
+      </div>
+    </div>
+    <div class="tb-field" style="margin-top:14px"><label>测试文本</label><textarea class="tb" id="re-text" placeholder="粘贴要匹配的文本…"></textarea></div>
+    <div class="tb-out" id="re-count" style="margin-top:12px">—</div>
+    <div class="tb-field" style="margin-top:12px"><label>高亮预览</label><div class="tb-out" id="re-hl" style="max-height:220px">—</div></div>
+    <div class="tb-field" style="margin-top:12px"><label>匹配列表</label><div class="tb-out" id="re-list" style="max-height:200px">—</div></div>
+    <p class="tb-err" id="re-err"></p>
+  </section>
+
+  <section class="tb-panel" id="p-diff" role="tabpanel">
+    <h2>文本对比</h2>
+    <p class="tb-hint">按行比较两段文本，绿色是新增、红色是删除。两边加起来最多处理 500 行。</p>
+    <div class="tb-grid">
+      <div class="tb-field"><label>原文</label><textarea class="tb" id="df-a"></textarea></div>
+      <div class="tb-field"><label>新文</label><textarea class="tb" id="df-b"></textarea></div>
+    </div>
+    <div class="tb-row"><button class="tb-btn primary" id="df-run">开始对比</button><button class="tb-btn" id="df-swap">左右互换</button><button class="tb-btn" id="df-clear">清空</button></div>
+    <pre class="tb-out tb-diff" id="df-out" style="max-height:360px">—</pre>
+  </section>
+
+  <section class="tb-panel" id="p-pwd" role="tabpanel">
+    <h2>密码生成</h2>
+    <p class="tb-hint">用浏览器自带的加密随机数生成，不联网、不记录，也不会用 Math.random 凑数。</p>
+    <div class="tb-grid">
+      <div class="tb-field"><label>长度（<span id="pw-len-v">16</span> 位）</label><input class="tb" type="range" id="pw-len" min="4" max="64" value="16"></div>
+      <div class="tb-field"><label>生成数量</label><select class="tb" id="pw-count"><option>1</option><option>3</option><option selected>5</option><option>10</option></select></div>
+    </div>
+    <div class="tb-row" id="pw-opts">
+      <label class="tb-check"><input type="checkbox" value="lower" checked> 小写字母</label>
+      <label class="tb-check"><input type="checkbox" value="upper" checked> 大写字母</label>
+      <label class="tb-check"><input type="checkbox" value="digit" checked> 数字</label>
+      <label class="tb-check"><input type="checkbox" value="symbol"> 符号</label>
+      <label class="tb-check"><input type="checkbox" id="pw-ex"> 排除易混淆字符 0O1lI</label>
+    </div>
+    <div class="tb-row"><button class="tb-btn primary" id="pw-gen">生成</button><button class="tb-btn" data-copy="pw-out">复制全部</button></div>
+    <textarea class="tb" id="pw-out" readonly style="min-height:130px"></textarea>
+    <div class="tb-out" id="pw-strength" style="margin-top:12px">—</div>
+  </section>
+
+  <section class="tb-panel" id="p-color" role="tabpanel">
+    <h2>颜色转换</h2>
+    <p class="tb-hint">输入 HEX、RGB 或 HSL 任意一种，另外两种自动算出。也可以直接用取色器挑。</p>
+    <div class="tb-grid">
+      <div class="tb-field"><label>取色器</label><input class="tb" type="color" id="cl-pick" value="#7a5cb8"></div>
+      <div class="tb-field"><label>预览</label><div class="tb-swatch" id="cl-swatch"></div></div>
+    </div>
+    <div class="tb-grid" style="margin-top:14px">
+      <div class="tb-field"><label>HEX</label><input class="tb" id="cl-hex" placeholder="#7a5cb8"></div>
+      <div class="tb-field"><label>RGB</label><input class="tb" id="cl-rgb" placeholder="rgb(122, 92, 184)"></div>
+    </div>
+    <div class="tb-field" style="margin-top:14px"><label>HSL</label><input class="tb" id="cl-hsl" placeholder="hsl(263, 39%, 54%)"></div>
+    <div class="tb-row"><button class="tb-btn primary" data-copy="cl-hex">复制 HEX</button><button class="tb-btn" data-copy="cl-rgb">复制 RGB</button><button class="tb-btn" data-copy="cl-hsl">复制 HSL</button></div>
+    <p class="tb-err" id="cl-err"></p>
+  </section>
+
+  <section class="tb-panel" id="p-unit" role="tabpanel">
+    <h2>单位换算</h2>
+    <p class="tb-hint">长度、重量、温度、数据存储、速度、时间。改动数值或单位即时出结果；存储按 1 KB = 1024 B 计算。</p>
+    <div class="tb-row"><select class="tb" id="un-cat" style="width:auto;min-width:180px"></select></div>
+    <div class="tb-grid">
+      <div class="tb-field"><label>数值</label><input class="tb" type="number" id="un-val" value="1"></div>
+      <div class="tb-field"><label>从</label><select class="tb" id="un-from"></select></div>
+    </div>
+    <div class="tb-grid" style="margin-top:14px">
+      <div class="tb-field"><label>到</label><select class="tb" id="un-to"></select></div>
+      <div class="tb-field"><label>结果</label><div class="tb-out" id="un-out">—</div></div>
+    </div>
+    <div class="tb-row"><button class="tb-btn" id="un-swap">交换单位</button><button class="tb-btn primary" data-copy="un-out">复制结果</button></div>
+  </section>
+
+  <section class="tb-panel" id="p-hash" role="tabpanel">
+    <h2>文件哈希</h2>
+    <p class="tb-hint">在本地算出文件的 SHA 校验值，用来比对下载是否完整。文件不会上传；计算时会一次性读入内存，建议 200 MB 以内。</p>
+    <div class="tb-row"><select class="tb" id="hs-alg" style="width:auto"><option>SHA-256</option><option>SHA-1</option><option>SHA-384</option><option>SHA-512</option></select><input class="tb" type="file" id="hs-file" style="width:auto"></div>
+    <div class="tb-out" id="hs-out">尚未选择文件</div>
+    <div class="tb-row"><button class="tb-btn primary" data-copy="hs-out">复制结果</button></div>
+  </section>
+
+  <section class="tb-panel" id="p-img" role="tabpanel">
+    <h2>图片压缩</h2>
+    <p class="tb-hint">在本地把图片重新编码，可调质量和最大宽度，直接下载。原图不会改动，也不会上传。</p>
+    <div class="tb-row"><input class="tb" type="file" id="im-file" accept="image/*" style="width:auto"></div>
+    <div class="tb-grid">
+      <div class="tb-field"><label>质量（<span id="im-q-v">0.80</span>）</label><input class="tb" type="range" id="im-q" min="0.1" max="1" step="0.05" value="0.8"></div>
+      <div class="tb-field"><label>最大宽度（0 表示不缩放）</label><input class="tb" type="number" id="im-w" value="1600" min="0"></div>
+    </div>
+    <div class="tb-row"><select class="tb" id="im-fmt" style="width:auto"><option value="image/webp">WebP</option><option value="image/jpeg">JPEG</option><option value="image/png">PNG</option></select><button class="tb-btn primary" id="im-run">压缩</button><button class="tb-btn" id="im-dl" disabled>下载结果</button></div>
+    <div class="tb-out" id="im-out">尚未选择图片</div>
+    <div class="tb-row"><img id="im-preview" alt="压缩结果预览" style="max-width:100%;border-radius:var(--radius);display:none"></div>
+  </section>
+
+  <p class="tb-note">所有工具都在本页内运行，不调用外部接口，也不保存你的输入。页面刷新即清空。</p>
+</div>
+
+<footer class="site-foot">
+  <div class="foot-inner">
+    <div class="foot-left">
+      <a class="brand" href="/">RezeのBlog</a>
+      <p>© <span class="js-year">2026</span> RezeのBlog · 保留所有权利</p>
+    </div>
+    <div class="foot-links">
+      <a href="/">首页</a>
+      <a href="/writing">文章</a>
+      <a href="/toolbox">工具箱</a>
+      <a href="/archive">归档</a>
+      <a href="/about">关于</a>
+      <a href="/changelog">更新日志</a>
+      <a href="/feed.xml">feed.xml</a>
+      <a href="mailto:1806754672@qq.com">写信</a>
+    </div>
+  </div>
+  <div class="icp">
+    <span>© <span class="js-year">2026</span> reze520.pages.dev</span>
+    <span><span class="js-icp">个人站点</span></span>
+    <span>手写 HTML / CSS，无框架</span>
+  </div>
+</footer>
+
+<script>
+(function () {
+  try {
+    var root = document.documentElement;
+    var t = localStorage.getItem("reze-theme");
+    if (!t) t = window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+    root.setAttribute("data-theme", t);
+    root.setAttribute("data-skin", localStorage.getItem("reze-skin-v2") || root.getAttribute("data-skin") || "paper");
+  } catch (e) {}
+  var btn = document.getElementById("theme-btn");
+  if (btn) btn.addEventListener("click", function () {
+    var next = document.documentElement.getAttribute("data-theme") === "dark" ? "light" : "dark";
+    document.documentElement.setAttribute("data-theme", next);
+    try { localStorage.setItem("reze-theme", next); } catch (e) {}
+  });
+  var y = String(new Date().getFullYear());
+  Array.prototype.forEach.call(document.querySelectorAll(".js-year"), function (el) { el.textContent = y; });
+})();
+</script>
+
+<script>
+(function () {
+  "use strict";
+  var $ = function (s, r) { return (r || document).querySelector(s); };
+  var $$ = function (s, r) { return Array.prototype.slice.call((r || document).querySelectorAll(s)); };
+  function esc(s) {
+    return String(s).replace(/[&<>"']/g, function (c) {
+      return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c];
+    });
+  }
+  function fmtBytes(n) {
+    if (n < 1024) return n + " B";
+    if (n < 1048576) return (n / 1024).toFixed(1) + " KB";
+    return (n / 1048576).toFixed(2) + " MB";
+  }
+  function legacyCopy(v) {
+    var ta = document.createElement("textarea");
+    ta.value = v; ta.style.position = "fixed"; ta.style.opacity = "0";
+    document.body.appendChild(ta); ta.select();
+    var ok = false;
+    try { ok = document.execCommand("copy"); } catch (e) {}
+    document.body.removeChild(ta);
+    return ok;
+  }
+  function copyFrom(el, btn) {
+    var v = (el && el.dataset && el.dataset.copyText !== undefined) ? el.dataset.copyText
+      : (el && "value" in el && typeof el.value === "string") ? el.value : (el ? el.textContent : "");
+    var old = btn.textContent;
+    if (!v || !v.trim()) { btn.textContent = "没有内容"; setTimeout(function () { btn.textContent = old; }, 1200); return; }
+    function done(ok) { btn.textContent = ok ? "已复制" : "复制失败"; setTimeout(function () { btn.textContent = old; }, 1200); }
+    if (navigator.clipboard && window.isSecureContext) {
+      navigator.clipboard.writeText(v).then(function () { done(true); }, function () { done(legacyCopy(v)); });
+    } else done(legacyCopy(v));
+  }
+  document.addEventListener("click", function (e) {
+    var b = e.target && e.target.closest ? e.target.closest("[data-copy]") : null;
+    if (!b) return;
+    var el = document.getElementById(b.getAttribute("data-copy"));
+    if (el) copyFrom(el, b);
+  });
+
+  /* ---------- 标签切换 ---------- */
+  function activate(name, push) {
+    var tab = $$(".tb-tab").filter(function (t) { return t.getAttribute("data-tab") === name; })[0];
+    if (!tab) return;
+    $$(".tb-tab").forEach(function (t) { t.setAttribute("aria-selected", "false"); });
+    tab.setAttribute("aria-selected", "true");
+    $$(".tb-panel").forEach(function (p) { p.classList.remove("is-active"); });
+    var p = document.getElementById("p-" + name);
+    if (p) p.classList.add("is-active");
+    if (push && location.hash.slice(1) !== name) history.replaceState(null, "", "#" + name);
+  }
+  $$(".tb-tab").forEach(function (tab) {
+    tab.addEventListener("click", function () { activate(tab.getAttribute("data-tab"), true); });
+  });
+  window.addEventListener("hashchange", function () { activate(location.hash.slice(1), false); });
+  if (location.hash) activate(location.hash.slice(1), false);
+
+  /* ---------- 文本整理 ---------- */
+  var txIn = $("#tx-in"), txOut = $("#tx-out");
+  function txStats() {
+    var s = txIn.value;
+    var arr = Array.from(s);
+    var cn = (s.match(/[\u4e00-\u9fa5]/g) || []).length;
+    var words = (s.match(/[A-Za-z0-9_'-]+/g) || []).length;
+    var lines = s ? s.split(/\r\n|\r|\n/).length : 0;
+    var bytes = new TextEncoder().encode(s).length;
+    var data = [["字符", arr.length], ["不含空格", arr.filter(function (c) { return !/\s/.test(c); }).length], ["中文", cn], ["英文词", words], ["行数", lines], ["UTF-8 字节", bytes]];
+    $("#tx-stats").innerHTML = data.map(function (d) { return '<span class="tb-stat">' + d[0] + "<b>" + d[1] + "</b></span>"; }).join("");
+  }
+  txIn.addEventListener("input", txStats);
+  txStats();
+  $$("[data-tx]").forEach(function (b) {
+    b.addEventListener("click", function () {
+      var lines = txIn.value.split(/\r\n|\r|\n/), act = b.getAttribute("data-tx"), out;
+      if (act === "noempty") out = lines.filter(function (l) { return l.trim() !== ""; });
+      else if (act === "trim") out = lines.map(function (l) { return l.trim(); });
+      else if (act === "dedup") out = lines.filter(function (l, i) { return lines.indexOf(l) === i; });
+      else if (act === "sort") out = lines.slice().sort(function (a, c) { return a.localeCompare(c, "zh-CN"); });
+      else if (act === "number") out = lines.map(function (l, i) { return (i + 1) + ". " + l; });
+      else if (act === "lower") out = [txIn.value.toLowerCase()];
+      else out = [txIn.value.toUpperCase()];
+      txOut.value = out.join("\n");
+    });
+  });
+  $("#tx-back").addEventListener("click", function () { txIn.value = txOut.value; txStats(); });
+  $("#tx-clear").addEventListener("click", function () { txIn.value = ""; txOut.value = ""; txStats(); });
+
+  /* ---------- 编码转换 ---------- */
+  function b64e(s) {
+    var bytes = new TextEncoder().encode(s), bin = "";
+    for (var i = 0; i < bytes.length; i++) bin += String.fromCharCode(bytes[i]);
+    return btoa(bin);
+  }
+  function b64d(s) {
+    var bin = atob(s.replace(/\s/g, ""));
+    var bytes = Uint8Array.from(bin, function (c) { return c.charCodeAt(0); });
+    return new TextDecoder().decode(bytes);
+  }
+  function uniEsc(s) {
+    return Array.from(s).map(function (c) {
+      var n = c.codePointAt(0);
+      return n > 0xffff ? "\\u{" + n.toString(16) + "}" : "\\u" + ("0000" + n.toString(16)).slice(-4);
+    }).join("");
+  }
+  function htmlEnt(s) {
+    return s.replace(/[&<>"']/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]; });
+  }
+  $$("[data-en]").forEach(function (b) {
+    b.addEventListener("click", function () {
+      var s = $("#en-in").value, act = b.getAttribute("data-en"), r = "";
+      $("#en-err").textContent = "";
+      try {
+        if (act === "b64e") r = b64e(s);
+        else if (act === "b64d") r = b64d(s);
+        else if (act === "urle") r = encodeURIComponent(s);
+        else if (act === "urld") r = decodeURIComponent(s);
+        else if (act === "unie") r = uniEsc(s);
+        else if (act === "unid") r = s.replace(/\\u\{([0-9a-f]+)\}|\\u([0-9a-f]{4})/gi, function (_, a, c) { return String.fromCodePoint(parseInt(a || c, 16)); });
+        else if (act === "htmle") r = htmlEnt(s);
+        else {
+          var ta = document.createElement("textarea");
+          ta.innerHTML = s;
+          r = ta.value;
+        }
+        $("#en-out").value = r;
+      } catch (e) { $("#en-err").textContent = "转换失败：" + e.message; }
+    });
+  });
+  $("#en-swap").addEventListener("click", function () { $("#en-in").value = $("#en-out").value; });
+
+  /* ---------- 时间戳 ---------- */
+  function pad(n) { return ("0" + n).slice(-2); }
+  function toLocalInput(d) {
+    return d.getFullYear() + "-" + pad(d.getMonth() + 1) + "-" + pad(d.getDate()) + "T" + pad(d.getHours()) + ":" + pad(d.getMinutes()) + ":" + pad(d.getSeconds());
+  }
+  function tickNow() {
+    var n = Date.now();
+    $("#tm-now-s").value = Math.floor(n / 1000);
+    $("#tm-now-ms").value = n;
+  }
+  tickNow();
+  $("#tm-refresh").addEventListener("click", tickNow);
+  $("#tm-now").addEventListener("click", function () { $("#tm-date").value = toLocalInput(new Date()); $("#tm-date").dispatchEvent(new Event("input")); });
+  $("#tm-ts").addEventListener("input", function () {
+    var raw = this.value.trim(), el = $("#tm-from"), err = $("#tm-err");
+    err.textContent = "";
+    if (!raw) { el.textContent = "—"; return; }
+    var n = Number(raw);
+    if (!isFinite(n)) { err.textContent = "请输入纯数字时间戳"; el.textContent = "—"; return; }
+    var ms = Math.abs(n) < 1e11 ? n * 1000 : n;
+    var d = new Date(ms);
+    if (isNaN(d.getTime())) { err.textContent = "这个时间戳超出可表示范围"; el.textContent = "—"; return; }
+    el.textContent = "本地：" + d.toLocaleString("zh-CN", { hour12: false }) + "\nUTC ：" + d.toISOString().replace("T", " ").replace("Z", " UTC");
+  });
+  $("#tm-date").addEventListener("input", function () {
+    var d = new Date(this.value), s = $("#tm-to-s"), m = $("#tm-to-ms");
+    if (isNaN(d.getTime())) { s.textContent = "—"; m.textContent = "—"; return; }
+    s.dataset.copyText = String(Math.floor(d.getTime() / 1000));
+    m.dataset.copyText = String(d.getTime());
+    s.textContent = "秒：" + s.dataset.copyText;
+    m.textContent = "毫秒：" + m.dataset.copyText;
+  });
+
+  /* ---------- JSON ---------- */
+  $$("[data-js]").forEach(function (b) {
+    b.addEventListener("click", function () {
+      var s = $("#js-in").value.trim(), act = b.getAttribute("data-js"), out = $("#js-out"), err = $("#js-err");
+      err.textContent = "";
+      if (!s) { err.textContent = "先粘贴一段 JSON"; return; }
+      try {
+        var o = JSON.parse(s);
+        if (act === "pretty") out.value = JSON.stringify(o, null, 2);
+        else if (act === "minify") out.value = JSON.stringify(o);
+        else {
+          var kind = Array.isArray(o) ? "数组" : o === null ? "null" : typeof o;
+          var n = o && typeof o === "object" ? Object.keys(o).length : 1;
+          out.value = "合法 JSON\n顶层类型：" + kind + "\n顶层元素数：" + n + "\n字符数：" + s.length;
+        }
+      } catch (e) {
+        var m = /position (\d+)/.exec(e.message);
+        err.textContent = "解析失败：" + e.message + (m ? "（大约第 " + m[1] + " 个字符）" : "");
+      }
+    });
+  });
+  $("#js-clear").addEventListener("click", function () { $("#js-in").value = ""; $("#js-out").value = ""; $("#js-err").textContent = ""; });
+
+  /* ---------- 正则测试 ---------- */
+  function runRe() {
+    var pat = $("#re-pat").value, text = $("#re-text").value;
+    var flags = $$("#re-flags input:checked").map(function (c) { return c.value; }).join("");
+    var err = $("#re-err"), cnt = $("#re-count"), hl = $("#re-hl"), list = $("#re-list");
+    err.textContent = ""; cnt.textContent = "—"; hl.textContent = "—"; list.textContent = "—";
+    if (!pat) return;
+    var re;
+    try { re = new RegExp(pat, flags.indexOf("g") >= 0 ? flags : flags + "g"); }
+    catch (e) { err.textContent = "表达式有误：" + e.message; return; }
+    var ms = [], m, guard = 0;
+    while ((m = re.exec(text)) !== null && guard++ < 1000) {
+      if (m[0] === "") { re.lastIndex++; continue; }
+      ms.push({ index: m.index, text: m[0] });
+      if (flags.indexOf("g") < 0) break;
+    }
+    cnt.textContent = "共匹配 " + ms.length + " 处" + (ms.length >= 1000 ? "（已截断）" : "");
+    var html = "", last = 0;
+    ms.forEach(function (x) {
+      html += esc(text.slice(last, x.index)) + "<mark>" + esc(x.text) + "</mark>";
+      last = x.index + x.text.length;
+    });
+    html += esc(text.slice(last));
+    hl.innerHTML = html || "（没有匹配）";
+    list.textContent = ms.slice(0, 200).map(function (x, i) {
+      return (i + 1) + ". [" + x.index + "] " + x.text.replace(/\n/g, "\\n");
+    }).join("\n") || "（没有匹配）";
+  }
+  ["#re-pat", "#re-text"].forEach(function (s) { $(s).addEventListener("input", runRe); });
+  $$("#re-flags input").forEach(function (c) { c.addEventListener("change", runRe); });
+
+  /* ---------- 文本对比 ---------- */
+  function diffLines(a, b) {
+    var A = a.replace(/\r\n/g, "\n").split("\n"), B = b.replace(/\r\n/g, "\n").split("\n");
+    if (A.length + B.length > 500) return null;
+    var n = A.length, m = B.length, dp = [], i, j;
+    for (i = 0; i <= n; i++) dp.push(new Uint16Array(m + 1));
+    for (i = n - 1; i >= 0; i--) for (j = m - 1; j >= 0; j--)
+      dp[i][j] = A[i] === B[j] ? dp[i + 1][j + 1] + 1 : Math.max(dp[i + 1][j], dp[i][j + 1]);
+    var out = []; i = 0; j = 0;
+    while (i < n && j < m) {
+      if (A[i] === B[j]) { out.push([" ", A[i]]); i++; j++; }
+      else if (dp[i + 1][j] >= dp[i][j + 1]) { out.push(["-", A[i]]); i++; }
+      else { out.push(["+", B[j]]); j++; }
+    }
+    while (i < n) out.push(["-", A[i++]]);
+    while (j < m) out.push(["+", B[j++]]);
+    return out;
+  }
+  $("#df-run").addEventListener("click", function () {
+    var rows = diffLines($("#df-a").value, $("#df-b").value), box = $("#df-out");
+    box.innerHTML = "";
+    if (!rows) { box.textContent = "两边加起来超过 500 行，先精简一下再对比。"; return; }
+    var frag = document.createDocumentFragment(), add = 0, del = 0;
+    rows.forEach(function (r) {
+      var d = document.createElement("div");
+      d.className = r[0] === "+" ? "add" : r[0] === "-" ? "del" : "";
+      d.textContent = r[0] + " " + r[1];
+      if (r[0] === "+") add++; if (r[0] === "-") del++;
+      frag.appendChild(d);
+    });
+    var head = document.createElement("div");
+    head.textContent = "新增 " + add + " 行 · 删除 " + del + " 行";
+    box.appendChild(head); box.appendChild(frag);
+  });
+  $("#df-swap").addEventListener("click", function () {
+    var a = $("#df-a").value; $("#df-a").value = $("#df-b").value; $("#df-b").value = a;
+  });
+  $("#df-clear").addEventListener("click", function () { $("#df-a").value = ""; $("#df-b").value = ""; $("#df-out").textContent = "—"; });
+
+  /* ---------- 密码生成 ---------- */
+  function randInt(max) {
+    if (max <= 0) return 0;
+    var limit = Math.floor(4294967296 / max) * max, x;
+    do { var a = new Uint32Array(1); crypto.getRandomValues(a); x = a[0]; } while (x >= limit);
+    return x % max;
+  }
+  function shuffle(arr) {
+    for (var i = arr.length - 1; i > 0; i--) { var j = randInt(i + 1), t = arr[i]; arr[i] = arr[j]; arr[j] = t; }
+    return arr;
+  }
+  $("#pw-len").addEventListener("input", function () { $("#pw-len-v").textContent = this.value; });
+  $("#pw-gen").addEventListener("click", function () {
+    var sets = {
+      lower: "abcdefghijklmnopqrstuvwxyz",
+      upper: "ABCDEFGHIJKLMNOPQRSTUVWXYZ",
+      digit: "0123456789",
+      symbol: "!@#$%^&*()-_=+[]{};:,.?/"
+    };
+    var chosen = $$("#pw-opts input:checked").map(function (c) { return c.value; }).filter(function (v) { return v in sets; });
+    var out = $("#pw-out"), strength = $("#pw-strength");
+    if (!chosen.length) { out.value = ""; strength.textContent = "至少勾选一种字符类型"; return; }
+    var len = Number($("#pw-len").value);
+    if (len < chosen.length) { out.value = ""; strength.textContent = "长度至少要能放下所选的字符类型"; return; }
+    var exclude = $("#pw-ex").checked, pools = [], all = "";
+    chosen.forEach(function (k) {
+      var p = sets[k];
+      if (exclude) p = p.replace(/[0O1lI]/g, "");
+      pools.push(p); all += p;
+    });
+    all = Array.from(new Set(Array.from(all))).join("");
+    if (!all) { out.value = ""; strength.textContent = "排除易混淆字符后没有可用字符了"; return; }
+    var count = Number($("#pw-count").value), lines = [];
+    for (var c = 0; c < count; c++) {
+      var chars = pools.map(function (p) { return p[randInt(p.length)]; });
+      while (chars.length < len) chars.push(all[randInt(all.length)]);
+      lines.push(shuffle(chars).join(""));
+    }
+    out.value = lines.join("\n");
+    var bits = len * Math.log2(all.length);
+    strength.textContent = "字符集 " + all.length + " 种 · 约 " + Math.round(bits) + " bit 熵 · " +
+      (bits < 45 ? "偏短，建议加长" : bits < 70 ? "日常够用" : "很结实");
+  });
+
+  /* ---------- 颜色转换 ---------- */
+  function clamp255(v) { return Math.max(0, Math.min(255, Math.round(v))); }
+  function hslToRgb(h, s, l) {
+    h = ((h % 360) + 360) % 360; s /= 100; l /= 100;
+    var c = (1 - Math.abs(2 * l - 1)) * s, x = c * (1 - Math.abs((h / 60) % 2 - 1)), m = l - c / 2;
+    var r = 0, g = 0, b = 0;
+    if (h < 60) { r = c; g = x; }
+    else if (h < 120) { r = x; g = c; }
+    else if (h < 180) { g = c; b = x; }
+    else if (h < 240) { g = x; b = c; }
+    else if (h < 300) { r = x; b = c; }
+    else { r = c; b = x; }
+    return [clamp255((r + m) * 255), clamp255((g + m) * 255), clamp255((b + m) * 255)];
+  }
+  function rgbToHsl(r, g, b) {
+    r /= 255; g /= 255; b /= 255;
+    var mx = Math.max(r, g, b), mn = Math.min(r, g, b), d = mx - mn, h = 0, s = 0, l = (mx + mn) / 2;
+    if (d) {
+      s = d / (1 - Math.abs(2 * l - 1));
+      if (mx === r) h = 60 * (((g - b) / d) % 6);
+      else if (mx === g) h = 60 * ((b - r) / d + 2);
+      else h = 60 * ((r - g) / d + 4);
+    }
+    return [((h % 360) + 360) % 360, s * 100, l * 100];
+  }
+  function parseColor(s) {
+    s = s.trim(); var m;
+    if ((m = /^#?([0-9a-f]{3}|[0-9a-f]{6})$/i.exec(s))) {
+      var h = m[1];
+      if (h.length === 3) h = h[0] + h[0] + h[1] + h[1] + h[2] + h[2];
+      return [parseInt(h.slice(0, 2), 16), parseInt(h.slice(2, 4), 16), parseInt(h.slice(4, 6), 16)];
+    }
+    if ((m = /^rgba?\(\s*(\d+)\s*[, ]\s*(\d+)\s*[, ]\s*(\d+)/i.exec(s))) return [clamp255(+m[1]), clamp255(+m[2]), clamp255(+m[3])];
+    if ((m = /^hsla?\(\s*([\d.]+)\s*[, ]\s*([\d.]+)%\s*[, ]\s*([\d.]+)%/i.exec(s))) return hslToRgb(+m[1], +m[2], +m[3]);
+    return null;
+  }
+  function applyColor(src) {
+    var rgb = parseColor(src.value), err = $("#cl-err");
+    if (!rgb) { err.textContent = "认不出这个颜色值，支持 #RGB / #RRGGBB / rgb() / hsl()"; return; }
+    err.textContent = "";
+    var hex = "#" + rgb.map(function (v) { return ("0" + v.toString(16)).slice(-2); }).join("");
+    var hsl = rgbToHsl(rgb[0], rgb[1], rgb[2]);
+    if (src !== $("#cl-hex")) $("#cl-hex").value = hex;
+    if (src !== $("#cl-rgb")) $("#cl-rgb").value = "rgb(" + rgb.join(", ") + ")";
+    if (src !== $("#cl-hsl")) $("#cl-hsl").value = "hsl(" + Math.round(hsl[0]) + ", " + Math.round(hsl[1]) + "%, " + Math.round(hsl[2]) + "%)";
+    $("#cl-swatch").style.background = hex;
+    $("#cl-pick").value = hex;
+  }
+  ["#cl-hex", "#cl-rgb", "#cl-hsl"].forEach(function (s) { $(s).addEventListener("input", function () { applyColor(this); }); });
+  $("#cl-pick").addEventListener("input", function () { $("#cl-hex").value = this.value; applyColor($("#cl-hex")); });
+  $("#cl-hex").value = "#7a5cb8";
+  applyColor($("#cl-hex"));
+
+  /* ---------- 单位换算 ---------- */
+  var CATS = {
+    length: { label: "长度", u: { mm: 0.001, cm: 0.01, m: 1, km: 1000, in: 0.0254, ft: 0.3048, yd: 0.9144, mi: 1609.344, "海里": 1852 } },
+    mass: { label: "重量", u: { mg: 1e-6, g: 0.001, kg: 1, t: 1000, oz: 0.028349523125, lb: 0.45359237 } },
+    temp: { label: "温度", special: true, u: { "°C": 1, "°F": 1, K: 1 } },
+    data: { label: "数据存储", u: { B: 1, KB: 1024, MB: 1048576, GB: 1073741824, TB: 1099511627776, bit: 0.125 } },
+    speed: { label: "速度", u: { "m/s": 1, "km/h": 1 / 3.6, mph: 0.44704, "节": 0.514444 } },
+    time: { label: "时间", u: { ms: 0.001, s: 1, min: 60, h: 3600, d: 86400, week: 604800 } }
+  };
+  function toC(v, u) { return u === "°C" ? v : u === "°F" ? (v - 32) * 5 / 9 : v - 273.15; }
+  function fromC(c, u) { return u === "°C" ? c : u === "°F" ? c * 9 / 5 + 32 : c + 273.15; }
+  function fmtNum(v) {
+    if (!isFinite(v)) return "—";
+    if (v === 0) return "0";
+    var a = Math.abs(v);
+    if (a >= 1e12 || a < 1e-6) return v.toExponential(6);
+    return Number(v.toPrecision(10)).toLocaleString("zh-CN", { maximumFractionDigits: 8 });
+  }
+  function fillUnits() {
+    var cat = CATS[$("#un-cat").value], keys = Object.keys(cat.u);
+    $("#un-from").innerHTML = keys.map(function (k) { return '<option value="' + k + '">' + k + "</option>"; }).join("");
+    $("#un-to").innerHTML = keys.map(function (k) { return '<option value="' + k + '">' + k + "</option>"; }).join("");
+    $("#un-from").value = keys[0];
+    $("#un-to").value = keys[1] || keys[0];
+    calcUnit();
+  }
+  function calcUnit() {
+    var cat = CATS[$("#un-cat").value], v = Number($("#un-val").value), a = $("#un-from").value, b = $("#un-to").value;
+    if (!isFinite(v)) { $("#un-out").textContent = "请输入数值"; return; }
+    var r = cat.special ? fromC(toC(v, a), b) : v * cat.u[a] / cat.u[b];
+    $("#un-out").dataset.copyText = String(Number(r.toPrecision(10)));
+    $("#un-out").textContent = fmtNum(r) + " " + b;
+  }
+  $("#un-cat").innerHTML = Object.keys(CATS).map(function (k) { return '<option value="' + k + '">' + CATS[k].label + "</option>"; }).join("");
+  $("#un-cat").addEventListener("change", fillUnits);
+  ["#un-val", "#un-from", "#un-to"].forEach(function (s) { $(s).addEventListener("input", calcUnit); $(s).addEventListener("change", calcUnit); });
+  $("#un-swap").addEventListener("click", function () {
+    var a = $("#un-from").value; $("#un-from").value = $("#un-to").value; $("#un-to").value = a; calcUnit();
+  });
+  fillUnits();
+
+  /* ---------- 文件哈希 ---------- */
+  function doHash() {
+    var f = $("#hs-file").files[0], box = $("#hs-out");
+    if (!f) { box.textContent = "尚未选择文件"; return; }
+    if (!window.crypto || !crypto.subtle) { box.textContent = "当前环境不支持 Web Crypto，请用 https 打开本页"; return; }
+    box.textContent = "计算中… " + f.name + "（" + fmtBytes(f.size) + "）";
+    f.arrayBuffer().then(function (buf) {
+      return crypto.subtle.digest($("#hs-alg").value, buf);
+    }).then(function (d) {
+      var hex = Array.prototype.map.call(new Uint8Array(d), function (b) { return ("0" + b.toString(16)).slice(-2); }).join("");
+      box.textContent = f.name + "\n大小：" + fmtBytes(f.size) + "\n" + $("#hs-alg").value + "：" + hex;
+    }).catch(function (e) { box.textContent = "计算失败：" + e.message; });
+  }
+  $("#hs-file").addEventListener("change", doHash);
+  $("#hs-alg").addEventListener("change", doHash);
+
+  /* ---------- 图片压缩 ---------- */
+  var imBlob = null, imName = "";
+  $("#im-q").addEventListener("input", function () { $("#im-q-v").textContent = Number(this.value).toFixed(2); });
+  $("#im-file").addEventListener("change", function () {
+    imBlob = null; $("#im-dl").disabled = true;
+    var old = $("#im-preview");
+    if (old.dataset.u) URL.revokeObjectURL(old.dataset.u);
+    old.style.display = "none";
+    $("#im-out").textContent = this.files[0] ? "已选择 " + this.files[0].name + "（" + fmtBytes(this.files[0].size) + "），点「压缩」开始" : "尚未选择图片";
+  });
+  function loadImg(f) {
+    return new Promise(function (res, rej) {
+      var u = URL.createObjectURL(f), im = new Image();
+      im.onload = function () { res({ im: im, u: u }); };
+      im.onerror = function () { URL.revokeObjectURL(u); rej(new Error("读不出这张图片")); };
+      im.src = u;
+    });
+  }
+  $("#im-run").addEventListener("click", function () {
+    var f = $("#im-file").files[0], box = $("#im-out");
+    if (!f) { box.textContent = "先选一张图片"; return; }
+    box.textContent = "处理中…";
+    loadImg(f).then(function (o) {
+      var w = o.im.naturalWidth, h = o.im.naturalHeight, maxW = Number($("#im-w").value) || 0;
+      if (maxW > 0 && w > maxW) { h = Math.round(h * maxW / w); w = maxW; }
+      var c = document.createElement("canvas");
+      c.width = w; c.height = h;
+      var ctx = c.getContext("2d");
+      var mime = $("#im-fmt").value, q = Number($("#im-q").value);
+      if (mime !== "image/png") { ctx.fillStyle = "#ffffff"; ctx.fillRect(0, 0, w, h); }
+      ctx.drawImage(o.im, 0, 0, w, h);
+      return new Promise(function (res) {
+        c.toBlob(function (b) { res({ blob: b, mime: mime, w: w, h: h, src: o.u }); }, mime, mime === "image/png" ? undefined : q);
+      });
+    }).then(function (r) {
+      URL.revokeObjectURL(r.src);
+      if (!r.blob) { box.textContent = "这个格式浏览器不支持，换 WebP 或 JPEG 试试"; return; }
+      imBlob = r.blob;
+      var ext = r.blob.type === "image/png" ? "png" : r.blob.type === "image/webp" ? "webp" : "jpg";
+      imName = f.name.replace(/\.[^.]+$/, "") + "-compressed." + ext;
+      var ratio = f.size ? Math.round((1 - r.blob.size / f.size) * 100) : 0;
+      box.textContent = "原图：" + fmtBytes(f.size) + " → 结果：" + fmtBytes(r.blob.size) +
+        "（" + (ratio >= 0 ? "减少 " + ratio + "%" : "增大 " + Math.abs(ratio) + "%") + "）\n尺寸：" + r.w + " × " + r.h;
+      $("#im-dl").disabled = false;
+      var pv = $("#im-preview");
+      if (pv.dataset.u) URL.revokeObjectURL(pv.dataset.u);
+      pv.dataset.u = URL.createObjectURL(r.blob);
+      pv.src = pv.dataset.u;
+      pv.style.display = "block";
+    }).catch(function (e) { box.textContent = "处理失败：" + e.message; });
+  });
+  $("#im-dl").addEventListener("click", function () {
+    if (!imBlob) return;
+    var u = URL.createObjectURL(imBlob), a = document.createElement("a");
+    a.href = u; a.download = imName;
+    document.body.appendChild(a); a.click(); document.body.removeChild(a);
+    setTimeout(function () { URL.revokeObjectURL(u); }, 2000);
+  });
+})();
+</script>
+</body>
+</html>

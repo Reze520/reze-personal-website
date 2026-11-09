@@ -1278,12 +1278,14 @@
         var hay = ((m.title || "") + " " + (m.text || "") + " " + (m.tags || []).join(" ")).toLowerCase();
         return !curQ || hay.indexOf(curQ) !== -1;
       });
-      curPages = Math.max(1, Math.floor(list.length / PER));
-      if (curPage >= curPages) curPage = curPages - 1;
+      var paged = pageSlice(list, curPage, PER);
+      curPages = paged.pages;
+      if (curPage >= curPages) {
+        curPage = curPages - 1;
+        paged = pageSlice(list, curPage, PER);
+      }
       if (curPage < 0) curPage = 0;
-      var from = curPage * PER;
-      var to = curPage === curPages - 1 ? list.length : from + PER;
-      var slice = list.slice(from, to);
+      var slice = paged.slice;
       listEl.innerHTML = (slice.length
         ? slice.map(momentMarkup).join("")
         : '<div class="g-empty">没有找到相关记录</div>') +
@@ -1424,6 +1426,19 @@
     return out;
   }
 
+  /* 均摊分页：页数取 ceil，余数从第一页起每页多分一篇。
+     364 篇按 12 篇一页是 31 页，23 页排 12 篇、8 页排 11 篇，
+     不会出现末页只剩几篇、也不会把 16 篇塞进末页。 */
+  function pageSlice(list, page, per) {
+    var n = list.length;
+    var pages = Math.max(1, Math.ceil(n / per));
+    var base = Math.floor(n / pages);
+    var extra = n % pages;
+    var from = page * base + Math.min(page, extra);
+    var size = base + (page < extra ? 1 : 0);
+    return { pages: pages, from: from, slice: list.slice(from, from + size) };
+  }
+
   function buildPager(pages, page) {
     if (pages <= 1) return "";
     var h = '<div class="g-pager">';
@@ -1494,11 +1509,13 @@
         var okTag = !t || (p.tags || []).indexOf(t) !== -1;
         return okCat && okTag;
       });
-      var pages = Math.max(1, Math.floor(list.length / PER));
-      if (page >= pages) page = pages - 1;
-      var start = page * PER;
-      var end = page === pages - 1 ? list.length : start + PER;
-      var slice = list.slice(start, end);
+      var paged = pageSlice(list, page, PER);
+      var pages = paged.pages;
+      if (page >= pages) {
+        page = pages - 1;
+        paged = pageSlice(list, page, PER);
+      }
+      var slice = paged.slice;
       var feature = "";
       var flow = slice;
       /* 首页第一页、没开分类或标签筛选时，置顶几篇单独排成一组；
@@ -1612,11 +1629,13 @@
         var okTag = !t || (p.tags || []).indexOf(t) !== -1;
         return okCat && okTag;
       });
-      var pages = Math.max(1, Math.floor(list.length / PER));
-      if (page >= pages) page = pages - 1;
-      var start = page * PER;
-      var end = page === pages - 1 ? list.length : start + PER;
-      var slice = list.slice(start, end);
+      var paged = pageSlice(list, page, PER);
+      var pages = paged.pages;
+      if (page >= pages) {
+        page = pages - 1;
+        paged = pageSlice(list, page, PER);
+      }
+      var slice = paged.slice;
       listEl.innerHTML = (slice.length
         ? slice.map(glassPostMarkup).join("")
         : '<div class="g-empty">这里还没有文章</div>') + buildPager(pages, page);
