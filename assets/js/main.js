@@ -2067,7 +2067,7 @@
       "</div></div>";
 
     right.innerHTML =
-      '<div class="g-card">' +
+      '<div class="g-card g-card-mfeed">' +
       '<div class="g-card-head"><span class="t">' + ICONS.clock +
       '站务</span><a class="more" href="/moments">更多</a></div>' +
       '<ul class="g-feed">' + feed + "</ul></div>" +

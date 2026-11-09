@@ -20,7 +20,7 @@
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20viewBox%3D%270%200%2064%2064%27%3E%3Crect%20width%3D%2764%27%20height%3D%2764%27%20rx%3D%2715%27%20fill%3D%27%23241f33%27%2F%3E%3Cg%20transform%3D%27translate%286%2C6%29%20scale%282.1667%29%27%3E%3Cpath%20d%3D%27M21%2012.79A9%209%200%201%201%2011.21%203%207%207%200%200%200%2021%2012.79z%27%20fill%3D%27%23f6f1e7%27%2F%3E%3C%2Fg%3E%3C%2Fsvg%3E">
-<link rel="stylesheet" href="assets/css/style.css?v=20261109m">
+<link rel="stylesheet" href="assets/css/style.css?v=20261109n">
   <link rel="alternate" type="application/rss+xml" title="RezeのBlog" href="feed.xml">
 </head>
 <body class="has-app">
@@ -96,10 +96,11 @@
 <h2>2026 年 11 月<span class="cl-count">53 条</span></h2>
 <ol class="cl-list">
 <li class="cl-item"><details open>
-<summary><span class="cl-kind" data-k="修复">修复</span><span class="cl-t">站务页条目与分页之间被撑出半屏空白</span><span class="cl-n">2 项</span></summary>
+<summary><span class="cl-kind" data-k="修复">修复</span><span class="cl-t">站务页半屏空白，三列按内容收口</span><span class="cl-n">3 项</span></summary>
 <div class="cl-body"><ul>
-<li>站务页此前为「三列等高」把列表容器拉成 <code>flex:1</code>、再给分页条 <code>margin-top:auto</code>，右栏一长，分页条就被钉到列底，13 条记录与分页之间空出约 524px，滚动到那里像内容丢了。</li>
-<li>改为分页条紧跟最后一条记录，列高交给侧栏，分栏线仍拉齐。顺带把站务条目的头像统一成静态图，与左栏一致。</li>
+<li>站务页此前为「三列等高」把列表容器拉成 <code>flex:1</code>、再给分页条 <code>margin-top:auto</code>，右栏一长，分页条就被钉到列底，13 条记录与分页之间空出约 524px，滚动到那里像内容丢了。现改为分页条紧跟最后一条记录，列高交给侧栏，分栏线仍拉齐。</li>
+<li>右栏那张「站务」卡列的就是本页内容，507px 高却把整列拖成最长；站务页收起它和会随阅读历史忽长忽短的「继续读」，右栏与中栏齐平，整页高度从 2421px 收到约 1940px，其它页面照旧显示。</li>
+<li>站务条目的头像统一成静态图，与左栏一致。</li>
 </ul></div>
 </details></li>
 <li class="cl-item"><details>
@@ -816,11 +817,11 @@
   } catch (e) {}
 })();
 </script>
-<script defer src="assets/js/data.meta.js?v=20261109m"></script>
-<script defer src="assets/js/cloud.js?v=20261109m"></script>
-<script defer src="assets/js/weather.js?v=20261109m"></script>
-<script defer src="assets/js/playlist.js?v=20261109m"></script>
-<script defer src="assets/js/main.js?v=20261109m"></script>
+<script defer src="assets/js/data.meta.js?v=20261109n"></script>
+<script defer src="assets/js/cloud.js?v=20261109n"></script>
+<script defer src="assets/js/weather.js?v=20261109n"></script>
+<script defer src="assets/js/playlist.js?v=20261109n"></script>
+<script defer src="assets/js/main.js?v=20261109n"></script>
 <script>
 /* 更新日志的一键展开／收起。details 自己就能点，这段只管批量开关。 */
 document.addEventListener("click", function (e) {

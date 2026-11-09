@@ -11715,6 +11715,17 @@ html:not([data-theme="dark"]) .ft-mini { border-left-color: rgba(124, 92, 190, .
   margin-top: 16px;
 }
 
+/* 站务页右栏那张「站务」卡列的就是本页这 74 条，再列一遍是重复，
+   而且它 507px 高，把右栏拖成最长列，主栏底下跟着空出半屏。本页收起，
+   其它页照旧留着当入口。续读卡会随阅读历史忽长忽短，也一并收起，
+   让右栏稳定在 1500px 上下，和中栏的 13 条正好齐平。 */
+.app[data-page="moments"] #app-right .g-card-mfeed,
+.app[data-page="timeline"] #app-right .g-card-mfeed,
+.app[data-page="moments"] #app-right .rec-continue,
+.app[data-page="timeline"] #app-right .rec-continue {
+  display: none;
+}
+
 
 /* ============================================================
    36. 参考源 / 词条：两页共用的索引版式
