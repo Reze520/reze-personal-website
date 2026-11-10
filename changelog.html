@@ -104,7 +104,7 @@ else c.addEventListener("load", run, {once:true});
 <button type="button" class="cl-btn" data-cl-all="0">全部收起</button>
 </div>
 <nav class="cl-nav" aria-label="按时间跳转">
-<a href="#cl-202611">2026.11<i>67 条</i></a>
+<a href="#cl-202611">2026.11<i>65 条</i></a>
 <a href="#cl-202610">2026.10<i>10 条</i></a>
 <a href="#cl-202604">2026.04<i>6 条</i></a>
 <a href="#cl-202506">2025.06<i>1 条</i></a>
@@ -113,36 +113,17 @@ else c.addEventListener("load", run, {once:true});
 </nav>
 </header>
 <section class="cl-month" id="cl-202611">
-<h2>2026 年 11 月<span class="cl-count">67 条</span></h2>
+<h2>2026 年 11 月<span class="cl-count">65 条</span></h2>
 <ol class="cl-list">
 <li class="cl-item"><details open>
-<summary><span class="cl-kind" data-k="功能">功能</span><span class="cl-t">剧情全集接上三处入口</span><span class="cl-n">5 项</span></summary>
+<summary><span class="cl-kind" data-k="功能">功能</span><span class="cl-t">剧情全集接上三处入口</span><span class="cl-n">6 项</span></summary>
 <div class="cl-body"><ul>
 <li><code>/gf-story</code> 是独立静态页，不在 <code>POSTS</code> 里。二百五十万字进文章表，列表、字数统计、接着读都会被带偏；代价是站上原本只有首页一张专题卡能找到它，Sitemap、站内搜索、归档页都没有。</li>
-<li>Sitemap 补一条 <code>/gf-story</code>，共 392 条：12 个静态页加 380 篇。</li>
+<li>Sitemap 补一条 <code>/gf-story/</code>，共 392 条：12 个静态页加 380 篇。</li>
 <li>站内搜索的索引末尾挂了一条常在条目，标题、摘要、标签、分类都参与匹配，搜「少女前线」「剧情」能出结果，链接直接指向该页；全文索引补全后重建索引，这条仍在。</li>
 <li>归档页顶部那行规模统计后面加「剧情全集」，与「参考源」并列。</li>
 <li>该页 head 原来只有 <code>title</code>，补了 <code>description</code>、<code>canonical</code>、<code>og</code> 与 twitter 卡片。</li>
 <li>版本号 20261110k。</li>
-</ul></div>
-</details></li>
-<li class="cl-item"><details>
-<summary><span class="cl-kind" data-k="基建">基建</span><span class="cl-t">首屏少下一百多 KB</span><span class="cl-n">6 项</span></summary>
-<div class="cl-body"><ul>
-<li>正文图片的 <code>loading="lazy"</code> 一直是插进 DOM 之后才由 <code>applyImgSize()</code> 补的，浏览器解析到 <code>src</code> 时已经开始下载，改属性收不回请求。现在拼进 <code>innerHTML</code> 之前就带上 <code>loading</code> 与 <code>decoding</code>，宽高仍由尺寸表补。</li>
-<li>头像用的是 600×600、106 KB 的 PNG，而左栏那个框只有 92px。加 <code>srcset</code>，2 倍屏取 256px 那张（27 KB），3 倍屏才回到原图。</li>
-<li>四张背景图原是 2560×1600，重压成 1920×1200、质量 62：暮色林线 175→85 KB，紫雾 364→209 KB，夜里那座桥 76→44 KB。封面里 6 张超过 120 KB 的一并重压，27 张合计 3.6 MB → 1.3 MB。</li>
-<li>Clarity 原在 <code>&lt;head&gt;</code> 里同步注入，改到 <code>load</code> 之后空闲时取。第一版把监听挂在 <code>document</code> 上，<code>load</code> 不发到那里，脚本一次都没加载；改挂 <code>window</code> 才恢复。</li>
-<li>农历库 <code>lunar.js</code> 443 KB（gzip 108 KB）原来进页面就在空闲时取。改成日历进入视口附近才取，窄屏上日历排在正文后面，滚不到就不下；日历被折叠时另设 12 秒兜底。</li>
-<li>版本号 20261110i。</li>
-</ul></div>
-</details></li>
-<li class="cl-item"><details>
-<summary><span class="cl-kind" data-k="界面">界面</span><span class="cl-t">换一张头像</span><span class="cl-n">3 项</span></summary>
-<div class="cl-body"><ul>
-<li>纸样下的左栏个人卡与站务条目换成新的 <code>avatar.png</code>（600×600），缩略图 <code>avatar-256.png</code> 同步更新；这些位置读的是同一个 <code>avatarSrc()</code>，换文件即全部生效。原图右上角的 <code>@sea</code> 水印抹掉了，那块是整片纯黑头发，按黑填平，没有拼接痕迹。</li>
-<li>淡紫仍用原来那张 GIF，没有动；切到纸样才换成静态图，两边各自保留自己的头像。</li>
-<li>版本号 20261110f。</li>
 </ul></div>
 </details></li>
 <li class="cl-item"><details>
