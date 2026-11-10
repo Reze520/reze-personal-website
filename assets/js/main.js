@@ -2768,7 +2768,8 @@ function archiveMainHtml() {
 
   return (
     '<div class="arc-top"><p class="g-scale">' + listScaleText() +
-    ' · <a class="g-archlink" href="/sources">参考源</a></p>' +
+    ' · <a class="g-archlink" href="/sources">参考源</a>' +
+    ' · <a class="g-archlink" href="/gf-story">剧情全集</a></p>' +
     '<div class="arc-jump">' + jump + "</div></div>" +
     '<div class="arc-blocks" id="arc-blocks">' + blocks + "</div>"
   );
@@ -6719,6 +6720,15 @@ function interceptLinks(e) {
     tools.insertBefore(trigger, tools.firstChild);
 
     // 索引先只拿元数据（标题/摘要/标签/分类），正文等用户真的要搜再补
+    /* 剧情全集是独立静态页，不在 POSTS 里（250 万字不进文章表），
+       但它确实是站上的内容；搜索里挂一条常在索引，搜「少女前线」「剧情」能找到。 */
+    var GF_STORY = {
+      id: "gf-story",
+      title: "少女前线 · 剧情全集",
+      cat: "专题",
+      excerpt: "主线 1–15 章（含紧急 / 夜战）、大型活动、活动剧情、角色三改与皮肤剧情，原分节逐字移植 + UP 主剧情分析，单页通读。",
+      tags: ["少女前线", "剧情", "游戏考据", "专题"]
+    };
     var index = [];
     function buildIndex() {
       index = orderedPosts().map(function (p) {
@@ -6732,6 +6742,16 @@ function interceptLinks(e) {
           ).toLowerCase(),
           body: body || p.excerpt || ""
         };
+      });
+      index.push({
+        post: GF_STORY,
+        href: "/gf-story",
+        titleLow: GF_STORY.title.toLowerCase(),
+        tagsLow: GF_STORY.tags.join(" ").toLowerCase(),
+        haystack: (
+          GF_STORY.title + " " + GF_STORY.excerpt + " " + GF_STORY.tags.join(" ") + " " + GF_STORY.cat
+        ).toLowerCase(),
+        body: GF_STORY.excerpt
       });
     }
     buildIndex();
@@ -6799,8 +6819,8 @@ function interceptLinks(e) {
           return (
             '<a class="search-item" data-i="' +
             i +
-            '" href="/p/' +
-            encodeURIComponent(p.id) +
+            '" href="' +
+            (item.href || postHref(p)) +
             '">' +
             "<h4>" +
             highlight(p.title, terms) +
