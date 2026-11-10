@@ -924,15 +924,18 @@
   }
 
   /* ---------- 头像与一句话简介 ----------
-     纸样（新界面）用静止帧 assets/uploads/avatar.png；淡紫与极简（旧界面）
-     继续放 SITE.avatar 指的那张 GIF。动图挂在页首会拖住整页重绘，纸样只讲
-     纸面，动的地方越少越好；旧界面原本就有那张动图，留着不动。
+     两套皮肤统一用静止头像 assets/uploads/avatar.png（600×600）。旧的那张
+     GIF 只留作存档，不再挂出去：动图会拖住页首整页重绘，换皮肤时也不会再
+     跳回旧头像。后台若把头像路径改成别的静态图，仍然按路径走。
      皮肤在 <head> 的内联脚本里已经写好，渲染时读到的即是最终值。
      简介只去掉末尾那一个句号：它下面就是三个数字，句号压在那里像把话说死了。 */
   function avatarSrc() {
     var a = String(SITE.avatar || "");
-    if (document.documentElement.getAttribute("data-skin") !== "paper") return a;
-    if (!a || /\.gif(\W|$)/i.test(a)) return "assets/uploads/avatar.png";
+    if (!a || /\.gif(\W|$)/i.test(a)) {
+      /* 图片按文件名访问，_headers 给的是 7 天缓存；换头像时带上版本号，
+         老访客不会还看着上一张。换图记得同步改这里。 */
+      return "assets/uploads/avatar.png?v=20261110e";
+    }
     return a;
   }
   function bioText() {
