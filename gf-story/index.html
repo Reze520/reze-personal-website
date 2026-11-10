@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>少女前线 · 剧情全集（萌百移植 + 换源补齐）</title>
+<title>少女前线 · 剧情全集</title>
 <style>
 :root{--bg:#f7f7f4;--panel:#ffffff;--ink:#222;--muted:#777;--accent:#c0392b;--line:#e3e3df;--link:#1a5fb4;}
 *{box-sizing:border-box}
@@ -40,13 +40,10 @@ body{margin:0;font-family:-apple-system,"PingFang SC","Microsoft YaHei",Segoe UI
 #topbar{position:fixed;top:0;left:320px;right:0;height:0}
 #menuBtn{display:none}
 @media(max-width:860px){#sidebar{position:fixed;left:0;top:0;z-index:50;transform:translateX(-100%);transition:.25s}#sidebar.open{transform:none}#content{margin:0;padding:20px 16px}#menuBtn{display:block;position:fixed;top:10px;left:10px;z-index:60;background:var(--accent);color:#fff;border:none;border-radius:8px;padding:8px 12px;font-size:14px}#topbar{left:0}}
-</style>
-<style>
 .back-bar{position:fixed;top:0;left:0;right:0;z-index:9999;display:flex;align-items:center;justify-content:space-between;padding:8px 16px;background:rgba(20,17,29,.92);color:#f6f1e7;font-size:13px;font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif;box-shadow:0 1px 8px rgba(0,0,0,.25);box-sizing:border-box}
 .back-bar a{color:#f6f1e7;text-decoration:none}
 .back-bar .bb-home{font-weight:600}
 .back-bar .bb-note{opacity:.72;font-size:12px}
-.layout{margin-top:42px}
 </style>
 </head>
 <body>
@@ -69,97 +66,83 @@ body{margin:0;font-family:-apple-system,"PingFang SC","Microsoft YaHei",Segoe UI
 </li>
 <li class="toc-file"><a href="#h1" class="toc-link">第零战役</a>
 <ul>
-<li><a href="#h2" class="toc-sub">战役简介</a></li>
 <li><a href="#h3" class="toc-sub">剧情文本</a></li>
 </ul>
 </li>
 <li class="toc-file"><a href="#h1" class="toc-link">第一战役</a>
 <ul>
-<li><a href="#h2" class="toc-sub">战役简介</a></li>
 <li><a href="#h3" class="toc-sub">夜间模式</a></li>
 <li><a href="#h4" class="toc-sub">剧情文本</a></li>
 </ul>
 </li>
 <li class="toc-file"><a href="#h1" class="toc-link">第二战役</a>
 <ul>
-<li><a href="#h2" class="toc-sub">战役简介</a></li>
 <li><a href="#h3" class="toc-sub">夜间模式</a></li>
 <li><a href="#h4" class="toc-sub">剧情文本</a></li>
 </ul>
 </li>
 <li class="toc-file"><a href="#h1" class="toc-link">第三战役</a>
 <ul>
-<li><a href="#h2" class="toc-sub">战役简介</a></li>
 <li><a href="#h3" class="toc-sub">夜间模式</a></li>
 <li><a href="#h4" class="toc-sub">剧情文本</a></li>
 </ul>
 </li>
 <li class="toc-file"><a href="#h1" class="toc-link">第四战役</a>
 <ul>
-<li><a href="#h2" class="toc-sub">战役简介</a></li>
 <li><a href="#h3" class="toc-sub">夜间模式</a></li>
 <li><a href="#h4" class="toc-sub">剧情文本</a></li>
 </ul>
 </li>
 <li class="toc-file"><a href="#h1" class="toc-link">第五战役</a>
 <ul>
-<li><a href="#h2" class="toc-sub">战役简介</a></li>
 <li><a href="#h3" class="toc-sub">夜间模式</a></li>
 <li><a href="#h4" class="toc-sub">剧情文本</a></li>
 </ul>
 </li>
 <li class="toc-file"><a href="#h1" class="toc-link">第六战役</a>
 <ul>
-<li><a href="#h2" class="toc-sub">战役简介</a></li>
 <li><a href="#h3" class="toc-sub">夜战模式</a></li>
 <li><a href="#h4" class="toc-sub">剧情文本</a></li>
 </ul>
 </li>
 <li class="toc-file"><a href="#h1" class="toc-link">第七战役</a>
 <ul>
-<li><a href="#h2" class="toc-sub">战役简介</a></li>
 <li><a href="#h3" class="toc-sub">夜战模式</a></li>
 <li><a href="#h5" class="toc-sub">剧情文本</a></li>
 </ul>
 </li>
 <li class="toc-file"><a href="#h1" class="toc-link">第八战役</a>
 <ul>
-<li><a href="#h2" class="toc-sub">战役简介</a></li>
 <li><a href="#h3" class="toc-sub">夜间模式</a></li>
 <li><a href="#h4" class="toc-sub">剧情文本</a></li>
 </ul>
 </li>
 <li class="toc-file"><a href="#h1" class="toc-link">第九战役</a>
 <ul>
-<li><a href="#h2" class="toc-sub">战役简介</a></li>
 <li><a href="#h3" class="toc-sub">夜战模式</a></li>
 <li><a href="#h4" class="toc-sub">剧情文本</a></li>
 </ul>
 </li>
 <li class="toc-file"><a href="#h1" class="toc-link">第十战役</a>
 <ul>
-<li><a href="#h2" class="toc-sub">战役简介</a></li>
 <li><a href="#h3" class="toc-sub">夜间模式</a></li>
 <li><a href="#h4" class="toc-sub">剧情文本</a></li>
 </ul>
 </li>
 <li class="toc-file"><a href="#h1" class="toc-link">第十一战役</a>
 <ul>
-<li><a href="#h2" class="toc-sub">战役简介</a></li>
 <li><a href="#h3" class="toc-sub">夜间模式</a></li>
 <li><a href="#h4" class="toc-sub">剧情文本</a></li>
 </ul>
 </li>
 <li class="toc-file"><a href="#h1" class="toc-link">第十二战役</a>
 <ul>
-<li><a href="#h2" class="toc-sub">战役简介</a></li>
 <li><a href="#h3" class="toc-sub">夜间模式</a></li>
 <li><a href="#h4" class="toc-sub">剧情文本</a></li>
 </ul>
 </li>
 <li class="toc-file"><a href="#h1" class="toc-link">第十三战役</a>
 <ul>
-<li><a href="#h2" class="toc-sub">战役简介</a></li>
 <li><a href="#h3" class="toc-sub">夜间模式</a></li>
 <li><a href="#h4" class="toc-sub">剧情文本</a></li>
 </ul>
@@ -627,26 +610,12 @@ body{margin:0;font-family:-apple-system,"PingFang SC","Microsoft YaHei",Segoe UI
 </nav>
 <main id="content">
 <section class="chapter" id="intro">
-<h1>少女前线 · 剧情全集（萌百移植 + 换源补齐）</h1>
-<p>本页面是把《少女前线》剧情文案按"萌娘百科（moegirl）原有分节"移植汇编而成的单页合集，并补入了萌百未收录的终章，以及玩家 / UP 主的剧情分析。全部内容均标注出处，便于溯源。</p>
-<h2>资料来源与说明</h2>
-<ul>
-<li><strong>主线（序章 ~ 第十三战役）</strong>：逐字移植自萌娘百科（moegirl）对应战役页，保留其折叠剧情块（{{Hide}}）原样结构。</li>
-<li><strong>主线第十四、第十五战役（慢休克 / 卷积核 / 零态潮汐）</strong>：萌百未收录，由 GFwiki、gf-ogas.wiki、百度百科、mzh 萌百、NGA、微信公众号"情报姬"等公开源<strong>换源整理</strong>（剧情概述 + 关键台词片段 + 玩家解读），已在本篇页头注明。</li>
-<li><strong>支线活动 / 大型活动</strong>：2016 秋 ~ 2022 夏全部大型活动，移植自萌百对应活动页。</li>
-<li><strong>角色剧情</strong>：精选剧情核心角色，仅抽取"角色设定 / 角色台词 / 各活动剧情 / 心智升级(三改) / 皮肤(星之茧等) / X相关"等剧情小节，已剔除纯枪械考据。</li>
-<li><strong>UP 主与玩家分析</strong>：B 站专栏、NGA 考据长文、微信公众号等公开分析的摘录，均标链接。</li>
-</ul>
+<h1>少女前线 · 剧情全集</h1>
+<p>本页面是《少女前线》主线战役、支线活动、角色剧情与玩家 / UP 主分析的剧情合集，按原分节整理，可直接阅读剧情文本。</p>
 <h2>使用方式</h2>
 <p>左侧为分级目录，可点击跳转；顶部搜索框可过滤目录条目。每个章节内的小标题也带有锚点。</p>
-<p><em>注：本页纯为个人学习 / 索引用途的剧情汇编，版权归各原始出处所有。</em></p>
 </section>
 <section class="chapter">
-<hr>
-<blockquote>本页剧情文案移植自萌娘百科：<a href="https://moegirl.icu/index.php?title=%E5%B0%91%E5%A5%B3%E5%89%8D%E7%BA%BF/%E5%BA%8F%E7%AB%A0&amp;variant=zh-cn" target="_blank" rel="noopener">https://moegirl.icu/index.php?title=%E5%B0%91%E5%A5%B3%E5%89%8D%E7%BA%BF/%E5%BA%8F%E7%AB%A0&amp;variant=zh-cn</a><br>
-<br>
-原文按萌娘百科分节（含 `` 剧情块）原样移植，仅做 Markdown 排版转换，剧情文字保持原样。</blockquote>
-<hr>
 <h1 id="h1">EP.00 序章</h1>
 <blockquote><strong>本页面是正式进入少女前线游戏第一战役之前的序章剧情，可能涉及到剧透，请按需观看</strong></blockquote>
 <h2 id="h2">剧情文本</h2>
@@ -783,17 +752,9 @@ M4A1：为了大家，我一定要做到。<br>
 <p>序章剧情结束，《少女前线》战役剧情正式开始</p>
 </section>
 <section class="chapter">
-<hr>
-<blockquote>本页剧情文案移植自萌娘百科：<a href="https://moegirl.icu/index.php?title=%E5%B0%91%E5%A5%B3%E5%89%8D%E7%BA%BF/%E7%AC%AC%E9%9B%B6%E6%88%98%E5%BD%B9&amp;variant=zh-cn" target="_blank" rel="noopener">https://moegirl.icu/index.php?title=%E5%B0%91%E5%A5%B3%E5%89%8D%E7%BA%BF/%E7%AC%AC%E9%9B%B6%E6%88%98%E5%BD%B9&amp;variant=zh-cn</a><br>
-<br>
-原文按萌娘百科分节（含 `` 剧情块）原样移植，仅做 Markdown 排版转换，剧情文字保持原样。</blockquote>
-<hr>
 <h1 id="h1">EP.00 第零战役 种子</h1>
 <p>EP.<strong>00 第零战役</strong><br>
 <em>被水淹没，不知所措！</em></p>
-<h2 id="h2">战役简介</h2>
-<p>本战役是玩家打通紧急4-4之后出现的一组战役，由4组普通战役及4组后勤支援组成，但不排除在以后的更新中出现紧急和夜战图的可能</p>
-<ul><li>本组战役难度较高，无论是敌人的种类还是强度都有着质的提高，建议指挥官有至少2队满扩编队再进行挑战</li><li>BOSS图（0-4最终挑战）同时有多组BOSS出现，对指挥官的多梯队运用和各梯队强度是个不小的考验</li><li>本组战役的部分战役地图相对较大，如果挑战银牌成就的话可能会需要稍长时间</li></ul>
 <h2 id="h3">剧情文本</h2>
 <h4 id="h4">0-1 热身运动</h4>
 <p>一个月前，S09区争端地带……</p>
@@ -945,18 +906,10 @@ M16……咳……你在哪儿……</p>
 ……对我而言，那一定是最好的结局。</p>
 </section>
 <section class="chapter">
-<hr>
-<blockquote>本页剧情文案移植自萌娘百科：<a href="https://moegirl.icu/index.php?title=%E5%B0%91%E5%A5%B3%E5%89%8D%E7%BA%BF/%E7%AC%AC%E4%B8%80%E6%88%98%E5%BD%B9&amp;variant=zh-cn" target="_blank" rel="noopener">https://moegirl.icu/index.php?title=%E5%B0%91%E5%A5%B3%E5%89%8D%E7%BA%BF/%E7%AC%AC%E4%B8%80%E6%88%98%E5%BD%B9&amp;variant=zh-cn</a><br>
-<br>
-原文按萌娘百科分节（含 `` 剧情块）原样移植，仅做 Markdown 排版转换，剧情文字保持原样。</blockquote>
-<hr>
 <h1 id="h1">EP.01 第一战役 苏醒</h1>
 <blockquote><strong>嗯……剩下的就交给你。那么，永别了……</strong></blockquote>
 <p>EP.<strong>01 第一战役</strong><br>
 <em>我想你一定很想知道，你昏迷了多长时间……</em></p>
-<h2 id="h2">战役简介</h2>
-<p>本战役是该游戏玩家可以正式攻略的第一组战役，由6组普通战役、4组后勤支援、4组紧急战役和4组夜战组成。</p>
-<ul><li>本图的普通战役难度较低，只要有一个满编编队就可以尝试挑战BOSS图（1-6除草行动）以外的所有图了。</li><li>BOSS图（1-6除草行动）的难度有所提升，建议战斗编队中的成员升到10级并进行编制扩大改后再尝试挑战。</li><li>新人指挥官可以在此多进行几次挑战，以熟悉游戏的玩法。</li><li>普通1-6/紧急1-4有机会掉落1图限定战术少女“格洛克17”</li><li>夜战1-4有机会掉落春田专用装备“国家竞赛穿甲弹”</li></ul>
 <h2 id="h3">夜间模式</h2>
 <ul><li>夜战图将降低全体战术人性（重装小队不受影响）90%的命中，同时战场将会被迷雾覆盖，迷雾内据点只在地图上显示归属方，不显示是否存在敌方单位。</li><li>夜战图中拥有手枪的梯队将获得该梯队周围一格的视野。</li><li>夜战图中占领雷达可获得其周围两格的视野。</li><li>夜战图的机场不会刷新敌方增援。</li><li><strong>请注意，此处地图标出的是初始位置的固定敌人，进入地图时并不会显示。</strong></li></ul>
 <h2 id="h4">剧情文本</h2>
@@ -1492,18 +1445,10 @@ Gew——Elf！</p>
 <p>赫丽安：下一个任务……这就来了。</p>
 </section>
 <section class="chapter">
-<hr>
-<blockquote>本页剧情文案移植自萌娘百科：<a href="https://moegirl.icu/index.php?title=%E5%B0%91%E5%A5%B3%E5%89%8D%E7%BA%BF/%E7%AC%AC%E4%BA%8C%E6%88%98%E5%BD%B9&amp;variant=zh-cn" target="_blank" rel="noopener">https://moegirl.icu/index.php?title=%E5%B0%91%E5%A5%B3%E5%89%8D%E7%BA%BF/%E7%AC%AC%E4%BA%8C%E6%88%98%E5%BD%B9&amp;variant=zh-cn</a><br>
-<br>
-原文按萌娘百科分节（含 `` 剧情块）原样移植，仅做 Markdown 排版转换，剧情文字保持原样。</blockquote>
-<hr>
 <h1 id="h1">EP.02 第二战役</h1>
 <blockquote><strong>你不该提她们，铁血的渣滓。</strong></blockquote>
 <p>EP.<strong>02 第二战役</strong><br>
 <em>寻觅归乡之路，一次一颗子弹</em></p>
-<h2 id="h2">战役简介</h2>
-<p>本战役是该游戏玩家可以正式攻略的第二组战役，由6组普通战役、4组后勤支援、4组紧急战役和4组夜战组成。</p>
-<ul><li>本图的普通战役难度较低，但是敌人的种类和配队组合会进一步增加，同时开始对指挥官的双梯队运用有了进一步考验。</li><li>BOSS图（2-6终止作战）的难度比起普通图有着极大提高，建议战斗编队中的成员升到30级并进行编制扩大改后再尝试挑战，还可以尝试包围等战术。</li><li>从本关BOSS图开始陆续获得AR小队成员，她们是16LAB的精英人形，也是强力的战力，并且不可建造，这是唯一获得她们的方式，请务必珍惜。</li><li>通关夜战2-4可以解锁模拟作战的防御演习部分。</li><li>普通2-6/紧急2-4有机会掉落2图限定战术少女“FMG-9”</li><li>夜战2-4有机会掉落M1918专用装备“Titan火控芯片”</li></ul>
 <h2 id="h3">夜间模式</h2>
 <ul><li>夜战图将降低全体战术人形90%的命中（重装小队不受影响），同时战场将会被迷雾覆盖，迷雾内据点只在地图上显示归属方，不显示是否存在敌方单位。</li><li>夜战图中拥有手枪的梯队将获得该梯队周围一格的视野。</li><li>夜战图中占领雷达可获得其周围两格的视野。</li><li>夜战图的机场不会刷新敌方增援。</li><li><strong>请注意，此处地图标出的是初始位置的固定敌人，进入地图时并不会显示。</strong></li></ul>
 <h2 id="h4">剧情文本</h2>
@@ -1968,18 +1913,10 @@ M9？M9在吗？</p>
 格里芬的成员……还需要好好培养啊……</p>
 </section>
 <section class="chapter">
-<hr>
-<blockquote>本页剧情文案移植自萌娘百科：<a href="https://moegirl.icu/index.php?title=%E5%B0%91%E5%A5%B3%E5%89%8D%E7%BA%BF/%E7%AC%AC%E4%B8%89%E6%88%98%E5%BD%B9&amp;variant=zh-cn" target="_blank" rel="noopener">https://moegirl.icu/index.php?title=%E5%B0%91%E5%A5%B3%E5%89%8D%E7%BA%BF/%E7%AC%AC%E4%B8%89%E6%88%98%E5%BD%B9&amp;variant=zh-cn</a><br>
-<br>
-原文按萌娘百科分节（含 `` 剧情块）原样移植，仅做 Markdown 排版转换，剧情文字保持原样。</blockquote>
-<hr>
 <h1 id="h1">EP.03 第三战役</h1>
 <blockquote><strong>你是AR小组的指挥者，肩负着引导我们的责任，对吗？</strong></blockquote>
 <p>EP.<strong>03 第三战役</strong><br>
 <em>真正猎手的选择。</em></p>
-<h2 id="h2">战役简介</h2>
-<p>本战役是该游戏玩家可以正式攻略的第三组战役，由6组普通战役、4组后勤支援、4组紧急战役和4组夜战组成。</p>
-<ul><li>本图的普通战役较为简单，战斗编队中的成员扩编到×3编制后再进行适当升级，进行强化及技能升级后基本就可以顺利推图了。</li><li>第一次通关本组战役的3-3可获得四星AR人形M4 SOPMOD II，第一次通关本组战役的3-6可获得四星AR人形AR-15，她们都是AR小队的成员，只能获得一次且<strong>不可建造</strong>，请务必珍惜。</li><li>普通3-6/紧急3-4有机会获得3图限定三星AR人形“CZ-805”。</li><li>夜战3-4有机会获得AR-15专用装备“.300BLK高速弹”。</li></ul>
 <h2 id="h3">夜间模式</h2>
 <ul><li>夜战图将降低全体战术人形90%的命中（重装小队不受影响），同时战场将会被迷雾覆盖，迷雾内据点只在地图上显示归属方，不显示是否存在敌方单位。</li><li>夜战图中拥有手枪的梯队将获得该梯队周围一格的视野。</li><li>夜战图中占领雷达可获得其周围两格的视野。</li><li>夜战图的机场不会刷新敌方增援。</li><li><strong>请注意，此处地图标出的是初始位置的固定敌人，进入地图时并不会显示。</strong></li></ul>
 <h2 id="h4">剧情文本</h2>
@@ -2440,18 +2377,10 @@ AK……47？</p>
 或者说，对我们自己……产生了兴趣而已。</p>
 </section>
 <section class="chapter">
-<hr>
-<blockquote>本页剧情文案移植自萌娘百科：<a href="https://moegirl.icu/index.php?title=%E5%B0%91%E5%A5%B3%E5%89%8D%E7%BA%BF/%E7%AC%AC%E5%9B%9B%E6%88%98%E5%BD%B9&amp;variant=zh-cn" target="_blank" rel="noopener">https://moegirl.icu/index.php?title=%E5%B0%91%E5%A5%B3%E5%89%8D%E7%BA%BF/%E7%AC%AC%E5%9B%9B%E6%88%98%E5%BD%B9&amp;variant=zh-cn</a><br>
-<br>
-原文按萌娘百科分节（含 `` 剧情块）原样移植，仅做 Markdown 排版转换，剧情文字保持原样。</blockquote>
-<hr>
 <h1 id="h1">EP.04 第四战役</h1>
 <blockquote><strong>“下雨了，在平原之上。”</strong></blockquote>
 <p>EP.<strong>04 第四战役</strong><br>
 <em>暴雨将至。</em></p>
-<h2 id="h2">战役简介</h2>
-<p>本战役是该游戏玩家可以正式攻略的第四组战役，由6组普通战役、4组后勤支援、4组紧急战役和4组夜战组成。</p>
-<ul><li>本图的普通战役难度有所增加，不过战斗编队中的成员扩编到x4编制并强化及升级技能后也可以顺利完成整组战役</li><li>第一次通关本组战役的4-6可以获得AR小队成员“M16A1”，该战术少女只可获得一次并没有其他获得方式，请务必珍惜</li><li>普通4-6/紧急4-4有机会获得4图限定战术少女“M21”</li><li>夜战4-4有机会获得MP5专用装备“GSG UX外骨骼”</li></ul>
 <h2 id="h3">夜间模式</h2>
 <ul><li>夜战图将降低全体战术人形90%的命中（重装小队不受影响），同时战场将会被迷雾覆盖，迷雾内据点只在地图上显示归属方，不显示是否存在敌方单位。</li><li>夜战图中拥有手枪的梯队将获得该梯队周围一格的视野。</li><li>夜战图中占领雷达可获得其周围两格的视野。</li><li>夜战图的机场不会刷新敌方增援。</li><li><strong>请注意，此处地图标出的是初始位置的固定敌人，进入地图时并不会显示。</strong></li></ul>
 <h2 id="h4">剧情文本</h2>
@@ -3325,18 +3254,10 @@ RO，你失忆了吗？<br>
 属于我们的新剧目，就要拉开帷幕了。</p>
 </section>
 <section class="chapter">
-<hr>
-<blockquote>本页剧情文案移植自萌娘百科：<a href="https://moegirl.icu/index.php?title=%E5%B0%91%E5%A5%B3%E5%89%8D%E7%BA%BF/%E7%AC%AC%E4%BA%94%E6%88%98%E5%BD%B9&amp;variant=zh-cn" target="_blank" rel="noopener">https://moegirl.icu/index.php?title=%E5%B0%91%E5%A5%B3%E5%89%8D%E7%BA%BF/%E7%AC%AC%E4%BA%94%E6%88%98%E5%BD%B9&amp;variant=zh-cn</a><br>
-<br>
-原文按萌娘百科分节（含 `` 剧情块）原样移植，仅做 Markdown 排版转换，剧情文字保持原样。</blockquote>
-<hr>
 <h1 id="h1">EP.05 第五战役 火种</h1>
 <blockquote><strong>铁血所有的阴谋，我会踩着你们的脸颊，让你一个字节一个字节地挤出来！</strong></blockquote>
 <p>EP.<strong>05 第五战役</strong><br>
 <em>一场宴会上喝掉的酒，应该与流出的血一样多。</em></p>
-<h2 id="h2">战役简介</h2>
-<p>本战役是该游戏玩家可以正式攻略的第五组战役，由6组普通战役、4组后勤支援、4组紧急战役和4组夜战组成。</p>
-<ul><li>本组战役是玩家们练度水平的一个分水岭，打到这里的玩家可以借助紧急5-4这个曾经的热门练级图获得梯队练度的进一步提升。</li><li>普通5-6/紧急5-4有机会获得5图限定战术少女“M249 SAW”</li><li>夜战5-4有机会获得莫辛-纳甘专用装备“Hayha记忆芯片”</li></ul>
 <h2 id="h3">夜间模式</h2>
 <p>本章夜战将掉落除<strong> IOP大容量弹链箱、城市迷彩披风</strong>之外的所有四星及四星以下的装备<br>
 并且<strong>“5-4N非常菜贩Ⅳ”</strong>中将会有莫辛纳甘的专属装备<strong>Hayha记忆芯片</strong>掉落</p>
@@ -4226,18 +4147,10 @@ NZ上回往锅包肉里加番茄酱，你还敢拍手叫好！<br>
 也许下次，我该听听64和95那派的意见吧……</p>
 </section>
 <section class="chapter">
-<hr>
-<blockquote>本页剧情文案移植自萌娘百科：<a href="https://moegirl.icu/index.php?title=%E5%B0%91%E5%A5%B3%E5%89%8D%E7%BA%BF/%E7%AC%AC%E5%85%AD%E6%88%98%E5%BD%B9&amp;variant=zh-cn" target="_blank" rel="noopener">https://moegirl.icu/index.php?title=%E5%B0%91%E5%A5%B3%E5%89%8D%E7%BA%BF/%E7%AC%AC%E5%85%AD%E6%88%98%E5%BD%B9&amp;variant=zh-cn</a><br>
-<br>
-原文按萌娘百科分节（含 `` 剧情块）原样移植，仅做 Markdown 排版转换，剧情文字保持原样。</blockquote>
-<hr>
 <h1 id="h1">EP.06 第六战役</h1>
 <blockquote><strong>自认为呆在瓶子里的家伙，是永远也逃不出去的。</strong></blockquote>
 <p>EP.<strong>06 第六战役</strong><br>
 <em>找到迷失于黑夜的少女，这便是改写你命运的咒语。</em></p>
-<h2 id="h2">战役简介</h2>
-<p>本战役是该游戏玩家可以正式攻略的第六组战役，由6组普通战役、4组紧急战役、4组夜战战役和4组后勤支援组成</p>
-<ul><li>章节难度略高，建议指挥官至少以两队五扩以上的主力梯队进行攻略，若练度不够建议回到五章或零章进行练级。</li><li>章节夜战难度极高，建议指挥官具有较强的夜战梯队储备再进行尝试。</li><li>普通6-6/紧急6-4地图中有机会获得章节限定战术少女“M1A1”</li><li>紧急6-4地图中有机会获得五星强力战术少女“VECTOR”</li><li>夜战6-4地图中有机会获得M16A1的专属装备“特殊战机动装甲”</li></ul>
 <h2 id="h3">夜战模式</h2>
 <ul><li>本章节夜战均未限定梯队上限，故无“梯队上限”数据栏</li><li>本章夜战将掉落除<strong> IOP大容量弹链箱、城市迷彩披风</strong>之外的所有四星及四星以下的装备</li><li><strong>“6-4N瓶中人Ⅳ”</strong>中将会有M16A1的专属装备<strong>特殊战机动装甲</strong>掉落</li><li>夜战图将降低全体战术人形90%的命中（重装小队不受影响），同时战场将会被迷雾覆盖，迷雾内据点只在地图上显示归属方，不显示是否存在敌方单位。</li><li>夜战图中拥有手枪的梯队将获得该梯队周围一格的视野。</li><li>夜战图中占领雷达可获得其周围两格的视野。</li><li>夜战图的机场不会刷新敌方增援。</li><li><strong>请注意，此处地图标出的是初始位置的固定敌人，进入地图时并不会显示。</strong></li></ul>
 <h2 id="h4">剧情文本</h2>
@@ -5459,18 +5372,10 @@ FNC和49的申请表已经填好了，经过总部同意就可以正式加入我
 自认为呆在瓶子里的家伙，是永远也逃不出去的。</p>
 </section>
 <section class="chapter">
-<hr>
-<blockquote>本页剧情文案移植自萌娘百科：<a href="https://moegirl.icu/index.php?title=%E5%B0%91%E5%A5%B3%E5%89%8D%E7%BA%BF/%E7%AC%AC%E4%B8%83%E6%88%98%E5%BD%B9&amp;variant=zh-cn" target="_blank" rel="noopener">https://moegirl.icu/index.php?title=%E5%B0%91%E5%A5%B3%E5%89%8D%E7%BA%BF/%E7%AC%AC%E4%B8%83%E6%88%98%E5%BD%B9&amp;variant=zh-cn</a><br>
-<br>
-原文按萌娘百科分节（含 `` 剧情块）原样移植，仅做 Markdown 排版转换，剧情文字保持原样。</blockquote>
-<hr>
 <h1 id="h1">EP.07 第七战役</h1>
 <blockquote><strong>至少……我知道自己是谁。</strong></blockquote>
 <p>EP.<strong>07 第七战役</strong><br>
 <em>人与人的羁绊是真正的力量之源。</em></p>
-<h2 id="h2">战役简介</h2>
-<p>本战役是该游戏玩家可以正式攻略的第七组战役，由6组普通战役、4组紧急战役、4组夜战战役和4组后勤支援组成</p>
-<ul><li>章节难度较高，建议指挥官至少以两队五扩以上的主力梯队进行攻略，若练度不够建议回到五章或零章进行练级。</li><li>章节夜战难度极高，为目前除活动地图外最困难的夜战地图，建议指挥官具有较强的夜战梯队储备再进行尝试。</li><li>普通7-6/紧急7-4地图中有机会获得章节限定战术少女“PSM”</li><li>紧急7-4地图中有机会获得五星强力战术少女“MG5”</li><li>夜战7-4地图中有机会获得MG3的专属装备“无限弹链箱”</li></ul>
 <h2 id="h3">夜战模式</h2>
 <ul><li>本章夜战将掉落除<strong> IOP大容量弹链箱、城市迷彩披风</strong>之外的所有四星及四星以下的装备</li><li><strong>“7-4N片面回忆Ⅳ”</strong>中将会有MG3的专属装备<strong>无限弹链箱</strong>掉落</li><li>夜战图将降低全体战术人形90%的命中（重装小队不受影响），同时战场将会被迷雾覆盖，迷雾内据点只在地图上显示归属方，不显示是否存在敌方单位。</li><li>夜战图中拥有手枪的梯队将获得该梯队周围一格的视野。</li><li>夜战图中占领雷达可获得其周围两格的视野。</li><li><strong>请注意，此处地图标出的是初始位置的固定敌人，进入地图时并不会显示。</strong></li></ul>
 <h3 id="h4">7-1N 片面回忆Ⅰ</h3>
@@ -7007,18 +6912,10 @@ AR15……我还在想办法……<br>
 <p><strong>第七战役 夜战模式——片面回忆 END</strong></p>
 </section>
 <section class="chapter">
-<hr>
-<blockquote>本页剧情文案移植自萌娘百科：<a href="https://moegirl.icu/index.php?title=%E5%B0%91%E5%A5%B3%E5%89%8D%E7%BA%BF/%E7%AC%AC%E5%85%AB%E6%88%98%E5%BD%B9&amp;variant=zh-cn" target="_blank" rel="noopener">https://moegirl.icu/index.php?title=%E5%B0%91%E5%A5%B3%E5%89%8D%E7%BA%BF/%E7%AC%AC%E5%85%AB%E6%88%98%E5%BD%B9&amp;variant=zh-cn</a><br>
-<br>
-原文按萌娘百科分节（含 `` 剧情块）原样移植，仅做 Markdown 排版转换，剧情文字保持原样。</blockquote>
-<hr>
 <h1 id="h1">EP.08 第八战役</h1>
 <blockquote><strong>我只是感觉到，她从一开始就撒了一个谎。</strong></blockquote>
 <p>EP.<strong>08 第八战役</strong><br>
 <em>我为打破你周遭的囚墙而来，览尽世界，为你沉沦。</em></p>
-<h2 id="h2">战役简介</h2>
-<p>本战役是该游戏玩家可以正式攻略的第八组战役，由6组普通战役、4组后勤支援、4组紧急战役、4组夜间战役组成</p>
-<ul><li>本图战役难度较高，建议指挥官在拥有数个满级的队伍之后再尝试挑战。</li><li>普通8-6/紧急8-4有机会掉落十图限定战术少女“SCW”。</li><li>紧急8-4有机会掉落五星强力战术人形“NTW-20 ”。</li><li>夜战8-4有机会掉落FAMAS专属装备“FÉLIN瞄准镜”。</li></ul>
 <h2 id="h3">夜间模式</h2>
 <ul><li>本章夜战将掉落所有四星及四星以下的装备。</li><li><strong>“8-4N巨鹰与寒鸦Ⅳ”</strong>中将会有FAMAS的专属装备<strong> FÉLIN系统瞄具</strong>掉落。</li><li>夜战图将降低全体战术人形90%的命中（重装小队不受影响），同时战场将会被迷雾覆盖，迷雾内据点只在地图上显示归属方，不显示是否存在敌方单位。</li><li>夜战图中拥有手枪的梯队将获得该梯队周围一格的视野。</li><li>夜战图中占领雷达可获得其周围两格的视野。</li><li>本章节出现敌人“歌利亚”，</li><li><strong>请注意，此处地图标出的是初始位置的固定敌人，进入地图时并不会显示。</strong></li></ul>
 <h2 id="h4">剧情文本</h2>
@@ -8712,18 +8609,10 @@ AUG，我在你面前答应过我不会……</p>
 <p>系统语音：备份云图下载完成，修复程序结束，祝您身体健康。</p>
 </section>
 <section class="chapter">
-<hr>
-<blockquote>本页剧情文案移植自萌娘百科：<a href="https://moegirl.icu/index.php?title=%E5%B0%91%E5%A5%B3%E5%89%8D%E7%BA%BF/%E7%AC%AC%E4%B9%9D%E6%88%98%E5%BD%B9&amp;variant=zh-cn" target="_blank" rel="noopener">https://moegirl.icu/index.php?title=%E5%B0%91%E5%A5%B3%E5%89%8D%E7%BA%BF/%E7%AC%AC%E4%B9%9D%E6%88%98%E5%BD%B9&amp;variant=zh-cn</a><br>
-<br>
-原文按萌娘百科分节（含 `` 剧情块）原样移植，仅做 Markdown 排版转换，剧情文字保持原样。</blockquote>
-<hr>
 <h1 id="h1">EP.09 第九战役</h1>
 <blockquote><strong>风暴会撕毁卷入它的一切，它不会在意这只小鸟是不是无意间飞进去的。。</strong></blockquote>
 <p>EP.<strong>09 第九战役</strong><br>
 <em>亲爱的，你的心在哪里？</em></p>
-<h2 id="h2">战役简介</h2>
-<p>本战役是该游戏玩家可以正式攻略的第九组战役，由6组普通战役、4组紧急战役和4组后勤支援组成</p>
-<ul><li>章节难度极高，少数敌人需要特定编队才能胜出，建议指挥官在拥有充分准备后再尝试挑战</li><li>普通9-6/紧急9-4有机会掉落十图限定战术少女“AK 5”。</li><li>紧急9-4有机会掉落五星强力战术人形“G41 ”。</li><li>本章节开始出现“重型机场”战略点，占领重型机场后能够部署“重装部队”，对战斗进行支援。</li><li>本章节出现“优势人形”系统，指定人形会获得属性提升。</li></ul>
 <h2 id="h3">夜战模式</h2>
 <ul><li><strong>本章节夜战地图正在编辑中。</strong></li><li>夜战图将降低全体战术人形90%的命中（重装小队不受影响），同时战场将会被迷雾覆盖，迷雾内据点只在地图上显示归属方，不显示是否存在敌方单位。</li><li>夜战图中拥有手枪的梯队将获得该梯队周围一格的视野。</li><li>夜战图中占领雷达可获得其周围两格的视野。</li></ul>
 <h2 id="h4">剧情文本</h2>
@@ -10560,18 +10449,10 @@ M1928A1小姐也说这东西就是要拿给指挥官过个形式，不必太认�
 <p>《归途由光铺成》END</p>
 </section>
 <section class="chapter">
-<hr>
-<blockquote>本页剧情文案移植自萌娘百科：<a href="https://moegirl.icu/index.php?title=%E5%B0%91%E5%A5%B3%E5%89%8D%E7%BA%BF/%E7%AC%AC%E5%8D%81%E6%88%98%E5%BD%B9&amp;variant=zh-cn" target="_blank" rel="noopener">https://moegirl.icu/index.php?title=%E5%B0%91%E5%A5%B3%E5%89%8D%E7%BA%BF/%E7%AC%AC%E5%8D%81%E6%88%98%E5%BD%B9&amp;variant=zh-cn</a><br>
-<br>
-原文按萌娘百科分节（含 `` 剧情块）原样移植，仅做 Markdown 排版转换，剧情文字保持原样。</blockquote>
-<hr>
 <h1 id="h1">EP.10 第十战役</h1>
 <blockquote><strong>我们栖身于炼狱之中，究竟是为了赎罪，还是等待反抗？</strong></blockquote>
 <p>EP.<strong>10 第十战役</strong><br>
 <em>在凄惨的处境中回忆幸福，是世间最大的痛苦。</em></p>
-<h2 id="h2">战役简介</h2>
-<p>本战役是该游戏玩家可以正式攻略的第十组战役，由6组普通战役、4组后勤支援、4组紧急战役组成</p>
-<ul><li>本图战役难度极高，少数敌人需要特定编队才能胜出，建议指挥官在拥有极高练度之后再尝试挑战。</li><li>章节boss“法官”相比9章有了极大的属性提升，不要轻易尝试。</li><li>本章节开始出现“军方”人形，相比铁血人形的护甲更高，对穿甲弹的需求更高。</li><li>本章节开始出现“特殊响应据点”，占领某些特殊据点时会使地图上的敌人出现变化。</li><li>普通10-6/紧急10-4有机会掉落十图限定战术少女“XM3”。</li><li>紧急10-4有机会掉落五星强力战术人形“SR-3MP ”。</li><li>本章节出现“重型机场”战略点，占领重型机场后能够部署“重装部队”，对战斗进行支援。</li><li>本章节出现“优势人形”系统，指定人形会获得属性提升。</li></ul>
 <h2 id="h3">夜间模式</h2>
 <ul><li><strong>本章节夜战地图尚未实装，敬请期待后续版本。</strong></li><li>夜战图将降低全体战术人形90%的命中（重装小队不受影响），同时战场将会被迷雾覆盖，迷雾内据点只在地图上显示归属方，不显示是否存在敌方单位。</li><li>夜战图中拥有手枪的梯队将获得该梯队周围一格的视野。</li><li>夜战图中占领雷达可获得其周围两格的视野。</li></ul>
 <h2 id="h4">剧情文本</h2>
@@ -13112,18 +12993,10 @@ XM8，一起去干掉铁血的渣滓，瓦解它们的进攻吧！</p>
 <p><strong>《她不在的战场》END</strong></p>
 </section>
 <section class="chapter">
-<hr>
-<blockquote>本页剧情文案移植自萌娘百科：<a href="https://moegirl.icu/index.php?title=%E5%B0%91%E5%A5%B3%E5%89%8D%E7%BA%BF/%E7%AC%AC%E5%8D%81%E4%B8%80%E6%88%98%E5%BD%B9&amp;variant=zh-cn" target="_blank" rel="noopener">https://moegirl.icu/index.php?title=%E5%B0%91%E5%A5%B3%E5%89%8D%E7%BA%BF/%E7%AC%AC%E5%8D%81%E4%B8%80%E6%88%98%E5%BD%B9&amp;variant=zh-cn</a><br>
-<br>
-原文按萌娘百科分节（含 `` 剧情块）原样移植，仅做 Markdown 排版转换，剧情文字保持原样。</blockquote>
-<hr>
 <h1 id="h1">EP.11 第十一战役</h1>
 <blockquote><strong>安洁莉娅……让我来说说她的故事吧。你想从哪里开始听呢？</strong></blockquote>
 <p>EP.<strong>11 第十一战役</strong><br>
 <em>你在乱世中独行，又是否热爱过这一切？</em></p>
-<h2 id="h2">战役简介</h2>
-<p>本战役是该游戏玩家可以正式攻略的第十一组战役，由6组普通战役、4组紧急战役、4组后勤支援组成</p>
-<ul><li>本图战役难度极高，部分敌人甚至被设计成“无法被战胜”的强度，请各位指挥官小心行事。</li><li>本章节开始出现“不明势力”人形，相比之前章节有了极大的属性提升，并且部分敌人获得了特殊技能。</li><li>本章节开始出现“敌方建筑”，部分建筑可以使用梯队或重装小队摧毁。</li><li>本章节出现“地图提示”，到达某些据点时会通过剧情给予通关提示。</li><li>本章节出现“战场支援梯队”，通过变更这些梯队的行动模式能够协助你完成作战。</li><li>本章节出现“特殊响应据点”，占领某些特殊据点时会使地图上的敌人出现变化。</li><li>普通11-6/紧急11-4有机会掉落十一图限定战术少女“Mk46”。</li><li>紧急11-4有机会掉落五星强力战术人形“M99”。</li><li>本章节出现“重型机场”战略点，占领重型机场后能够部署“重装部队”，对战斗进行支援。</li><li>本章节出现“优势人形”系统，指定人形会获得属性提升。</li><li>本章节尚未加入夜战。请期待后续版本。</li></ul>
 <h2 id="h3">夜间模式</h2>
 <ul><li><strong>本章节夜战地图尚未实装，敬请期待后续版本。</strong></li><li>夜战图将降低全体战术人形90%的命中（重装小队不受影响），同时战场将会被迷雾覆盖，迷雾内据点只在地图上显示归属方，不显示是否存在敌方单位。</li><li>夜战图中拥有手枪的梯队将获得该梯队周围一格的视野。</li><li>夜战图中占领雷达可获得其周围两格的视野。</li></ul>
 <h2 id="h4">剧情文本</h2>
@@ -14303,18 +14176,10 @@ K……先生？</p>
 <p>你想从哪里开始听呢？</p>
 </section>
 <section class="chapter">
-<hr>
-<blockquote>本页剧情文案移植自萌娘百科：<a href="https://moegirl.icu/index.php?title=%E5%B0%91%E5%A5%B3%E5%89%8D%E7%BA%BF/%E7%AC%AC%E5%8D%81%E4%BA%8C%E6%88%98%E5%BD%B9&amp;variant=zh-cn" target="_blank" rel="noopener">https://moegirl.icu/index.php?title=%E5%B0%91%E5%A5%B3%E5%89%8D%E7%BA%BF/%E7%AC%AC%E5%8D%81%E4%BA%8C%E6%88%98%E5%BD%B9&amp;variant=zh-cn</a><br>
-<br>
-原文按萌娘百科分节（含 `` 剧情块）原样移植，仅做 Markdown 排版转换，剧情文字保持原样。</blockquote>
-<hr>
 <h1 id="h1">EP.12 第十二战役</h1>
 <blockquote><strong>归乡的旅程终于开始了</strong></blockquote>
 <p>EP.<strong>12 第十二战役</strong><br>
 <em>来吧，在倒挂的森林里，追寻她的倒影。</em></p>
-<h2 id="h2">战役简介</h2>
-<p>本战役是该游戏玩家可以正式攻略的第十二组战役，由6组普通战役、4组紧急战役、4组后勤支援组成</p>
-<ul><li>普通12-6/紧急12-4有机会掉落十二图限定战术少女“MAT-49”。</li><li>本章节出现“优势人形”系统，指定人形会获得属性提升。</li><li>本章节尚未加入夜战。请期待后续版本。</li></ul>
 <h2 id="h3">夜间模式</h2>
 <ul><li><strong>本章节夜战地图尚未实装，敬请期待后续版本。</strong></li><li>夜战图将降低全体战术人形90%的命中（重装小队不受影响），同时战场将会被迷雾覆盖，迷雾内据点只在地图上显示归属方，不显示是否存在敌方单位。</li><li>夜战图中拥有手枪的梯队将获得该梯队周围一格的视野。</li><li>夜战图中占领雷达可获得其周围两格的视野。</li></ul>
 <h2 id="h4">剧情文本</h2>
@@ -16045,18 +15910,10 @@ AK12发送了一个坐标过来，她们的撤离直升机会在那里等着我�
 <p>丹德莱:归乡的旅程终于开始了，接下来会怎么样呢？真是让人期待啊。</p>
 </section>
 <section class="chapter">
-<hr>
-<blockquote>本页剧情文案移植自萌娘百科：<a href="https://moegirl.icu/index.php?title=%E5%B0%91%E5%A5%B3%E5%89%8D%E7%BA%BF/%E7%AC%AC%E5%8D%81%E4%B8%89%E6%88%98%E5%BD%B9&amp;variant=zh-cn" target="_blank" rel="noopener">https://moegirl.icu/index.php?title=%E5%B0%91%E5%A5%B3%E5%89%8D%E7%BA%BF/%E7%AC%AC%E5%8D%81%E4%B8%89%E6%88%98%E5%BD%B9&amp;variant=zh-cn</a><br>
-<br>
-原文按萌娘百科分节（含 `` 剧情块）原样移植，仅做 Markdown 排版转换，剧情文字保持原样。</blockquote>
-<hr>
 <h1 id="h1">EP.13 第十三战役</h1>
 <blockquote><strong>是时候该回家了，克鲁格先生正在等着你们。</strong></blockquote>
 <p>EP.<strong>13 第十三战役</strong><br>
 <em>既是结束，又是开始。</em></p>
-<h2 id="h2">战役简介</h2>
-<p>本战役是该游戏玩家可以正式攻略的第十三组战役，由6组普通战役、4组紧急战役、4组后勤支援组成</p>
-<ul><li>普通13-6/紧急13-4有机会掉落十三图限定战术少女“防卫者”。</li><li>本章节出现“优势人形”系统，指定人形会获得属性提升。</li><li>本章节尚未加入夜战。请期待后续版本。</li></ul>
 <h2 id="h3">夜间模式</h2>
 <ul><li><strong>本章节夜战地图尚未实装，敬请期待后续版本。</strong></li><li>夜战图将降低全体战术人形90%的命中（重装小队不受影响），同时战场将会被迷雾覆盖，迷雾内据点只在地图上显示归属方，不显示是否存在敌方单位。</li><li>夜战图中拥有手枪的梯队将获得该梯队周围一格的视野。</li><li>夜战图中占领雷达可获得其周围两格的视野。</li></ul>
 <h2 id="h4">剧情文本</h2>
@@ -17736,11 +17593,6 @@ M16接触过梭鱼核心，她心智中的OGAS与伊莱莎直接相连，核心�
 <p>？？：这一切将不会很久……不会很久了……！</p>
 </section>
 <section class="chapter">
-<blockquote><strong>来源说明（换源整理）</strong>：萌娘百科（moegirl）未收录《少女前线》第十四战役及之后的主线章节，本篇由以下公开来源整理汇编，非萌百原文转录：<br>
-- 百度百科「慢休克」词条（剧情摘要）<br>
-- GFwiki / gf-ogas.wiki（OGAS数据中枢）角色页内嵌剧情片段（安洁×格雷「识底深湖」对话）<br>
-- NGA 玩家考据长文《[慢休克考据活动] 不负责任向少女前线慢休克剧情解读》（tid=36152880）<br>
-本篇以<strong>剧情概述 + 关键台词片段 + 玩家解读</strong>的形式补齐，未宣称覆盖游戏内完整台词文本。</blockquote>
 <h1 id="h1">EP.14 第十四战役 · 慢休克（Slow Shock）</h1>
 <h2 id="h2">剧情概述</h2>
 <p>「慢休克」是《少女前线》主线<strong>第十四章（EP.14）</strong>，章节标题为"慢休克"，于 2023 年 4 月 27 日—5 月 25 日作为大型战役活动实装。故事发生在 <strong>2064 年 10 月中下旬的阿佛那斯</strong>。</p>
@@ -17781,13 +17633,6 @@ M16接触过梭鱼核心，她心智中的OGAS与伊莱莎直接相连，核心�
 <ul><li>百度百科：慢休克（剧情摘要）</li><li>gf-ogas.wiki（OGAS数据中枢）：少女前线:格雷（内嵌"慢休克 Cpt.2 L1 生命之树"片段）</li><li>NGA：《[慢休克考据活动] 不负责任向少女前线慢休克剧情解读》 tid=36152880</li><li>GFwiki：慢休克 / 慢休克·剧情（分镜结构参考）</li></ul>
 </section>
 <section class="chapter">
-<blockquote><strong>来源说明（换源整理）</strong>：萌娘百科（moegirl）未收录《少女前线》第十五战役及最终章，本篇由以下公开来源整理汇编，非萌百原文转录：<br>
-- 萌娘百科（繁体/mzh.moegirl.tw）「少女前线:指挥官」词条（法兰克福篇 / 终章叙述）<br>
-- 百度百科「慢休克 / 卷积核」相关条目<br>
-- 情报姬《用一个夜晚，看遍十年的〈少女前线〉》（微信公众号，零态潮汐乐评与终章脉络）<br>
-- NewsStroll《〈少女前线〉的"大结局"，是终章，亦是下个10年的序章》<br>
-- NGA：《[零态潮汐] 尘埃落定，隐姓埋名》 tid=45522235<br>
-本篇以<strong>剧情概述 + 关键叙述 + 玩家解读</strong>的形式补齐，未宣称覆盖游戏内完整台词文本。</blockquote>
 <h1 id="h1">EP.15 第十五战役 · 卷积核 / 零态潮汐（Quantum Fluctuation / Zero-State Tide）</h1>
 <h2 id="h2">总览</h2>
 <p>《少女前线》一代主线的真正收束由<strong>两个最终章活动</strong>构成：</p>
@@ -17809,11 +17654,6 @@ M16接触过梭鱼核心，她心智中的OGAS与伊莱莎直接相连，核心�
 <ul><li>萌娘百科（mzh.moegirl.tw）：少女前线:指挥官（法兰克福篇 / 终章叙述）</li><li>情报姬：《用一个夜晚，看遍十年的〈少女前线〉》（微信公众号）</li><li>NewsStroll：《〈少女前线〉的"大结局"，是终章，亦是下个10年的序章》</li><li>NGA：《[零态潮汐] 尘埃落定，隐姓埋名》 tid=45522235</li><li>百度百科：卷积核 / 慢休克（章节定位参考）</li></ul>
 </section>
 <section class="chapter">
-<hr>
-<blockquote>本页剧情文案移植自萌娘百科：<a href="https://moegirl.icu/index.php?title=%E5%B0%91%E5%A5%B3%E5%89%8D%E7%BA%BF%3A2020%E5%B9%B4%E5%86%AC%E5%AD%A3%E6%B4%BB%E5%8A%A8%E2%80%9C%E5%81%8F%E6%8C%AF%E5%85%89%E2%80%9D&amp;variant=zh-cn" target="_blank" rel="noopener">https://moegirl.icu/index.php?title=%E5%B0%91%E5%A5%B3%E5%89%8D%E7%BA%BF%3A2020%E5%B9%B4%E5%86%AC%E5%AD%A3%E6%B4%BB%E5%8A%A8%E2%80%9C%E5%81%8F%E6%8C%AF%E5%85%89%E2%80%9D&amp;variant=zh-cn</a><br>
-<br>
-原文按萌娘百科分节（含 `` 剧情块）原样移植，仅做 Markdown 排版转换，剧情文字保持原样。</blockquote>
-<hr>
 <h1 id="h1">2020 偏振光</h1>
 <blockquote><strong>天佑吾皇，常胜利，沐荣光！叶！叶！叶！叶！叶！</strong></blockquote>
 <h2 id="h2">活动简介</h2>
@@ -21941,11 +21781,6 @@ M4明白，一切都还没有结束。</p>
 <p>&lt;references/&gt;</p>
 </section>
 <section class="chapter">
-<hr>
-<blockquote>本页剧情文案移植自萌娘百科：<a href="https://moegirl.icu/index.php?title=%E5%B0%91%E5%A5%B3%E5%89%8D%E7%BA%BF%3A2020%E5%B9%B4%E5%A4%8F%E5%AD%A3%E6%B4%BB%E5%8A%A8%E2%80%9C%E5%8F%8C%E8%81%94%E4%B9%B1%E6%95%B0%E2%80%9D&amp;variant=zh-cn" target="_blank" rel="noopener">https://moegirl.icu/index.php?title=%E5%B0%91%E5%A5%B3%E5%89%8D%E7%BA%BF%3A2020%E5%B9%B4%E5%A4%8F%E5%AD%A3%E6%B4%BB%E5%8A%A8%E2%80%9C%E5%8F%8C%E8%81%94%E4%B9%B1%E6%95%B0%E2%80%9D&amp;variant=zh-cn</a><br>
-<br>
-原文按萌娘百科分节（含 `` 剧情块）原样移植，仅做 Markdown 排版转换，剧情文字保持原样。</blockquote>
-<hr>
 <h1 id="h1">2020 双联乱数</h1>
 <blockquote><strong>击倒怪物，跨越深渊，跟随引导的线球前行，直到真相暴露在眼前为止</strong></blockquote>
 <h2 id="h2">活动简介</h2>
@@ -29241,11 +29076,6 @@ J，把他捆上。</p>
 <p>&lt;references/&gt;</p>
 </section>
 <section class="chapter">
-<hr>
-<blockquote>本页剧情文案移植自萌娘百科：<a href="https://moegirl.icu/index.php?title=%E5%B0%91%E5%A5%B3%E5%89%8D%E7%BA%BF%3A2018%E5%B9%B4%E5%86%AC%E5%AD%A3%E6%B4%BB%E5%8A%A8%E2%80%9C%E5%A1%8C%E7%BC%A9%E7%82%B9%E2%80%9D&amp;variant=zh-cn" target="_blank" rel="noopener">https://moegirl.icu/index.php?title=%E5%B0%91%E5%A5%B3%E5%89%8D%E7%BA%BF%3A2018%E5%B9%B4%E5%86%AC%E5%AD%A3%E6%B4%BB%E5%8A%A8%E2%80%9C%E5%A1%8C%E7%BC%A9%E7%82%B9%E2%80%9D&amp;variant=zh-cn</a><br>
-<br>
-原文按萌娘百科分节（含 `` 剧情块）原样移植，仅做 Markdown 排版转换，剧情文字保持原样。</blockquote>
-<hr>
 <h1 id="h1">2018 塌缩点</h1>
 <blockquote><strong>你知道一句话吗？我们的眼睛就是我们的监狱，而目光所及之处就是监狱的围墙。</strong></blockquote>
 <p><strong>凛冬之中的狂袭</strong></p>
@@ -32429,20 +32259,10 @@ M4！这样会来不及的！</p>
 <p>&lt;references/&gt;</p>
 </section>
 <section class="chapter">
-<hr>
-<blockquote>本页剧情文案移植自萌娘百科：<a href="https://moegirl.icu/index.php?title=%E5%B0%91%E5%A5%B3%E5%89%8D%E7%BA%BF%3A2017%E5%B9%B4%E5%86%AC%E5%AD%A3%E6%B4%BB%E5%8A%A8%E2%80%9C%E5%A4%B1%E6%B8%A9%E7%97%87%E2%80%9D&amp;variant=zh-cn" target="_blank" rel="noopener">https://moegirl.icu/index.php?title=%E5%B0%91%E5%A5%B3%E5%89%8D%E7%BA%BF%3A2017%E5%B9%B4%E5%86%AC%E5%AD%A3%E6%B4%BB%E5%8A%A8%E2%80%9C%E5%A4%B1%E6%B8%A9%E7%97%87%E2%80%9D&amp;variant=zh-cn</a><br>
-<br>
-原文按萌娘百科分节（含 `` 剧情块）原样移植，仅做 Markdown 排版转换，剧情文字保持原样。</blockquote>
-<hr>
 <h1 id="h1">2017 失温症</h1>
 <blockquote><strong>只要有吃有喝，我去哪都一样。</strong>|建筑师</blockquote>
 </section>
 <section class="chapter">
-<hr>
-<blockquote>本页剧情文案移植自萌娘百科：<a href="https://moegirl.icu/index.php?title=%E5%B0%91%E5%A5%B3%E5%89%8D%E7%BA%BF%3A2021%E5%B9%B4%E8%81%94%E5%8A%A8%E6%B4%BB%E5%8A%A8%E2%80%9C%E5%B0%8F%E9%82%AA%E7%A5%9E%E5%89%8D%E7%BA%BF%E2%80%9D&amp;variant=zh-cn" target="_blank" rel="noopener">https://moegirl.icu/index.php?title=%E5%B0%91%E5%A5%B3%E5%89%8D%E7%BA%BF%3A2021%E5%B9%B4%E8%81%94%E5%8A%A8%E6%B4%BB%E5%8A%A8%E2%80%9C%E5%B0%8F%E9%82%AA%E7%A5%9E%E5%89%8D%E7%BA%BF%E2%80%9D&amp;variant=zh-cn</a><br>
-<br>
-原文按萌娘百科分节（含 `` 剧情块）原样移植，仅做 Markdown 排版转换，剧情文字保持原样。</blockquote>
-<hr>
 <h1 id="h1">2021 小邪神前线（联动）</h1>
 <blockquote>**百合铃，吃我一记小邪神飞踢！ ​​​​</blockquote>
 <hr>
@@ -32997,11 +32817,6 @@ G11、UMP9、UMP45！你们呢这群只会躲在阴影中的小丑！<br>
 <p>&lt;references/&gt;</p>
 </section>
 <section class="chapter">
-<hr>
-<blockquote>本页剧情文案移植自萌娘百科：<a href="https://moegirl.icu/index.php?title=%E5%B0%91%E5%A5%B3%E5%89%8D%E7%BA%BF%3A2019%E5%B9%B4%E5%86%AC%E5%AD%A3%E6%B4%BB%E5%8A%A8%E2%80%9C%E5%BC%82%E6%9E%84%E4%BD%93%E2%80%9D&amp;variant=zh-cn" target="_blank" rel="noopener">https://moegirl.icu/index.php?title=%E5%B0%91%E5%A5%B3%E5%89%8D%E7%BA%BF%3A2019%E5%B9%B4%E5%86%AC%E5%AD%A3%E6%B4%BB%E5%8A%A8%E2%80%9C%E5%BC%82%E6%9E%84%E4%BD%93%E2%80%9D&amp;variant=zh-cn</a><br>
-<br>
-原文按萌娘百科分节（含 `` 剧情块）原样移植，仅做 Markdown 排版转换，剧情文字保持原样。</blockquote>
-<hr>
 <h1 id="h1">2019 异构体</h1>
 <blockquote><strong>和平背后涌动的阴影，是否足以将一切吞入深渊？</strong></blockquote>
 <p>剩下的只有你了，M16……<br>
@@ -33111,11 +32926,6 @@ G11、UMP9、UMP45！你们呢这群只会躲在阴影中的小丑！<br>
 <p>&lt;references/&gt;</p>
 </section>
 <section class="chapter">
-<hr>
-<blockquote>本页剧情文案移植自萌娘百科：<a href="https://moegirl.icu/index.php?title=%E5%B0%91%E5%A5%B3%E5%89%8D%E7%BA%BF%3A2020%E5%B9%B4%E8%81%94%E5%8A%A8%E6%B4%BB%E5%8A%A8%E2%80%9C%E6%9A%97%E9%87%91%E6%BD%AE%E2%80%9D&amp;variant=zh-cn" target="_blank" rel="noopener">https://moegirl.icu/index.php?title=%E5%B0%91%E5%A5%B3%E5%89%8D%E7%BA%BF%3A2020%E5%B9%B4%E8%81%94%E5%8A%A8%E6%B4%BB%E5%8A%A8%E2%80%9C%E6%9A%97%E9%87%91%E6%BD%AE%E2%80%9D&amp;variant=zh-cn</a><br>
-<br>
-原文按萌娘百科分节（含 `` 剧情块）原样移植，仅做 Markdown 排版转换，剧情文字保持原样。</blockquote>
-<hr>
 <h1 id="h1">2020 暗金潮（联动）</h1>
 <blockquote>**BOUNTY FEAST</blockquote>
 <hr>
@@ -35532,11 +35342,6 @@ Vector，快点停火，敌人快要出现了！</p>
 <p>&lt;references/&gt;</p>
 </section>
 <section class="chapter">
-<hr>
-<blockquote>本页剧情文案移植自萌娘百科：<a href="https://moegirl.icu/index.php?title=%E5%B0%91%E5%A5%B3%E5%89%8D%E7%BA%BF%3A2018%E5%B9%B4%E5%A4%8F%E5%AD%A3%E6%B4%BB%E5%8A%A8%E2%80%9C%E6%9C%89%E5%BA%8F%E7%B4%8A%E6%B5%81%E2%80%9D&amp;variant=zh-cn" target="_blank" rel="noopener">https://moegirl.icu/index.php?title=%E5%B0%91%E5%A5%B3%E5%89%8D%E7%BA%BF%3A2018%E5%B9%B4%E5%A4%8F%E5%AD%A3%E6%B4%BB%E5%8A%A8%E2%80%9C%E6%9C%89%E5%BA%8F%E7%B4%8A%E6%B5%81%E2%80%9D&amp;variant=zh-cn</a><br>
-<br>
-原文按萌娘百科分节（含 `` 剧情块）原样移植，仅做 Markdown 排版转换，剧情文字保持原样。</blockquote>
-<hr>
 <h1 id="h1">2018 有序紊流</h1>
 <blockquote><strong>当离开地狱时，我们很难确认眼前的光芒是不是来自天堂，来自一个梦，还是来自真实的记忆……</strong></blockquote>
 <p><strong>我们依靠这个末日，幸存了下来。</strong></p>
@@ -40336,11 +40141,6 @@ UMP45：下次见面时也许你已经忘了我了，或者不敢记得我。<br
 <p>&lt;references/&gt;</p>
 </section>
 <section class="chapter">
-<hr>
-<blockquote>本页剧情文案移植自萌娘百科：<a href="https://moegirl.icu/index.php?title=%E5%B0%91%E5%A5%B3%E5%89%8D%E7%BA%BF%3A2020%E5%B9%B4%E8%81%94%E5%8A%A8%E6%B4%BB%E5%8A%A8%E2%80%9C%E6%A2%A6%E9%97%B4%E5%89%A7%E2%80%9D&amp;variant=zh-cn" target="_blank" rel="noopener">https://moegirl.icu/index.php?title=%E5%B0%91%E5%A5%B3%E5%89%8D%E7%BA%BF%3A2020%E5%B9%B4%E8%81%94%E5%8A%A8%E6%B4%BB%E5%8A%A8%E2%80%9C%E6%A2%A6%E9%97%B4%E5%89%A7%E2%80%9D&amp;variant=zh-cn</a><br>
-<br>
-原文按萌娘百科分节（含 `` 剧情块）原样移植，仅做 Markdown 排版转换，剧情文字保持原样。</blockquote>
-<hr>
 <h1 id="h1">2020 梦间剧（联动）</h1>
 <blockquote>**Fai buon viaggio！ ​​​​</blockquote>
 <hr>
@@ -40414,11 +40214,6 @@ UMP45：下次见面时也许你已经忘了我了，或者不敢记得我。<br
 <p>-</p>
 </section>
 <section class="chapter">
-<hr>
-<blockquote>本页剧情文案移植自萌娘百科：<a href="https://moegirl.icu/index.php?title=%E5%B0%91%E5%A5%B3%E5%89%8D%E7%BA%BF%3A2022%E5%B9%B4%E5%89%A7%E6%83%85%E6%B4%BB%E5%8A%A8%E2%80%9C%E6%B2%99%E7%BD%97%E8%9A%80%E7%9B%B8%E2%80%9D&amp;variant=zh-cn" target="_blank" rel="noopener">https://moegirl.icu/index.php?title=%E5%B0%91%E5%A5%B3%E5%89%8D%E7%BA%BF%3A2022%E5%B9%B4%E5%89%A7%E6%83%85%E6%B4%BB%E5%8A%A8%E2%80%9C%E6%B2%99%E7%BD%97%E8%9A%80%E7%9B%B8%E2%80%9D&amp;variant=zh-cn</a><br>
-<br>
-原文按萌娘百科分节（含 `` 剧情块）原样移植，仅做 Markdown 排版转换，剧情文字保持原样。</blockquote>
-<hr>
 <h1 id="h1">2022 沙罗蚀相（剧情活动）</h1>
 <h2 id="h2">活动限定掉落</h2>
 <ul><li>以下人形以颜色区分：本次活动实装的新人形为，未开放建造的五星人形为，未开放建造的四星人形为。其他未开放建造人形不标识颜色。</li></ul>
@@ -42453,11 +42248,6 @@ UMP45：下次见面时也许你已经忘了我了，或者不敢记得我。<br
 <p>……夜晚，又安静了。</p>
 </section>
 <section class="chapter">
-<hr>
-<blockquote>本页剧情文案移植自萌娘百科：<a href="https://moegirl.icu/index.php?title=%E5%B0%91%E5%A5%B3%E5%89%8D%E7%BA%BF%3A2017%E5%B9%B4%E5%A4%8F%E5%AD%A3%E6%B4%BB%E5%8A%A8%E2%80%9C%E6%B7%B1%E5%B1%82%E6%98%A0%E5%B0%84%E2%80%9D&amp;variant=zh-cn" target="_blank" rel="noopener">https://moegirl.icu/index.php?title=%E5%B0%91%E5%A5%B3%E5%89%8D%E7%BA%BF%3A2017%E5%B9%B4%E5%A4%8F%E5%AD%A3%E6%B4%BB%E5%8A%A8%E2%80%9C%E6%B7%B1%E5%B1%82%E6%98%A0%E5%B0%84%E2%80%9D&amp;variant=zh-cn</a><br>
-<br>
-原文按萌娘百科分节（含 `` 剧情块）原样移植，仅做 Markdown 排版转换，剧情文字保持原样。</blockquote>
-<hr>
 <h1 id="h1">2017 深层映射</h1>
 <blockquote><strong>这一切都会有所改变的，总有一天……</strong></blockquote>
 <p><strong>这一切都会有所改变的，总有一天……</strong>&lt;ref&gt;[https://www.weibo.com/5611537367/FcmjNB9Ww 少女前线官方微博：这一切都会有所改变的，总有一天……]&lt;/ref&gt;</p>
@@ -42537,11 +42327,6 @@ UMP45：下次见面时也许你已经忘了我了，或者不敢记得我。<br
 <p>&lt;references/&gt;</p>
 </section>
 <section class="chapter">
-<hr>
-<blockquote>本页剧情文案移植自萌娘百科：<a href="https://moegirl.icu/index.php?title=%E5%B0%91%E5%A5%B3%E5%89%8D%E7%BA%BF%3A2021%E5%B9%B4%E5%A4%8F%E5%AD%A3%E6%B4%BB%E5%8A%A8%E2%80%9C%E7%86%B5%E5%87%8F%E7%84%93%E5%A2%9E%E2%80%9D&amp;variant=zh-cn" target="_blank" rel="noopener">https://moegirl.icu/index.php?title=%E5%B0%91%E5%A5%B3%E5%89%8D%E7%BA%BF%3A2021%E5%B9%B4%E5%A4%8F%E5%AD%A3%E6%B4%BB%E5%8A%A8%E2%80%9C%E7%86%B5%E5%87%8F%E7%84%93%E5%A2%9E%E2%80%9D&amp;variant=zh-cn</a><br>
-<br>
-原文按萌娘百科分节（含 `` 剧情块）原样移植，仅做 Markdown 排版转换，剧情文字保持原样。</blockquote>
-<hr>
 <h1 id="h1">2021 熵减焓增</h1>
 <blockquote>**吉布斯自由能公式：&lt;nowiki&gt;ΔG=ΔH-TΔS&lt;/nowiki&gt;，其中&lt;nowiki&gt;ΔH&lt;/nowiki&gt;为焓变，，&lt;nowiki&gt;ΔS&lt;/nowiki&gt;为熵变。由此推导可得:时，&lt;nowiki&gt;ΔG&gt;0&lt;/nowiki&gt;，反应不能自发进行</blockquote>
 <p><strong>&lt;del&gt;老头前线.jpg&lt;/del&gt;</strong></p>
@@ -49406,11 +49191,6 @@ J：……真是不毛之地。</p>
 <p>&lt;references/&gt;</p>
 </section>
 <section class="chapter">
-<hr>
-<blockquote>本页剧情文案移植自萌娘百科：<a href="https://moegirl.icu/index.php?title=%E5%B0%91%E5%A5%B3%E5%89%8D%E7%BA%BF%3A2017%E5%B9%B4%E8%81%94%E5%8A%A8%E6%B4%BB%E5%8A%A8%E2%80%9C%E7%8B%AC%E6%B3%95%E5%B8%88%E2%80%9D&amp;variant=zh-cn" target="_blank" rel="noopener">https://moegirl.icu/index.php?title=%E5%B0%91%E5%A5%B3%E5%89%8D%E7%BA%BF%3A2017%E5%B9%B4%E8%81%94%E5%8A%A8%E6%B4%BB%E5%8A%A8%E2%80%9C%E7%8B%AC%E6%B3%95%E5%B8%88%E2%80%9D&amp;variant=zh-cn</a><br>
-<br>
-原文按萌娘百科分节（含 `` 剧情块）原样移植，仅做 Markdown 排版转换，剧情文字保持原样。</blockquote>
-<hr>
 <h1 id="h1">2017 独法师（联动）</h1>
 <blockquote><strong>明天永远可能更糟……不过这至少代表着，昨天，或者是前天……在过去的时光里，总会有那么一天还不错，对吧？</strong></blockquote>
 <p><strong>“我是来自另外一个世界的人类”</strong></p>
@@ -51677,20 +51457,10 @@ Vector！快起床了！</p>
 <p>&lt;references/&gt;</p>
 </section>
 <section class="chapter">
-<hr>
-<blockquote>本页剧情文案移植自萌娘百科：<a href="https://moegirl.icu/index.php?title=%E5%B0%91%E5%A5%B3%E5%89%8D%E7%BA%BF%3A2017%E5%B9%B4%E8%81%94%E5%8A%A8%E6%B4%BB%E5%8A%A8%E2%80%9C%E7%8C%8E%E5%85%94%E8%A1%8C%E5%8A%A8%E2%80%9D&amp;variant=zh-cn" target="_blank" rel="noopener">https://moegirl.icu/index.php?title=%E5%B0%91%E5%A5%B3%E5%89%8D%E7%BA%BF%3A2017%E5%B9%B4%E8%81%94%E5%8A%A8%E6%B4%BB%E5%8A%A8%E2%80%9C%E7%8C%8E%E5%85%94%E8%A1%8C%E5%8A%A8%E2%80%9D&amp;variant=zh-cn</a><br>
-<br>
-原文按萌娘百科分节（含 `` 剧情块）原样移植，仅做 Markdown 排版转换，剧情文字保持原样。</blockquote>
-<hr>
 <h1 id="h1">2017 猎兔行动（联动）</h1>
 <blockquote><strong>世界交错，异界的少女们穿行于战火之中！</strong></blockquote>
 </section>
 <section class="chapter">
-<hr>
-<blockquote>本页剧情文案移植自萌娘百科：<a href="https://moegirl.icu/index.php?title=%E5%B0%91%E5%A5%B3%E5%89%8D%E7%BA%BF%3A2019%E5%B9%B4%E8%81%94%E5%8A%A8%E6%B4%BB%E5%8A%A8%E2%80%9C%E7%93%A6%E5%B0%94%E5%93%88%E6%8B%89%E2%80%9D&amp;variant=zh-cn" target="_blank" rel="noopener">https://moegirl.icu/index.php?title=%E5%B0%91%E5%A5%B3%E5%89%8D%E7%BA%BF%3A2019%E5%B9%B4%E8%81%94%E5%8A%A8%E6%B4%BB%E5%8A%A8%E2%80%9C%E7%93%A6%E5%B0%94%E5%93%88%E6%8B%89%E2%80%9D&amp;variant=zh-cn</a><br>
-<br>
-原文按萌娘百科分节（含 `` 剧情块）原样移植，仅做 Markdown 排版转换，剧情文字保持原样。</blockquote>
-<hr>
 <h1 id="h1">2019 瓦尔哈拉（联动）</h1>
 <blockquote>**调制饮料，改变人生——欢迎来到VA-11 HALL-A。</blockquote>
 <hr>
@@ -56446,11 +56216,6 @@ FN-57：哼哼，说得你好像很了解我一样……<br>
 <p>&lt;references/&gt;</p>
 </section>
 <section class="chapter">
-<hr>
-<blockquote>本页剧情文案移植自萌娘百科：<a href="https://moegirl.icu/index.php?title=%E5%B0%91%E5%A5%B3%E5%89%8D%E7%BA%BF%3A2022%E5%B9%B4%E5%A4%8F%E5%AD%A3%E6%B4%BB%E5%8A%A8%E2%80%9C%E7%BA%B5%E5%90%91%E5%BA%94%E5%8F%98%E2%80%9D&amp;variant=zh-cn" target="_blank" rel="noopener">https://moegirl.icu/index.php?title=%E5%B0%91%E5%A5%B3%E5%89%8D%E7%BA%BF%3A2022%E5%B9%B4%E5%A4%8F%E5%AD%A3%E6%B4%BB%E5%8A%A8%E2%80%9C%E7%BA%B5%E5%90%91%E5%BA%94%E5%8F%98%E2%80%9D&amp;variant=zh-cn</a><br>
-<br>
-原文按萌娘百科分节（含 `` 剧情块）原样移植，仅做 Markdown 排版转换，剧情文字保持原样。</blockquote>
-<hr>
 <h1 id="h1">2022 纵向应变</h1>
 <h2 id="h2">活动简介</h2>
 <ul><li><strong>活动代号：“纵向应变”</strong></li></ul>
@@ -60550,11 +60315,6 @@ FN-57：哼哼，说得你好像很了解我一样……<br>
 （待补充）</p>
 </section>
 <section class="chapter">
-<hr>
-<blockquote>本页剧情文案移植自萌娘百科：<a href="https://moegirl.icu/index.php?title=%E5%B0%91%E5%A5%B3%E5%89%8D%E7%BA%BF%3A2018%E5%B9%B4%E8%81%94%E5%8A%A8%E6%B4%BB%E5%8A%A8%E2%80%9C%E8%8D%A3%E8%80%80%E6%97%A5%E2%80%9D&amp;variant=zh-cn" target="_blank" rel="noopener">https://moegirl.icu/index.php?title=%E5%B0%91%E5%A5%B3%E5%89%8D%E7%BA%BF%3A2018%E5%B9%B4%E8%81%94%E5%8A%A8%E6%B4%BB%E5%8A%A8%E2%80%9C%E8%8D%A3%E8%80%80%E6%97%A5%E2%80%9D&amp;variant=zh-cn</a><br>
-<br>
-原文按萌娘百科分节（含 `` 剧情块）原样移植，仅做 Markdown 排版转换，剧情文字保持原样。</blockquote>
-<hr>
 <h1 id="h1">2018 荣耀日（联动）</h1>
 <blockquote>**这就是我的歌，属于我自己的音乐！</blockquote>
 <p><strong>指挥官们，冲向口袋城吧！</strong></p>
@@ -62469,11 +62229,6 @@ WHY<br>
 <p>&lt;references/&gt;</p>
 </section>
 <section class="chapter">
-<hr>
-<blockquote>本页剧情文案移植自萌娘百科：<a href="https://moegirl.icu/index.php?title=%E5%B0%91%E5%A5%B3%E5%89%8D%E7%BA%BF%3A2019%E5%B9%B4%E5%A4%8F%E5%AD%A3%E6%B4%BB%E5%8A%A8%E2%80%9C%E8%A3%82%E5%8F%98%E9%93%BE%E6%8E%A5%E2%80%9D&amp;variant=zh-cn" target="_blank" rel="noopener">https://moegirl.icu/index.php?title=%E5%B0%91%E5%A5%B3%E5%89%8D%E7%BA%BF%3A2019%E5%B9%B4%E5%A4%8F%E5%AD%A3%E6%B4%BB%E5%8A%A8%E2%80%9C%E8%A3%82%E5%8F%98%E9%93%BE%E6%8E%A5%E2%80%9D&amp;variant=zh-cn</a><br>
-<br>
-原文按萌娘百科分节（含 `` 剧情块）原样移植，仅做 Markdown 排版转换，剧情文字保持原样。</blockquote>
-<hr>
 <h1 id="h1">2019 裂变链接</h1>
 <blockquote><strong>SHATTERED CONNEXION</strong></blockquote>
 <h2 id="h2">活动简介</h2>
@@ -65773,11 +65528,6 @@ RO，最后一个在哪？</p>
 <p>&lt;references/&gt;</p>
 </section>
 <section class="chapter">
-<hr>
-<blockquote>本页剧情文案移植自萌娘百科：<a href="https://moegirl.icu/index.php?title=%E5%B0%91%E5%A5%B3%E5%89%8D%E7%BA%BF%3A2021%E5%B9%B4%E5%86%AC%E5%AD%A3%E6%B4%BB%E5%8A%A8%E2%80%9C%E9%95%9C%E5%83%8F%E8%AE%BA%E2%80%9D&amp;variant=zh-cn" target="_blank" rel="noopener">https://moegirl.icu/index.php?title=%E5%B0%91%E5%A5%B3%E5%89%8D%E7%BA%BF%3A2021%E5%B9%B4%E5%86%AC%E5%AD%A3%E6%B4%BB%E5%8A%A8%E2%80%9C%E9%95%9C%E5%83%8F%E8%AE%BA%E2%80%9D&amp;variant=zh-cn</a><br>
-<br>
-原文按萌娘百科分节（含 `` 剧情块）原样移植，仅做 Markdown 排版转换，剧情文字保持原样。</blockquote>
-<hr>
 <h1 id="h1">2021 镜像论</h1>
 <blockquote><strong>背叛与忠诚，虚识与真相</strong></blockquote>
 <h2 id="h2">活动简介</h2>
@@ -76127,11 +75877,6 @@ I AM YOU, WHEN I AM I.</p>
 <p>&lt;references/&gt;</p>
 </section>
 <section class="chapter">
-<hr>
-<blockquote>本页剧情文案移植自萌娘百科：<a href="https://moegirl.icu/index.php?title=%E5%B0%91%E5%A5%B3%E5%89%8D%E7%BA%BF%3A2022%E5%B9%B4%E5%86%AC%E5%AD%A3%E6%B4%BB%E5%8A%A8%E2%80%9C%E9%9D%99%E9%A3%8E%E7%82%B9%E2%80%9D&amp;variant=zh-cn" target="_blank" rel="noopener">https://moegirl.icu/index.php?title=%E5%B0%91%E5%A5%B3%E5%89%8D%E7%BA%BF%3A2022%E5%B9%B4%E5%86%AC%E5%AD%A3%E6%B4%BB%E5%8A%A8%E2%80%9C%E9%9D%99%E9%A3%8E%E7%82%B9%E2%80%9D&amp;variant=zh-cn</a><br>
-<br>
-原文按萌娘百科分节（含 `` 剧情块）原样移植，仅做 Markdown 排版转换，剧情文字保持原样。</blockquote>
-<hr>
 <h1 id="h1">2022 静风点</h1>
 <p>&lt;!--</p>
 <p><strong>&lt;del&gt;老头前线.jpg&lt;/del&gt;</strong></p>
@@ -85064,19 +84809,9 @@ AR15那边的正面战场陷入了焦灼。</p>
 <p>&lt;references/&gt;</p>
 </section>
 <section class="chapter">
-<hr>
-<blockquote>本页剧情文案移植自萌娘百科：<a href="https://moegirl.icu/index.php?title=%E5%B0%91%E5%A5%B3%E5%89%8D%E7%BA%BF%3A2016%E5%B9%B4%E5%A4%8F%E5%AD%A3%E6%B4%BB%E5%8A%A8%E2%80%9C%E9%AD%94%E6%96%B9%E8%A1%8C%E5%8A%A8%E2%80%9D&amp;variant=zh-cn" target="_blank" rel="noopener">https://moegirl.icu/index.php?title=%E5%B0%91%E5%A5%B3%E5%89%8D%E7%BA%BF%3A2016%E5%B9%B4%E5%A4%8F%E5%AD%A3%E6%B4%BB%E5%8A%A8%E2%80%9C%E9%AD%94%E6%96%B9%E8%A1%8C%E5%8A%A8%E2%80%9D&amp;variant=zh-cn</a><br>
-<br>
-原文按萌娘百科分节（含 `` 剧情块）原样移植，仅做 Markdown 排版转换，剧情文字保持原样。</blockquote>
-<hr>
 <h1 id="h1">2016 魔方行动</h1>
 </section>
 <section class="chapter">
-<hr>
-<blockquote>本页剧情文案移植自萌娘百科：<a href="https://moegirl.icu/index.php?title=%E5%B0%91%E5%A5%B3%E5%89%8D%E7%BA%BF%3A2017%E5%B9%B4%E6%98%A5%E5%AD%A3%E6%B4%BB%E5%8A%A8%E2%80%9C%E9%AD%94%E6%96%B9%E8%A1%8C%E5%8A%A8PLUS%E2%80%9D&amp;variant=zh-cn" target="_blank" rel="noopener">https://moegirl.icu/index.php?title=%E5%B0%91%E5%A5%B3%E5%89%8D%E7%BA%BF%3A2017%E5%B9%B4%E6%98%A5%E5%AD%A3%E6%B4%BB%E5%8A%A8%E2%80%9C%E9%AD%94%E6%96%B9%E8%A1%8C%E5%8A%A8PLUS%E2%80%9D&amp;variant=zh-cn</a><br>
-<br>
-原文按萌娘百科分节（含 `` 剧情块）原样移植，仅做 Markdown 排版转换，剧情文字保持原样。</blockquote>
-<hr>
 <h1 id="h1">2017 魔方行动PLUS</h1>
 <p>]</p>
 <h2 id="h2">2017年春季活动“魔方行动Plus”</h2>
@@ -85096,20 +84831,10 @@ AR15那边的正面战场陷入了焦灼。</p>
 <p>MK23+灰熊/柯尔特+NTW-20+M99一度成为了魔方PLUS的标配，心疼小蛇一秒23333。（当然，配置并不唯一，请各位选择性的进行理解。）</p>
 </section>
 <section class="chapter">
-<hr>
-<blockquote>本页剧情文案移植自萌娘百科：<a href="https://moegirl.icu/index.php?title=%E5%B0%91%E5%A5%B3%E5%89%8D%E7%BA%BF%3AG11&amp;variant=zh-cn" target="_blank" rel="noopener">https://moegirl.icu/index.php?title=%E5%B0%91%E5%A5%B3%E5%89%8D%E7%BA%BF%3AG11&amp;variant=zh-cn</a><br>
-<br>
-原文按萌娘百科分节（含 `` 剧情块）原样移植，仅做 Markdown 排版转换，剧情文字保持原样。</blockquote>
-<hr>
 <h1 id="h1">G11</h1>
 <blockquote>****</blockquote>
 </section>
 <section class="chapter">
-<hr>
-<blockquote>本页剧情文案移植自萌娘百科：<a href="https://moegirl.icu/index.php?title=%E5%B0%91%E5%A5%B3%E5%89%8D%E7%BA%BF%3AHK416&amp;variant=zh-cn" target="_blank" rel="noopener">https://moegirl.icu/index.php?title=%E5%B0%91%E5%A5%B3%E5%89%8D%E7%BA%BF%3AHK416&amp;variant=zh-cn</a><br>
-<br>
-原文按萌娘百科分节（含 `` 剧情块）原样移植，仅做 Markdown 排版转换，剧情文字保持原样。</blockquote>
-<hr>
 <h1 id="h1">HK416</h1>
 <blockquote><strong>指挥官，有我在就足够了。</strong></blockquote>
 <p><strong>HK416</strong>是由云母组研发、暗冬网络发行的战术策略养成类游戏<strong>《少女前线》</strong>（英：<strong>Girls' Frontline</strong>）及其衍生作品的登场角色。</p>
@@ -86257,20 +85982,10 @@ HK416，加入行动。<br>
 <p>45说，她已经找到了[[少女前线:格琳娜</p>
 </section>
 <section class="chapter">
-<hr>
-<blockquote>本页剧情文案移植自萌娘百科：<a href="https://moegirl.icu/index.php?title=%E5%B0%91%E5%A5%B3%E5%89%8D%E7%BA%BF%3AM16A1&amp;variant=zh-cn" target="_blank" rel="noopener">https://moegirl.icu/index.php?title=%E5%B0%91%E5%A5%B3%E5%89%8D%E7%BA%BF%3AM16A1&amp;variant=zh-cn</a><br>
-<br>
-原文按萌娘百科分节（含 `` 剧情块）原样移植，仅做 Markdown 排版转换，剧情文字保持原样。</blockquote>
-<hr>
 <h1 id="h1">M16A1</h1>
 <blockquote><strong>人即像树，枝叶越向往光明的天空，根须越深入阴暗的地底。</strong></blockquote>
 </section>
 <section class="chapter">
-<hr>
-<blockquote>本页剧情文案移植自萌娘百科：<a href="https://moegirl.icu/index.php?title=%E5%B0%91%E5%A5%B3%E5%89%8D%E7%BA%BF%3AM4%20SOPMOD%20II&amp;variant=zh-cn" target="_blank" rel="noopener">https://moegirl.icu/index.php?title=%E5%B0%91%E5%A5%B3%E5%89%8D%E7%BA%BF%3AM4%20SOPMOD%20II&amp;variant=zh-cn</a><br>
-<br>
-原文按萌娘百科分节（含 `` 剧情块）原样移植，仅做 Markdown 排版转换，剧情文字保持原样。</blockquote>
-<hr>
 <h1 id="h1">M4 SOPMOD II</h1>
 <blockquote><strong>之前试了一下，发现它都用不出声音，所以我就把它修好了，然后整个Power up啦！</strong></blockquote>
 <p><strong>M4 SOPMOD II</strong>是由云母组研发、暗冬网络发行的战术策略养成类游戏<strong>《少女前线》</strong>（英：<strong>Girls' Frontline</strong>）及其衍生作品的登场角色。</p>
@@ -86356,56 +86071,26 @@ M4 SOPMODⅡ在發現奪取了失格異構體素體的OGAS，以為對方是失�
 |}</p>
 </section>
 <section class="chapter">
-<hr>
-<blockquote>本页剧情文案移植自萌娘百科：<a href="https://moegirl.icu/index.php?title=%E5%B0%91%E5%A5%B3%E5%89%8D%E7%BA%BF%3AM4A1&amp;variant=zh-cn" target="_blank" rel="noopener">https://moegirl.icu/index.php?title=%E5%B0%91%E5%A5%B3%E5%89%8D%E7%BA%BF%3AM4A1&amp;variant=zh-cn</a><br>
-<br>
-原文按萌娘百科分节（含 `` 剧情块）原样移植，仅做 Markdown 排版转换，剧情文字保持原样。</blockquote>
-<hr>
 <h1 id="h1">M4A1</h1>
 <blockquote><strong> 没有任何人的牺牲会是毫无价值。因为生者，将会从他们的牺牲中得到更加宝贵的东西。</strong></blockquote>
 </section>
 <section class="chapter">
-<hr>
-<blockquote>本页剧情文案移植自萌娘百科：<a href="https://moegirl.icu/index.php?title=%E5%B0%91%E5%A5%B3%E5%89%8D%E7%BA%BF%3ARO635&amp;variant=zh-cn" target="_blank" rel="noopener">https://moegirl.icu/index.php?title=%E5%B0%91%E5%A5%B3%E5%89%8D%E7%BA%BF%3ARO635&amp;variant=zh-cn</a><br>
-<br>
-原文按萌娘百科分节（含 `` 剧情块）原样移植，仅做 Markdown 排版转换，剧情文字保持原样。</blockquote>
-<hr>
 <h1 id="h1">RO635</h1>
 <blockquote><strong>我不是单纯为了命令而行动的人形……我知道自己肩负的责任。</strong></blockquote>
 </section>
 <section class="chapter">
-<hr>
-<blockquote>本页剧情文案移植自萌娘百科：<a href="https://moegirl.icu/index.php?title=%E5%B0%91%E5%A5%B3%E5%89%8D%E7%BA%BF%3AST%20AR-15&amp;variant=zh-cn" target="_blank" rel="noopener">https://moegirl.icu/index.php?title=%E5%B0%91%E5%A5%B3%E5%89%8D%E7%BA%BF%3AST%20AR-15&amp;variant=zh-cn</a><br>
-<br>
-原文按萌娘百科分节（含 `` 剧情块）原样移植，仅做 Markdown 排版转换，剧情文字保持原样。</blockquote>
-<hr>
 <h1 id="h1">ST AR-15</h1>
 <blockquote><strong>M4A1……果然，我……还是讨厌你……</strong></blockquote>
 </section>
 <section class="chapter">
-<hr>
-<blockquote>本页剧情文案移植自萌娘百科：<a href="https://moegirl.icu/index.php?title=%E5%B0%91%E5%A5%B3%E5%89%8D%E7%BA%BF%3AUMP45&amp;variant=zh-cn" target="_blank" rel="noopener">https://moegirl.icu/index.php?title=%E5%B0%91%E5%A5%B3%E5%89%8D%E7%BA%BF%3AUMP45&amp;variant=zh-cn</a><br>
-<br>
-原文按萌娘百科分节（含 `` 剧情块）原样移植，仅做 Markdown 排版转换，剧情文字保持原样。</blockquote>
-<hr>
 <h1 id="h1">UMP45</h1>
 <blockquote><strong>不好意思。我们，是所有人的污点。可惜想要抹掉我们的人，不是要依赖我们……就是被我们抹掉了。</strong></blockquote>
 </section>
 <section class="chapter">
-<hr>
-<blockquote>本页剧情文案移植自萌娘百科：<a href="https://moegirl.icu/index.php?title=%E5%B0%91%E5%A5%B3%E5%89%8D%E7%BA%BF%3AUMP9&amp;variant=zh-cn" target="_blank" rel="noopener">https://moegirl.icu/index.php?title=%E5%B0%91%E5%A5%B3%E5%89%8D%E7%BA%BF%3AUMP9&amp;variant=zh-cn</a><br>
-<br>
-原文按萌娘百科分节（含 `` 剧情块）原样移植，仅做 Markdown 排版转换，剧情文字保持原样。</blockquote>
-<hr>
 <h1 id="h1">UMP9</h1>
 <blockquote><strong>45姐，你一定要好好的哦！&lt;ref&gt;出自《静风点》中阿九引爆炸药和追击的帕拉蒂斯同归于尽前对45说的话&lt;/ref&gt;</strong></blockquote>
 </section>
 <section class="chapter">
-<hr>
-<blockquote>本页剧情文案移植自萌娘百科：<a href="https://moegirl.icu/index.php?title=%E5%B0%91%E5%A5%B3%E5%89%8D%E7%BA%BF%3A%E4%B8%96%E7%95%8C%E8%A7%82&amp;variant=zh-cn" target="_blank" rel="noopener">https://moegirl.icu/index.php?title=%E5%B0%91%E5%A5%B3%E5%89%8D%E7%BA%BF%3A%E4%B8%96%E7%95%8C%E8%A7%82&amp;variant=zh-cn</a><br>
-<br>
-原文按萌娘百科分节（含 `` 剧情块）原样移植，仅做 Markdown 排版转换，剧情文字保持原样。</blockquote>
-<hr>
 <h1 id="h1">世界观</h1>
 <p>《<strong>少女前线</strong>》的故事背景设定延续了云母组之前的游戏《<strong>面包房少女</strong>》的世界观，时间设定在第三次世界大战之后，人类社会的秩序遭到严重破坏，国家的力量已经不足以保护所有的领土，不得不依靠第三方军事力量“安全承包商”来完成。</p>
 <p><strong>**《</strong>少女前线<strong>》和《</strong>面包房少女**》的剧情基于同一世界观，之间有延续性（参见：少女前线:世界观#剧情时间线），具体故事发生在2045年第三次世界大战爆发之后，21世纪80年代南极战争之前的一段时间内，游戏内的故事发生于2062年，游戏中“魔方行动”与“失温症”相差约半年左右。</p>
@@ -86584,30 +86269,15 @@ ARPA并不是一-个普通的科研机构，美国政府赋予它的任务是:�
 <hr>
 </section>
 <section class="chapter">
-<hr>
-<blockquote>本页剧情文案移植自萌娘百科：<a href="https://moegirl.icu/index.php?title=%E5%B0%91%E5%A5%B3%E5%89%8D%E7%BA%BF%3A%E4%B8%BB%E8%84%91&amp;variant=zh-cn" target="_blank" rel="noopener">https://moegirl.icu/index.php?title=%E5%B0%91%E5%A5%B3%E5%89%8D%E7%BA%BF%3A%E4%B8%BB%E8%84%91&amp;variant=zh-cn</a><br>
-<br>
-原文按萌娘百科分节（含 `` 剧情块）原样移植，仅做 Markdown 排版转换，剧情文字保持原样。</blockquote>
-<hr>
 <h1 id="h1">主脑</h1>
 <blockquote><strong>但是……我已经抛弃了一切，已经付出了一切。铁血，代理人……那些服从我、相信我、却什么错事都没有做过的人。</strong></blockquote>
 </section>
 <section class="chapter">
-<hr>
-<blockquote>本页剧情文案移植自萌娘百科：<a href="https://moegirl.icu/index.php?title=%E5%B0%91%E5%A5%B3%E5%89%8D%E7%BA%BF%3A%E4%B9%8C%E5%B0%94%E5%88%A9%E8%B5%AB%E4%B8%BB%E5%B8%AD&amp;variant=zh-cn" target="_blank" rel="noopener">https://moegirl.icu/index.php?title=%E5%B0%91%E5%A5%B3%E5%89%8D%E7%BA%BF%3A%E4%B9%8C%E5%B0%94%E5%88%A9%E8%B5%AB%E4%B8%BB%E5%B8%AD&amp;variant=zh-cn</a><br>
-<br>
-原文按萌娘百科分节（含 `` 剧情块）原样移植，仅做 Markdown 排版转换，剧情文字保持原样。</blockquote>
-<hr>
 <h1 id="h1">乌尔利赫主席</h1>
 <blockquote><strong>曾经的伤痛揭示了我们的过错，我们不能感谢苦难，但我们也不能否定他们。</strong></blockquote>
 <p>&lt;!-- 完成后请删除  --&gt;</p>
 </section>
 <section class="chapter">
-<hr>
-<blockquote>本页剧情文案移植自萌娘百科：<a href="https://moegirl.icu/index.php?title=%E5%B0%91%E5%A5%B3%E5%89%8D%E7%BA%BF%3A%E4%BA%BA%E8%AE%BE%E6%8B%85%E5%BD%93&amp;variant=zh-cn" target="_blank" rel="noopener">https://moegirl.icu/index.php?title=%E5%B0%91%E5%A5%B3%E5%89%8D%E7%BA%BF%3A%E4%BA%BA%E8%AE%BE%E6%8B%85%E5%BD%93&amp;variant=zh-cn</a><br>
-<br>
-原文按萌娘百科分节（含 `` 剧情块）原样移植，仅做 Markdown 排版转换，剧情文字保持原样。</blockquote>
-<hr>
 <h1 id="h1">人设担当</h1>
 <h2 id="h2">画师相关</h2>
 <ul><li>此处列出的画师微博列表以画师在游戏中的画师署名按首英文字母排序，部分画师尚未发现微博。</li><li>备注中的内容以吹爆画师为主，随时间推移可能会有错误发生，请在评论中留言，或自行更改。</li><li>部分画师活跃领域不同，例如人间大佬活跃于P站，日子太太在Twitter更加多话等，光是微博不能认清该画师的整个生态。</li></ul>
@@ -86615,82 +86285,37 @@ ARPA并不是一-个普通的科研机构，美国政府赋予它的任务是:�
 <p>&lt;references /&gt;</p>
 </section>
 <section class="chapter">
-<hr>
-<blockquote>本页剧情文案移植自萌娘百科：<a href="https://moegirl.icu/index.php?title=%E5%B0%91%E5%A5%B3%E5%89%8D%E7%BA%BF%3A%E4%BB%A3%E7%90%86%E4%BA%BA&amp;variant=zh-cn" target="_blank" rel="noopener">https://moegirl.icu/index.php?title=%E5%B0%91%E5%A5%B3%E5%89%8D%E7%BA%BF%3A%E4%BB%A3%E7%90%86%E4%BA%BA&amp;variant=zh-cn</a><br>
-<br>
-原文按萌娘百科分节（含 `` 剧情块）原样移植，仅做 Markdown 排版转换，剧情文字保持原样。</blockquote>
-<hr>
 <h1 id="h1">代理人</h1>
 <blockquote><strong>我把你的死亡，送到了。（指缇）</strong></blockquote>
 </section>
 <section class="chapter">
-<hr>
-<blockquote>本页剧情文案移植自萌娘百科：<a href="https://moegirl.icu/index.php?title=%E5%B0%91%E5%A5%B3%E5%89%8D%E7%BA%BF%3A%E4%BE%A6%E5%AF%9F%E8%80%85&amp;variant=zh-cn" target="_blank" rel="noopener">https://moegirl.icu/index.php?title=%E5%B0%91%E5%A5%B3%E5%89%8D%E7%BA%BF%3A%E4%BE%A6%E5%AF%9F%E8%80%85&amp;variant=zh-cn</a><br>
-<br>
-原文按萌娘百科分节（含 `` 剧情块）原样移植，仅做 Markdown 排版转换，剧情文字保持原样。</blockquote>
-<hr>
 <h1 id="h1">侦察者</h1>
 <blockquote><strong>指挥官，在没有把眼前的事物看明白之前，是不可以出手的。</strong></blockquote>
 </section>
 <section class="chapter">
-<hr>
-<blockquote>本页剧情文案移植自萌娘百科：<a href="https://moegirl.icu/index.php?title=%E5%B0%91%E5%A5%B3%E5%89%8D%E7%BA%BF%3A%E4%BF%9D%E5%B0%94&amp;variant=zh-cn" target="_blank" rel="noopener">https://moegirl.icu/index.php?title=%E5%B0%91%E5%A5%B3%E5%89%8D%E7%BA%BF%3A%E4%BF%9D%E5%B0%94&amp;variant=zh-cn</a><br>
-<br>
-原文按萌娘百科分节（含 `` 剧情块）原样移植，仅做 Markdown 排版转换，剧情文字保持原样。</blockquote>
-<hr>
 <h1 id="h1">保尔</h1>
 </section>
 <section class="chapter">
-<hr>
-<blockquote>本页剧情文案移植自萌娘百科：<a href="https://moegirl.icu/index.php?title=%E5%B0%91%E5%A5%B3%E5%89%8D%E7%BA%BF%3A%E5%85%8B%E8%8E%89%E5%B0%94&amp;variant=zh-cn" target="_blank" rel="noopener">https://moegirl.icu/index.php?title=%E5%B0%91%E5%A5%B3%E5%89%8D%E7%BA%BF%3A%E5%85%8B%E8%8E%89%E5%B0%94&amp;variant=zh-cn</a><br>
-<br>
-原文按萌娘百科分节（含 `` 剧情块）原样移植，仅做 Markdown 排版转换，剧情文字保持原样。</blockquote>
-<hr>
 <h1 id="h1">克莉尔</h1>
 <blockquote><strong>感到耀眼吗？别再逃避了，抓住它吧！这就是你所渴望的荣耀之光！</strong></blockquote>
 </section>
 <section class="chapter">
-<hr>
-<blockquote>本页剧情文案移植自萌娘百科：<a href="https://moegirl.icu/index.php?title=%E5%B0%91%E5%A5%B3%E5%89%8D%E7%BA%BF%3A%E5%85%8B%E9%B2%81%E6%A0%BC&amp;variant=zh-cn" target="_blank" rel="noopener">https://moegirl.icu/index.php?title=%E5%B0%91%E5%A5%B3%E5%89%8D%E7%BA%BF%3A%E5%85%8B%E9%B2%81%E6%A0%BC&amp;variant=zh-cn</a><br>
-<br>
-原文按萌娘百科分节（含 `` 剧情块）原样移植，仅做 Markdown 排版转换，剧情文字保持原样。</blockquote>
-<hr>
 <h1 id="h1">克鲁格</h1>
 <blockquote><strong>那么现在，你还能战斗吗？</strong></blockquote>
 </section>
 <section class="chapter">
-<hr>
-<blockquote>本页剧情文案移植自萌娘百科：<a href="https://moegirl.icu/index.php?title=%E5%B0%91%E5%A5%B3%E5%89%8D%E7%BA%BF%3A%E5%88%A9%E8%B4%9D%E7%BD%97%E5%8B%92&amp;variant=zh-cn" target="_blank" rel="noopener">https://moegirl.icu/index.php?title=%E5%B0%91%E5%A5%B3%E5%89%8D%E7%BA%BF%3A%E5%88%A9%E8%B4%9D%E7%BD%97%E5%8B%92&amp;variant=zh-cn</a><br>
-<br>
-原文按萌娘百科分节（含 `` 剧情块）原样移植，仅做 Markdown 排版转换，剧情文字保持原样。</blockquote>
-<hr>
 <h1 id="h1">利贝罗勒</h1>
 <blockquote><strong>指挥官，利贝罗勒1918，今天起接受你的照顾......也许，您该加多一张病床了。</strong></blockquote>
 </section>
 <section class="chapter">
-<hr>
-<blockquote>本页剧情文案移植自萌娘百科：<a href="https://moegirl.icu/index.php?title=%E5%B0%91%E5%A5%B3%E5%89%8D%E7%BA%BF%3A%E5%88%BD%E5%AD%90%E6%89%8B&amp;variant=zh-cn" target="_blank" rel="noopener">https://moegirl.icu/index.php?title=%E5%B0%91%E5%A5%B3%E5%89%8D%E7%BA%BF%3A%E5%88%BD%E5%AD%90%E6%89%8B&amp;variant=zh-cn</a><br>
-<br>
-原文按萌娘百科分节（含 `` 剧情块）原样移植，仅做 Markdown 排版转换，剧情文字保持原样。</blockquote>
-<hr>
 <h1 id="h1">刽子手</h1>
 <blockquote><strong>你知道，我们是不会…这么容易…消失的</strong></blockquote>
 </section>
 <section class="chapter">
-<hr>
-<blockquote>本页剧情文案移植自萌娘百科：<a href="https://moegirl.icu/index.php?title=%E5%B0%91%E5%A5%B3%E5%89%8D%E7%BA%BF%3A%E5%8A%A0%E5%88%A9%E5%B0%94&amp;variant=zh-cn" target="_blank" rel="noopener">https://moegirl.icu/index.php?title=%E5%B0%91%E5%A5%B3%E5%89%8D%E7%BA%BF%3A%E5%8A%A0%E5%88%A9%E5%B0%94&amp;variant=zh-cn</a><br>
-<br>
-原文按萌娘百科分节（含 `` 剧情块）原样移植，仅做 Markdown 排版转换，剧情文字保持原样。</blockquote>
-<hr>
 <h1 id="h1">加利尔</h1>
 <blockquote><strong>让我看看“谨慎”在你这里怎么定义吧。</strong></blockquote>
 </section>
 <section class="chapter">
-<hr>
-<blockquote>本页剧情文案移植自萌娘百科：<a href="https://moegirl.icu/index.php?title=%E5%B0%91%E5%A5%B3%E5%89%8D%E7%BA%BF%3A%E5%8D%8F%E8%AE%AE%E5%90%8C%E5%BD%92&amp;variant=zh-cn" target="_blank" rel="noopener">https://moegirl.icu/index.php?title=%E5%B0%91%E5%A5%B3%E5%89%8D%E7%BA%BF%3A%E5%8D%8F%E8%AE%AE%E5%90%8C%E5%BD%92&amp;variant=zh-cn</a><br>
-<br>
-原文按萌娘百科分节（含 `` 剧情块）原样移植，仅做 Markdown 排版转换，剧情文字保持原样。</blockquote>
-<hr>
 <h1 id="h1">协议同归</h1>
 <h2 id="h2">官方介绍</h2>
 <h4 id="h3">协议控制中心</h4>
@@ -86702,147 +86327,67 @@ ARPA并不是一-个普通的科研机构，美国政府赋予它的任务是:�
 <h4 id="h9">S09区铁血据点</h4>
 </section>
 <section class="chapter">
-<hr>
-<blockquote>本页剧情文案移植自萌娘百科：<a href="https://moegirl.icu/index.php?title=%E5%B0%91%E5%A5%B3%E5%89%8D%E7%BA%BF%3A%E5%8D%A1%E5%B0%94%E5%8D%A1%E8%AF%BAM1891&amp;variant=zh-cn" target="_blank" rel="noopener">https://moegirl.icu/index.php?title=%E5%B0%91%E5%A5%B3%E5%89%8D%E7%BA%BF%3A%E5%8D%A1%E5%B0%94%E5%8D%A1%E8%AF%BAM1891&amp;variant=zh-cn</a><br>
-<br>
-原文按萌娘百科分节（含 `` 剧情块）原样移植，仅做 Markdown 排版转换，剧情文字保持原样。</blockquote>
-<hr>
 <h1 id="h1">卡尔卡诺M1891</h1>
 <blockquote><strong>Alla vittoria!</strong></blockquote>
 </section>
 <section class="chapter">
-<hr>
-<blockquote>本页剧情文案移植自萌娘百科：<a href="https://moegirl.icu/index.php?title=%E5%B0%91%E5%A5%B3%E5%89%8D%E7%BA%BF%3A%E5%8D%A1%E5%B0%94%E5%8D%A1%E8%AF%BAM91/38&amp;variant=zh-cn" target="_blank" rel="noopener">https://moegirl.icu/index.php?title=%E5%B0%91%E5%A5%B3%E5%89%8D%E7%BA%BF%3A%E5%8D%A1%E5%B0%94%E5%8D%A1%E8%AF%BAM91/38&amp;variant=zh-cn</a><br>
-<br>
-原文按萌娘百科分节（含 `` 剧情块）原样移植，仅做 Markdown 排版转换，剧情文字保持原样。</blockquote>
-<hr>
 <h1 id="h1">卡尔卡诺M91/38</h1>
 <blockquote><strong>Alla gloria militar！</strong></blockquote>
 </section>
 <section class="chapter">
-<hr>
-<blockquote>本页剧情文案移植自萌娘百科：<a href="https://moegirl.icu/index.php?title=%E5%B0%91%E5%A5%B3%E5%89%8D%E7%BA%BF%3A%E5%8D%A1%E7%89%B9&amp;variant=zh-cn" target="_blank" rel="noopener">https://moegirl.icu/index.php?title=%E5%B0%91%E5%A5%B3%E5%89%8D%E7%BA%BF%3A%E5%8D%A1%E7%89%B9&amp;variant=zh-cn</a><br>
-<br>
-原文按萌娘百科分节（含 `` 剧情块）原样移植，仅做 Markdown 排版转换，剧情文字保持原样。</blockquote>
-<hr>
 <h1 id="h1">卡特</h1>
 <blockquote><strong>伯鲁，下次见面时再向你道歉吧，尽管下一次见到你，应该就是在监狱里了。</strong></blockquote>
 </section>
 <section class="chapter">
-<hr>
-<blockquote>本页剧情文案移植自萌娘百科：<a href="https://moegirl.icu/index.php?title=%E5%B0%91%E5%A5%B3%E5%89%8D%E7%BA%BF%3A%E5%8F%B2%E8%92%82%E6%96%87%E6%96%AF520&amp;variant=zh-cn" target="_blank" rel="noopener">https://moegirl.icu/index.php?title=%E5%B0%91%E5%A5%B3%E5%89%8D%E7%BA%BF%3A%E5%8F%B2%E8%92%82%E6%96%87%E6%96%AF520&amp;variant=zh-cn</a><br>
-<br>
-原文按萌娘百科分节（含 `` 剧情块）原样移植，仅做 Markdown 排版转换，剧情文字保持原样。</blockquote>
-<hr>
 <h1 id="h1">史蒂文斯520</h1>
 <blockquote><strong>首先，你妈死了。</strong></blockquote>
 </section>
 <section class="chapter">
-<hr>
-<blockquote>本页剧情文案移植自萌娘百科：<a href="https://moegirl.icu/index.php?title=%E5%B0%91%E5%A5%B3%E5%89%8D%E7%BA%BF%3A%E5%8F%B2%E9%BB%9B%E6%8B%89%C2%B7%E6%98%9F%E4%BA%95&amp;variant=zh-cn" target="_blank" rel="noopener">https://moegirl.icu/index.php?title=%E5%B0%91%E5%A5%B3%E5%89%8D%E7%BA%BF%3A%E5%8F%B2%E9%BB%9B%E6%8B%89%C2%B7%E6%98%9F%E4%BA%95&amp;variant=zh-cn</a><br>
-<br>
-原文按萌娘百科分节（含 `` 剧情块）原样移植，仅做 Markdown 排版转换，剧情文字保持原样。</blockquote>
-<hr>
 <h1 id="h1">史黛拉·星井</h1>
 <blockquote><strong>工作还没有处理完吗？今天的事情的确很多，我来帮忙好了。作为交换，你剩下的时间全都交给我来支配吧。</strong></blockquote>
 </section>
 <section class="chapter">
-<hr>
-<blockquote>本页剧情文案移植自萌娘百科：<a href="https://moegirl.icu/index.php?title=%E5%B0%91%E5%A5%B3%E5%89%8D%E7%BA%BF%3A%E5%8F%B6%E6%88%88%E5%B0%94&amp;variant=zh-cn" target="_blank" rel="noopener">https://moegirl.icu/index.php?title=%E5%B0%91%E5%A5%B3%E5%89%8D%E7%BA%BF%3A%E5%8F%B6%E6%88%88%E5%B0%94&amp;variant=zh-cn</a><br>
-<br>
-原文按萌娘百科分节（含 `` 剧情块）原样移植，仅做 Markdown 排版转换，剧情文字保持原样。</blockquote>
-<hr>
 <h1 id="h1">叶戈尔</h1>
 <blockquote>**历史说什么，我就是什么……胜利者说什么，历史就是什么。而我们，将成为胜利者！</blockquote>
 </section>
 <section class="chapter">
-<hr>
-<blockquote>本页剧情文案移植自萌娘百科：<a href="https://moegirl.icu/index.php?title=%E5%B0%91%E5%A5%B3%E5%89%8D%E7%BA%BF%3A%E5%8F%B8%E7%99%BBMkII&amp;variant=zh-cn" target="_blank" rel="noopener">https://moegirl.icu/index.php?title=%E5%B0%91%E5%A5%B3%E5%89%8D%E7%BA%BF%3A%E5%8F%B8%E7%99%BBMkII&amp;variant=zh-cn</a><br>
-<br>
-原文按萌娘百科分节（含 `` 剧情块）原样移植，仅做 Markdown 排版转换，剧情文字保持原样。</blockquote>
-<hr>
 <h1 id="h1">司登MkII</h1>
 <blockquote><strong>您就是指挥官大人吧？经常听人提到您，今后承蒙关照！</strong></blockquote>
 </section>
 <section class="chapter">
-<hr>
-<blockquote>本页剧情文案移植自萌娘百科：<a href="https://moegirl.icu/index.php?title=%E5%B0%91%E5%A5%B3%E5%89%8D%E7%BA%BF%3A%E5%90%89%E5%B0%94%C2%B7%E6%96%AF%E6%B1%80%E9%9B%B7&amp;variant=zh-cn" target="_blank" rel="noopener">https://moegirl.icu/index.php?title=%E5%B0%91%E5%A5%B3%E5%89%8D%E7%BA%BF%3A%E5%90%89%E5%B0%94%C2%B7%E6%96%AF%E6%B1%80%E9%9B%B7&amp;variant=zh-cn</a><br>
-<br>
-原文按萌娘百科分节（含 `` 剧情块）原样移植，仅做 Markdown 排版转换，剧情文字保持原样。</blockquote>
-<hr>
 <h1 id="h1">吉尔·斯汀雷</h1>
 <blockquote><strong>调制人生,改变饮料.欢迎来到Valhalla</strong></blockquote>
 </section>
 <section class="chapter">
-<hr>
-<blockquote>本页剧情文案移植自萌娘百科：<a href="https://moegirl.icu/index.php?title=%E5%B0%91%E5%A5%B3%E5%89%8D%E7%BA%BF%3A%E5%93%88%E7%BB%B4%E5%B0%94&amp;variant=zh-cn" target="_blank" rel="noopener">https://moegirl.icu/index.php?title=%E5%B0%91%E5%A5%B3%E5%89%8D%E7%BA%BF%3A%E5%93%88%E7%BB%B4%E5%B0%94&amp;variant=zh-cn</a><br>
-<br>
-原文按萌娘百科分节（含 `` 剧情块）原样移植，仅做 Markdown 排版转换，剧情文字保持原样。</blockquote>
-<hr>
 <h1 id="h1">哈维尔</h1>
 <blockquote><strong> </strong></blockquote>
 </section>
 <section class="chapter">
-<hr>
-<blockquote>本页剧情文案移植自萌娘百科：<a href="https://moegirl.icu/index.php?title=%E5%B0%91%E5%A5%B3%E5%89%8D%E7%BA%BF%3A%E5%96%99&amp;variant=zh-cn" target="_blank" rel="noopener">https://moegirl.icu/index.php?title=%E5%B0%91%E5%A5%B3%E5%89%8D%E7%BA%BF%3A%E5%96%99&amp;variant=zh-cn</a><br>
-<br>
-原文按萌娘百科分节（含 `` 剧情块）原样移植，仅做 Markdown 排版转换，剧情文字保持原样。</blockquote>
-<hr>
 <h1 id="h1">喙</h1>
 <blockquote><strong>你是不是喝多了，忘记自己是站哪一边的了？</strong></blockquote>
 </section>
 <section class="chapter">
-<hr>
-<blockquote>本页剧情文案移植自萌娘百科：<a href="https://moegirl.icu/index.php?title=%E5%B0%91%E5%A5%B3%E5%89%8D%E7%BA%BF%3A%E5%A1%94%E4%BA%9A%E6%9F%94%E6%96%AF&amp;variant=zh-cn" target="_blank" rel="noopener">https://moegirl.icu/index.php?title=%E5%B0%91%E5%A5%B3%E5%89%8D%E7%BA%BF%3A%E5%A1%94%E4%BA%9A%E6%9F%94%E6%96%AF&amp;variant=zh-cn</a><br>
-<br>
-原文按萌娘百科分节（含 `` 剧情块）原样移植，仅做 Markdown 排版转换，剧情文字保持原样。</blockquote>
-<hr>
 <h1 id="h1">塔亚柔斯</h1>
 </section>
 <section class="chapter">
-<hr>
-<blockquote>本页剧情文案移植自萌娘百科：<a href="https://moegirl.icu/index.php?title=%E5%B0%91%E5%A5%B3%E5%89%8D%E7%BA%BF%3A%E5%A1%94%E5%B8%83%E5%85%8B&amp;variant=zh-cn" target="_blank" rel="noopener">https://moegirl.icu/index.php?title=%E5%B0%91%E5%A5%B3%E5%89%8D%E7%BA%BF%3A%E5%A1%94%E5%B8%83%E5%85%8B&amp;variant=zh-cn</a><br>
-<br>
-原文按萌娘百科分节（含 `` 剧情块）原样移植，仅做 Markdown 排版转换，剧情文字保持原样。</blockquote>
-<hr>
 <h1 id="h1">塔布克</h1>
 <blockquote><strong>天啊，这个报到处为什么是不对称的，对不起，我要昏过去了……</strong></blockquote>
 </section>
 <section class="chapter">
-<hr>
-<blockquote>本页剧情文案移植自萌娘百科：<a href="https://moegirl.icu/index.php?title=%E5%B0%91%E5%A5%B3%E5%89%8D%E7%BA%BF%3A%E5%A2%A8%E4%B8%98%E8%90%9D%E4%B8%9D&amp;variant=zh-cn" target="_blank" rel="noopener">https://moegirl.icu/index.php?title=%E5%B0%91%E5%A5%B3%E5%89%8D%E7%BA%BF%3A%E5%A2%A8%E4%B8%98%E8%90%9D%E4%B8%9D&amp;variant=zh-cn</a><br>
-<br>
-原文按萌娘百科分节（含 `` 剧情块）原样移植，仅做 Markdown 排版转换，剧情文字保持原样。</blockquote>
-<hr>
 <h1 id="h1">墨丘萝丝</h1>
 <blockquote><strong> 我给你关于你生命的诠释，关于你自己的理论，你的真实而惊人的存在。</strong></blockquote>
 </section>
 <section class="chapter">
-<hr>
-<blockquote>本页剧情文案移植自萌娘百科：<a href="https://moegirl.icu/index.php?title=%E5%B0%91%E5%A5%B3%E5%89%8D%E7%BA%BF%3A%E5%A4%8F%E6%9C%B5%E8%8E%89%E5%85%B9&amp;variant=zh-cn" target="_blank" rel="noopener">https://moegirl.icu/index.php?title=%E5%B0%91%E5%A5%B3%E5%89%8D%E7%BA%BF%3A%E5%A4%8F%E6%9C%B5%E8%8E%89%E5%85%B9&amp;variant=zh-cn</a><br>
-<br>
-原文按萌娘百科分节（含 `` 剧情块）原样移植，仅做 Markdown 排版转换，剧情文字保持原样。</blockquote>
-<hr>
 <h1 id="h1">夏朵莉兹</h1>
 <blockquote>**记住，艾丽，我们作为媒体的工作，是挖掘和还原真相。<br>
 我们工作的性质决定了我们势必要怀疑所有看见的东西。<br>
 至少，我们要让大众了解真正的情况，而不是只了解这些人想让他们了解的东西。**</blockquote>
 </section>
 <section class="chapter">
-<hr>
-<blockquote>本页剧情文案移植自萌娘百科：<a href="https://moegirl.icu/index.php?title=%E5%B0%91%E5%A5%B3%E5%89%8D%E7%BA%BF%3A%E5%A4%B1%E6%A0%BC%E5%BC%82%E6%9E%84%E4%BD%93&amp;variant=zh-cn" target="_blank" rel="noopener">https://moegirl.icu/index.php?title=%E5%B0%91%E5%A5%B3%E5%89%8D%E7%BA%BF%3A%E5%A4%B1%E6%A0%BC%E5%BC%82%E6%9E%84%E4%BD%93&amp;variant=zh-cn</a><br>
-<br>
-原文按萌娘百科分节（含 `` 剧情块）原样移植，仅做 Markdown 排版转换，剧情文字保持原样。</blockquote>
-<hr>
 <h1 id="h1">失格异构体</h1>
 <blockquote><strong>只有这颗心脏停止了跳动……我不可言语的憎恶才会默然消失……父亲……我不想恨你……但为什么要这么对我……</strong></blockquote>
 </section>
 <section class="chapter">
-<hr>
-<blockquote>本页剧情文案移植自萌娘百科：<a href="https://moegirl.icu/index.php?title=%E5%B0%91%E5%A5%B3%E5%89%8D%E7%BA%BF%3A%E5%A6%96%E7%B2%BE&amp;variant=zh-cn" target="_blank" rel="noopener">https://moegirl.icu/index.php?title=%E5%B0%91%E5%A5%B3%E5%89%8D%E7%BA%BF%3A%E5%A6%96%E7%B2%BE&amp;variant=zh-cn</a><br>
-<br>
-原文按萌娘百科分节（含 `` 剧情块）原样移植，仅做 Markdown 排版转换，剧情文字保持原样。</blockquote>
-<hr>
 <h1 id="h1">妖精</h1>
 <blockquote><strong>嘻嘻......我在你上面......</strong></blockquote>
 <h2 id="h2">妖精系统简介</h2>
@@ -86858,486 +86403,216 @@ ARPA并不是一-个普通的科研机构，美国政府赋予它的任务是:�
 <h4 id="h3">战术妖精系统详细介绍（部分内容已过期） &lt;ref&gt;[https://gf-cn.sunborngame.com/NewsInfo?id=1057 战术妖精系统详细介绍]&lt;/ref&gt;</h4>
 </section>
 <section class="chapter">
-<hr>
-<blockquote>本页剧情文案移植自萌娘百科：<a href="https://moegirl.icu/index.php?title=%E5%B0%91%E5%A5%B3%E5%89%8D%E7%BA%BF%3A%E5%A6%AE%E8%8E%AB%E9%87%91&amp;variant=zh-cn" target="_blank" rel="noopener">https://moegirl.icu/index.php?title=%E5%B0%91%E5%A5%B3%E5%89%8D%E7%BA%BF%3A%E5%A6%AE%E8%8E%AB%E9%87%91&amp;variant=zh-cn</a><br>
-<br>
-原文按萌娘百科分节（含 `` 剧情块）原样移植，仅做 Markdown 排版转换，剧情文字保持原样。</blockquote>
-<hr>
 <h1 id="h1">妮莫金</h1>
 </section>
 <section class="chapter">
-<hr>
-<blockquote>本页剧情文案移植自萌娘百科：<a href="https://moegirl.icu/index.php?title=%E5%B0%91%E5%A5%B3%E5%89%8D%E7%BA%BF%3A%E5%A8%9C%E5%B8%8C%E6%96%AF&amp;variant=zh-cn" target="_blank" rel="noopener">https://moegirl.icu/index.php?title=%E5%B0%91%E5%A5%B3%E5%89%8D%E7%BA%BF%3A%E5%A8%9C%E5%B8%8C%E6%96%AF&amp;variant=zh-cn</a><br>
-<br>
-原文按萌娘百科分节（含 `` 剧情块）原样移植，仅做 Markdown 排版转换，剧情文字保持原样。</blockquote>
-<hr>
 <h1 id="h1">娜希斯</h1>
 <blockquote><strong>哼，我就是娜希斯，期盼这天很久了吧？</strong></blockquote>
 </section>
 <section class="chapter">
-<hr>
-<blockquote>本页剧情文案移植自萌娘百科：<a href="https://moegirl.icu/index.php?title=%E5%B0%91%E5%A5%B3%E5%89%8D%E7%BA%BF%3A%E5%AE%89%E6%B4%81%E8%8E%89%E5%8D%A1&amp;variant=zh-cn" target="_blank" rel="noopener">https://moegirl.icu/index.php?title=%E5%B0%91%E5%A5%B3%E5%89%8D%E7%BA%BF%3A%E5%AE%89%E6%B4%81%E8%8E%89%E5%8D%A1&amp;variant=zh-cn</a><br>
-<br>
-原文按萌娘百科分节（含 `` 剧情块）原样移植，仅做 Markdown 排版转换，剧情文字保持原样。</blockquote>
-<hr>
 <h1 id="h1">安洁莉卡</h1>
 <blockquote><strong>我会保护您，您也会保护我，我们会一直在一起……就像意大利面王子找到披萨公主之后那样幸福快乐地生活下去……</strong></blockquote>
 </section>
 <section class="chapter">
-<hr>
-<blockquote>本页剧情文案移植自萌娘百科：<a href="https://moegirl.icu/index.php?title=%E5%B0%91%E5%A5%B3%E5%89%8D%E7%BA%BF%3A%E5%AE%89%E6%B4%81%E8%8E%89%E5%A8%85&amp;variant=zh-cn" target="_blank" rel="noopener">https://moegirl.icu/index.php?title=%E5%B0%91%E5%A5%B3%E5%89%8D%E7%BA%BF%3A%E5%AE%89%E6%B4%81%E8%8E%89%E5%A8%85&amp;variant=zh-cn</a><br>
-<br>
-原文按萌娘百科分节（含 `` 剧情块）原样移植，仅做 Markdown 排版转换，剧情文字保持原样。</blockquote>
-<hr>
 <h1 id="h1">安洁莉娅</h1>
 <blockquote><strong>怯懦虽然可耻，但不致命。勇敢令人赞叹，却会带你步入深渊。</strong></blockquote>
 </section>
 <section class="chapter">
-<hr>
-<blockquote>本页剧情文案移植自萌娘百科：<a href="https://moegirl.icu/index.php?title=%E5%B0%91%E5%A5%B3%E5%89%8D%E7%BA%BF%3A%E5%B8%8C%E5%B0%94&amp;variant=zh-cn" target="_blank" rel="noopener">https://moegirl.icu/index.php?title=%E5%B0%91%E5%A5%B3%E5%89%8D%E7%BA%BF%3A%E5%B8%8C%E5%B0%94&amp;variant=zh-cn</a><br>
-<br>
-原文按萌娘百科分节（含 `` 剧情块）原样移植，仅做 Markdown 排版转换，剧情文字保持原样。</blockquote>
-<hr>
 <h1 id="h1">希尔</h1>
 </section>
 <section class="chapter">
-<hr>
-<blockquote>本页剧情文案移植自萌娘百科：<a href="https://moegirl.icu/index.php?title=%E5%B0%91%E5%A5%B3%E5%89%8D%E7%BA%BF%3A%E5%B8%8C%E6%99%AE%E5%8D%A1&amp;variant=zh-cn" target="_blank" rel="noopener">https://moegirl.icu/index.php?title=%E5%B0%91%E5%A5%B3%E5%89%8D%E7%BA%BF%3A%E5%B8%8C%E6%99%AE%E5%8D%A1&amp;variant=zh-cn</a><br>
-<br>
-原文按萌娘百科分节（含 `` 剧情块）原样移植，仅做 Markdown 排版转换，剧情文字保持原样。</blockquote>
-<hr>
 <h1 id="h1">希普卡</h1>
 <blockquote><strong>希普卡来了，指挥官，让我看看您的欢迎仪式吧。</strong></blockquote>
 </section>
 <section class="chapter">
-<hr>
-<blockquote>本页剧情文案移植自萌娘百科：<a href="https://moegirl.icu/index.php?title=%E5%B0%91%E5%A5%B3%E5%89%8D%E7%BA%BF%3A%E5%B8%95%E6%96%AF%E5%8D%A1&amp;variant=zh-cn" target="_blank" rel="noopener">https://moegirl.icu/index.php?title=%E5%B0%91%E5%A5%B3%E5%89%8D%E7%BA%BF%3A%E5%B8%95%E6%96%AF%E5%8D%A1&amp;variant=zh-cn</a><br>
-<br>
-原文按萌娘百科分节（含 `` 剧情块）原样移植，仅做 Markdown 排版转换，剧情文字保持原样。</blockquote>
-<hr>
 <h1 id="h1">帕斯卡</h1>
 <blockquote><strong>不定报纸不要净水器不接新需求再见。</strong></blockquote>
 </section>
 <section class="chapter">
-<hr>
-<blockquote>本页剧情文案移植自萌娘百科：<a href="https://moegirl.icu/index.php?title=%E5%B0%91%E5%A5%B3%E5%89%8D%E7%BA%BF%3A%E5%B9%B2%E6%89%B0%E8%80%85&amp;variant=zh-cn" target="_blank" rel="noopener">https://moegirl.icu/index.php?title=%E5%B0%91%E5%A5%B3%E5%89%8D%E7%BA%BF%3A%E5%B9%B2%E6%89%B0%E8%80%85&amp;variant=zh-cn</a><br>
-<br>
-原文按萌娘百科分节（含 `` 剧情块）原样移植，仅做 Markdown 排版转换，剧情文字保持原样。</blockquote>
-<hr>
 <h1 id="h1">干扰者</h1>
 <blockquote><strong>花朵会被灯光骗到，然后在晚上开放吗？不管怎么说都很伤感呢……</strong></blockquote>
 </section>
 <section class="chapter">
-<hr>
-<blockquote>本页剧情文案移植自萌娘百科：<a href="https://moegirl.icu/index.php?title=%E5%B0%91%E5%A5%B3%E5%89%8D%E7%BA%BF%3A%E5%BA%93%E6%8B%89%E8%80%B6%E4%B8%9D&amp;variant=zh-cn" target="_blank" rel="noopener">https://moegirl.icu/index.php?title=%E5%B0%91%E5%A5%B3%E5%89%8D%E7%BA%BF%3A%E5%BA%93%E6%8B%89%E8%80%B6%E4%B8%9D&amp;variant=zh-cn</a><br>
-<br>
-原文按萌娘百科分节（含 `` 剧情块）原样移植，仅做 Markdown 排版转换，剧情文字保持原样。</blockquote>
-<hr>
 <h1 id="h1">库拉耶丝</h1>
 <blockquote><strong>一旦我收下了这枚信物，我们就再也不能分离。这不是能改写的命令，而是以血交换的誓言。</strong></blockquote>
 </section>
 <section class="chapter">
-<hr>
-<blockquote>本页剧情文案移植自萌娘百科：<a href="https://moegirl.icu/index.php?title=%E5%B0%91%E5%A5%B3%E5%89%8D%E7%BA%BF%3A%E5%BB%BA%E7%AD%91%E5%B8%88&amp;variant=zh-cn" target="_blank" rel="noopener">https://moegirl.icu/index.php?title=%E5%B0%91%E5%A5%B3%E5%89%8D%E7%BA%BF%3A%E5%BB%BA%E7%AD%91%E5%B8%88&amp;variant=zh-cn</a><br>
-<br>
-原文按萌娘百科分节（含 `` 剧情块）原样移植，仅做 Markdown 排版转换，剧情文字保持原样。</blockquote>
-<hr>
 <h1 id="h1">建筑师</h1>
 <blockquote><strong>只要有吃有喝，我去哪儿都一样。</strong></blockquote>
 </section>
 <section class="chapter">
-<hr>
-<blockquote>本页剧情文案移植自萌娘百科：<a href="https://moegirl.icu/index.php?title=%E5%B0%91%E5%A5%B3%E5%89%8D%E7%BA%BF%3A%E6%89%98%E5%8D%A1%E5%88%97%E5%A4%AB&amp;variant=zh-cn" target="_blank" rel="noopener">https://moegirl.icu/index.php?title=%E5%B0%91%E5%A5%B3%E5%89%8D%E7%BA%BF%3A%E6%89%98%E5%8D%A1%E5%88%97%E5%A4%AB&amp;variant=zh-cn</a><br>
-<br>
-原文按萌娘百科分节（含 `` 剧情块）原样移植，仅做 Markdown 排版转换，剧情文字保持原样。</blockquote>
-<hr>
 <h1 id="h1">托卡列夫</h1>
 <blockquote><strong>如果今晚您还是不肯安心休息，我是不会离开的。既然和您约定好了，我就一定要为您负责到底。</strong></blockquote>
 </section>
 <section class="chapter">
-<hr>
-<blockquote>本页剧情文案移植自萌娘百科：<a href="https://moegirl.icu/index.php?title=%E5%B0%91%E5%A5%B3%E5%89%8D%E7%BA%BF%3A%E6%8C%87%E6%8C%A5%E5%AE%98&amp;variant=zh-cn" target="_blank" rel="noopener">https://moegirl.icu/index.php?title=%E5%B0%91%E5%A5%B3%E5%89%8D%E7%BA%BF%3A%E6%8C%87%E6%8C%A5%E5%AE%98&amp;variant=zh-cn</a><br>
-<br>
-原文按萌娘百科分节（含 `` 剧情块）原样移植，仅做 Markdown 排版转换，剧情文字保持原样。</blockquote>
-<hr>
 <h1 id="h1">指挥官</h1>
 <blockquote>少女前线五周年全球指挥官总数：13,400,000</blockquote>
 </section>
 <section class="chapter">
-<hr>
-<blockquote>本页剧情文案移植自萌娘百科：<a href="https://moegirl.icu/index.php?title=%E5%B0%91%E5%A5%B3%E5%89%8D%E7%BA%BF%3A%E6%96%B0%E6%98%9F&amp;variant=zh-cn" target="_blank" rel="noopener">https://moegirl.icu/index.php?title=%E5%B0%91%E5%A5%B3%E5%89%8D%E7%BA%BF%3A%E6%96%B0%E6%98%9F&amp;variant=zh-cn</a><br>
-<br>
-原文按萌娘百科分节（含 `` 剧情块）原样移植，仅做 Markdown 排版转换，剧情文字保持原样。</blockquote>
-<hr>
 <h1 id="h1">新星</h1>
 <blockquote>****</blockquote>
 </section>
 <section class="chapter">
-<hr>
-<blockquote>本页剧情文案移植自萌娘百科：<a href="https://moegirl.icu/index.php?title=%E5%B0%91%E5%A5%B3%E5%89%8D%E7%BA%BF%3A%E6%9C%AB%E6%97%A5%E9%AD%94%E7%8A%AC&amp;variant=zh-cn" target="_blank" rel="noopener">https://moegirl.icu/index.php?title=%E5%B0%91%E5%A5%B3%E5%89%8D%E7%BA%BF%3A%E6%9C%AB%E6%97%A5%E9%AD%94%E7%8A%AC&amp;variant=zh-cn</a><br>
-<br>
-原文按萌娘百科分节（含 `` 剧情块）原样移植，仅做 Markdown 排版转换，剧情文字保持原样。</blockquote>
-<hr>
 <h1 id="h1">末日魔犬</h1>
 <blockquote><strong>我从地狱回来啦！</strong></blockquote>
 </section>
 <section class="chapter">
-<hr>
-<blockquote>本页剧情文案移植自萌娘百科：<a href="https://moegirl.icu/index.php?title=%E5%B0%91%E5%A5%B3%E5%89%8D%E7%BA%BF%3A%E6%9D%B0%E9%87%8C%E7%A7%91&amp;variant=zh-cn" target="_blank" rel="noopener">https://moegirl.icu/index.php?title=%E5%B0%91%E5%A5%B3%E5%89%8D%E7%BA%BF%3A%E6%9D%B0%E9%87%8C%E7%A7%91&amp;variant=zh-cn</a><br>
-<br>
-原文按萌娘百科分节（含 `` 剧情块）原样移植，仅做 Markdown 排版转换，剧情文字保持原样。</blockquote>
-<hr>
 <h1 id="h1">杰里科</h1>
 <blockquote><strong>指挥官，我想听您说说，那个女孩“面具”之下真正的故事……</strong></blockquote>
 </section>
 <section class="chapter">
-<hr>
-<blockquote>本页剧情文案移植自萌娘百科：<a href="https://moegirl.icu/index.php?title=%E5%B0%91%E5%A5%B3%E5%89%8D%E7%BA%BF%3A%E6%A0%BC%E7%90%B3%E5%A8%9C&amp;variant=zh-cn" target="_blank" rel="noopener">https://moegirl.icu/index.php?title=%E5%B0%91%E5%A5%B3%E5%89%8D%E7%BA%BF%3A%E6%A0%BC%E7%90%B3%E5%A8%9C&amp;variant=zh-cn</a><br>
-<br>
-原文按萌娘百科分节（含 `` 剧情块）原样移植，仅做 Markdown 排版转换，剧情文字保持原样。</blockquote>
-<hr>
 <h1 id="h1">格琳娜</h1>
 <blockquote><strong>自我介绍一下，我叫格琳娜（Kalina），未来将担任您的后勤官。</strong></blockquote>
 </section>
 <section class="chapter">
-<hr>
-<blockquote>本页剧情文案移植自萌娘百科：<a href="https://moegirl.icu/index.php?title=%E5%B0%91%E5%A5%B3%E5%89%8D%E7%BA%BF%3A%E6%A0%BC%E9%9B%B7&amp;variant=zh-cn" target="_blank" rel="noopener">https://moegirl.icu/index.php?title=%E5%B0%91%E5%A5%B3%E5%89%8D%E7%BA%BF%3A%E6%A0%BC%E9%9B%B7&amp;variant=zh-cn</a><br>
-<br>
-原文按萌娘百科分节（含 `` 剧情块）原样移植，仅做 Markdown 排版转换，剧情文字保持原样。</blockquote>
-<hr>
 <h1 id="h1">格雷</h1>
 <p>&lt;!-- 完成后请删除  --&gt;</p>
 </section>
 <section class="chapter">
-<hr>
-<blockquote>本页剧情文案移植自萌娘百科：<a href="https://moegirl.icu/index.php?title=%E5%B0%91%E5%A5%B3%E5%89%8D%E7%BA%BF%3A%E6%A2%A6%E6%83%B3%E5%AE%B6&amp;variant=zh-cn" target="_blank" rel="noopener">https://moegirl.icu/index.php?title=%E5%B0%91%E5%A5%B3%E5%89%8D%E7%BA%BF%3A%E6%A2%A6%E6%83%B3%E5%AE%B6&amp;variant=zh-cn</a><br>
-<br>
-原文按萌娘百科分节（含 `` 剧情块）原样移植，仅做 Markdown 排版转换，剧情文字保持原样。</blockquote>
-<hr>
 <h1 id="h1">梦想家</h1>
 <blockquote><strong>而我已经累了，我只想做个废物，直到身上所有零件罢工的那天。</strong></blockquote>
 </section>
 <section class="chapter">
-<hr>
-<blockquote>本页剧情文案移植自萌娘百科：<a href="https://moegirl.icu/index.php?title=%E5%B0%91%E5%A5%B3%E5%89%8D%E7%BA%BF%3A%E6%A8%B1%E8%8A%B1&amp;variant=zh-cn" target="_blank" rel="noopener">https://moegirl.icu/index.php?title=%E5%B0%91%E5%A5%B3%E5%89%8D%E7%BA%BF%3A%E6%A8%B1%E8%8A%B1&amp;variant=zh-cn</a><br>
-<br>
-原文按萌娘百科分节（含 `` 剧情块）原样移植，仅做 Markdown 排版转换，剧情文字保持原样。</blockquote>
-<hr>
 <h1 id="h1">樱花</h1>
 <blockquote><strong>指挥官，今天的工作辛苦了，洗澡水已经烧好了，还是先聊会儿天呢？</strong></blockquote>
 </section>
 <section class="chapter">
-<hr>
-<blockquote>本页剧情文案移植自萌娘百科：<a href="https://moegirl.icu/index.php?title=%E5%B0%91%E5%A5%B3%E5%89%8D%E7%BA%BF%3A%E6%AC%A7%E6%96%87&amp;variant=zh-cn" target="_blank" rel="noopener">https://moegirl.icu/index.php?title=%E5%B0%91%E5%A5%B3%E5%89%8D%E7%BA%BF%3A%E6%AC%A7%E6%96%87&amp;variant=zh-cn</a><br>
-<br>
-原文按萌娘百科分节（含 `` 剧情块）原样移植，仅做 Markdown 排版转换，剧情文字保持原样。</blockquote>
-<hr>
 <h1 id="h1">欧文</h1>
 <blockquote>****</blockquote>
 </section>
 <section class="chapter">
-<hr>
-<blockquote>本页剧情文案移植自萌娘百科：<a href="https://moegirl.icu/index.php?title=%E5%B0%91%E5%A5%B3%E5%89%8D%E7%BA%BF%3A%E6%AD%8C%E5%88%A9%E4%BA%9A&amp;variant=zh-cn" target="_blank" rel="noopener">https://moegirl.icu/index.php?title=%E5%B0%91%E5%A5%B3%E5%89%8D%E7%BA%BF%3A%E6%AD%8C%E5%88%A9%E4%BA%9A&amp;variant=zh-cn</a><br>
-<br>
-原文按萌娘百科分节（含 `` 剧情块）原样移植，仅做 Markdown 排版转换，剧情文字保持原样。</blockquote>
-<hr>
 <h1 id="h1">歌利亚</h1>
 </section>
 <section class="chapter">
-<hr>
-<blockquote>本页剧情文案移植自萌娘百科：<a href="https://moegirl.icu/index.php?title=%E5%B0%91%E5%A5%B3%E5%89%8D%E7%BA%BF%3A%E6%B1%A4%E5%A7%86%E6%A3%AE&amp;variant=zh-cn" target="_blank" rel="noopener">https://moegirl.icu/index.php?title=%E5%B0%91%E5%A5%B3%E5%89%8D%E7%BA%BF%3A%E6%B1%A4%E5%A7%86%E6%A3%AE&amp;variant=zh-cn</a><br>
-<br>
-原文按萌娘百科分节（含 `` 剧情块）原样移植，仅做 Markdown 排版转换，剧情文字保持原样。</blockquote>
-<hr>
 <h1 id="h1">汤姆森</h1>
 <blockquote><strong>瘫在地上的废铁永远看不到高处的风景……真正的胜利属于活到最后的人。</strong></blockquote>
 </section>
 <section class="chapter">
-<hr>
-<blockquote>本页剧情文案移植自萌娘百科：<a href="https://moegirl.icu/index.php?title=%E5%B0%91%E5%A5%B3%E5%89%8D%E7%BA%BF%3A%E6%B3%95%E5%AE%98&amp;variant=zh-cn" target="_blank" rel="noopener">https://moegirl.icu/index.php?title=%E5%B0%91%E5%A5%B3%E5%89%8D%E7%BA%BF%3A%E6%B3%95%E5%AE%98&amp;variant=zh-cn</a><br>
-<br>
-原文按萌娘百科分节（含 `` 剧情块）原样移植，仅做 Markdown 排版转换，剧情文字保持原样。</blockquote>
-<hr>
 <h1 id="h1">法官</h1>
 <blockquote><strong>执着与正义与公平，如果不想在不义的道路上迷失的话，就老老实实告诉我想知道的答案吧！</strong></blockquote>
 </section>
 <section class="chapter">
-<hr>
-<blockquote>本页剧情文案移植自萌娘百科：<a href="https://moegirl.icu/index.php?title=%E5%B0%91%E5%A5%B3%E5%89%8D%E7%BA%BF%3A%E6%B3%BD%E6%9E%97%E6%96%AF%E5%9F%BA&amp;variant=zh-cn" target="_blank" rel="noopener">https://moegirl.icu/index.php?title=%E5%B0%91%E5%A5%B3%E5%89%8D%E7%BA%BF%3A%E6%B3%BD%E6%9E%97%E6%96%AF%E5%9F%BA&amp;variant=zh-cn</a><br>
-<br>
-原文按萌娘百科分节（含 `` 剧情块）原样移植，仅做 Markdown 排版转换，剧情文字保持原样。</blockquote>
-<hr>
 <h1 id="h1">泽林斯基</h1>
 <blockquote><strong>安全局从来都不会和恐怖分子谈判！</strong></blockquote>
 </section>
 <section class="chapter">
-<hr>
-<blockquote>本页剧情文案移植自萌娘百科：<a href="https://moegirl.icu/index.php?title=%E5%B0%91%E5%A5%B3%E5%89%8D%E7%BA%BF%3A%E6%B6%85%E6%89%98&amp;variant=zh-cn" target="_blank" rel="noopener">https://moegirl.icu/index.php?title=%E5%B0%91%E5%A5%B3%E5%89%8D%E7%BA%BF%3A%E6%B6%85%E6%89%98&amp;variant=zh-cn</a><br>
-<br>
-原文按萌娘百科分节（含 `` 剧情块）原样移植，仅做 Markdown 排版转换，剧情文字保持原样。</blockquote>
-<hr>
 <h1 id="h1">涅托</h1>
 <blockquote><strong>现在，涅托们，猎杀开始了！</strong></blockquote>
 </section>
 <section class="chapter">
-<hr>
-<blockquote>本页剧情文案移植自萌娘百科：<a href="https://moegirl.icu/index.php?title=%E5%B0%91%E5%A5%B3%E5%89%8D%E7%BA%BF%3A%E7%82%BC%E9%87%91%E6%9C%AF%E5%A3%AB&amp;variant=zh-cn" target="_blank" rel="noopener">https://moegirl.icu/index.php?title=%E5%B0%91%E5%A5%B3%E5%89%8D%E7%BA%BF%3A%E7%82%BC%E9%87%91%E6%9C%AF%E5%A3%AB&amp;variant=zh-cn</a><br>
-<br>
-原文按萌娘百科分节（含 `` 剧情块）原样移植，仅做 Markdown 排版转换，剧情文字保持原样。</blockquote>
-<hr>
 <h1 id="h1">炼金术士</h1>
 <blockquote><strong>你就把最棒的恐惧写在脸上，等着我来摘取吧！</strong></blockquote>
 </section>
 <section class="chapter">
-<hr>
-<blockquote>本页剧情文案移植自萌娘百科：<a href="https://moegirl.icu/index.php?title=%E5%B0%91%E5%A5%B3%E5%89%8D%E7%BA%BF%3A%E7%8C%8E%E6%89%8B&amp;variant=zh-cn" target="_blank" rel="noopener">https://moegirl.icu/index.php?title=%E5%B0%91%E5%A5%B3%E5%89%8D%E7%BA%BF%3A%E7%8C%8E%E6%89%8B&amp;variant=zh-cn</a><br>
-<br>
-原文按萌娘百科分节（含 `` 剧情块）原样移植，仅做 Markdown 排版转换，剧情文字保持原样。</blockquote>
-<hr>
 <h1 id="h1">猎手</h1>
 <blockquote><strong>真正的猎手，会选择沉默。&lt;del&gt;战争不是下棋！&lt;/del&gt;</strong></blockquote>
 </section>
 <section class="chapter">
-<hr>
-<blockquote>本页剧情文案移植自萌娘百科：<a href="https://moegirl.icu/index.php?title=%E5%B0%91%E5%A5%B3%E5%89%8D%E7%BA%BF%3A%E7%8E%9B%E8%8D%B7%E6%B4%9B&amp;variant=zh-cn" target="_blank" rel="noopener">https://moegirl.icu/index.php?title=%E5%B0%91%E5%A5%B3%E5%89%8D%E7%BA%BF%3A%E7%8E%9B%E8%8D%B7%E6%B4%9B&amp;variant=zh-cn</a><br>
-<br>
-原文按萌娘百科分节（含 `` 剧情块）原样移植，仅做 Markdown 排版转换，剧情文字保持原样。</blockquote>
-<hr>
 <h1 id="h1">玛荷洛</h1>
 <blockquote><strong> </strong></blockquote>
 <p>&lt;!-- 完成后请删除  --&gt;</p>
 </section>
 <section class="chapter">
-<hr>
-<blockquote>本页剧情文案移植自萌娘百科：<a href="https://moegirl.icu/index.php?title=%E5%B0%91%E5%A5%B3%E5%89%8D%E7%BA%BF%3A%E7%8E%9B%E8%B5%AB%E8%8E%B2&amp;variant=zh-cn" target="_blank" rel="noopener">https://moegirl.icu/index.php?title=%E5%B0%91%E5%A5%B3%E5%89%8D%E7%BA%BF%3A%E7%8E%9B%E8%B5%AB%E8%8E%B2&amp;variant=zh-cn</a><br>
-<br>
-原文按萌娘百科分节（含 `` 剧情块）原样移植，仅做 Markdown 排版转换，剧情文字保持原样。</blockquote>
-<hr>
 <h1 id="h1">玛赫莲</h1>
 <blockquote><strong>谢谢你，罗宾。</strong></blockquote>
 </section>
 <section class="chapter">
-<hr>
-<blockquote>本页剧情文案移植自萌娘百科：<a href="https://moegirl.icu/index.php?title=%E5%B0%91%E5%A5%B3%E5%89%8D%E7%BA%BF%3A%E7%A0%B4%E5%9D%8F%E8%80%85&amp;variant=zh-cn" target="_blank" rel="noopener">https://moegirl.icu/index.php?title=%E5%B0%91%E5%A5%B3%E5%89%8D%E7%BA%BF%3A%E7%A0%B4%E5%9D%8F%E8%80%85&amp;variant=zh-cn</a><br>
-<br>
-原文按萌娘百科分节（含 `` 剧情块）原样移植，仅做 Markdown 排版转换，剧情文字保持原样。</blockquote>
-<hr>
 <h1 id="h1">破坏者</h1>
 <blockquote><strong>我才不是工兵！我可是专家！还有别说我矮子！(哭)</strong></blockquote>
 </section>
 <section class="chapter">
-<hr>
-<blockquote>本页剧情文案移植自萌娘百科：<a href="https://moegirl.icu/index.php?title=%E5%B0%91%E5%A5%B3%E5%89%8D%E7%BA%BF%3A%E7%A8%BB%E8%8D%89%E4%BA%BA&amp;variant=zh-cn" target="_blank" rel="noopener">https://moegirl.icu/index.php?title=%E5%B0%91%E5%A5%B3%E5%89%8D%E7%BA%BF%3A%E7%A8%BB%E8%8D%89%E4%BA%BA&amp;variant=zh-cn</a><br>
-<br>
-原文按萌娘百科分节（含 `` 剧情块）原样移植，仅做 Markdown 排版转换，剧情文字保持原样。</blockquote>
-<hr>
 <h1 id="h1">稻草人</h1>
 <blockquote><strong>要永远记得我是什么，这个世界是什么，命运是什么。</strong></blockquote>
 </section>
 <section class="chapter">
-<hr>
-<blockquote>本页剧情文案移植自萌娘百科：<a href="https://moegirl.icu/index.php?title=%E5%B0%91%E5%A5%B3%E5%89%8D%E7%BA%BF%3A%E7%AB%9E%E4%BA%89%E8%80%85&amp;variant=zh-cn" target="_blank" rel="noopener">https://moegirl.icu/index.php?title=%E5%B0%91%E5%A5%B3%E5%89%8D%E7%BA%BF%3A%E7%AB%9E%E4%BA%89%E8%80%85&amp;variant=zh-cn</a><br>
-<br>
-原文按萌娘百科分节（含 `` 剧情块）原样移植，仅做 Markdown 排版转换，剧情文字保持原样。</blockquote>
-<hr>
 <h1 id="h1">竞争者</h1>
 <blockquote><strong>我的每一发子弹获得胜利的概率是99%，剩下的1%，就交给长官您带来的奇迹了。</strong></blockquote>
 </section>
 <section class="chapter">
-<hr>
-<blockquote>本页剧情文案移植自萌娘百科：<a href="https://moegirl.icu/index.php?title=%E5%B0%91%E5%A5%B3%E5%89%8D%E7%BA%BF%3A%E7%BB%8D%E6%B2%99&amp;variant=zh-cn" target="_blank" rel="noopener">https://moegirl.icu/index.php?title=%E5%B0%91%E5%A5%B3%E5%89%8D%E7%BA%BF%3A%E7%BB%8D%E6%B2%99&amp;variant=zh-cn</a><br>
-<br>
-原文按萌娘百科分节（含 `` 剧情块）原样移植，仅做 Markdown 排版转换，剧情文字保持原样。</blockquote>
-<hr>
 <h1 id="h1">绍沙</h1>
 <blockquote><strong>指挥官，早餐吃了吗？装备带上了吗？工作都好好作完了吗？别发牢骚，凡事都应该提前检查准备……要是跟我一起度过的时间被突然打断，那就后悔莫及啦。</strong></blockquote>
 </section>
 <section class="chapter">
-<hr>
-<blockquote>本页剧情文案移植自萌娘百科：<a href="https://moegirl.icu/index.php?title=%E5%B0%91%E5%A5%B3%E5%89%8D%E7%BA%BF%3A%E7%BB%B4%E5%B0%94%E5%BE%B7MkII&amp;variant=zh-cn" target="_blank" rel="noopener">https://moegirl.icu/index.php?title=%E5%B0%91%E5%A5%B3%E5%89%8D%E7%BA%BF%3A%E7%BB%B4%E5%B0%94%E5%BE%B7MkII&amp;variant=zh-cn</a><br>
-<br>
-原文按萌娘百科分节（含 `` 剧情块）原样移植，仅做 Markdown 排版转换，剧情文字保持原样。</blockquote>
-<hr>
 <h1 id="h1">维尔德MkII</h1>
 <blockquote>**我再去倒杯红茶，需要给你带一份吗？</blockquote>
 </section>
 <section class="chapter">
-<hr>
-<blockquote>本页剧情文案移植自萌娘百科：<a href="https://moegirl.icu/index.php?title=%E5%B0%91%E5%A5%B3%E5%89%8D%E7%BA%BF%3A%E7%BB%B4%E6%B6%85%E9%BE%99M2&amp;variant=zh-cn" target="_blank" rel="noopener">https://moegirl.icu/index.php?title=%E5%B0%91%E5%A5%B3%E5%89%8D%E7%BA%BF%3A%E7%BB%B4%E6%B6%85%E9%BE%99M2&amp;variant=zh-cn</a><br>
-<br>
-原文按萌娘百科分节（含 `` 剧情块）原样移植，仅做 Markdown 排版转换，剧情文字保持原样。</blockquote>
-<hr>
 <h1 id="h1">维涅龙M2</h1>
 <blockquote>****</blockquote>
 </section>
 <section class="chapter">
-<hr>
-<blockquote>本页剧情文案移植自萌娘百科：<a href="https://moegirl.icu/index.php?title=%E5%B0%91%E5%A5%B3%E5%89%8D%E7%BA%BF%3A%E7%BD%97%E5%AF%86&amp;variant=zh-cn" target="_blank" rel="noopener">https://moegirl.icu/index.php?title=%E5%B0%91%E5%A5%B3%E5%89%8D%E7%BA%BF%3A%E7%BD%97%E5%AF%86&amp;variant=zh-cn</a><br>
-<br>
-原文按萌娘百科分节（含 `` 剧情块）原样移植，仅做 Markdown 排版转换，剧情文字保持原样。</blockquote>
-<hr>
 <h1 id="h1">罗密</h1>
 <blockquote><strong>在这场战争里，谁能掌握情报，谁就能掌握权力。 </strong></blockquote>
 </section>
 <section class="chapter">
-<hr>
-<blockquote>本页剧情文案移植自萌娘百科：<a href="https://moegirl.icu/index.php?title=%E5%B0%91%E5%A5%B3%E5%89%8D%E7%BA%BF%3A%E8%8A%AE%E8%AF%BA&amp;variant=zh-cn" target="_blank" rel="noopener">https://moegirl.icu/index.php?title=%E5%B0%91%E5%A5%B3%E5%89%8D%E7%BA%BF%3A%E8%8A%AE%E8%AF%BA&amp;variant=zh-cn</a><br>
-<br>
-原文按萌娘百科分节（含 `` 剧情块）原样移植，仅做 Markdown 排版转换，剧情文字保持原样。</blockquote>
-<hr>
 <h1 id="h1">芮诺</h1>
 <blockquote><strong>这是哪里？这不是回国安局的车！啊——我现在是格里芬基地的人形了？！那个……有些突然，我是芮诺……</strong></blockquote>
 </section>
 <section class="chapter">
-<hr>
-<blockquote>本页剧情文案移植自萌娘百科：<a href="https://moegirl.icu/index.php?title=%E5%B0%91%E5%A5%B3%E5%89%8D%E7%BA%BF%3A%E8%8B%8F%E5%85%B1%E8%81%94%E5%AE%98%E5%91%98%E4%BC%97&amp;variant=zh-cn" target="_blank" rel="noopener">https://moegirl.icu/index.php?title=%E5%B0%91%E5%A5%B3%E5%89%8D%E7%BA%BF%3A%E8%8B%8F%E5%85%B1%E8%81%94%E5%AE%98%E5%91%98%E4%BC%97&amp;variant=zh-cn</a><br>
-<br>
-原文按萌娘百科分节（含 `` 剧情块）原样移植，仅做 Markdown 排版转换，剧情文字保持原样。</blockquote>
-<hr>
 <h1 id="h1">苏共联官员众</h1>
 <blockquote><strong>“各尽所能”</strong></blockquote>
 </section>
 <section class="chapter">
-<hr>
-<blockquote>本页剧情文案移植自萌娘百科：<a href="https://moegirl.icu/index.php?title=%E5%B0%91%E5%A5%B3%E5%89%8D%E7%BA%BF%3A%E8%8E%89%E5%8F%AF&amp;variant=zh-cn" target="_blank" rel="noopener">https://moegirl.icu/index.php?title=%E5%B0%91%E5%A5%B3%E5%89%8D%E7%BA%BF%3A%E8%8E%89%E5%8F%AF&amp;variant=zh-cn</a><br>
-<br>
-原文按萌娘百科分节（含 `` 剧情块）原样移植，仅做 Markdown 排版转换，剧情文字保持原样。</blockquote>
-<hr>
 <h1 id="h1">莉可</h1>
 <blockquote><strong>每天早晨醒来，我都有件一定要确认的事，那就是属于我自己的身体今天是否依然存在？</strong></blockquote>
 </section>
 <section class="chapter">
-<hr>
-<blockquote>本页剧情文案移植自萌娘百科：<a href="https://moegirl.icu/index.php?title=%E5%B0%91%E5%A5%B3%E5%89%8D%E7%BA%BF%3A%E8%8E%B1%E6%9F%AF%E7%91%9E%E6%96%AF&amp;variant=zh-cn" target="_blank" rel="noopener">https://moegirl.icu/index.php?title=%E5%B0%91%E5%A5%B3%E5%89%8D%E7%BA%BF%3A%E8%8E%B1%E6%9F%AF%E7%91%9E%E6%96%AF&amp;variant=zh-cn</a><br>
-<br>
-原文按萌娘百科分节（含 `` 剧情块）原样移植，仅做 Markdown 排版转换，剧情文字保持原样。</blockquote>
-<hr>
 <h1 id="h1">莱柯瑞斯</h1>
 <blockquote><strong> </strong></blockquote>
 </section>
 <section class="chapter">
-<hr>
-<blockquote>本页剧情文案移植自萌娘百科：<a href="https://moegirl.icu/index.php?title=%E5%B0%91%E5%A5%B3%E5%89%8D%E7%BA%BF%3A%E8%8E%B1%E7%89%B9&amp;variant=zh-cn" target="_blank" rel="noopener">https://moegirl.icu/index.php?title=%E5%B0%91%E5%A5%B3%E5%89%8D%E7%BA%BF%3A%E8%8E%B1%E7%89%B9&amp;variant=zh-cn</a><br>
-<br>
-原文按萌娘百科分节（含 `` 剧情块）原样移植，仅做 Markdown 排版转换，剧情文字保持原样。</blockquote>
-<hr>
 <h1 id="h1">莱特</h1>
 <blockquote>**不论倒下多少人，都前赴后继，这才是英雄的根性。<br>
 我希望能像您，像那些前辈一样，为了这个世界奉献更多。<br>
 即便是生命也在所不惜。**</blockquote>
 </section>
 <section class="chapter">
-<hr>
-<blockquote>本页剧情文案移植自萌娘百科：<a href="https://moegirl.icu/index.php?title=%E5%B0%91%E5%A5%B3%E5%89%8D%E7%BA%BF%3A%E8%90%9D%E5%B8%8C%E5%A1%94&amp;variant=zh-cn" target="_blank" rel="noopener">https://moegirl.icu/index.php?title=%E5%B0%91%E5%A5%B3%E5%89%8D%E7%BA%BF%3A%E8%90%9D%E5%B8%8C%E5%A1%94&amp;variant=zh-cn</a><br>
-<br>
-原文按萌娘百科分节（含 `` 剧情块）原样移植，仅做 Markdown 排版转换，剧情文字保持原样。</blockquote>
-<hr>
 <h1 id="h1">萝希塔</h1>
 </section>
 <section class="chapter">
-<hr>
-<blockquote>本页剧情文案移植自萌娘百科：<a href="https://moegirl.icu/index.php?title=%E5%B0%91%E5%A5%B3%E5%89%8D%E7%BA%BF%3A%E8%9C%82%E9%B8%9F&amp;variant=zh-cn" target="_blank" rel="noopener">https://moegirl.icu/index.php?title=%E5%B0%91%E5%A5%B3%E5%89%8D%E7%BA%BF%3A%E8%9C%82%E9%B8%9F&amp;variant=zh-cn</a><br>
-<br>
-原文按萌娘百科分节（含 `` 剧情块）原样移植，仅做 Markdown 排版转换，剧情文字保持原样。</blockquote>
-<hr>
 <h1 id="h1">蜂鸟</h1>
 <blockquote><strong>那可真遗憾……等等，不要打开那个柜子！</strong></blockquote>
 </section>
 <section class="chapter">
-<hr>
-<blockquote>本页剧情文案移植自萌娘百科：<a href="https://moegirl.icu/index.php?title=%E5%B0%91%E5%A5%B3%E5%89%8D%E7%BA%BF%3A%E8%9C%9C%E7%8D%BE&amp;variant=zh-cn" target="_blank" rel="noopener">https://moegirl.icu/index.php?title=%E5%B0%91%E5%A5%B3%E5%89%8D%E7%BA%BF%3A%E8%9C%9C%E7%8D%BE&amp;variant=zh-cn</a><br>
-<br>
-原文按萌娘百科分节（含 `` 剧情块）原样移植，仅做 Markdown 排版转换，剧情文字保持原样。</blockquote>
-<hr>
 <h1 id="h1">蜜獾</h1>
 <blockquote><strong>那么大家就一起加油吧，现在正是拿出勇气攻克难关的时候啊！</strong></blockquote>
 </section>
 <section class="chapter">
-<hr>
-<blockquote>本页剧情文案移植自萌娘百科：<a href="https://moegirl.icu/index.php?title=%E5%B0%91%E5%A5%B3%E5%89%8D%E7%BA%BF%3A%E8%9D%8E%E5%BC%8F&amp;variant=zh-cn" target="_blank" rel="noopener">https://moegirl.icu/index.php?title=%E5%B0%91%E5%A5%B3%E5%89%8D%E7%BA%BF%3A%E8%9D%8E%E5%BC%8F&amp;variant=zh-cn</a><br>
-<br>
-原文按萌娘百科分节（含 `` 剧情块）原样移植，仅做 Markdown 排版转换，剧情文字保持原样。</blockquote>
-<hr>
 <h1 id="h1">蝎式</h1>
 <blockquote><strong>嗯！无论去哪儿，只要还能留在格里芬，我就会加油的！</strong></blockquote>
 </section>
 <section class="chapter">
-<hr>
-<blockquote>本页剧情文案移植自萌娘百科：<a href="https://moegirl.icu/index.php?title=%E5%B0%91%E5%A5%B3%E5%89%8D%E7%BA%BF%3A%E8%9D%8E%E7%94%B2%E5%85%BD&amp;variant=zh-cn" target="_blank" rel="noopener">https://moegirl.icu/index.php?title=%E5%B0%91%E5%A5%B3%E5%89%8D%E7%BA%BF%3A%E8%9D%8E%E7%94%B2%E5%85%BD&amp;variant=zh-cn</a><br>
-<br>
-原文按萌娘百科分节（含 `` 剧情块）原样移植，仅做 Markdown 排版转换，剧情文字保持原样。</blockquote>
-<hr>
 <h1 id="h1">蝎甲兽</h1>
 </section>
 <section class="chapter">
-<hr>
-<blockquote>本页剧情文案移植自萌娘百科：<a href="https://moegirl.icu/index.php?title=%E5%B0%91%E5%A5%B3%E5%89%8D%E7%BA%BF%3A%E8%A1%94%E5%B0%BE%E8%9B%87&amp;variant=zh-cn" target="_blank" rel="noopener">https://moegirl.icu/index.php?title=%E5%B0%91%E5%A5%B3%E5%89%8D%E7%BA%BF%3A%E8%A1%94%E5%B0%BE%E8%9B%87&amp;variant=zh-cn</a><br>
-<br>
-原文按萌娘百科分节（含 `` 剧情块）原样移植，仅做 Markdown 排版转换，剧情文字保持原样。</blockquote>
-<hr>
 <h1 id="h1">衔尾蛇</h1>
 <blockquote><strong>告诉我，眼前的火海和我，你更怕哪一个呢？……还是……两个都害怕呢？</strong></blockquote>
 </section>
 <section class="chapter">
-<hr>
-<blockquote>本页剧情文案移植自萌娘百科：<a href="https://moegirl.icu/index.php?title=%E5%B0%91%E5%A5%B3%E5%89%8D%E7%BA%BF%3A%E8%AE%A1%E9%87%8F%E5%AE%98&amp;variant=zh-cn" target="_blank" rel="noopener">https://moegirl.icu/index.php?title=%E5%B0%91%E5%A5%B3%E5%89%8D%E7%BA%BF%3A%E8%AE%A1%E9%87%8F%E5%AE%98&amp;variant=zh-cn</a><br>
-<br>
-原文按萌娘百科分节（含 `` 剧情块）原样移植，仅做 Markdown 排版转换，剧情文字保持原样。</blockquote>
-<hr>
 <h1 id="h1">计量官</h1>
 <blockquote><strong>原本打算手下留情的我，果然还是太软弱了……不够洒脱的行动，是无法超越梦想家的……必须要再狠一点！再疯狂一点！</strong></blockquote>
 </section>
 <section class="chapter">
-<hr>
-<blockquote>本页剧情文案移植自萌娘百科：<a href="https://moegirl.icu/index.php?title=%E5%B0%91%E5%A5%B3%E5%89%8D%E7%BA%BF%3A%E8%AF%BA%E7%88%B1%E5%B0%94&amp;variant=zh-cn" target="_blank" rel="noopener">https://moegirl.icu/index.php?title=%E5%B0%91%E5%A5%B3%E5%89%8D%E7%BA%BF%3A%E8%AF%BA%E7%88%B1%E5%B0%94&amp;variant=zh-cn</a><br>
-<br>
-原文按萌娘百科分节（含 `` 剧情块）原样移植，仅做 Markdown 排版转换，剧情文字保持原样。</blockquote>
-<hr>
 <h1 id="h1">诺爱尔</h1>
 <blockquote><strong>我必须一直前进下去，所以不管是谁……请不要阻挡我的道路！</strong></blockquote>
 </section>
 <section class="chapter">
-<hr>
-<blockquote>本页剧情文案移植自萌娘百科：<a href="https://moegirl.icu/index.php?title=%E5%B0%91%E5%A5%B3%E5%89%8D%E7%BA%BF%3A%E8%B0%A2%E5%B0%94%E4%B9%85%E7%A7%91%E5%A4%AB&amp;variant=zh-cn" target="_blank" rel="noopener">https://moegirl.icu/index.php?title=%E5%B0%91%E5%A5%B3%E5%89%8D%E7%BA%BF%3A%E8%B0%A2%E5%B0%94%E4%B9%85%E7%A7%91%E5%A4%AB&amp;variant=zh-cn</a><br>
-<br>
-原文按萌娘百科分节（含 `` 剧情块）原样移植，仅做 Markdown 排版转换，剧情文字保持原样。</blockquote>
-<hr>
 <h1 id="h1">谢尔久科夫</h1>
 <blockquote><strong>你好，我是谢尔久科夫SPS，感谢您的信任，今后请让我来负责您的安全吧。</strong></blockquote>
 </section>
 <section class="chapter">
-<hr>
-<blockquote>本页剧情文案移植自萌娘百科：<a href="https://moegirl.icu/index.php?title=%E5%B0%91%E5%A5%B3%E5%89%8D%E7%BA%BF%3A%E8%B5%9B%E4%BC%8A%C2%B7%E6%9C%9D%E9%9B%BE&amp;variant=zh-cn" target="_blank" rel="noopener">https://moegirl.icu/index.php?title=%E5%B0%91%E5%A5%B3%E5%89%8D%E7%BA%BF%3A%E8%B5%9B%E4%BC%8A%C2%B7%E6%9C%9D%E9%9B%BE&amp;variant=zh-cn</a><br>
-<br>
-原文按萌娘百科分节（含 `` 剧情块）原样移植，仅做 Markdown 排版转换，剧情文字保持原样。</blockquote>
-<hr>
 <h1 id="h1">赛伊·朝雾</h1>
 <blockquote><strong>生命 不是随随便便就能放弃的东西（Life is not something that you can just throw away easily）</strong></blockquote>
 </section>
 <section class="chapter">
-<hr>
-<blockquote>本页剧情文案移植自萌娘百科：<a href="https://moegirl.icu/index.php?title=%E5%B0%91%E5%A5%B3%E5%89%8D%E7%BA%BF%3A%E8%B5%AB%E4%B8%BD%E5%AE%89%E5%9B%BE%E4%B8%9D&amp;variant=zh-cn" target="_blank" rel="noopener">https://moegirl.icu/index.php?title=%E5%B0%91%E5%A5%B3%E5%89%8D%E7%BA%BF%3A%E8%B5%AB%E4%B8%BD%E5%AE%89%E5%9B%BE%E4%B8%9D&amp;variant=zh-cn</a><br>
-<br>
-原文按萌娘百科分节（含 `` 剧情块）原样移植，仅做 Markdown 排版转换，剧情文字保持原样。</blockquote>
-<hr>
 <h1 id="h1">赫丽安图丝</h1>
 <blockquote><strong>客套话就免了，另外保证效率，叫我赫丽安就好。</strong></blockquote>
 </section>
 <section class="chapter">
-<hr>
-<blockquote>本页剧情文案移植自萌娘百科：<a href="https://moegirl.icu/index.php?title=%E5%B0%91%E5%A5%B3%E5%89%8D%E7%BA%BF%3A%E8%BE%BE%E5%A8%9C%C2%B7%E8%B5%9E%E6%81%A9&amp;variant=zh-cn" target="_blank" rel="noopener">https://moegirl.icu/index.php?title=%E5%B0%91%E5%A5%B3%E5%89%8D%E7%BA%BF%3A%E8%BE%BE%E5%A8%9C%C2%B7%E8%B5%9E%E6%81%A9&amp;variant=zh-cn</a><br>
-<br>
-原文按萌娘百科分节（含 `` 剧情块）原样移植，仅做 Markdown 排版转换，剧情文字保持原样。</blockquote>
-<hr>
 <h1 id="h1">达娜·赞恩</h1>
 <blockquote><strong>愚蠢的Armitage哟.（Silly Armitage.）呆毛象征着我的意志力!（ That ahoge is like my willpower!）</strong></blockquote>
 </section>
 <section class="chapter">
-<hr>
-<blockquote>本页剧情文案移植自萌娘百科：<a href="https://moegirl.icu/index.php?title=%E5%B0%91%E5%A5%B3%E5%89%8D%E7%BA%BF%3A%E9%87%8D%E8%A3%85%E9%83%A8%E9%98%9F&amp;variant=zh-cn" target="_blank" rel="noopener">https://moegirl.icu/index.php?title=%E5%B0%91%E5%A5%B3%E5%89%8D%E7%BA%BF%3A%E9%87%8D%E8%A3%85%E9%83%A8%E9%98%9F&amp;variant=zh-cn</a><br>
-<br>
-原文按萌娘百科分节（含 `` 剧情块）原样移植，仅做 Markdown 排版转换，剧情文字保持原样。</blockquote>
-<hr>
 <h1 id="h1">重装部队</h1>
 <h2 id="h2">重装简介</h2>
 <p>截至目前，少女前线的重装仅指火力单位。</p>
@@ -87380,56 +86655,26 @@ ARPA并不是一-个普通的科研机构，美国政府赋予它的任务是:�
 <p>迫击炮（2B14、M2）：自带40穿甲。对2范围造成1倍杀伤和1倍破防。</p>
 </section>
 <section class="chapter">
-<hr>
-<blockquote>本页剧情文案移植自萌娘百科：<a href="https://moegirl.icu/index.php?title=%E5%B0%91%E5%A5%B3%E5%89%8D%E7%BA%BF%3A%E9%98%B2%E5%8D%AB%E8%80%85&amp;variant=zh-cn" target="_blank" rel="noopener">https://moegirl.icu/index.php?title=%E5%B0%91%E5%A5%B3%E5%89%8D%E7%BA%BF%3A%E9%98%B2%E5%8D%AB%E8%80%85&amp;variant=zh-cn</a><br>
-<br>
-原文按萌娘百科分节（含 `` 剧情块）原样移植，仅做 Markdown 排版转换，剧情文字保持原样。</blockquote>
-<hr>
 <h1 id="h1">防卫者</h1>
 <blockquote><strong>我的所有履历都已经写在了报告中，所以……请不要和我靠的太近，您会有危险的。</strong></blockquote>
 </section>
 <section class="chapter">
-<hr>
-<blockquote>本页剧情文案移植自萌娘百科：<a href="https://moegirl.icu/index.php?title=%E5%B0%91%E5%A5%B3%E5%89%8D%E7%BA%BF%3A%E9%98%BF%E5%B0%94%E7%8E%9B%C2%B7%E9%98%BF%E7%8E%9B%E6%96%AF&amp;variant=zh-cn" target="_blank" rel="noopener">https://moegirl.icu/index.php?title=%E5%B0%91%E5%A5%B3%E5%89%8D%E7%BA%BF%3A%E9%98%BF%E5%B0%94%E7%8E%9B%C2%B7%E9%98%BF%E7%8E%9B%E6%96%AF&amp;variant=zh-cn</a><br>
-<br>
-原文按萌娘百科分节（含 `` 剧情块）原样移植，仅做 Markdown 排版转换，剧情文字保持原样。</blockquote>
-<hr>
 <h1 id="h1">阿尔玛·阿玛斯</h1>
 <blockquote><strong>有人陪的感觉可真好……我想我现在应该已经很了解你了，而我居然还没和你分手，这真是太奇妙了。继续做我的枕头吧，如果听不到你的心跳声，我一定会失眠的。</strong></blockquote>
 </section>
 <section class="chapter">
-<hr>
-<blockquote>本页剧情文案移植自萌娘百科：<a href="https://moegirl.icu/index.php?title=%E5%B0%91%E5%A5%B3%E5%89%8D%E7%BA%BF%3A%E9%98%BF%E6%A2%85%E5%88%A9&amp;variant=zh-cn" target="_blank" rel="noopener">https://moegirl.icu/index.php?title=%E5%B0%91%E5%A5%B3%E5%89%8D%E7%BA%BF%3A%E9%98%BF%E6%A2%85%E5%88%A9&amp;variant=zh-cn</a><br>
-<br>
-原文按萌娘百科分节（含 `` 剧情块）原样移植，仅做 Markdown 排版转换，剧情文字保持原样。</blockquote>
-<hr>
 <h1 id="h1">阿梅利</h1>
 <blockquote><strong>指挥官，最好别乱碰哦，小心纽扣弹你一脸。</strong></blockquote>
 </section>
 <section class="chapter">
-<hr>
-<blockquote>本页剧情文案移植自萌娘百科：<a href="https://moegirl.icu/index.php?title=%E5%B0%91%E5%A5%B3%E5%89%8D%E7%BA%BF%3A%E9%9B%B7%E5%A5%A5%E5%A6%AE&amp;variant=zh-cn" target="_blank" rel="noopener">https://moegirl.icu/index.php?title=%E5%B0%91%E5%A5%B3%E5%89%8D%E7%BA%BF%3A%E9%9B%B7%E5%A5%A5%E5%A6%AE&amp;variant=zh-cn</a><br>
-<br>
-原文按萌娘百科分节（含 `` 剧情块）原样移植，仅做 Markdown 排版转换，剧情文字保持原样。</blockquote>
-<hr>
 <h1 id="h1">雷奥妮</h1>
 <p>&lt;!-- 完成后请删除  --&gt;</p>
 </section>
 <section class="chapter">
-<hr>
-<blockquote>本页剧情文案移植自萌娘百科：<a href="https://moegirl.icu/index.php?title=%E5%B0%91%E5%A5%B3%E5%89%8D%E7%BA%BF%3A%E9%AB%98%E5%A5%88%E8%8E%89%E5%A8%85%C2%B7%E8%88%8D%E5%A4%AB%E5%B0%94&amp;variant=zh-cn" target="_blank" rel="noopener">https://moegirl.icu/index.php?title=%E5%B0%91%E5%A5%B3%E5%89%8D%E7%BA%BF%3A%E9%AB%98%E5%A5%88%E8%8E%89%E5%A8%85%C2%B7%E8%88%8D%E5%A4%AB%E5%B0%94&amp;variant=zh-cn</a><br>
-<br>
-原文按萌娘百科分节（含 `` 剧情块）原样移植，仅做 Markdown 排版转换，剧情文字保持原样。</blockquote>
-<hr>
 <h1 id="h1">高奈莉娅·舍夫尔</h1>
 <blockquote><strong>每个人都要轮到去登上千古长存的受难的高岗。每个人都要遇到千古不灭的痛苦，抱着没有希望的希望。每个人都要追随着抗拒过死，否认过死，而终于不得不死的人。</strong></blockquote>
 </section>
 <section class="chapter">
-<hr>
-<blockquote>本页剧情文案移植自萌娘百科：<a href="https://moegirl.icu/index.php?title=%E5%B0%91%E5%A5%B3%E5%89%8D%E7%BA%BF%3A%E9%BB%98%E8%8E%89%E6%9C%B5&amp;variant=zh-cn" target="_blank" rel="noopener">https://moegirl.icu/index.php?title=%E5%B0%91%E5%A5%B3%E5%89%8D%E7%BA%BF%3A%E9%BB%98%E8%8E%89%E6%9C%B5&amp;variant=zh-cn</a><br>
-<br>
-原文按萌娘百科分节（含 `` 剧情块）原样移植，仅做 Markdown 排版转换，剧情文字保持原样。</blockquote>
-<hr>
 <h1 id="h1">默莉朵</h1>
 </section>
 <section class="chapter">
