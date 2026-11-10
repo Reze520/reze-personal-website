@@ -42,15 +42,9 @@ body{margin:0;font-family:-apple-system,"PingFang SC","Microsoft YaHei",Segoe UI
 #topbar{position:fixed;top:0;left:320px;right:0;height:0}
 #menuBtn{display:none}
 @media(max-width:860px){#sidebar{position:fixed;left:0;top:0;z-index:50;transform:translateX(-100%);transition:.25s}#sidebar.open{transform:none}#content{margin:0;padding:20px 16px}#menuBtn{display:block;position:fixed;top:10px;left:10px;z-index:60;background:var(--accent);color:#fff;border:none;border-radius:8px;padding:8px 12px;font-size:14px}#topbar{left:0}}
-.back-bar{position:fixed;top:14px;right:16px;z-index:9999;display:inline-flex;align-items:center;gap:8px;padding:7px 14px;background:rgba(20,17,29,.9);color:#f6f1e7;font-size:13px;border-radius:999px;box-shadow:0 2px 10px rgba(0,0,0,.25);font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif;backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px)}
-.back-bar a{color:#f6f1e7;text-decoration:none}
-.back-bar .bb-home{font-weight:600}
-.back-bar .bb-note{opacity:.7;font-size:12px}
-@media(max-width:860px){.back-bar{top:10px;right:10px;padding:6px 12px}}
 </style>
 </head>
 <body>
-<div class="back-bar"><a class="bb-home" href="/">← 返回 Reze 的小窝</a></div>
 <button id="menuBtn">目录</button>
 <div class="layout">
 <nav id="sidebar">
@@ -246,37 +240,36 @@ body{margin:0;font-family:-apple-system,"PingFang SC","Microsoft YaHei",Segoe UI
 </li>
 </ul></li>
 <li class="toc-group"><span class="toc-group-title">六、考据与解析（论坛原文转载）</span><ul>
-<li class="toc-file"><a href="#h2401" class="toc-link">第一卷 · 总纲：时间线、剧情整理与解说导览</a>
+<li class="toc-file"><a href="#h2401" class="toc-link">第一卷 · 时间线与剧情整理</a>
 <ul>
-<li><a href="#h2402" class="toc-sub">少女前线（逆向坍塌）剧情世界观时间线（1905～2112）</a></li>
-<li><a href="#h2436" class="toc-sub">少女前线剧情整理</a></li>
-<li><a href="#h2437" class="toc-sub">《少女前线全剧情解说》分集导览（Part 0 ～ Part 7.5）</a></li>
+<li><a href="#h2402" class="toc-sub">少女前线(逆向坍塌)剧情世界观时间线(1905～2112)又双叒叕重置版</a></li>
+<li><a href="#h2436" class="toc-sub">少女前线剧情整理(假期更新)</a></li>
 </ul>
 </li>
-<li class="toc-file"><a href="#h2438" class="toc-link">第二卷 · 逐活动考据</a>
+<li class="toc-file"><a href="#h2437" class="toc-link">第二卷 · 活动考据（双联乱数 / 慢休克 / 熵减焓增 / 镜像论 / 零电荷）</a>
 <ul>
-<li><a href="#h2439" class="toc-sub">双联乱数：PV + 前三章剧情报告</a></li>
-<li><a href="#h2440" class="toc-sub">慢休克剧情解读</a></li>
-<li><a href="#h2441" class="toc-sub">不完美的设定集（熵减焓增考据）</a></li>
-<li><a href="#h2443" class="toc-sub">镜像论结尾那句密码：「只有叛逆，我才忠诚」</a></li>
-<li><a href="#h2445" class="toc-sub">关于零电荷活动的一些疑惑</a></li>
+<li><a href="#h2438" class="toc-sub">[双联乱数考据] [虽迟但到]少女前线0202年夏活"双联乱数"PV+前三章剧情报告</a></li>
+<li><a href="#h2439" class="toc-sub">[剧透预警] [慢休克考据活动] 不负责任向少女前线慢休克剧情解读</a></li>
+<li><a href="#h2440" class="toc-sub">[熵减焓增考据活动] [剧透预警] 不完美的设定集——对本次剧情的个人分析</a></li>
+<li><a href="#h2442" class="toc-sub">[活动氵]剧透警告，我感觉我理解镜像论结尾那句密码了</a></li>
+<li><a href="#h2444" class="toc-sub">关于零电荷活动的一些疑惑</a></li>
 </ul>
 </li>
-<li class="toc-file"><a href="#h2447" class="toc-link">第三卷 · 人物与设定</a>
+<li class="toc-file"><a href="#h2446" class="toc-link">第三卷 · 人物与设定考据</a>
 <ul>
-<li><a href="#h2448" class="toc-sub">这人是谁？和我很熟么？——前作关键人物 / 势力 / 设定补完</a></li>
-<li><a href="#h2562" class="toc-sub">弗兰肯斯坦之罪——对艾德琳等涅托类角色的分析与推测</a></li>
+<li><a href="#h2447" class="toc-sub">[考据]这人是谁？和我很熟么？——前作关键人物/势力/设定补完</a></li>
+<li><a href="#h2561" class="toc-sub">[协议同归氵] 弗兰肯斯坦之罪——对艾德琳等涅托类角色的分析与推测</a></li>
 </ul>
 </li>
-<li class="toc-file"><a href="#h2563" class="toc-link">第四卷 · 终局与争议</a>
+<li class="toc-file"><a href="#h2562" class="toc-link">第四卷 · 结局评述（卷积核）</a>
 <ul>
-<li><a href="#h2564" class="toc-sub">勇气，电影和远方</a></li>
-<li><a href="#h2565" class="toc-sub">锐评一下卷积核——YM，永远的草台班子</a></li>
+<li><a href="#h2563" class="toc-sub">[不是考据的个人想法氵]勇气 电影和远方——关于卷积核活动的一些个人想法和问题总结</a></li>
+<li><a href="#h2564" class="toc-sub">[剧情氵]锐评一下卷积核——ym，永远的草台班子</a></li>
 </ul>
 </li>
-<li class="toc-file"><a href="#h2567" class="toc-link">第五卷 · 世界观入门（追放视角）</a>
+<li class="toc-file"><a href="#h2566" class="toc-link">第五卷 · 世界观入门</a>
 <ul>
-<li><a href="#h2568" class="toc-sub">剧情理解以及给新人的一点背景讲解</a></li>
+<li><a href="#h2567" class="toc-sub">剧情理解以及给新人的一点背景讲解</a></li>
 </ul>
 </li>
 </ul></li>
@@ -284,7 +277,7 @@ body{margin:0;font-family:-apple-system,"PingFang SC","Microsoft YaHei",Segoe UI
 </nav>
 <main id="content"><section class="chapter" id="intro">
 <h1>少女前线 · 剧情全集</h1>
-<p>本页面是《少女前线》主线战役、正统活动、联动活动、节庆活动的剧情文本合集，另附 AR 小队 / 404 小队 / 忤逆小队的三改与人物线剧情，以及一份约十九万字的论坛考据原文汇编（五卷 13 篇，NGA 与追放官方社区原帖全文转载）。所有剧情文本按原分节整理，可直接阅读。</p>
+<p>本页面是《少女前线》主线战役、正统活动、联动活动、节庆活动的剧情文本合集，另附 AR 小队 / 404 小队 / 忤逆小队的三改与人物线剧情，以及一份约十九万字的论坛考据原文汇编（五卷 12 篇，NGA 与追放官方社区原帖全文转载，未做改写与评述）。所有剧情文本按原分节整理，可直接阅读。</p>
 <h2>使用方式</h2>
 <p>左侧为分级目录，可点击跳转；顶部搜索框可过滤目录条目。每个章节内的小标题也带有锚点。</p>
 </section><div id="reader"><div class="reader-boot">正在载入…</div></div>
@@ -316,8 +309,8 @@ body{margin:0;font-family:-apple-system,"PingFang SC","Microsoft YaHei",Segoe UI
 </style>
 <script>
 (function(){
-  var PARTS = [{"n":1,"s":"parts/p001.html","t":"EP.00 序章","c":2689},{"n":2,"s":"parts/p002.html","t":"EP.00 第零战役 种子","c":3129},{"n":3,"s":"parts/p003.html","t":"EP.01 第一战役 苏醒","c":10437},{"n":4,"s":"parts/p004.html","t":"EP.02 第二战役","c":8888},{"n":5,"s":"parts/p005.html","t":"EP.03 第三战役","c":8938},{"n":6,"s":"parts/p006.html","t":"EP.04 第四战役","c":16048},{"n":7,"s":"parts/p007.html","t":"EP.05 第五战役 火种","c":17378},{"n":8,"s":"parts/p008.html","t":"EP.06 第六战役","c":24362},{"n":9,"s":"parts/p009.html","t":"EP.07 第七战役","c":26946},{"n":10,"s":"parts/p010.html","t":"EP.08 第八战役","c":33826},{"n":11,"s":"parts/p011.html","t":"EP.09 第九战役","c":37567},{"n":12,"s":"parts/p012.html","t":"EP.10 第十战役","c":48354},{"n":13,"s":"parts/p013.html","t":"EP.11 第十一战役","c":30035},{"n":14,"s":"parts/p014.html","t":"EP.12 第十二战役","c":37693},{"n":15,"s":"parts/p015.html","t":"EP.13 第十三战役","c":39789},{"n":16,"s":"parts/p016.html","t":"第十四战役（慢休克）","c":136839},{"n":17,"s":"parts/p017.html","t":"第十五战役（卷积核）","c":54851},{"n":18,"s":"parts/p018.html","t":"2016 魔方行动","c":9920},{"n":19,"s":"parts/p019.html","t":"2017 失温症","c":23372},{"n":20,"s":"parts/p020.html","t":"2017 魔方行动PLUS","c":12436},{"n":21,"s":"parts/p021.html","t":"2017 深层映射","c":49143},{"n":22,"s":"parts/p022.html","t":"2018 塌缩点","c":58129},{"n":23,"s":"parts/p023.html","t":"2018 有序紊流","c":99493},{"n":24,"s":"parts/p024.html","t":"异构体","c":89166},{"n":25,"s":"parts/p025.html","t":"2019 裂变链接","c":79237},{"n":26,"s":"parts/p026.html","t":"2020 偏振光","c":91895},{"n":27,"s":"parts/p027.html","t":"2020 双联乱数","c":148605},{"n":28,"s":"parts/p028.html","t":"2021 镜像论","c":189422},{"n":29,"s":"parts/p029.html","t":"2021 熵减焓增","c":152489},{"n":30,"s":"parts/p030.html","t":"2022 静风点","c":100939},{"n":31,"s":"parts/p031.html","t":"2022 纵向应变","c":88901},{"n":32,"s":"parts/p032.html","t":"2022 沙罗蚀相（剧情活动）","c":45663},{"n":33,"s":"parts/p033.html","t":"迷笼猜想","c":16775},{"n":34,"s":"parts/p034.html","t":"思域迷航","c":3416},{"n":35,"s":"parts/p035.html","t":"错构之泉","c":47163},{"n":36,"s":"parts/p036.html","t":"零电荷","c":60020},{"n":37,"s":"parts/p037.html","t":"2017 猎兔行动（联动）","c":10945},{"n":38,"s":"parts/p038.html","t":"2017 独法师（联动）","c":39911},{"n":39,"s":"parts/p039.html","t":"2018 荣耀日（联动）","c":31573},{"n":40,"s":"parts/p040.html","t":"2019 瓦尔哈拉（联动）","c":101543},{"n":41,"s":"parts/p041.html","t":"2020 梦间剧（联动）","c":57067},{"n":42,"s":"parts/p042.html","t":"2020 暗金潮（联动）","c":49180},{"n":43,"s":"parts/p043.html","t":"2021 小邪神前线（联动）","c":10277},{"n":44,"s":"parts/p044.html","t":"雪浪映花颜","c":99246},{"n":45,"s":"parts/p045.html","t":"镜扉的永恒","c":51829},{"n":46,"s":"parts/p046.html","t":"诡疫狂潮","c":11883},{"n":47,"s":"parts/p047.html","t":"雪夜杀礼异想曲","c":10032},{"n":48,"s":"parts/p048.html","t":"照相馆谜题","c":18439},{"n":49,"s":"parts/p049.html","t":"碧海秘闻","c":12595},{"n":50,"s":"parts/p050.html","t":"茧中蝶影","c":29592},{"n":51,"s":"parts/p051.html","t":"捩浪人","c":16508},{"n":52,"s":"parts/p052.html","t":"一币之遥","c":36617},{"n":53,"s":"parts/p053.html","t":"焙炒爱意","c":12143},{"n":54,"s":"parts/p054.html","t":"里坎禁猎区","c":22827},{"n":55,"s":"parts/p055.html","t":"M4A1","c":5950},{"n":56,"s":"parts/p056.html","t":"ST AR-15","c":5406},{"n":57,"s":"parts/p057.html","t":"M4 SOPMOD II","c":1463},{"n":58,"s":"parts/p058.html","t":"M16A1","c":1089},{"n":59,"s":"parts/p059.html","t":"RO635","c":16367},{"n":60,"s":"parts/p060.html","t":"UMP45","c":15330},{"n":61,"s":"parts/p061.html","t":"UMP9","c":15908},{"n":62,"s":"parts/p062.html","t":"HK416","c":18677},{"n":63,"s":"parts/p063.html","t":"G11","c":17461},{"n":64,"s":"parts/p064.html","t":"AK-12","c":8371},{"n":65,"s":"parts/p065.html","t":"AN-94","c":7338},{"n":66,"s":"parts/p066.html","t":"AK-15","c":1211},{"n":67,"s":"parts/p067.html","t":"RPK-16","c":5850},{"n":68,"s":"parts/p068.html","t":"第一卷 · 总纲：时间线、剧情整理与解说导览","c":32808},{"n":69,"s":"parts/p069.html","t":"第二卷 · 逐活动考据","c":43264},{"n":70,"s":"parts/p070.html","t":"第三卷 · 人物与设定","c":57967},{"n":71,"s":"parts/p071.html","t":"第四卷 · 终局与争议","c":48165},{"n":72,"s":"parts/p072.html","t":"第五卷 · 世界观入门（追放视角）","c":5566}];
-  var STARTS = [1,15,22,43,64,85,106,127,148,170,191,212,233,249,265,281,344,724,736,762,778,830,896,982,1034,1099,1174,1241,1354,1437,1493,1545,1567,1579,1586,1607,1631,1658,1723,1756,1802,1828,1851,1867,1971,1997,2004,2014,2026,2036,2052,2062,2074,2094,2107,2126,2149,2154,2177,2200,2234,2248,2301,2325,2349,2364,2377,2401,2438,2447,2563,2567];
+  var PARTS = [{"n":1,"s":"parts/p001.html","t":"EP.00 序章","c":2689},{"n":2,"s":"parts/p002.html","t":"EP.00 第零战役 种子","c":3129},{"n":3,"s":"parts/p003.html","t":"EP.01 第一战役 苏醒","c":10437},{"n":4,"s":"parts/p004.html","t":"EP.02 第二战役","c":8888},{"n":5,"s":"parts/p005.html","t":"EP.03 第三战役","c":8938},{"n":6,"s":"parts/p006.html","t":"EP.04 第四战役","c":16048},{"n":7,"s":"parts/p007.html","t":"EP.05 第五战役 火种","c":17378},{"n":8,"s":"parts/p008.html","t":"EP.06 第六战役","c":24362},{"n":9,"s":"parts/p009.html","t":"EP.07 第七战役","c":26946},{"n":10,"s":"parts/p010.html","t":"EP.08 第八战役","c":33826},{"n":11,"s":"parts/p011.html","t":"EP.09 第九战役","c":37567},{"n":12,"s":"parts/p012.html","t":"EP.10 第十战役","c":48354},{"n":13,"s":"parts/p013.html","t":"EP.11 第十一战役","c":30035},{"n":14,"s":"parts/p014.html","t":"EP.12 第十二战役","c":37693},{"n":15,"s":"parts/p015.html","t":"EP.13 第十三战役","c":39789},{"n":16,"s":"parts/p016.html","t":"第十四战役（慢休克）","c":136839},{"n":17,"s":"parts/p017.html","t":"第十五战役（卷积核）","c":54851},{"n":18,"s":"parts/p018.html","t":"2016 魔方行动","c":9920},{"n":19,"s":"parts/p019.html","t":"2017 失温症","c":23372},{"n":20,"s":"parts/p020.html","t":"2017 魔方行动PLUS","c":12436},{"n":21,"s":"parts/p021.html","t":"2017 深层映射","c":49143},{"n":22,"s":"parts/p022.html","t":"2018 塌缩点","c":58129},{"n":23,"s":"parts/p023.html","t":"2018 有序紊流","c":99493},{"n":24,"s":"parts/p024.html","t":"异构体","c":89166},{"n":25,"s":"parts/p025.html","t":"2019 裂变链接","c":79237},{"n":26,"s":"parts/p026.html","t":"2020 偏振光","c":91895},{"n":27,"s":"parts/p027.html","t":"2020 双联乱数","c":148605},{"n":28,"s":"parts/p028.html","t":"2021 镜像论","c":189422},{"n":29,"s":"parts/p029.html","t":"2021 熵减焓增","c":152489},{"n":30,"s":"parts/p030.html","t":"2022 静风点","c":100939},{"n":31,"s":"parts/p031.html","t":"2022 纵向应变","c":88901},{"n":32,"s":"parts/p032.html","t":"2022 沙罗蚀相（剧情活动）","c":45663},{"n":33,"s":"parts/p033.html","t":"迷笼猜想","c":16775},{"n":34,"s":"parts/p034.html","t":"思域迷航","c":3416},{"n":35,"s":"parts/p035.html","t":"错构之泉","c":47163},{"n":36,"s":"parts/p036.html","t":"零电荷","c":60020},{"n":37,"s":"parts/p037.html","t":"2017 猎兔行动（联动）","c":10945},{"n":38,"s":"parts/p038.html","t":"2017 独法师（联动）","c":39911},{"n":39,"s":"parts/p039.html","t":"2018 荣耀日（联动）","c":31573},{"n":40,"s":"parts/p040.html","t":"2019 瓦尔哈拉（联动）","c":101543},{"n":41,"s":"parts/p041.html","t":"2020 梦间剧（联动）","c":57067},{"n":42,"s":"parts/p042.html","t":"2020 暗金潮（联动）","c":49180},{"n":43,"s":"parts/p043.html","t":"2021 小邪神前线（联动）","c":10277},{"n":44,"s":"parts/p044.html","t":"雪浪映花颜","c":99246},{"n":45,"s":"parts/p045.html","t":"镜扉的永恒","c":51829},{"n":46,"s":"parts/p046.html","t":"诡疫狂潮","c":11883},{"n":47,"s":"parts/p047.html","t":"雪夜杀礼异想曲","c":10032},{"n":48,"s":"parts/p048.html","t":"照相馆谜题","c":18439},{"n":49,"s":"parts/p049.html","t":"碧海秘闻","c":12595},{"n":50,"s":"parts/p050.html","t":"茧中蝶影","c":29592},{"n":51,"s":"parts/p051.html","t":"捩浪人","c":16508},{"n":52,"s":"parts/p052.html","t":"一币之遥","c":36617},{"n":53,"s":"parts/p053.html","t":"焙炒爱意","c":12143},{"n":54,"s":"parts/p054.html","t":"里坎禁猎区","c":22827},{"n":55,"s":"parts/p055.html","t":"M4A1","c":5950},{"n":56,"s":"parts/p056.html","t":"ST AR-15","c":5406},{"n":57,"s":"parts/p057.html","t":"M4 SOPMOD II","c":1463},{"n":58,"s":"parts/p058.html","t":"M16A1","c":1089},{"n":59,"s":"parts/p059.html","t":"RO635","c":16367},{"n":60,"s":"parts/p060.html","t":"UMP45","c":15330},{"n":61,"s":"parts/p061.html","t":"UMP9","c":15908},{"n":62,"s":"parts/p062.html","t":"HK416","c":18677},{"n":63,"s":"parts/p063.html","t":"G11","c":17461},{"n":64,"s":"parts/p064.html","t":"AK-12","c":8371},{"n":65,"s":"parts/p065.html","t":"AN-94","c":7338},{"n":66,"s":"parts/p066.html","t":"AK-15","c":1211},{"n":67,"s":"parts/p067.html","t":"RPK-16","c":5850},{"n":68,"s":"parts/p068.html","t":"第一卷 · 时间线与剧情整理","c":32002},{"n":69,"s":"parts/p069.html","t":"第二卷 · 活动考据（双联乱数 / 慢休克 / 熵减焓增 / 镜像论 / 零电荷）","c":43352},{"n":70,"s":"parts/p070.html","t":"第三卷 · 人物与设定考据","c":57949},{"n":71,"s":"parts/p071.html","t":"第四卷 · 结局评述（卷积核）","c":48211},{"n":72,"s":"parts/p072.html","t":"第五卷 · 世界观入门","c":5529}];
+  var STARTS = [1,15,22,43,64,85,106,127,148,170,191,212,233,249,265,281,344,724,736,762,778,830,896,982,1034,1099,1174,1241,1354,1437,1493,1545,1567,1579,1586,1607,1631,1658,1723,1756,1802,1828,1851,1867,1971,1997,2004,2014,2026,2036,2052,2062,2074,2094,2107,2126,2149,2154,2177,2200,2234,2248,2301,2325,2349,2364,2377,2401,2437,2446,2562,2566];
   var reader = document.getElementById('reader');
   var cur = 0, busy = false;
 
