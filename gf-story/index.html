@@ -7,6 +7,7 @@
 <style>
 :root{--bg:#f7f7f4;--panel:#ffffff;--ink:#222;--muted:#777;--accent:#c0392b;--line:#e3e3df;--link:#1a5fb4;}
 *{box-sizing:border-box}
+html{scroll-behavior:smooth}
 body{margin:0;font-family:-apple-system,"PingFang SC","Microsoft YaHei",Segoe UI,Roboto,sans-serif;background:var(--bg);color:var(--ink);line-height:1.85;}
 .layout{display:flex;min-height:100vh}
 #sidebar{width:320px;flex:0 0 320px;background:var(--panel);border-right:1px solid var(--line);position:sticky;top:0;height:100vh;overflow-y:auto;padding:14px 10px 60px;}
@@ -25,6 +26,7 @@ body{margin:0;font-family:-apple-system,"PingFang SC","Microsoft YaHei",Segoe UI
 .toc-link.active{background:#c0392b;color:#fff}
 .toc-sub.active{background:#c0392b;color:#fff;font-weight:600}
 #content{flex:1;max-width:920px;margin:0 auto;padding:34px 40px 120px}
+.chapter h1,.chapter h2,.chapter h3,.chapter h4{scroll-margin-top:64px}
 .chapter h1{font-size:26px;border-bottom:3px solid var(--accent);padding-bottom:8px;margin-top:10px;color:#1a1a1a}
 .chapter h2{font-size:21px;margin-top:34px;border-left:5px solid var(--accent);padding-left:12px;color:#222}
 .chapter h3{font-size:17px;margin-top:24px;color:#333}
@@ -40,14 +42,15 @@ body{margin:0;font-family:-apple-system,"PingFang SC","Microsoft YaHei",Segoe UI
 #topbar{position:fixed;top:0;left:320px;right:0;height:0}
 #menuBtn{display:none}
 @media(max-width:860px){#sidebar{position:fixed;left:0;top:0;z-index:50;transform:translateX(-100%);transition:.25s}#sidebar.open{transform:none}#content{margin:0;padding:20px 16px}#menuBtn{display:block;position:fixed;top:10px;left:10px;z-index:60;background:var(--accent);color:#fff;border:none;border-radius:8px;padding:8px 12px;font-size:14px}#topbar{left:0}}
-.back-bar{position:fixed;top:0;left:0;right:0;z-index:9999;display:flex;align-items:center;justify-content:space-between;padding:8px 16px;background:rgba(20,17,29,.92);color:#f6f1e7;font-size:13px;font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif;box-shadow:0 1px 8px rgba(0,0,0,.25);box-sizing:border-box}
+.back-bar{position:fixed;top:14px;right:16px;z-index:9999;display:inline-flex;align-items:center;gap:8px;padding:7px 14px;background:rgba(20,17,29,.9);color:#f6f1e7;font-size:13px;border-radius:999px;box-shadow:0 2px 10px rgba(0,0,0,.25);font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif;backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px)}
 .back-bar a{color:#f6f1e7;text-decoration:none}
 .back-bar .bb-home{font-weight:600}
-.back-bar .bb-note{opacity:.72;font-size:12px}
+.back-bar .bb-note{opacity:.7;font-size:12px}
+@media(max-width:860px){.back-bar{top:10px;right:10px;padding:6px 12px}}
 </style>
 </head>
 <body>
-<div class="back-bar"><a class="bb-home" href="/">← 返回 Reze 的小窝</a><span class="bb-note">少女前线 · 剧情全集（独立专题）</span></div>
+<div class="back-bar"><a class="bb-home" href="/">← 返回 Reze 的小窝</a></div>
 <button id="menuBtn">目录</button>
 <div class="layout">
 <nav id="sidebar">
