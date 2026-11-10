@@ -27,7 +27,7 @@
 <meta name="msvalidate.01" content="204D6E716E859C38234C17C54F832E74" />
 <!-- Clarity tracking code for https://reze520.pages.dev/ -->
 <script>
-/* 统计脚本不参与渲染，等页面 load 之后再在空闲时取，别跟正文抢带宽。
+/* 统计脚本不参与渲染，等页面 load 完再挑空闲时取，别跟正文抢带宽。
    取不到就算了，不影响任何功能。 */
 (function(c,l,a,r,i,t,y){
 function go(){
@@ -35,10 +35,12 @@ c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
 t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i+"?ref=bwt";
 y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
 }
-var idle=c.requestIdleCallback||function(f){return setTimeout(f,1200)};
-if(l.readyState==="complete") idled();
-else l.addEventListener("load", idled, {once:true});
-function idled(){ idle(go); }
+function run(){
+if(c.requestIdleCallback) c.requestIdleCallback(go,{timeout:3000});
+else setTimeout(go,1500);
+}
+if(l.readyState==="complete") run();
+else c.addEventListener("load", run, {once:true});
 })(window, document, "clarity", "script", "zaw2usao3y");
 </script>
 </head>
