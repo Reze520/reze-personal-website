@@ -3859,6 +3859,23 @@ body.has-app .site-foot .brand .brand-mark {
   display: block;
 }
 
+/* 少女前线剧情全集专题卡：在首页文章流里高亮，和普通文章区分 */
+.g-posth.gf-story-card {
+  background:
+    linear-gradient(135deg, rgba(122, 92, 184, 0.16), rgba(60, 44, 100, 0.16)),
+    var(--glass);
+  border-color: rgba(184, 161, 247, 0.42);
+}
+.g-posth.gf-story-card:hover {
+  background:
+    linear-gradient(135deg, rgba(122, 92, 184, 0.26), rgba(60, 44, 100, 0.26)),
+    var(--g-fill);
+  border-color: rgba(184, 161, 247, 0.6);
+}
+.g-posth.gf-story-card .pin {
+  background: rgba(122, 92, 184, 0.92);
+}
+
 /* 公告卡 */
 /* 公告用的毛笔楷书：词牌显示更搭；自托管走 Pages，国内稳定加载 */
 /* /assets/fonts/* 发 immutable，字体文件名必须带内容哈希；改字库不换名，浏览器会一直用旧缓存 */

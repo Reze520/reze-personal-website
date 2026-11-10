@@ -1174,6 +1174,26 @@
     );
   }
 
+  /* 少女前线剧情全集专题卡：指向独立静态页 /gf-story。
+     不进 POSTS（云端 loadCloudContent 会整体覆盖 window.POSTS），
+     直接在渲染时插入，确保云端内容到达、renderMain 重画后依然存在。 */
+  function gfStoryCardHtml() {
+    var fake = { words: 2500000, date: "2026-11-09" };
+    return (
+      '<a class="g-posth gf-story-card no-cover" href="/gf-story" style="--cat-h:' + catHue("游戏考据") + '">' +
+      '<div class="info">' +
+      '<div class="ttl"><span class="mark">' + ICONS.doc + "</span>" +
+      "<h2>少女前线 · 剧情全集</h2>" +
+      '<span class="pin">专题</span></div>' +
+      '<p class="excerpt">主线 1–15 章（含紧急 / 夜战）、大型活动、活动剧情、角色三改与皮肤剧情，原分节逐字移植 + UP 主剧情分析，单页通读。</p>' +
+      '<div class="meta"><span>' + ICONS.cal + "2026-11-09</span>" +
+      "<span>" + ICONS.doc + "250 万字</span>" +
+      lenBarHtml(fake) + "</div>" +
+      "</div>" +
+      "</a>"
+    );
+  }
+
   /* 首页置顶区：只认 pinned 标记，和发布时间无关。第一篇放大成主卡，
      其余最多三张小卡；置顶篇数变化时自动增减，不用改版式。 */
   function featureBlockHtml(pins) {
@@ -1533,7 +1553,10 @@
           flow = slice.filter(function (q) { return !used[q.id]; });
         }
       }
-      listEl.innerHTML = feature + (flow.length
+      // 首页第一屏、未开分类/标签筛选时，在置顶区之后、普通文章流之前插入专题卡。
+      // 翻页或点分类后不再插入，避免干扰列表与重复出现。
+      var gfCard = (page === 0 && (!c || c === "全部") && !t) ? gfStoryCardHtml() : "";
+      listEl.innerHTML = feature + gfCard + (flow.length
         ? flow.map(glassPostH).join("")
         : (feature ? "" : '<div class="g-empty">这里还没有文章</div>')) + buildPager(pages, page);
       Array.prototype.forEach.call(barEl.querySelectorAll(".g-tab[data-cat]"), function (b) {
