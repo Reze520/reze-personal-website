@@ -41,14 +41,26 @@ body{margin:0;font-family:-apple-system,"PingFang SC","Microsoft YaHei",Segoe UI
 .chapter a:hover{text-decoration:underline}
 #topbar{position:fixed;top:0;left:320px;right:0;height:0}
 #menuBtn{display:none}
-@media(max-width:860px){#sidebar{position:fixed;left:0;top:0;z-index:50;transform:translateX(-100%);transition:.25s}#sidebar.open{transform:none}#content{margin:0;padding:20px 16px}#menuBtn{display:block;position:fixed;top:10px;left:10px;z-index:60;background:var(--accent);color:#fff;border:none;border-radius:8px;padding:8px 12px;font-size:14px}#topbar{left:0}}
+.sb-head{position:sticky;top:0;z-index:3;background:var(--panel);padding:0 0 8px;margin-bottom:4px;border-bottom:1px solid var(--line)}
+.back-home{display:flex;align-items:center;gap:6px;margin:2px 8px 8px;padding:9px 11px;border:1px solid var(--line);border-radius:8px;background:#fff;color:var(--accent);font-size:13px;font-weight:600;text-decoration:none}
+.back-home:hover{background:#fdecea;border-color:var(--accent)}
+.back-float{display:none;position:fixed;top:10px;right:10px;z-index:70;align-items:center;gap:5px;padding:8px 12px;border:1px solid var(--line);border-radius:999px;background:rgba(255,255,255,.95);box-shadow:0 2px 10px rgba(0,0,0,.10);color:var(--accent);font-size:12.5px;font-weight:600;text-decoration:none;backdrop-filter:blur(6px)}
+.back-float:hover{background:var(--accent);color:#fff;border-color:var(--accent)}
+#mobile-bar{display:none}
+@media(max-width:860px){#mobile-bar{display:block;position:fixed;top:0;left:0;right:0;height:52px;background:#fff;border-bottom:1px solid var(--line);z-index:45}main#content{padding-top:72px}.back-float{background:#fff}}
+@media(max-width:860px){#sidebar{position:fixed;left:0;top:0;z-index:50;transform:translateX(-100%);transition:.25s}#sidebar.open{transform:none}#content{margin:0;padding:20px 16px}#menuBtn{display:block;position:fixed;top:10px;left:10px;z-index:60;background:var(--accent);color:#fff;border:none;border-radius:8px;padding:8px 12px;font-size:14px}#topbar{left:0}.back-float{display:inline-flex}.sb-head{top:0}}
 </style>
 </head>
 <body>
+<div id="mobile-bar"></div>
 <button id="menuBtn">目录</button>
+<a class="back-float" href="../" title="返回 RezeのBlog 首页">← 返回博客</a>
 <div class="layout">
 <nav id="sidebar">
+<div class="sb-head">
+<a class="back-home" href="../" title="返回 RezeのBlog 首页">← 返回 RezeのBlog</a>
 <h1 class="sb-title">少女前线 · 剧情全集</h1>
+</div>
 <input id="search" type="text" placeholder="搜索目录…" />
 <ul class="toc-top">
 <li class="toc-group"><span class="toc-group-title">前言 / 说明</span><ul>
