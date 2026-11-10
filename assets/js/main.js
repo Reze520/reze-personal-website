@@ -939,6 +939,20 @@
     }
     return a;
   }
+  /* 头像最大只显示到 92px（首屏那个 76px），2 倍屏要 184px、3 倍屏 276px。
+     原来直接把 600×600 那张 106 KB 的 PNG 挂上去，手机上白下 80 KB。
+     仓库里还有一张 256×256 的缩略版，够 2 倍屏用，交给 srcset 去挑。 */
+  function avatarSrcset(src) {
+    if (!/assets\/uploads\/avatar\.png(\?|$)/.test(src)) return "";
+    var q = src.indexOf("?") > 0 ? src.slice(src.indexOf("?")) : "";
+    return "assets/uploads/avatar-256.png" + q + " 256w, " +
+      "assets/uploads/avatar.png" + q + " 600w";
+  }
+  function avatarImg(src, alt) {
+    var set = avatarSrcset(src);
+    return '<img data-av src="' + esc(src) + '" alt="' + esc(alt || "") + '"' +
+      (set ? ' srcset="' + esc(set) + '" sizes="92px"' : "") + ">";
+  }
   function bioText() {
     return String(SITE.slogan || "").replace(/[。．.]+\s*$/, "");
   }
@@ -948,7 +962,12 @@
     var src = avatarSrc();
     if (!src) return;
     Array.prototype.forEach.call(document.querySelectorAll("img[data-av]"), function (im) {
-      if (im.getAttribute("src") !== src) im.setAttribute("src", src);
+      if (im.getAttribute("src") !== src) {
+        im.setAttribute("src", src);
+        var set = avatarSrcset(src);
+        if (set) im.setAttribute("srcset", set);
+        else im.removeAttribute("srcset");
+      }
     });
   }
 
@@ -960,7 +979,7 @@
     var tagNum = Object.keys(tc).length;
 
     var avatar = avatarSrc()
-      ? '<div class="avatar"><img data-av src="' + esc(avatarSrc()) + '" alt="' + esc(SITE.name) + '"></div>'
+      ? '<div class="avatar">' + avatarImg(avatarSrc(), SITE.name) + "</div>"
       : '<div class="avatar"><span class="ph">蕾</span></div>';
 
     // 社交按钮：优先用 SITE.social 数组，没有就退回旧的 github + email 两个
@@ -1256,7 +1275,7 @@
 
   function momentMarkup(m) {
     var av = avatarSrc()
-      ? '<img data-av src="' + esc(avatarSrc()) + '" alt="">'
+      ? avatarImg(avatarSrc(), "")
       : "<span>" + esc((SITE.name || "蕾").charAt(0)) + "</span>";
     var pics = (m.images || []).length
       ? '<div class="pics">' +
@@ -1989,7 +2008,7 @@
     /* 头像按皮肤分流：纸样用静止帧，淡紫与极简留着 GIF。
        切皮肤时由 syncAvatar() 换 src，这里不重渲染。 */
     var avatarHtml = SITE.avatar
-      ? '<img data-av src="' + esc(avatarSrc()) + '" alt="' + esc(SITE.name) + '">'
+      ? avatarImg(avatarSrc(), SITE.name)
       : '<span class="ph">' + esc((SITE.name || "蕾").charAt(0)) + "</span>";
 
     var socialHtml = (SITE.social || [])
@@ -4780,6 +4799,7 @@ function interceptLinks(e) {
     var indentHint = /^\s*<div class="pg-indent"><\/div>\s*/;
     var wantIndent = indentHint.test(p.content || "");
     var content = wantIndent ? (p.content || "").replace(indentHint, "") : p.content;
+    content = lazyMedia(content);
     if (!content) content = '<p class="pg-loading">正文正在取回…</p>';
 
     host.innerHTML =
@@ -6346,6 +6366,17 @@ function interceptLinks(e) {
      一篇长文进来会把几十张图一起拉下来；图回来之前浏览器不知道它多高，
      滚动到一半图加载完，下面的字被推走。尺寸表由 tools/gen_img_size.py
      从 assets/uploads 量出来，新加图之后重跑一次。 */
+  /* 正文里的 <img> 必须在拼进 innerHTML 之前就把 loading 写上。
+     事后再补没有用：浏览器解析到 src 那一刻已经开始下载，改属性收不回请求。
+     一篇长文常带四五张图，全在首屏以下，先下完就是几十上百 KB 白花。 */
+  function lazyMedia(html) {
+    if (!html || html.indexOf("<img") < 0) return html;
+    return html.replace(/<img\b([^>]*)>/gi, function (tag, attrs) {
+      if (/\bloading\s*=/i.test(attrs)) return tag;
+      return '<img loading="lazy" decoding="async"' + attrs + ">";
+    });
+  }
+
   var IMG_SIZE = window.IMG_SIZE || {};
   function applyImgSize(root) {
     Array.prototype.forEach.call((root || document).querySelectorAll("img"), function (img) {
@@ -6420,7 +6451,7 @@ function interceptLinks(e) {
     var av = $("#splash-avatar");
     if (av) {
       av.innerHTML = SITE.avatar
-        ? '<img data-av src="' + esc(avatarSrc()) + '" alt="' + esc(SITE.name) + '">'
+        ? avatarImg(avatarSrc(), SITE.name)
         : "<span>" + esc((SITE.name || "蕾").charAt(0)) + "</span>";
     }
 
