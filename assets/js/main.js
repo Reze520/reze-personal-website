@@ -1739,8 +1739,30 @@
   }
 
   function scheduleLunar() {
-    if ("requestIdleCallback" in window) requestIdleCallback(fetchLunar, { timeout: 2500 });
-    else setTimeout(fetchLunar, 1500);
+    var run = function () {
+      if ("requestIdleCallback" in window) requestIdleCallback(fetchLunar, { timeout: 2500 });
+      else setTimeout(fetchLunar, 1500);
+    };
+    /* 窄屏上日历排在正文后面，滚不到就不必先下这一百多 KB。
+       桌面右栏的日历本来就在首屏，观察器立刻触发，等于没变。 */
+    var cal = document.querySelector(".g-cal");
+    if (cal && "IntersectionObserver" in window) {
+      var done = false;
+      var go = function () {
+        if (done) return;
+        done = true;
+        io.disconnect();
+        run();
+      };
+      var io = new IntersectionObserver(function (es) {
+        for (var i = 0; i < es.length; i++) if (es[i].isIntersecting) { go(); return; }
+      }, { rootMargin: "600px 0px" });
+      io.observe(cal);
+      /* 日历被折叠或藏起来时观察器不会触发，兜一层，别让农历永远不来 */
+      setTimeout(go, 12000);
+      return;
+    }
+    run();
   }
 
   /* ---------- 右栏小日历：农历 + 节日 + 发文标记，可翻月 ----------
