@@ -43,10 +43,3 @@
 
 /assets/uploads/*
   Cache-Control: public, max-age=604800
-
-# 剧情全集是独立静态页：外壳跟着改，分节文件按需取、给一周缓存
-/gf-story*
-  Cache-Control: public, max-age=0, must-revalidate
-
-/gf-story/parts/*
-  Cache-Control: public, max-age=604800

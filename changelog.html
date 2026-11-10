@@ -116,14 +116,13 @@ else c.addEventListener("load", run, {once:true});
 <h2>2026 年 11 月<span class="cl-count">67 条</span></h2>
 <ol class="cl-list">
 <li class="cl-item"><details open>
-<summary><span class="cl-kind" data-k="功能">功能</span><span class="cl-t">剧情全集接上三处入口</span><span class="cl-n">6 项</span></summary>
+<summary><span class="cl-kind" data-k="功能">功能</span><span class="cl-t">剧情全集接上三处入口</span><span class="cl-n">5 项</span></summary>
 <div class="cl-body"><ul>
 <li><code>/gf-story</code> 是独立静态页，不在 <code>POSTS</code> 里。二百五十万字进文章表，列表、字数统计、接着读都会被带偏；代价是站上原本只有首页一张专题卡能找到它，Sitemap、站内搜索、归档页都没有。</li>
 <li>Sitemap 补一条 <code>/gf-story</code>，共 392 条：12 个静态页加 380 篇。</li>
 <li>站内搜索的索引末尾挂了一条常在条目，标题、摘要、标签、分类都参与匹配，搜「少女前线」「剧情」能出结果，链接直接指向该页；全文索引补全后重建索引，这条仍在。</li>
 <li>归档页顶部那行规模统计后面加「剧情全集」，与「参考源」并列。</li>
 <li>该页 head 原来只有 <code>title</code>，补了 <code>description</code>、<code>canonical</code>、<code>og</code> 与 twitter 卡片。</li>
-<li><code>_headers</code> 给 <code>/gf-story*</code> 发 <code>must-revalidate</code>，<code>/gf-story/parts/*</code> 给一周缓存。68 个分节按需取，重复进这个页面不再重下。</li>
 <li>版本号 20261110k。</li>
 </ul></div>
 </details></li>
