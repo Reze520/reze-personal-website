@@ -11750,12 +11750,11 @@ html:not([data-theme="dark"]) .ft-mini { border-left-color: rgba(124, 92, 190, .
 
 /* 站务页右栏那张「站务」卡列的就是本页这 74 条，再列一遍是重复，
    而且它 507px 高，把右栏拖成最长列，主栏底下跟着空出半屏。本页收起，
-   其它页照旧留着当入口。续读卡会随阅读历史忽长忽短，也一并收起，
-   让右栏稳定在 1500px 上下，和中栏的 13 条正好齐平。 */
+   其它页照旧留着当入口。
+   续读卡原来也从右栏收起（怕它忽长忽短带歪右栏高度），现在它搬到左栏、
+   固定 3 条，不再影响右栏，这里就不必管它了。 */
 .app[data-page="moments"] #app-right .g-card-mfeed,
-.app[data-page="timeline"] #app-right .g-card-mfeed,
-.app[data-page="moments"] #app-right .rec-continue,
-.app[data-page="timeline"] #app-right .rec-continue {
+.app[data-page="timeline"] #app-right .g-card-mfeed {
   display: none;
 }
 
@@ -13191,30 +13190,30 @@ html[data-lunar="off"] .g-cal-grid i.g-cal-sub {
 }
 
 /* ============================================================
-   猜你喜欢：短页面上搬到中栏的那一版
-   「继续读 / 猜你喜欢」默认都挂在右栏。遇上归档、关于、天气这种正文只有
-   一屏的页面，右栏能堆到 1900px，中栏底下就空出一大片白，一边挤一边空。
-   main.js 量完两栏高度会把这张卡搬到中栏、给它加 .rec-guess-wide 并把
-   .app 标成 has-rec-wide：中栏被撑到和最长那栏等高，卡片贴到页面底部，
-   空白留在正文和卡片之间，页面最底下那一排就不会只剩右边有东西。
-   条目按 240px 自动分列，宽屏三列、平板两列、手机一列。
+   继续读：搬到左栏的紧凑版
+   「继续读」原来挂在右栏最上面、最多列 6 条。左栏只有个人卡、诗笺、
+   播放器，桌面上常空出一截，把这张卡挪过来正好补上，右栏留给
+   「猜你喜欢」。左栏宽 248px，内边距和字号各降一档，条目压到 3 条
+   （条数由 main.js 控制，这里只管排版）。
+   窄屏（≤900px）左栏变成两列网格，卡片横跨整行。
    ============================================================ */
-.app.has-rec-wide > .col-main {
-  align-self: stretch;
+.col-left .g-card.rec-continue .g-card-head {
+  padding: 12px 14px 6px;
 }
-.app.has-rec-wide .rec-guess-wide {
-  margin-top: auto;
+.col-left .g-card.rec-continue .g-feed {
+  padding: 0 14px 8px;
 }
-.g-card.rec-guess-wide .g-card-head {
-  padding: 16px 18px 10px;
+.col-left .g-card.rec-continue .g-feed li {
+  padding: 8px 0;
+  font-size: 11px;
+  line-height: 1.6;
 }
-.g-card.rec-guess-wide .g-feed {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
-  column-gap: 26px;
-  padding: 2px 18px 12px;
+.col-left .g-card.rec-continue .g-feed time {
+  font-size: 10px;
+  margin-bottom: 3px;
 }
-.g-card.rec-guess-wide .g-feed li {
-  padding: 11px 0;
-  font-size: 12.5px;
+@media (max-width: 900px) {
+  .col-left .g-card.rec-continue {
+    grid-column: 1 / -1;
+  }
 }

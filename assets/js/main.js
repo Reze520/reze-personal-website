@@ -5304,7 +5304,7 @@ function interceptLinks(e) {
     window.addEventListener("scroll", window.__readScroll, { passive: true });
   }
 
-  /* 右栏「继续读 / 猜你喜欢」：基于本地阅读历史，不建画像、不上传 */
+  /* 「继续读」挂左栏、「猜你喜欢」挂右栏：都基于本地阅读历史，不建画像、不上传 */
   function renderRecModules(right) {
     var box = right || $("#app-right");
     if (!box) return;
@@ -5317,21 +5317,24 @@ function interceptLinks(e) {
       cont.id = "rec-continue";
       box.appendChild(cont);
     }
-    if (!hist.length) {
+    /* 只列最近 3 篇。这张卡在左栏，宽 248px、底下还压着别的卡片，
+       列多了会一路把页面拖长，三篇刚好够勾人回去。
+       历史里存着但已经解析不出来（文章删了/改名了）就当没读过，
+       cItems 为空时整张卡收起——不留「还没有读过的文章」那种空壳。 */
+    var cItems = hist.slice(0, 3).map(function (id) {
+      var p = postById(id);
+      if (!p) return "";
+      return '<li><a href="/p/' + encodeURIComponent(p.id) + '">' +
+        "<time>" + fmtDate(p.date) + "</time>" +
+        "<span>" + esc(p.title) + "</span></a></li>";
+    }).filter(Boolean).join("");
+    if (!cItems) {
       cont.style.display = "none";
     } else {
       cont.style.display = "";
-      var cItems = hist.slice(0, 6).map(function (id) {
-        var p = postById(id);
-        if (!p) return "";
-        return '<li><a href="/p/' + encodeURIComponent(p.id) + '">' +
-          "<time>" + fmtDate(p.date) + "</time>" +
-          "<span>" + esc(p.title) + "</span></a></li>";
-      }).filter(Boolean).join("");
       cont.innerHTML =
         '<div class="g-card-head"><span class="t">' + ICONS.clock + "继续读</span></div>" +
-        (cItems ? '<ul class="g-feed">' + cItems + "</ul>"
-                 : '<div class="g-notice">还没有读过的文章</div>');
+        '<ul class="g-feed">' + cItems + "</ul>";
     }
 
     var guess = document.getElementById("rec-guess");
@@ -5408,44 +5411,24 @@ function interceptLinks(e) {
     placeRecModules();
   }
 
-  /* 「继续读」和「猜你喜欢」默认都挂在右栏。中栏内容长的时候没问题，
-     但归档、关于、天气这类页正文只有一屏，右栏能堆到 1900px，
-     中栏底下就空出一大片，看着一边挤、一边空。
-     这里量两栏的实际高度，右栏明显高过中栏时把「猜你喜欢」搬到中栏，
-     贴在中栏底部（.app.has-rec-wide 让栏位等高，卡片 margin-top:auto），
-     页面底部那一排就不会只压在右边。换回长页面时自动放回右栏。
-     量高度时先扣掉卡片自己，免得搬过去之后中栏变高又搬回来，来回横跳。 */
+  /* 「继续读」搬到左栏末尾，「猜你喜欢」留在右栏。
+     左栏只有个人卡、诗笺、播放器，桌面端底下常空出一截；三篇续读正好补上，
+     右栏天生就是推荐位，不来回搬。
+     两处都用 appendChild：搬的是同一个节点，重复调用不会翻倍。
+     窄屏（≤900px）左栏是两列网格，卡片横跨整行，样式在 style.css 尾部。 */
   function placeRecModules() {
-    var main = $("#app-main");
+    var left = $("#app-left");
     var right = $("#app-right");
-    var app = document.querySelector(".app");
+    if (!left || !right) return;
+    var cont = document.getElementById("rec-continue");
+    /* 没有阅读历史时卡片是 display:none，何必搬过去占一个空槽 */
+    if (cont && cont.style.display !== "none" && cont.parentNode !== left) {
+      left.appendChild(cont);
+    }
     var guess = document.getElementById("rec-guess");
-    if (!main || !right || !app || !guess) return;
-    if (guess.style.display === "none") return;
-
-    /* 先退回自然高度再量：stretch 之后中栏会被拉成和右栏一样高，量出来永远「齐平」，
-       判定就会来回翻。量完再按结论挂回去。 */
-    var stretched = app.classList.contains("has-rec-wide");
-    if (stretched) app.classList.remove("has-rec-wide");
-    var gap = 16;
-    var gh = (guess.offsetHeight || 0) + gap;
-    var inMain = guess.parentNode === main;
-    var mainH = (main.offsetHeight || 0) - (inMain ? gh : 0);
-    var rightH = (right.offsetHeight || 0) - (inMain ? 0 : gh);
-    var move = rightH - mainH > 320;
-
-    if (move) {
-      if (!inMain) {
-        guess.classList.add("rec-guess-wide");
-        main.appendChild(guess);
-      }
-      app.classList.add("has-rec-wide");
-    } else {
-      if (inMain) {
-        guess.classList.remove("rec-guess-wide");
-        right.appendChild(guess);
-      }
-      app.classList.remove("has-rec-wide");
+    if (guess && guess.parentNode !== right) {
+      guess.classList.remove("rec-guess-wide");
+      right.appendChild(guess);
     }
   }
 
