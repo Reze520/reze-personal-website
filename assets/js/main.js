@@ -3154,8 +3154,9 @@ function mountFloatToc() {
     return window.innerWidth <= 760 ? "ftoc-pos-m" : "ftoc-pos";
   }
   try {
+    // 手机走底部抽屉，不需要记位置；记过的旧坐标会把浮窗推到屏外，这里不读
     var saved = JSON.parse(localStorage.getItem(posKey()) || "null");
-    if (saved && saved.l) {
+    if (window.innerWidth > 760 && saved && saved.l) {
       wrap.style.left = saved.l;
       wrap.style.top = saved.t;
       wrap.style.right = "auto";
@@ -3226,13 +3227,16 @@ function mountFloatToc() {
     }
     drag = null;
   }
-  [btn, head].forEach(function (h) {
-    h.addEventListener("mousedown", startDrag);
-    h.addEventListener("touchstart", function (e) {
-      var t = e.touches[0];
-      if (t) startDrag({ clientX: t.clientX, clientY: t.clientY, button: 0 });
-    }, { passive: true });
-  });
+  // 拖动只在桌面 / 平板（>760px）启用；手机是底部抽屉，不拖、位置固定，跑不出屏
+  if (window.innerWidth > 760) {
+    [btn, head].forEach(function (h) {
+      h.addEventListener("mousedown", startDrag);
+      h.addEventListener("touchstart", function (e) {
+        var t = e.touches[0];
+        if (t) startDrag({ clientX: t.clientX, clientY: t.clientY, button: 0 });
+      }, { passive: true });
+    });
+  }
   add("mousemove", moveDrag);
   add("mouseup", endDrag);
   add("touchmove", function (e) {

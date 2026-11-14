@@ -10527,42 +10527,86 @@ html {
   }
 }
 
-/* 32.5 浮动目录：手机上按手指的尺寸重排 */
+/* 32.5 浮动目录：手机改成底部抽屉 —— 不依赖拖动，永不跑出屏。
+   收起态只留一个贴底居中的小药丸（图标 + 节数），点开后从底部升起整宽面板，
+   遮住下半屏；点遮罩或 × 收起。桌面 / 平板（>760px）仍走右上可拖动浮窗。 */
 @media (max-width: 760px) {
   .ftoc {
-    right: max(10px, env(safe-area-inset-right));
-    /* 贴到最底边：阅读时视线在正文中段，底边最不碍事 */
-    bottom: calc(14px + env(safe-area-inset-bottom));
+    left: 0;
+    right: 0;
+    top: auto;
+    bottom: 0;
+    /* 容器本身不占面积，子元素都 fixed 定位到视口 */
   }
   .ftoc-btn {
-    width: 44px;
-    height: 44px;
-    /* 手机上它会压在正文边上，淡着放，手指按下去才变实 */
-    opacity: 0.5;
+    position: fixed;
+    left: 50%;
+    transform: translateX(-50%);
+    bottom: calc(14px + env(safe-area-inset-bottom));
+    width: auto;
+    height: 40px;
+    padding: 0 16px;
+    border-radius: 22px;
+    gap: 6px;
+    opacity: 0.92;
     backdrop-filter: blur(10px) saturate(140%);
     -webkit-backdrop-filter: blur(10px) saturate(140%);
   }
   .ftoc-btn:active {
     opacity: 1;
   }
+  .ftoc[data-open="1"] .ftoc-btn {
+    display: none;
+  }
   .ftoc-panel {
-    width: min(84vw, 300px);
-    max-height: min(58dvh, 60vh);
+    position: fixed;
+    left: 0;
+    right: 0;
+    top: auto;
+    bottom: 0;
+    width: 100%;
+    max-height: 72vh;
+    border-radius: 18px 18px 0 0;
+    border-bottom: 0;
+    transform: translateY(100%);
+    transition: transform 0.26s ease;
+    /* 覆盖 base 的 display:none：用位移隐藏，便于滑入动画 */
+    display: flex;
+    pointer-events: none;
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+  .ftoc[data-open="1"] .ftoc-panel {
+    transform: translateY(0);
+    pointer-events: auto;
   }
   .ftoc-head {
-    padding: 12px 12px 8px;
+    padding: 16px 16px 8px;
+    position: relative;
+    cursor: default;
+  }
+  /* 抽屉把手 */
+  .ftoc-head::before {
+    content: "";
+    position: absolute;
+    top: 7px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 36px;
+    height: 4px;
+    border-radius: 2px;
+    background: var(--g-line);
   }
   .ftoc-x {
     padding: 4px 8px;
     font-size: 20px;
   }
   .ftoc-link {
-    padding: 9px 10px;
-    font-size: 13px;
+    padding: 11px 16px;
+    font-size: 14px;
   }
   .ftoc-link.lv3 {
-    padding-left: 22px;
-    font-size: 12.5px;
+    padding-left: 28px;
+    font-size: 13px;
   }
 }
 
